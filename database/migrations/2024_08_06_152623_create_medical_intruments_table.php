@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('medical_intruments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Supplier::class)->constrained();
             $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->string('name')->comment('Tên dụng cụ');

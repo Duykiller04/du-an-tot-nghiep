@@ -10,7 +10,6 @@ class Medicine extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'supplier_id',
         'storage_id',
         'unit_id',
         'medicine_code',
@@ -26,10 +25,6 @@ class Medicine extends Model
         'is_active',
         'expiration_date',
     ];
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
     public function storage()
     {
         return $this->belongsTo(Storage::class);

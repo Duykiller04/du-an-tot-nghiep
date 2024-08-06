@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('name',20)->comment('Tên danh mục');
             $table->unsignedBigInteger('parent_id')->index()->nullable();
+            $table->string('name',20)->comment('Tên danh mục');
             $table->softDeletes();
             $table->timestamps();
         });

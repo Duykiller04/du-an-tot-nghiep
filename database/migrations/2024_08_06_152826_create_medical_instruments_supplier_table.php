@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\MedicalIntrument;
+use App\Models\Supplier;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(MedicalIntrument::class)->constrained();
             $table->foreignIdFor(Supplier::class)->constrained();
             
-            $table->primary(['supplier_id', 'medical_instrument_id']);
+            $table->primary(['medical_instrument_id', 'supplier_id']);
             $table->timestamps();
         });
     }

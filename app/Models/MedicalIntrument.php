@@ -10,15 +10,15 @@ class MedicalIntrument extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'supplier_id',
         'storage_id',
         'unit_id',
         'name',
         'price_import',
         'price_sale'
     ];
-    public function supplier(){
-        return $this->belongsTo(Supplier::class);
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class);
     }
     public function storage(){
         return $this->belongsTo(Storage::class);

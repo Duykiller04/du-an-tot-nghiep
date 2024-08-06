@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Supplier::class)->constrained();
             $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->string('medicine_code',20)->comment('Mã thuốc');
