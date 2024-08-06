@@ -26,7 +26,4 @@ class MedicalIntrument extends Model
     public function unit(){
         return $this->belongsTo(Unit::class);
     }
-    public function suppliers(){
-        return $this->belongsToMany(Supplier::class);
-    }
 }
