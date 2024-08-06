@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('cut_dose_orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('weight');
+            $table->unsignedBigInteger('weight')->comment('cân nặng');
             $table->unsignedBigInteger('age_min');
             $table->unsignedBigInteger('age_max');
             $table->boolean('gender');
-            $table->string('name_diseases');
+            $table->string('name_diseases')->comment('tên bệnh');
             $table->timestamps();
         });
     }

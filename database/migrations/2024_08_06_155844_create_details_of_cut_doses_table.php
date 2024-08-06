@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->double('quantity');
             $table->unsignedBigInteger('current_price');
-            $table->string('dosage');
+            $table->string('dosage')->comment('liều lượng');
             $table->timestamps();
         });
     }
