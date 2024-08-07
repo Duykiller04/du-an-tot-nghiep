@@ -21,6 +21,6 @@ class Supplier extends Model
         return $this->belongsToMany(Medicine::class);
     }
     public function medicalInstruments() {
-        return $this->belongsToMany(MedicalIntrument::class);
+        return $this->belongsToMany(MedicalInstrument::class);
     }
 }
