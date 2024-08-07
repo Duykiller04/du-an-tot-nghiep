@@ -24,6 +24,6 @@ class Category extends Model
         return $this->belongsToMany(Medicine::class);
     }
     public function medicialInstruments(){
-        return $this->hasMany(MedicalIntrument::class);
+        return $this->hasMany(MedicalInstrument::class);
     }
 }

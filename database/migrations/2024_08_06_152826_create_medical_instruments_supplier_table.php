@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MedicalInstrument;
 use App\Models\MedicalIntrument;
 use App\Models\Supplier;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('medical_instruments_supplier', function (Blueprint $table) {
-            $table->foreignIdFor(MedicalIntrument::class)->constrained();
+            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->foreignIdFor(Supplier::class)->constrained();
             
             $table->primary(['medical_instrument_id', 'supplier_id']);
