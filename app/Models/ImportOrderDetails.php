@@ -38,6 +38,6 @@ class ImportOrderDetails extends Model
     }
     public function memedical_instrumentsdicine()
     {
-        return $this->belongsTo(Medicalnstruments::class);
+        return $this->belongsTo(MedicalInstrument::class);
     }
 }

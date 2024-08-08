@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\Unit;
+use App\Models\Customer;
+use App\Models\Storage;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,15 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('medical_intruments', function (Blueprint $table) {
+        Schema::create('inventory_audits', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Storage::class)->constrained();
-            $table->foreignIdFor(Unit::class)->constrained();
-            $table->string('name')->comment('Tên dụng cụ');
-            $table->double('price_import',15,2)->comment('giá nhập');
-            $table->double('price_sale',15,2)->comment('giá bán');
-            $table->softDeletes();
+            $table->foreignIdFor(Customer::class)->constrained();
+            $table->time('time');
+            $table->time('date_recorded');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('medical_intruments');
+        Schema::dropIfExists('inventory_audits');
     }
 };

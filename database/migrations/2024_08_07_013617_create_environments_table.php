@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Storage;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,7 @@ return new class extends Migration
     {
         Schema::create('environments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('storage_id');
-            $table->foreign('storage_id')->references('id')->on('storage');
+            $table->foreignIdFor(Storage::class)->constrained();
             $table->date('time');
             $table->double('temperature');
             $table->double('huminity');

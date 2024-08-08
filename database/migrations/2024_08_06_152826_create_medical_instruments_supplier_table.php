@@ -17,7 +17,6 @@ return new class extends Migration
         Schema::create('medical_instruments_supplier', function (Blueprint $table) {
             $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->foreignIdFor(Supplier::class)->constrained();
-            
             $table->primary(['medical_instrument_id', 'supplier_id']);
             $table->timestamps();
         });

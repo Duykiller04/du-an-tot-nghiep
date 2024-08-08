@@ -29,6 +29,6 @@ class ExpiredMedications extends Model
 
     public function medical_instruments()
     {
-        return $this->hasMany(MedicalInstruments::class);
+        return $this->hasMany(MedicalInstrument::class);
     }
 }

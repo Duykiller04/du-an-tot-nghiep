@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\InventoryAudit;
+use App\Models\MedicalInstrument;
+use App\Models\Medicine;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,14 +16,11 @@ return new class extends Migration
     {
         Schema::create('inventory_check_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('inventory_audit_id');
-            $table->foreign('inventory_audit_id')->references('id')->on('inventory_audit');
-            $table->unsignedBigInteger('medicine_id');
-            $table->foreign('medicine_id')->references('id')->on('medicines');
-            $table->unsignedBigInteger('quantity');
-            $table->enum('status',['Checked','Unchecked']);
-            $table->unsignedBigInteger('medical_instrument_id');
-            $table->foreign('medical_instrument_id')->references('id')->on('medical_instruments');
+            $table->foreignIdFor(InventoryAudit::class)->constrained();
+            $table->foreignIdFor(Medicine::class)->constrained();
+            $table->foreignIdFor(MedicalInstrument::class)->constrained();
+            $table->double('quantity');
+            $table->enum('status',['checked','unchecked']);
             $table->timestamps();
             $table->softDeletes();
         });
