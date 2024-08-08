@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\CutDoseOrder;
+use App\Models\CutDosePrescription;
 use App\Models\MedicalInstrument;
 use App\Models\Medicine;
 use App\Models\Unit;
@@ -15,13 +15,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('details_of_cutting_dose_medications', function (Blueprint $table) {
+        Schema::create('cut_dose_prescription_details', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Medicine::class)->constrained();
-            $table->foreignIdFor(CutDoseOrder::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
+            $table->foreignIdFor(CutDosePrescription::class)->constrained();
             $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->double('quantity');
+            $table->unsignedBigInteger('current_price');
             $table->string('dosage')->comment('liều lượng');
             $table->timestamps();
         });
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('details_of_cutting_dose_medications');
+        Schema::dropIfExists('cut_dose_prescription_details');
     }
 };

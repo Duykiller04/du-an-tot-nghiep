@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Category;
-use App\Models\Supplier;
+use App\Models\Medicine;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('category_medicine', function (Blueprint $table) {
             $table->foreignIdFor(Category::class)->constrained();
-            $table->foreignIdFor(Supplier::class)->constrained();
-            
+            $table->foreignIdFor(Medicine::class)->constrained();
             $table->primary(['category_id', 'medicine_id']);
             $table->timestamps();
         });

@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Inventory_audi extends Model
+class InventoryAudit extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    protected $table = 'inventory_audit';
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'storage_id',
         'time',

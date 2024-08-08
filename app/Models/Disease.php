@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Disease extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    protected $table = 'diseases';
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'disease_name',
         'symptom',

@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Environment extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    protected $table = 'environments';
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'storage_id',
         'time',
