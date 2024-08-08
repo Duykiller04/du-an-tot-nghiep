@@ -15,13 +15,11 @@ class CutDoseOrderDetails extends Model
         'unit_id',
         'quantity',
         'dosage',
-
-
     ];
 
-    public function medicine()
+    public function medicines() //duy
     {
-        return $this->belongsTo(Medicine::class);
+        return $this->hasMany(Medicine::class);
     }
 
     public function cutDoseOrder()
