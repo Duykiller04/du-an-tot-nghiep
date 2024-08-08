@@ -25,6 +25,14 @@ class Medicine extends Model
         'is_active',
         'expiration_date',
     ];
+    public function categories() //duy
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function CutDoseOrderDetails() //duy
+    {
+        return $this->belongsTo(CutDoseOrderDetails::class);
+    }
     public function storage()
     {
         return $this->belongsTo(Storage::class);
