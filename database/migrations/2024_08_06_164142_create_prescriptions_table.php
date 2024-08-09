@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('type_sell', ['Bán lẻ', 'bán giá nhập', 'Trả lại nhà cung cấp', 'xuất', 'hủy'])->comment('loại_bán');
             $table->string('name_customer', 50);
             $table->timestamps();
+
         });
     }
 

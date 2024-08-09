@@ -17,6 +17,8 @@ class PrescriptionDetail extends Model
         'quantity',
         'current_price',
         'dosage',
+
+        
     ];
 
     public function medicine()

@@ -16,5 +16,6 @@ class Customer extends Model
         'email',
         'age',
         'weight',
+        
     ];
 }
