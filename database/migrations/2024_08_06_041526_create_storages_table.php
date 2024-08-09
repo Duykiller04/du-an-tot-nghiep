@@ -17,9 +17,7 @@ return new class extends Migration
     {
         Schema::create('storages', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Medicine::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->string('inventory_code')->unique();
             $table->string('location')->comment('địa chỉ');
             $table->unsignedInteger('quantity')->default(0);
