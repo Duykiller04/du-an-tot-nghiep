@@ -17,6 +17,7 @@ class DetailsOfCutDose extends Model
         'quantity',
         'current_price',
         'dosage',
+        
 
     ];
 

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('quantity');
             $table->string('dosage')->comment('liều lượng');
             $table->timestamps();
+
         });
     }
 

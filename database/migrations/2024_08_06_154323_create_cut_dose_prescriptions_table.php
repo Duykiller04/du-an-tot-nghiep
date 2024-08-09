@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_doctor');
             $table->double('total');
             $table->timestamps();
+            
         });
     }
 

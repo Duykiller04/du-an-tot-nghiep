@@ -16,6 +16,7 @@ class DetailsOfCuttingDoseMedication extends Model
         'quantity',
         'dosage',
 
+        
 
     ];
 

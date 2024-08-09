@@ -15,9 +15,10 @@ class CutDoseOrder extends Model
         'age_max',
         'gender',
         'name_diseases'
+        
     ];
 
-    
+
 }
 
 

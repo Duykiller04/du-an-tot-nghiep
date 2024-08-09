@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('gender');
             $table->string('name_diseases')->comment('tên bệnh');
             $table->timestamps();
+
         });
     }
 
