@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Disease;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,11 +17,11 @@ return new class extends Migration
             $table->foreignIdFor(Disease::class)->constrained();
             $table->string('name_hospital', 50)->comment('tên_bệnh_viện');
             $table->string('name_doctor', 50);
-            $table->date('age');
+            $table->unsignedBigInteger('age');
             $table->string('phone_doctor');
             $table->double('total');
             $table->timestamps();
-            
+
         });
     }
 

@@ -5,35 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailsOfCutDose extends Model
+class CutDoseOrderDetails extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'medicine_id',
-        'cut_dose_prescription_id',
+        'cut_dose_medication_id',
         'medical_instruments_id',
         'unit_id',
         'quantity',
-        'current_price',
         'dosage',
-        
-
     ];
 
-    public function medicine()
+    public function medicines() //duy
     {
-        return $this->belongsTo(Medicine::class);
+        return $this->hasMany(Medicine::class);
+    }
+
+    public function cutDoseOrder()
+    {
+        return $this->belongsTo(CutDoseOrder::class);
     }
 
     public function unit()
     {
         return $this->belongsTo(Unit::class);
-    }
-
-    public function cutDosePrescription()
-    {
-        return $this->belongsTo(CutDosePrescription::class);
     }
 
     public function medicalInstrument()

@@ -16,7 +16,7 @@ class CutDosePrescription extends Model
         'age',
         'phone_doctor',
         'total',
-        
+
 
     ];
 
