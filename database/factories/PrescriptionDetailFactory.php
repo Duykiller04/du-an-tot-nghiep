@@ -24,7 +24,7 @@ class PrescriptionDetailFactory extends Factory
             'medicine_id' =>  rand(1,10),
             'unit_id' =>  rand(1,10),
             'prescription_id' => rand(1,10),
-            'medical_instruments_id' =>  rand(1,10),
+            'medical_instrument_id' =>  rand(1,10),
             'quantity' => fake()->numberBetween(1, 100),
             'current_price' =>fake()->randomFloat(2, 10, 1000),
             'dosage' =>fake()->text(50),

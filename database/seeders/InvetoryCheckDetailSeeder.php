@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class InvetoryAuditDetailSeeder extends Seeder
+class InvetoryCheckDetailSeeder extends Seeder
 {
     /**
      * Run the database seeds.

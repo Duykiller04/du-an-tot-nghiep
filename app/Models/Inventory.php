@@ -12,7 +12,7 @@ class Inventory extends Model
         'storage_id',
         'medicine_id',
         'quantity',
-        'medical_instruments_id',
+        'medical_instrument_id',
     ];
 
     public function storage()

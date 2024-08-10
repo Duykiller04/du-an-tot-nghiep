@@ -17,10 +17,9 @@ class CutDoseOrderDetailsFactory extends Factory
     public function definition(): array
     {
         return [
-
             'medicine_id' => rand(1, 10),
-            'cut_dose_medication_id' => rand(1, 10),
-            'medical_instruments_id' => rand(1, 10),
+            'cut_dose_order_id' => rand(1, 10),
+            'medical_instrument_id' => rand(1, 10),
             'unit_id' => rand(1, 10),
             'quantity' => fake()->numberBetween(1, 100),
             'dosage' => fake()->text(50),

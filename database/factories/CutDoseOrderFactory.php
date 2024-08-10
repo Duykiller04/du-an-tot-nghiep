@@ -20,7 +20,7 @@ class CutDoseOrderFactory extends Factory
             'weight' => rand(1, 50),
             'age_min' => 1,
             'age_max' => 90,
-            'gender' => fake()->randomElement(['Nam', 'Nữ', 'giới tính khác']),
+            'gender' => fake()->boolean(),
             'name_diseases' => fake()->name(10),
         ];
     }

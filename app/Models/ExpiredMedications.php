@@ -14,7 +14,7 @@ class ExpiredMedications extends Model
         'quantity',
         'expiration_date',
         'medicine_id',
-        'medical_instruments_id',
+        'medical_instrument_id',
     ];
 
     public function storage()
