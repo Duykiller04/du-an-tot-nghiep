@@ -23,7 +23,7 @@ class CutDosePrescriptionDetailFactory extends Factory
         return [
             'medicine_id' => rand(1, 10),
             'cut_dose_prescription_id' => rand(1, 10),
-            'medical_instruments_id' => rand(1, 10),
+            'medical_instrument_id' => rand(1, 10),
             'unit_id' => rand(1, 10),
             'quantity' => fake()->numberBetween(1, 100),
             'current_price' => fake()->randomFloat(2, 1, 100),

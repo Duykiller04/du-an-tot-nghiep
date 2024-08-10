@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Inventory_audit_detail extends Model
+class InventoryCheckDetail extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
@@ -15,6 +15,5 @@ class Inventory_audit_detail extends Model
         'quantity',
         'status',
         'medical_instrument_id',
-
     ];
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImportOrderDetails extends Model
+class ImportOrderDetail extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -19,7 +19,7 @@ class ImportOrderDetails extends Model
         'note',
         'medication_name',
         'expiration_date',
-        'medical_instruments_id',
+        'medical_instrument_id',
     ];
 
     public function import_order()

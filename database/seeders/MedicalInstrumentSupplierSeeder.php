@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\MedicalInstrument;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
+use Illuminate\Support\Facades\DB;
 
 class MedicalInstrumentSupplierSeeder extends Seeder
 {
@@ -13,8 +15,23 @@ class MedicalInstrumentSupplierSeeder extends Seeder
      */
     public function run(): void
     {
-        $medicine = MedicalInstrument::find(1);
-        $supplier = [1,2,3,4];
-        $medicine->suppliers()->sync($supplier);
+        $faker = Faker::create();
+
+        $existingPairs = [];
+
+        while (count($existingPairs) < 10) {
+            $medicalInstrumentId = $faker->numberBetween(1, 10);
+            $supplierId = $faker->numberBetween(1, 10);
+
+            $pair = $medicalInstrumentId . '-' . $supplierId;
+
+            if (!in_array($pair, $existingPairs)) {
+                DB::table('medical_instruments_supplier')->insert([
+                    'medical_instrument_id' => $medicalInstrumentId,
+                    'supplier_id' => $supplierId,
+                ]);
+                $existingPairs[] = $pair;
+            }
+        }
     }
 }

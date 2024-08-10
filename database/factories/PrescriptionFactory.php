@@ -18,7 +18,7 @@ class PrescriptionFactory extends Factory
     {
         return [
             'total' => fake()->randomFloat(2, 100, 10000),
-            'age' => fake()->numberBetween(18, 80),
+            'age' => fake()->date(),
             'type_sell' => fake()->randomElement(['Bán lẻ', ' Bán giá nhập', 'Trả lại nhà cung cấp', 'Xuất','Hủy']),
             'name_customer' => fake()->name(),
         ];
