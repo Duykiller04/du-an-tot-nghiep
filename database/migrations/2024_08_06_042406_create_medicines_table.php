@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use Illuminate\Database\Migrations\Migration;
@@ -15,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->string('medicine_code',20)->comment('Mã thuốc');
             $table->double('price_import',15,2)->comment('giá nhập');
