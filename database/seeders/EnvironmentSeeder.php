@@ -13,7 +13,7 @@ class EnvironmentSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=0; $i < 5; $i++) { 
+        for ($i=0; $i < 10; $i++) { 
             DB::table('environments')->insert([
                 'storage_id'=>1,
                 'time'=>now()->subDays(),
