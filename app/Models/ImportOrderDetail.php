@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImportOrderDetails extends Model
+class ImportOrderDetail extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -38,6 +38,6 @@ class ImportOrderDetails extends Model
     }
     public function memedical_instrumentsdicine()
     {
-        return $this->belongsTo(Medicalnstruments::class);
+        return $this->belongsTo(MedicalInstrument::class);
     }
 }

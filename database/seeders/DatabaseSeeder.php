@@ -3,8 +3,12 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 
+use App\Models\ImportOrderDetail;
+
+use App\Models\Storage;
+use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -18,5 +22,10 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $this->call(ExpiredMedicationSeeder::class);
+        $this->call(InventorySeeder::class);
+        $this->call(ImportOrderSeeder::class);
+        $this->call(Storage::class);
+        $this->call(ImportOrderDetail::class);
     }
 }

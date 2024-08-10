@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Category;
-use App\Models\Supplier;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_medicine', function (Blueprint $table) {
-            $table->foreignIdFor(Category::class)->constrained();
-            $table->foreignIdFor(Supplier::class)->constrained();
-            
-            $table->primary(['category_id', 'medicine_id']);
+        Schema::create('units', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('parent_id')->index()->nullable();
+            $table->string('name')->comment('Tên danh mục');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_medicine');
+        Schema::dropIfExists('units');
     }
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use Illuminate\Database\Migrations\Migration;
@@ -24,11 +25,11 @@ return new class extends Migration
             $table->string('registration_number',30)->comment('Số đăng ký');
             $table->string('active_ingredient',30)->comment('Hoạt chất');
             $table->string('concentration',50)->comment('Hàm lượng');
-            $table->string('dosage ',100)->comment('Liều dùng');
+            $table->string('dosage',100)->comment('Liều dùng');
             $table->string('administration_route',50)->comment('Đường dùng (đường uống, đường tiêm)');
             $table->string('origin',50)->comment(' Xuất xứ (ví dụ: Việt Nam)');
             $table->boolean('is_active')->default(true);
-            $table->date('expiration_date ')->comment('Ngày hết hạn');
+            $table->date('expiration_date')->comment('Ngày hết hạn');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -20,8 +20,8 @@ class Category extends Model
     public function children(){
         return $this->hasMany(Category::class, 'parent_id');
     }
-    public function medicines(){
-        return $this->belongsToMany(Medicine::class);
+    public function medicines(){ //duy
+        return $this->hasMany(Medicine::class);
     }
     public function medicialInstruments(){
         return $this->hasMany(MedicalInstrument::class);

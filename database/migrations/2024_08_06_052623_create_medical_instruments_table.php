@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\MedicalInstrument;
-use App\Models\Medicine;
 use App\Models\Storage;
+use App\Models\Unit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,14 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expired_medications', function (Blueprint $table) {
+        Schema::create('medical_instruments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Storage::class)->constrained();
-            $table->foreignIdFor(Medicine::class)->constrained();
-            
-            $table->unsignedInteger('quantity')->default(0);
-            $table->dateTime('expiration_date')->comment('ngày hết hạn');
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
+            $table->foreignIdFor(Unit::class)->constrained();
+            $table->string('name')->comment('Tên dụng cụ');
+            $table->double('price_import',15,2)->comment('giá nhập');
+            $table->double('price_sale',15,2)->comment('giá bán');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expired_medications');
+        Schema::dropIfExists('medical_instruments');
     }
 };

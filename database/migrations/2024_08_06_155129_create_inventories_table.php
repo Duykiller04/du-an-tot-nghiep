@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\MedicalInstrument;
+use App\Models\Medicine;
 use App\Models\Storage;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Medicine::class)->constrained();
-            $table->foreignIdFor(Medical_instruments::class)->constrained();
+            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->unsignedInteger('quantity')->default(0);
             $table->timestamps();
         });
