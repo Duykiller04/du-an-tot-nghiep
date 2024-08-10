@@ -13,7 +13,7 @@ class InventoryAuditSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=0; $i < 5; $i++) { 
+        for ($i=0; $i < 10; $i++) { 
             DB::table('inventory_audits')->insert([
                 'storage_id'=>1,
                 'customer_id'=>1,
