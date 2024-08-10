@@ -17,6 +17,7 @@ class CutDosePrescription extends Model
         'phone_doctor',
         'total',
 
+
     ];
 
     public function disease()

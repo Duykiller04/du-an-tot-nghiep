@@ -16,8 +16,6 @@ class CutDoseOrder extends Model
         'gender',
         'name_diseases'
     ];
-
-    
 }
 
 
