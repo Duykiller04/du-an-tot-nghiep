@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('phone', 20)->nullable();
-            $table->string('address', 50)->nullable();
+            $table->string('address')->nullable();
             $table->string('email', 50)->unique();
             $table->integer('age')->nullable()->comment('Tuổi');
             $table->integer('weight')->nullable()->comment('Cân nặng');
