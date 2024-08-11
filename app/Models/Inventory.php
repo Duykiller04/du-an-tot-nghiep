@@ -17,16 +17,16 @@ class Inventory extends Model
 
     public function storage()
     {
-        return $this->hasMany(Storage::class);
+        return $this->belongsTo(Storage::class);
     }
 
     public function medicine()
     {
-        return $this->hasMany(Medicine::class);
+        return $this->belongsTo(Medicine::class);
     }
 
     public function medical_instruments()
     {
-        return $this->hasMany(MedicalInstrument::class);
+        return $this->belongsTo(MedicalInstrument::class);
     }
 }
