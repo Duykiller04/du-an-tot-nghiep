@@ -25,7 +25,7 @@ class Inventory extends Model
         return $this->belongsTo(Medicine::class);
     }
 
-    public function medical_instruments()
+    public function medicalInstruments()
     {
         return $this->hasMany(MedicalInstrument::class);
     }

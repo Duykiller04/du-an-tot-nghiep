@@ -19,7 +19,7 @@ class PrescriptionFactory extends Factory
         return [
             'total' => fake()->randomFloat(2, 100, 10000),
             'age' => fake()->date(),
-            'type_sell' => fake()->randomElement(['Bán lẻ', ' Bán giá nhập', 'Trả lại nhà cung cấp', 'Xuất','Hủy']),
+            'type_sell' => fake()->randomElement(['Bán lẻ', 'bán giá nhập', 'Trả lại nhà cung cấp', 'xuất', 'hủy']),
             'name_customer' => fake()->name(),
         ];
     }

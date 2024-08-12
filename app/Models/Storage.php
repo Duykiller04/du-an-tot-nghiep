@@ -32,7 +32,7 @@ class Storage extends Model
         return $this->hasMany(Unit::class);
     }
 
-    public function medical_instruments()
+    public function medicalInstruments()
     {
         return $this->hasMany(MedicalInstrument::class);
     }

@@ -13,7 +13,7 @@ class InventoryAudit extends Model
         'storage_id',
         'time',
         'date_recorded',
-        'customer_id',
+        'user_id',
     ];
     protected function detail(){
         return $this->hasMany(InventoryCheckDetail::class,'inventory_audit_id','id');
@@ -21,7 +21,7 @@ class InventoryAudit extends Model
     protected function storage(){
         return $this->belongsTo(Storage::class,'storage_id','id');
     }
-    protected function customer(){
-        return $this->belongsTo(Customer::class,'customer_id','id');
+    protected function user(){
+        return $this->belongsTo(User::class,'user_id','id');
     }
 }

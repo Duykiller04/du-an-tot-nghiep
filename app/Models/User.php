@@ -51,8 +51,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function import_order()
+    public function importOrder()
     {
-        return $this->belongsTo(ImportOrder::class);
+        return $this->hasMany(ImportOrder::class);
     }
+    public function inventoryAudit(){
+        return $this->hasMany(InventoryAudit::class);
+    }
+
 }
