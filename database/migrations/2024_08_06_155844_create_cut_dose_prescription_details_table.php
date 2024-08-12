@@ -25,7 +25,6 @@ return new class extends Migration
             $table->unsignedBigInteger('current_price');
             $table->string('dosage')->comment('liều lượng');
             $table->timestamps();
-            
         });
     }
 

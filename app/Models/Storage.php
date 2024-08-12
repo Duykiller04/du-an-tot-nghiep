@@ -17,6 +17,11 @@ class Storage extends Model
         'medical_instruments_id',
     ];
 
+    public function inventory()
+    {
+        return $this->hasMany(Medicine::class);
+    }
+
     public function medicine()
     {
         return $this->hasMany(Medicine::class);

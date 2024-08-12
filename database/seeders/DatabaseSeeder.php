@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\Customer;
 use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
@@ -21,7 +20,10 @@ use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-
+use App\Models\ImportOrderDetail;
+use App\Models\Storage;
+use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 class DatabaseSeeder extends Seeder
 {
     /**
