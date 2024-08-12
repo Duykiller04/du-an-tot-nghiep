@@ -16,6 +16,10 @@ class CutDoseOrder extends Model
         'gender',
         'name_diseases'
     ];
+    public function cutDoseOrderDetail(){
+        return $this->hasOne(CutDoseOrderDetails::class);
+    }
+
 }
 
 

@@ -8,22 +8,15 @@ use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
 use App\Models\CutDosePrescription;
 use App\Models\CutDosePrescriptionDetail;
-use App\Models\ImportOrderDetail;
-use App\Models\InventoryCheckDetail;
 use App\Models\Prescription;
 use App\Models\PrescriptionDetail;
 use App\Models\Category;
 use App\Models\MedicalInstrument;
 use App\Models\Medicine;
-use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\ImportOrderDetail;
-use App\Models\Storage;
-use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 class DatabaseSeeder extends Seeder
 {
     /**

@@ -13,10 +13,9 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $find = Category::find(1);
         $category1 = Category::query()->create([
                 'name' => 'Children 1',
-                'parent_id' => $find->id,
+                'parent_id' => 1,
                 'is_active' => true,
         ]);
     }

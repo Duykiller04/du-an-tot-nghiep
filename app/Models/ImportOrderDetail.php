@@ -35,7 +35,7 @@ class ImportOrderDetail extends Model
     {
         return $this->belongsTo(Medicine::class);
     }
-    public function memedical_instrumentsdicine()
+    public function memedicalInstrumentsdicine()
     {
         return $this->belongsTo(MedicalInstrument::class);
     }

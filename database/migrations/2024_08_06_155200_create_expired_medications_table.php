@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->unsignedInteger('quantity')->default(0);
             $table->dateTime('expiration_date')->comment('ngày hết hạn');
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->timestamps();
         });
     }

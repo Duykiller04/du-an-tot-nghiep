@@ -22,4 +22,7 @@ class CutDosePrescription extends Model
     {
         return $this->belongsTo(Disease::class);
     }
+    public function cutDosePrescriptionDetail(){
+        return $this->hasOne(CutDosePrescriptionDetail::class);
+    }
 }

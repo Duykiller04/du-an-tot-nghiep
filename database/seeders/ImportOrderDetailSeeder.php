@@ -28,7 +28,7 @@ class ImportOrderDetailSeeder extends Seeder
                 'unit_id' => $faker->numberBetween(1, 10),
                 'note' => fake()->text(),
                 'medication_name' => fake()->name(),
-                'expiration_date' => $faker->date(), // Ngày thêm
+                'expiration_date' => $faker->date(),
                 'medical_instrument_id' => $faker->numberBetween(1, 10),
             ]);
         }
