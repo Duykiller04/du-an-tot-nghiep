@@ -10,8 +10,8 @@ class CutDoseOrderDetails extends Model
     use HasFactory;
     protected $fillable = [
         'medicine_id',
-        'cut_dose_medication_id',
-        'medical_instruments_id',
+        'cut_dose_order_id',
+        'medical_instrument_id',
         'unit_id',
         'quantity',
         'dosage',

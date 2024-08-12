@@ -17,13 +17,12 @@ class ExpiredMedicationSeeder extends Seeder
         $faker = Faker::create();
         
         foreach (range(1, 10) as $index) {
-            DB::table(ExpiredMedications::class)->insert([
+            DB::table('expired_medications')->insert([
                 'storage_id'=> $faker -> numberBetween(1, 10),
                 'medicine_id'=> $faker -> numberBetween(1, 10),
-                'medical_instruments_id'=> $faker -> numberBetween(1, 10),
+                'medical_instrument_id'=> $faker -> numberBetween(1, 10),
                 'quantity' => $faker -> numberBetween(1, 100),
                 'expiration_date' => $faker->date(),
-                
             ]);
         }
     }

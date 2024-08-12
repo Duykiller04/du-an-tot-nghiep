@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Medicine::class)->constrained();
-            
+            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->unsignedInteger('quantity')->default(0);
             $table->dateTime('expiration_date')->comment('ngày hết hạn');
             $table->foreignIdFor(MedicalInstrument::class)->constrained();

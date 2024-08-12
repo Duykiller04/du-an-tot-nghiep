@@ -18,17 +18,18 @@ class ImportOrderDetailSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1, 10) as $index) {
-            DB::table(ImportOrderDetail::class)->insert([
-                'import_order_id'=> $faker -> numberBetween(1, 10),
+            DB::table('import_order_details')->insert([
+                'import_order_id' => $faker->numberBetween(1, 10),
                 'date_added' => $faker->date(),
-                'quantity' => $faker -> numberBetween(1, 100),
-                'import_price'=>fake() ->randomFloat(2, 100, 1000),
-                'total'=> $faker ->randomFloat(2, 100, 1000),
-                'medicine_id'=> $faker -> numberBetween(1, 10),
-                'note' =>fake()->text(), 
-                'medication_name' =>fake()->name(),
+                'quantity' => $faker->numberBetween(1, 100),
+                'import_price' => fake()->randomFloat(2, 100, 1000),
+                'total' => $faker->randomFloat(2, 100, 1000),
+                'medicine_id' => $faker->numberBetween(1, 10),
+                'unit_id' => $faker->numberBetween(1, 10),
+                'note' => fake()->text(),
+                'medication_name' => fake()->name(),
                 'expiration_date' => $faker->date(), // Ngày thêm
-                'medical_instruments_id'=> $faker -> numberBetween(1, 10),
+                'medical_instrument_id' => $faker->numberBetween(1, 10),
             ]);
         }
     }

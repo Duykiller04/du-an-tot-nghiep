@@ -13,6 +13,15 @@ class InventoryAudit extends Model
         'storage_id',
         'time',
         'date_recorded',
-        'id_customer',
+        'customer_id',
     ];
+    protected function detail(){
+        return $this->hasMany(InventoryCheckDetail::class,'inventory_audit_id','id');
+    }
+    protected function storage(){
+        return $this->belongsTo(Storage::class,'storage_id','id');
+    }
+    protected function customer(){
+        return $this->belongsTo(Customer::class,'customer_id','id');
+    }
 }

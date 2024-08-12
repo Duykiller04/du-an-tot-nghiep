@@ -13,10 +13,12 @@ class PrescriptionDetail extends Model
         'medicine_id',
         'unit_id',
         'prescription_id',
-        'medical_instruments_id',
+        'medical_instrument_id',
         'quantity',
         'current_price',
         'dosage',
+
+        
     ];
 
     public function medicine()

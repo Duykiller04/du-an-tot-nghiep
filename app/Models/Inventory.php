@@ -12,7 +12,7 @@ class Inventory extends Model
         'storage_id',
         'medicine_id',
         'quantity',
-        'medical_instruments_id',
+        'medical_instrument_id',
     ];
 
     public function storage()
@@ -27,6 +27,6 @@ class Inventory extends Model
 
     public function medical_instruments()
     {
-        return $this->belongsTo(MedicalInstrument::class);
+        return $this->hasMany(MedicalInstrument::class);
     }
 }

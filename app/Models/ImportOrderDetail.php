@@ -19,7 +19,7 @@ class ImportOrderDetail extends Model
         'note',
         'medication_name',
         'expiration_date',
-        'medical_instruments_id',
+        'medical_instrument_id',
     ];
 
     public function import_order()
@@ -31,7 +31,6 @@ class ImportOrderDetail extends Model
     {
         return $this->belongsTo(Unit::class);
     }
-// 
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);

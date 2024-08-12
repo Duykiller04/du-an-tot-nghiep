@@ -17,13 +17,11 @@ class StorageSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1, 10) as $index) {
-            DB::table(Storage::class)->insert([
-                'inventory_code' => $faker -> numberBetween(1, 10),
-                'medicine_id' => $faker -> numberBetween(1, 10),
-                'location' => $faker -> numberBetween(1, 10),
+            DB::table('storages')->insert([
+                'inventory_code' => $faker -> numberBetween(1, 10) . $faker ->name(),
+                'location' => $faker -> name(),
                 'quantity'=> $faker -> numberBetween(1, 100),
                 'unit_id' => $faker -> numberBetween(1, 10),
-                'medical_instruments_id' => $faker -> numberBetween(1, 10),
             ]);
         }
     }

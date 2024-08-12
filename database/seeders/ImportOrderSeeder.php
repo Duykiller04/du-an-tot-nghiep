@@ -17,7 +17,7 @@ class ImportOrderSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1, 10) as $index) {
-            DB::table(ImportOrder::class)->insert([
+            DB::table('import_orders')->insert([
                 'user_id' => $faker -> numberBetween(1, 10),
                 'storage_id' => $faker -> numberBetween(1, 10),
                 'supplier_id' => $faker -> numberBetween(1, 10),
