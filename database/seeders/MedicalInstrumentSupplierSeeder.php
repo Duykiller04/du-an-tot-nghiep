@@ -19,7 +19,9 @@ class MedicalInstrumentSupplierSeeder extends Seeder
 
         $existingPairs = [];
 
-        while (count($existingPairs) < 10) {
+        for ($i=0; $i < 5; $i++)
+            # code...
+        {
             $medicalInstrumentId = $faker->numberBetween(1, 10);
             $supplierId = $faker->numberBetween(1, 10);
 

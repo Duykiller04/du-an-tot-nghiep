@@ -17,7 +17,8 @@ class MedicineSupplierSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1, 10) as $index) {
+         for ($i=0; $i <5 ; $i++) 
+         {
             DB::table('medicine_supplier')->insert([
                 'medicine_id' => $faker->numberBetween(1, 10),
                 'supplier_id' => $faker->numberBetween(1, 10),
