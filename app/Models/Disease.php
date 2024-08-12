@@ -16,4 +16,7 @@ class Disease extends Model
         'verify_date',
 
     ];
+    protected function customer(){
+        return $this->belongsTo(User::class,'user_id','id');
+    }
 }

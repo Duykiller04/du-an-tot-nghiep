@@ -18,7 +18,7 @@ class CutDosePrescriptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'disease_id' => rand(1, 10),
+            'disease_id' => rand(1, 5),
             'name_hospital' => fake()->name(20),
             'name_doctor' => fake()->name(20),
             'age' => fake()->numberBetween(10,50),
