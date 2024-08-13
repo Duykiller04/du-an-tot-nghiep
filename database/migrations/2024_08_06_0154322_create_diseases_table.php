@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('disease_name');
             $table->string('symptom');
-            $table->string('feature_img')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('verify_date');
             $table->timestamps();
             $table->softDeletes();
