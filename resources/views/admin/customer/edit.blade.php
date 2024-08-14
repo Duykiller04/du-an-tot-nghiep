@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <form action="{{ route('customer.update',$customer) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.customers.update',$customer) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row">

@@ -34,7 +34,7 @@ class SupplierController extends Controller
     {
         try {
             Supplier::query()->create($request->all());
-            return redirect()->route('suppliers.index')->with('success', 'Thành công');
+            return redirect()->route('admin.suppliers.index')->with('success', 'Thành công');
         } catch (\Exception $exception) {
             return back()->with('error' . $exception->getMessage());
         }

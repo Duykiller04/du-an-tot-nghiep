@@ -52,7 +52,7 @@ class UserController extends Controller
             $customer->image = Storage::put(self::PATH_UPLOAD, $request->file('image'));
             $customer->save();
         }
-        return redirect()->route('users.index');
+        return redirect()->route('admin.users.index');
     }
     /**
      * Display the specified resource.
@@ -97,7 +97,7 @@ class UserController extends Controller
             $customer->save();
         }
 
-        return redirect()->route('users.index');
+        return redirect()->route('admin.users.index');
     }
 
     /**

@@ -32,9 +32,9 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        $data=$request->validated();
+        $data = $request->validated();
         Customer::query()->create($data);
-        return redirect()->route('customer.index');
+        return redirect()->route('admin.customers.index');
     }
 
     /**
@@ -61,7 +61,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::findOrFail($id);
         $customer->update($request->all());
-        return redirect()->route('customer.index');
+        return redirect()->route('admin.customers.index');
     }
 
     /**

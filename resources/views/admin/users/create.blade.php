@@ -8,7 +8,7 @@
             </div>
         @endif
 
-        <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('admin.users.store') }}" method="post" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">

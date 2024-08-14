@@ -2,7 +2,7 @@
 @section('content')
     <div class="table-responsive">
         <h1>DANH SÁCH USER</h1>
-        <a class="btn btn-info" href="{{ route('users.create') }}">Thêm mới</a>
+        <a class="btn btn-info" href="{{ route('admin.users.create') }}">Thêm mới</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -57,9 +57,9 @@
                         </td>
 
                         <td>
-                            <a class="btn btn-info" href="{{ route('users.show', $item->id) }}">Xem</a>
-                            <a class="btn btn-warning" href="{{ route('users.edit', $item->id) }}">Sửa</a>
-                            <form action="{{ route('users.destroy', $item->id) }}" method="POST">
+                            <a class="btn btn-info" href="{{ route('admin.users.show', $item->id) }}">Xem</a>
+                            <a class="btn btn-warning" href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
+                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
 
