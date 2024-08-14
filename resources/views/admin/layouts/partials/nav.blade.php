@@ -496,8 +496,8 @@
                                     $url = Storage::url($url);
                                 }
                             @endphp
-                            <img class="rounded-circle header-profile-user"
-                                src="{{ $url }}" alt="Header Avatar">
+                            <img class="rounded-circle header-profile-user" src="{{ $url }}"
+                                alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span
                                     class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
