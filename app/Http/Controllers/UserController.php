@@ -36,22 +36,11 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $userData = [
-            'name'        => $request->input('name'),
-            'email'       => $request->input('email'),
-            'phone'       => $request->input('phone'),
-            'address'     => $request->input('address'),
-            'birth'       => $request->input('birth'),
-            'description' => $request->input('description'),
-            'password'    => bcrypt($request->input('password')),
-            'type'        => $request->input('type'),
-        ];
-
-        $customer = User::create($userData);
+        $data = $request->except('image');
         if ($request->hasFile('image')) {
-            $customer->image = Storage::put(self::PATH_UPLOAD, $request->file('image'));
-            $customer->save();
+            $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         }
+        User::create($data);
         return redirect()->route('users.index');
     }
     /**
@@ -75,29 +64,23 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        $userData = [
-            'name'        => $request->input('name'),
-            'email'       => $request->input('email'),
-            'phone'       => $request->input('phone'),
-            'address'     => $request->input('address'),
-            'birth'       => $request->input('birth'),
-            'description' => $request->input('description'),
-            'type'        => $request->input('type'),
-        ];
+        $model = User::query()->findOrFail($id);
 
-        if ($request->has('password')) {
-            $userData['password'] = bcrypt($request->input('password'));
-        }
-
-        $customer = User::find($id); // Lấy user cần cập nhật dựa trên $id
-        $customer->update($userData); // Cập nhật thông tin user
-
+        $data = $request->except('image');
         if ($request->hasFile('image')) {
-            $customer->image = Storage::put(self::PATH_UPLOAD, $request->file('image'));
-            $customer->save();
+            $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         }
 
-        return redirect()->route('users.index');
+        $currentImgThumb = $model->image;
+        $model->update($data);
+        if (
+            $request->hasFile('image')
+            && $currentImgThumb
+            && Storage::exists($currentImgThumb)
+        ) {
+            Storage::delete($currentImgThumb);
+        }
+        return back();
     }
 
     /**
