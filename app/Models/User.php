@@ -58,5 +58,4 @@ class User extends Authenticatable
     public function inventoryAudit(){
         return $this->hasMany(InventoryAudit::class);
     }
-
 }

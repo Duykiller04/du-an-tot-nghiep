@@ -18,8 +18,15 @@ Route::get('/', function () {
     return view('admin.layouts.master');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
+Auth::routes();
+
 Route::prefix('admin')
     ->as('admin.')
+    ->middleware('auth')
     ->group(function () {
 
         Route::controller(DeseaseController::class)
@@ -34,3 +41,6 @@ Route::prefix('admin')
         });
 
     });
+
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
