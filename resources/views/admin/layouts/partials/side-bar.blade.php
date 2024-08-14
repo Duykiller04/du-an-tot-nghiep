@@ -91,6 +91,23 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarSuppliers" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarSuppliers">
+                        <i class=" ri-file-user-line"></i>
+                        <span data-key="t-layouts">Nhà cung cấp</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarSuppliers">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('suppliers.index') }}" class="nav-link">Danh sách</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('suppliers.create') }}" class="nav-link">Thêm mới</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->
