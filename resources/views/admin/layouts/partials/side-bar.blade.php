@@ -50,7 +50,7 @@
                     <div class="collapse menu-dropdown" id="sidebarMultilevel">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-level-1.1"> Level 1.1 </a>
+                                <a href="{{route('customer.index')}}" class="nav-link" data-key="t-level-1.1">Customers</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse"
@@ -91,19 +91,32 @@
                         </ul>
                     </div>
                 </li>
+                
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarSuppliers" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarSuppliers">
-                        <i class=" ri-file-user-line"></i>
-                        <span data-key="t-layouts">Nhà cung cấp</span>
+                    <a class="nav-link menu-link" href="#sidebarProduct" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarProduct">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Các loại bệnh</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarSuppliers">
+                    <div class="collapse menu-dropdown" id="sidebarProduct">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('suppliers.index') }}" class="nav-link">Danh sách</a>
+                                <a href="{{route('admin.diseases.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
                             </li>
+
+                            {{-- <li class="nav-item">
+                                <a href="{{ route('admin.products.variant') }}" class="nav-link" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Thuộc tính
+                                </a>
+                            </li> --}}
+
                             <li class="nav-item">
-                                <a href="{{ route('suppliers.create') }}" class="nav-link">Thêm mới</a>
+                                <a href="{{route('admin.diseases.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
                             </li>
                         </ul>
                     </div>

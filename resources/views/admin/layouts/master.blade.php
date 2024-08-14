@@ -64,7 +64,11 @@
     @yield('script-libs')
 
     @yield('js')
-
+    
 </body>
 
 </html>
+
+@php
+    session()->forget('success');
+@endphp

@@ -17,7 +17,7 @@ class DiseaseSeeder extends Seeder
             DB::table('diseases')->insert([
                 'disease_name'=>'Benh dep trai',
                 'symptom'=>'nhin la nung',
-                'user_id'=> 1,
+                'feature_img' => fake()->imageUrl(),
                 'verify_date'=> now()->subDays()
             ]);
         }

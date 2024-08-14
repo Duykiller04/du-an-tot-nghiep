@@ -12,11 +12,11 @@ class Disease extends Model
     protected $fillable = [
         'disease_name',
         'symptom',
-        'user_id',
+        'feature_img',
+        'treatment_direction',
+        'danger_level',
         'verify_date',
 
     ];
-    protected function customer(){
-        return $this->belongsTo(User::class,'user_id','id');
-    }
+  
 }

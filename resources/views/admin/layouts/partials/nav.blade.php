@@ -487,7 +487,7 @@
                 </div> --}}
 
                 <div class="dropdown ms-sm-3 header-item topbar-user">
-                    {{-- <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                    <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             @php
@@ -508,19 +508,19 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header">Welcome {{ Auth::user()->name }} !</h6>
-                        <a class="dropdown-item" href=" {{ route('users.edit', Auth::user()->id) }} "><i
+                        {{-- <a class="dropdown-item" href=" {{ route('users.edit', Auth::user()->id) }} "><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Profile</span></a>
-                        <a class="dropdown-item" href="{{ route('auth.logout') }}"
+                                class="align-middle">Profile</span></a> --}}
+                        <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                           document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
 
-                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" class="d-none">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
