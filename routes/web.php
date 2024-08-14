@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeseaseController;
@@ -45,6 +46,8 @@ Route::prefix('admin')
         Route::resource('users', UserController::class);
       
         Route::resource('customer', CustomerController::class);
+      
+        Route::resource('suppliers', SupplierController::class);
 
     });
 
