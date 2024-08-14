@@ -17,7 +17,7 @@ class CutDoseOrderDetails extends Model
         'dosage',
     ];
 
-    public function medicines() //duy
+    public function medicines()
     {
         return $this->hasMany(Medicine::class);
     }

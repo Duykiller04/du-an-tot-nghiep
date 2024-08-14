@@ -14,7 +14,8 @@ class Prescription extends Model
         'age',
         'type_sell',
         'name_customer',
-
-        
     ];
+    public function prescriptionDetail(){
+        return $this->hasOne(PrescriptionDetail::class);
+    }
 }

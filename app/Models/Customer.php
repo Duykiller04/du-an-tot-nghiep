@@ -16,6 +16,12 @@ class Customer extends Model
         'email',
         'age',
         'weight',
-        
     ];
+    
+    public function diseases(){
+        return $this->hasMany(Disease::class);
+    }
+    public function prescription(){
+        return $this->hasMany(Prescription::class);
+    }
 }

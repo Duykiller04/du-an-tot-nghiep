@@ -24,10 +24,10 @@ class ExpiredMedications extends Model
 
     public function medicine()
     {
-        return $this->hasMany(Medicine::class);
+        return $this->belongsTo(Medicine::class);
     }
 
-    public function medical_instruments()
+    public function medicalInstruments()
     {
         return $this->hasMany(MedicalInstrument::class);
     }

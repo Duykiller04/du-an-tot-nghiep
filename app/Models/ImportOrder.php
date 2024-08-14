@@ -19,10 +19,10 @@ class ImportOrder extends Model
         'status',
         'user_id',
     ];
-
+// 
     public function storage()
     {
-        return $this->hasMany(Storage::class);
+        return $this->belongsTo(Storage::class);
     }
 
     public function user()
@@ -32,6 +32,6 @@ class ImportOrder extends Model
 
     public function supplier()
     {
-        return $this->hasMany(Supplier::class);
+        return $this->belongsTo(Supplier::class);
     }
 }
