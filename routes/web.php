@@ -27,6 +27,7 @@ Route::get('/login', function () {
 
 Auth::routes();
 
+
 Route::prefix('admin')
     ->as('admin.')
     ->middleware('auth')
@@ -45,8 +46,8 @@ Route::prefix('admin')
       
         Route::resource('users', UserController::class);
       
-        Route::resource('customer', CustomerController::class);
-      
+        Route::resource('customers', CustomerController::class);
+
         Route::resource('suppliers', SupplierController::class);
 
     });

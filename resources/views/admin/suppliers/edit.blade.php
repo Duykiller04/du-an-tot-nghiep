@@ -23,7 +23,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('suppliers.update', $supplier) }}" method="POST">
+    <form action="{{ route('admin.suppliers.update', $supplier) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="row">

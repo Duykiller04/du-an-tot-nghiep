@@ -32,7 +32,7 @@
                     <h5 class="card-title mb-0">
                         Danh sách
                     </h5>
-                    <a href="{{ route('suppliers.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
+                    <a href="{{ route('admin.suppliers.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
                 </div>
                 <div class="card-body">
                     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -60,11 +60,11 @@
                                     <td>{{ $item->address }}</td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="{{ route('suppliers.show', $item->id) }}"
+                                            <a href="{{ route('admin.suppliers.show', $item->id) }}"
                                                 class="btn btn-primary me-2">Xem</a>
-                                            <a href="{{ route('suppliers.edit', $item->id) }}"
+                                            <a href="{{ route('admin.suppliers.edit', $item->id) }}"
                                                 class="btn btn-warning me-2">Sửa</a>
-                                            <form action="{{ route('suppliers.destroy', $item->id) }}" method="post">
+                                            <form action="{{ route('admin.suppliers.destroy', $item->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" onclick="return confirm('Chắc chắn chưa?')"
