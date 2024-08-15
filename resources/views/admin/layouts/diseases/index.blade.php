@@ -69,7 +69,7 @@
                                     <tr>
                                         <td>{{ $disease->id }}</td>
                                         <td>{{ $disease->disease_name }}</td>
-                                        <td><img width="30" height="30" src="{{ Storage::url($disease->feature_img) }}" alt=""></td>
+                                        <td><img width="30" height="30" src="{{ \Storage::url($disease->feature_img) }}" alt=""></td>
                                         <td>{{ \Carbon\Carbon::parse($disease->verify_date)->format('H:m:s d/m/Y') }}</td>
                                         <td>
                                             @if ($disease->danger_level === 'low')

@@ -50,7 +50,7 @@
                     <div class="collapse menu-dropdown" id="sidebarMultilevel">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-level-1.1"> Level 1.1 </a>
+                                {{-- <a href="{{route('customer.index')}}" class="nav-link" data-key="t-level-1.1">Customers</a> --}}
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse"
@@ -106,12 +106,6 @@
                                 </a>
                             </li>
 
-                            {{-- <li class="nav-item">
-                                <a href="{{ route('admin.products.variant') }}" class="nav-link" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
-                                    Thuộc tính
-                                </a>
-                            </li> --}}
-
                             <li class="nav-item">
                                 <a href="{{route('admin.diseases.index')}}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
@@ -121,6 +115,79 @@
                         </ul>
                     </div>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#user" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="user">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Người dùng</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="user">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.users.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.users.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#customer" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="customer">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Khách hàng</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="customer">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.customers.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.customers.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#suppliers" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="suppliers">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Nhà cung cấp</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="suppliers">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.suppliers.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.suppliers.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
             </ul>
         </div>
         <!-- Sidebar -->

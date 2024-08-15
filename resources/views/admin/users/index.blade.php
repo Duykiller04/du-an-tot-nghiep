@@ -1,0 +1,155 @@
+@extends('admin.layouts.master')
+
+@section('title')
+    Danh sách người dùng
+@endsection
+
+@section('content')
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0"> Danh sách người dùng</h4>
+
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
+                            <li class="breadcrumb-item active">Danh sách</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                @if (session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+
+                <div class="card" id="diseaseList">
+                    <div class="card-header border-bottom-dashed">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-sm">
+                                <div>
+                                    <h5 class="card-title mb-0">Danh sách người dùng</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-auto">
+                                <div class="d-flex flex-wrap align-items-start gap-2">
+                                    <a href="{{ route('admin.users.create') }}" type="button" class="btn btn-success add-btn">
+                                        <i class="ri-add-line align-bottom me-1"></i> Thêm
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="diseaseTable"
+                            class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>PHOME</th>
+                                    <td>ADDRESS</td>
+                                    <td>BIRTH</td>
+                                    <th>IMAGE</th>
+                                    <th>EMAIL</th>
+                                    <th>TYPE</th>
+                                    <th>CREATED AT</th>
+                                    <th>UPDATED AT</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $item)
+                                    <tr>
+                                        <td>
+                                            {{ $item->id }}
+                                        </td>
+                                        <td>
+                                            {{ $item->name }}
+                                        </td>
+                                        <td>
+                                            {{ $item->phone }}
+                                        </td>
+                                        <td>
+                                            {{ $item->address }}
+                                        </td>
+                                        <td>{{ date('m/d/Y', strtotime($item->birth)) }}</td>
+                                        <td>
+                                            @php
+                                                $url = $item->image;
+                                                if (!Str::contains($url, 'http')) {
+                                                    $url = Storage::url($url);
+                                                }
+                                            @endphp
+                                            <img src="{{ $url }}" alt="" width="100px">
+                                        </td>
+                                        <td>
+                                            {{ $item->email }}
+                                        </td>
+                                        <td>{!! $item->type ? '<span class="badge bg-primary">Admin</span>' : '<span class="badge bg-danger">Staff</span>' !!}</td>
+                                        <td>
+                                            {{ $item->created_at }}
+                                        </td>
+                                        <td>
+                                            {{ $item->updated_at }}
+                                        </td>
+
+                                        <td class="d-flex">
+                                            <a class="btn btn-info" href="{{ route('admin.users.show', $item->id) }}">Xem</a>
+                                            <a class="btn btn-warning ms-2" href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
+                                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST" class="ms-2">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button class="btn btn-danger "
+                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa ko')"
+                                                    type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+
+    </div>
+    <!-- container-fluid -->
+@endsection
+
+@section('style-libs')
+    <!--datatable css-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <!--datatable responsive css-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+@endsection
+
+@section('script-libs')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!--datatable js-->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#diseaseTable').DataTable();
+        });
+    </script>
+@endsection

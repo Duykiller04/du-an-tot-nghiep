@@ -92,7 +92,13 @@
                             <input type="file" class="form-control" id="feature_img" name="feature_img"
                                 accept="image/png, image/gif, image/jpeg, image/jpg">
                             @if($diseases->feature_img)
-                                <img src="{{ asset('storage/' . $diseases->feature_img) }}" alt="Ảnh đại diện" class="img-thumbnail mt-2" style="max-width: 200px;">
+                                @php
+                                    $url = $diseases->feature_img;
+                                    if (!Str::contains($url, 'http')) {
+                                        $url = Storage::url($url);
+                                    }
+                                @endphp
+                                <img src="{{ $url }}" alt="Ảnh đại diện" class="img-thumbnail mt-2" style="max-width: 200px;">
                             @endif
                             @error('feature_img')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
