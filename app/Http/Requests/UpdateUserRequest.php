@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +32,7 @@ class UpdateUserRequest extends FormRequest
             'description' => 'nullable|string',
             'email' => 'required|email',
             'password' => 'required|string|min:8',
-            'type' => ['required', 'boolean'],
+           'type' => ['required', 'in:' . User::TYPE_ADMIN . ',' . User::TYPE_STAFF],
 
         ];
 
@@ -49,7 +50,7 @@ class UpdateUserRequest extends FormRequest
             'description' => 'Description',
             'email' => 'Email',
             'password' => 'Password',
-            'type' => 'User Type',
+            'type' => 'Type',
         ];
     }
 }

@@ -64,7 +64,7 @@
                             </tr>
                             <tr>
                                 <th class="ps-0" scope="row">Type:</th>
-                                <td>{!! $user->type ? '<span class="badge bg-primary">Admin</span>' : '<span class="badge bg-danger">Staff</span>' !!}</td>
+                                <td>{{ $user->type  }}</td>
                             </tr>
                             <tr>
                                 <th class="ps-0" scope="row">Description:</th>

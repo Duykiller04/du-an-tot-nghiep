@@ -12,8 +12,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-    const TYPE_ADMIN = true;
-    const TYPE_STAFF = false;
+    const TYPE_ADMIN = 'Admin';
+    const TYPE_STAFF = 'Staff';
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +55,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(ImportOrder::class);
     }
-    public function inventoryAudit(){
+    public function inventoryAudit()
+    {
         return $this->hasMany(InventoryAudit::class);
     }
 
@@ -68,21 +69,4 @@ class User extends Authenticatable
     {
         return $this->type === self::TYPE_STAFF;
     }
-
-
-    public function getTypeAttribute($value)
-    {
-        return $value ? self::TYPE_ADMIN : self::TYPE_STAFF;
-    }
-
-    //Tùy chỉnh việc trả về giá trị của thuộc tính "type".
-    //Trả về self::TYPE_ADMIN nếu giá trị gốc là true, ngược lại trả về self::TYPE_STAFF
-
-    public function setTypeAttribute($value)
-    {
-        $this->attributes['type'] = $value ? self::TYPE_ADMIN : self::TYPE_STAFF;
-    }
-
-    //Tùy chỉnh việc gán giá trị cho thuộc tính "type".
-    //Gán self::TYPE_ADMIN nếu giá trị mới là true, ngược lại gán self::TYPE_STAFF.
 }

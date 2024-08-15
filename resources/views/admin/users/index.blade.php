@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route(' admin.users.create') }}" type="button" class="btn btn-success add-btn">
+                                    <a href="{{ route('admin.users.create') }}" type="button" class="btn btn-success add-btn">
                                         <i class="ri-add-line align-bottom me-1"></i> Thêm
                                     </a>
                                 </div>
@@ -97,7 +97,7 @@
                                         <td>
                                             {{ $item->email }}
                                         </td>
-                                        <td>{!! $item->type ? '<span class="badge bg-primary">Admin</span>' : '<span class="badge bg-danger">Staff</span>' !!}</td>
+                                        <td>{{ $item->type }}</td>
                                         <td>
                                             {{ $item->created_at }}
                                         </td>
@@ -106,9 +106,9 @@
                                         </td>
 
                                         <td>
-                                            <a class="btn btn-info" href="{{ route(' admin.users.show', $item->id) }}">Xem</a>
-                                            <a class="btn btn-warning" href="{{ route(' admin.users.edit', $item->id) }}">Sửa</a>
-                                            <form action="{{ route(' admin.users.destroy', $item->id) }}" method="POST">
+                                            <a class="btn btn-info" href="{{ route('admin.users.show', $item->id) }}">Xem</a>
+                                            <a class="btn btn-warning" href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
+                                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
 

@@ -23,8 +23,8 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('type', [User::TYPE_ADMIN, User::TYPE_STAFF])
-                    ->default(User::TYPE_STAFF)
-                    ->comment('Nhân viên và Người quản lý');;
+                ->default(User::TYPE_STAFF)
+                ->comment('Nhân viên và Người quản lý');;
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
@@ -39,5 +39,3 @@ return new class extends Migration {
         Schema::dropIfExists('users');
     }
 };
-
-

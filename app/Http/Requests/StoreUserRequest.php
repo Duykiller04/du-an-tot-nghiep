@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
@@ -31,7 +32,7 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
 
-            'type' => ['required', 'boolean']
+            'type' => ['required', 'in:' . User::TYPE_ADMIN . ',' . User::TYPE_STAFF],
         ];
     }
     public function attributes()
@@ -45,7 +46,7 @@ class StoreUserRequest extends FormRequest
             'description' => 'Description',
             'email' => 'Email',
             'password' => 'Password',
-            'type' => 'User Type',
+            'type' => ' Type',
         ];
     }
 }
