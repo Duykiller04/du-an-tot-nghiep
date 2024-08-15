@@ -39,11 +39,6 @@
                             </tr>
 
                             <tr>
-                                <th class="ps-0" scope="row">Password:</th>
-                                <td class="text-muted">{{ $user->password }}</td>
-                            </tr>
-
-                            <tr>
                                 <th class="ps-0" scope="row">Image:</th>
                                 <td class="text-muted">
                                     <img src="{{ asset('storage/' . $user->image) }}" alt="User Image" width="100">
