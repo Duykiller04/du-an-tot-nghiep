@@ -9,6 +9,26 @@
 
 @section('content')
     <div class="container-fluid">
+<h1>CẬP NHẬT USER</h1>
+    <div class="border p-5 rounded bg-light bg-gradient">
+        @if (session()->has('error'))
+            <div class="alert alert-danger">
+                {{ session()->get('error') }}
+            </div>
+        @endif
+
+        <form action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name"
+                    value="{{ old('name', $user->name) }}">
+
+                @error('name')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
 
         <!-- start page title -->
         <div class="row">

@@ -41,7 +41,7 @@ class UserController extends Controller
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         }
         User::create($data);
-        return redirect()->route('users.index');
+        return redirect()->route('admin.users.index');
     }
     /**
      * Display the specified resource.
@@ -70,7 +70,6 @@ class UserController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         }
-
         $currentImgThumb = $model->image;
         $model->update($data);
         if (

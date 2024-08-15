@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeseaseController;
 use Illuminate\Support\Facades\Route;
@@ -19,13 +21,12 @@ Route::get('/', function () {
     return view('admin.layouts.master');
 });
 
-
-
 Route::get('/login', function () {
     return view('auth.login');
 });
 
 Auth::routes();
+
 
 Route::prefix('admin')
     ->as('admin.')
@@ -44,6 +45,10 @@ Route::prefix('admin')
         });
       
         Route::resource('users', UserController::class);
+      
+        Route::resource('customers', CustomerController::class);
+
+        Route::resource('suppliers', SupplierController::class);
 
     });
 

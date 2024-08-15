@@ -14,6 +14,8 @@
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 class="mb-sm-0">Thêm User</h4>
+        <form action="{{ route('admin.users.store') }}" method="post" enctype="multipart/form-data">
+            @csrf
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
