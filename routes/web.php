@@ -4,6 +4,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeseaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
