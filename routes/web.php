@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\DeseaseController;
+use App\Http\Controllers\Admin\DiseaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,7 +34,7 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function () {
 
-        Route::controller(DeseaseController::class)
+        Route::controller(DiseaseController::class)
             ->prefix('diseases')->as('diseases.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
