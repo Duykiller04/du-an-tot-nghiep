@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route('admin.diseases.create') }}" type="button" class="btn btn-success add-btn">
+                                    <a href="{{ route('admin.suppliers.create') }}" type="button" class="btn btn-success add-btn">
                                         <i class="ri-add-line align-bottom me-1"></i> Thêm mới
                                     </a>
                                 </div>

@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách Users
+    Danh sách người dùng
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0"> Danh sách Users</h4>
+                    <h4 class="mb-sm-0"> Danh sách người dùng</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
@@ -38,12 +38,12 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-sm">
                                 <div>
-                                    <h5 class="card-title mb-0">Danh sách bệnh</h5>
+                                    <h5 class="card-title mb-0">Danh sách người dùng</h5>
                                 </div>
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route(' admin.users.create') }}" type="button" class="btn btn-success add-btn">
+                                    <a href="{{ route('admin.users.create') }}" type="button" class="btn btn-success add-btn">
                                         <i class="ri-add-line align-bottom me-1"></i> Thêm
                                     </a>
                                 </div>
@@ -105,10 +105,10 @@
                                             {{ $item->updated_at }}
                                         </td>
 
-                                        <td>
-                                            <a class="btn btn-info" href="{{ route(' admin.users.show', $item->id) }}">Xem</a>
-                                            <a class="btn btn-warning" href="{{ route(' admin.users.edit', $item->id) }}">Sửa</a>
-                                            <form action="{{ route(' admin.users.destroy', $item->id) }}" method="POST">
+                                        <td class="d-flex">
+                                            <a class="btn btn-info" href="{{ route('admin.users.show', $item->id) }}">Xem</a>
+                                            <a class="btn btn-warning ms-2" href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
+                                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST" class="ms-2">
                                                 @csrf
                                                 @method('DELETE')
 
