@@ -10,9 +10,12 @@ class Medicine extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
+        'category_id',
         'storage_id',
         'unit_id',
         'medicine_code',
+        'name',
+        'image',
         'price_import',
         'price_sale',
         'packaging_specification',
@@ -25,7 +28,7 @@ class Medicine extends Model
         'is_active',
         'expiration_date',
     ];
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }

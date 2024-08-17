@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
@@ -16,9 +17,12 @@ return new class extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Category::class)->constrained();
             $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->string('medicine_code',20)->comment('Mã thuốc');
+            $table->string('name');
+            $table->string('image')->nullable()->comment('ảnh thuốc');
             $table->double('price_import',15,2)->comment('giá nhập');
             $table->double('price_sale',15,2)->comment('giá bán');
             $table->string('packaging_specification',50)->comment('Quy cách đóng gói');
