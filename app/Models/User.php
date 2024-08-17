@@ -12,8 +12,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-    const TYPE_ADMIN = 'Admin';
-    const TYPE_STAFF = 'Staff';
+    const TYPE_ADMIN = 'admin';
+    const TYPE_STAFF = 'staff';
 
     /**
      * The attributes that are mass assignable.

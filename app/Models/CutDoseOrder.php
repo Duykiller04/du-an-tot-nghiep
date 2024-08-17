@@ -10,16 +10,20 @@ class CutDoseOrder extends Model
     use HasFactory;
 
     protected $fillable = [
+        'disease_id ',
         'weight',
         'age_min',
         'age_max',
         'gender',
-        'name_diseases'
+
     ];
-    public function cutDoseOrderDetail(){
+
+    public function disease()
+    {
+        return $this->belongsTo(Disease::class);
+    }
+    public function cutDoseOrderDetail()
+    {
         return $this->hasOne(CutDoseOrderDetails::class);
     }
-
 }
-
-

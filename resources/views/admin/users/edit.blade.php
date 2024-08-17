@@ -105,8 +105,8 @@ Cập nhật User
                 <div>
                     <label for="type" class="form-label">Type</label>
                     <select name="type" id="type" class="form-select">
-                        <option value="admin" @if($user->type == 'admin') selected @endif>Admin</option>
-                        <option value="staff" @if($user->type == 'staff') selected @endif>Staff</option>
+                        <option value="admin" @if($user->type == 'Admin') selected @endif>Admin</option>
+                        <option value="staff" @if($user->type == 'Staff') selected @endif>Staff</option>
                     </select>
                 </div>
             </div>
