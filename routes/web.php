@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CatalogueController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
@@ -32,7 +33,7 @@ Auth::routes();
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware('auth')
+    //->middleware('auth')
     ->group(function () {
 
         Route::controller(DeseaseController::class)
@@ -44,6 +45,16 @@ Route::prefix('admin')
                 Route::get('/{id}', 'edit')->name('edit');
                 Route::put('/{id}', 'update')->name('update');
                 Route::delete('/{id}', 'destroy')->name('destroy');
+            });
+        Route::controller(CatalogueController::class)
+            ->prefix('catalogues')->as('catalogues.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/add', 'create')->name('add');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
 
         Route::resource('users', UserController::class);
