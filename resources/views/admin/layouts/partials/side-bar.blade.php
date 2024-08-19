@@ -232,6 +232,60 @@
                     </div>
                 </li>
 
+
+                {{-- ---------------------------------------------------------------------------------------------------------------- --}}
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#medicalInstrument" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="medicalInstrument">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Dụng cụ</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="medicalInstrument">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicalInstruments.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicalInstruments.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#medicine" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="medicine">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="medicine">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicines.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicines.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
             </ul>
         </div>
         <!-- Sidebar -->

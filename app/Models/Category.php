@@ -26,4 +26,5 @@ class Category extends Model
     public function medicialInstruments(){
         return $this->hasMany(MedicalInstrument::class);
     }
+    
 }

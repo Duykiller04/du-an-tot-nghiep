@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DeseaseController;
+use App\Http\Controllers\Admin\MedicalInstrumentController;
+use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\UnitController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -62,9 +64,10 @@ Route::prefix('admin')
         Route::resource('customers', CustomerController::class);
 
         Route::resource('suppliers', SupplierController::class);
-
+      
+        Route::resource('medicalInstruments', MedicalInstrumentController::class);
+        Route::resource('medicines', MedicineController::class);
         Route::resource('units', UnitController::class);
-
     });
 
 
