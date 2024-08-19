@@ -1,7 +1,6 @@
 @extends('admin.layouts.master')
-
 @section('title')
-    Danh sách khách hàng
+    Danh sách thể đơn vị tính
 @endsection
 
 @section('content')
@@ -9,15 +8,18 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Danh sách khách hàng</h4>
+                <h4 class="mb-sm-0">Datatables</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
-                        <li class="breadcrumb-item active">Danh sách khách hàng</li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript: void(0);">Tables</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Datatables
+                        </li>
                     </ol>
                 </div>
-
             </div>
         </div>
     </div>
@@ -27,74 +29,77 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Danh sách</h5>
-
-                    <a href="{{route('admin.customers.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
+                    <h5 class="card-title mb-0">
+                        Danh sách
+                    </h5>
+                    <a href="{{ route('admin.units.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
                 </div>
                 <div class="card-body">
                     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle"
-                        style="width:100%">
-
+                        style="width: 100%">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Address</th>
-                                <th>Email</th>
-                                <th>Age</th>
-                                <th>weight</th>
+                                <th>Tên</th>
+                                <th>Đơn vị tính cha</th>
+                                <th>Đơn vị tính con</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            @foreach ($listCustomer as $item)
+                            @foreach ($data as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->name}}</td>
-                                    <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->address}}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>{{ $item->age }}</td>
-                                    <td>{{ $item->weight}}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->parent ? $item->parent->name : 'N/A' }}</td>
+                                    <td>
+                                        @if ($item->children->count())
+                                            <ul>
+                                                @foreach ($item->children as $child)
+                                                    <li>{{ $child->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            Trống
+                                        @endif
+                                    </td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>{{ $item->updated_at }}</td>
                                     <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="{{route('admin.customers.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
-                                            <form action="{{ route('admin.customers.destroy', $item) }}" method="post">
+                                        <div class="d-flex">
+                                            <a href="{{ route('admin.units.show', $item) }}" class="btn btn-info mb-3">Xem</a>
+                                            <a href="{{ route('admin.units.edit', $item) }}" class="btn btn-warning mb-3 ms-3 me-3">Sửa</a>
+                                            <form action="{{ route('admin.units.destroy', $item) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                    class="btn btn-danger mb-3">DELETE
-                                                </button>
+                                                    class="btn btn-danger">Xóa</button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
                 </div>
             </div>
-        </div><!--end col-->
+        </div>
+        <!--end col-->
     </div>
 @endsection
 
-@section('style-libs')
+@section('css')
     <!--datatable css-->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
     <!--datatable responsive css-->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
 @endsection
 
-@section('script-libs')
+@section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -117,4 +122,3 @@
         });
     </script>
 @endsection
-

@@ -21,12 +21,13 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->segment(3);
         return [
             'tax_code' => 'required|max:13',
             'name' => 'required|max:100',
             'address' => 'required|string|max:255',
-            'phone' => 'required|unique:suppliers,phone,except,id|max:11',
-            'email' => 'required|unique:suppliers,email,except,id|max:255',
+            'phone' => "required|max:11|unique:suppliers,phone,$id",
+            'email' => "required|max:255|unique:suppliers,email,$id",
         ];
     }
     public function messages()

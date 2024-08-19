@@ -10,11 +10,9 @@ class Storage extends Model
     use HasFactory;
     protected $fillable = [
         'inventory_code',
-        'medicine_id',
         'location',
         'quantity',
         'unit_id',
-        'medical_instruments_id',
     ];
 
     public function inventory()

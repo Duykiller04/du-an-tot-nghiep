@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Disease;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,7 @@ class DeseaseController extends Controller
     public function index()
     {
         $diseases = Disease::all();
-        return view('admin.layouts.diseases.index', compact('diseases'));
+        return view('admin.diseases.index', compact('diseases'));
     }
 
     /**
@@ -22,7 +23,7 @@ class DeseaseController extends Controller
      */
     public function create()
     {
-        return view('admin.layouts.diseases.add');
+        return view('admin.diseases.add');
     }
 
     /**
@@ -81,7 +82,7 @@ class DeseaseController extends Controller
     public function edit(string $id)
     {
         $diseases = Disease::findOrFail($id);
-        return view('admin.layouts.diseases.edit', compact('diseases'));
+        return view('admin.diseases.edit', compact('diseases'));
     }
 
     /**

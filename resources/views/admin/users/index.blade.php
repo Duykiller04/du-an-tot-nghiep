@@ -1,16 +1,16 @@
 @extends('admin.layouts.master')
 
 @section('title')
-Danh sách Users
+    Danh sách Users
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0"> Danh sách Users</h4>
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0"> Danh sách Users</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -33,23 +33,23 @@ Danh sách Users
             <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
-            <div class="card" id="diseaseList">
-                <div class="card-header border-bottom-dashed">
-                    <div class="row g-4 align-items-center">
-                        <div class="col-sm">
-                            <div>
-                                <h5 class="card-title mb-0">Danh Users</h5>
+                <div class="card" id="diseaseList">
+                    <div class="card-header border-bottom-dashed">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-sm">
+                                <div>
+                                    <h5 class="card-title mb-0">Danh sách bệnh</h5>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-auto">
-                            <div class="d-flex flex-wrap align-items-start gap-2">
-                                <a href="{{ route('admin.users.create') }}" type="button" class="btn btn-success add-btn">
-                                    <i class="ri-add-line align-bottom me-1"></i> Thêm
-                                </a>
+                            <div class="col-sm-auto">
+                                <div class="d-flex flex-wrap align-items-start gap-2">
+                                    <a href="{{ route(' admin.users.create') }}" type="button" class="btn btn-success add-btn">
+                                        <i class="ri-add-line align-bottom me-1"></i> Thêm
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <div class="card-body">
                     <table id="diseaseTable"
@@ -111,12 +111,12 @@ Danh sách Users
                                     {{ $item->updated_at }}
                                 </td>
 
-                                <td>
-                                    <a class="btn btn-info" href="{{ route('admin.users.show', $item->id) }}">Xem</a>
-                                    <a class="btn btn-warning" href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
-                                    <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
+                                        <td>
+                                            <a class="btn btn-info" href="{{ route(' admin.users.show', $item->id) }}">Xem</a>
+                                            <a class="btn btn-warning" href="{{ route(' admin.users.edit', $item->id) }}">Sửa</a>
+                                            <form action="{{ route(' admin.users.destroy', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
 
                                         <button class="btn btn-danger "
                                             onclick="return confirm('Bạn có chắc chắn muốn xóa ko')"

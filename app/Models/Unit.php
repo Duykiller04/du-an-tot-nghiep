@@ -15,11 +15,11 @@ class Unit extends Model
     ];
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(Unit::class, 'parent_id');
     }
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(Unit::class, 'parent_id');
     }
     public function medicines()
     {

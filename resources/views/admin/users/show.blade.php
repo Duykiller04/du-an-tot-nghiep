@@ -24,24 +24,24 @@ Chi tiết User
     </div>
     <!-- end page title -->
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-borderless mb-0">
-                    <tbody>
-                        <tr>
-                            <th class="ps-0" scope="row">Full Name:</th>
-                            <td class="text-muted">{{ $user->name }}</td>
-                        </tr>
-                        <tr>
-                            <th class="ps-0" scope="row">Email:</th>
-                            <td class="text-muted">{{ $user->email }}</td>
-                        </tr>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="ps-0" scope="row">Full Name:</th>
+                                <td class="text-muted">{{ $user->name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="ps-0" scope="row">Email:</th>
+                                <td class="text-muted">{{ $user->email }}</td>
+                            </tr>
 
-                        <tr>
-                            <th class="ps-0" scope="row">Password:</th>
-                            <td class="text-muted">{{ $user->password }}</td>
-                        </tr>
+                            <tr>
+                                <th class="ps-0" scope="row">Password:</th>
+                                <td class="text-muted">{{ $user->password }}</td>
+                            </tr>
 
                         <tr>
                             <th class="ps-0" scope="row">Image:</th>
