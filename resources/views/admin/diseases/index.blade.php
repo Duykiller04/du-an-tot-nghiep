@@ -69,19 +69,7 @@
                                     <tr>
                                         <td>{{ $disease->id }}</td>
                                         <td>{{ $disease->disease_name }}</td>
-                                        <td>
-                                            @php
-                                                $url = $disease->feature_img;
-                                                if (!Str::contains($url, 'http')) {
-                                                    $url = Storage::url($url);
-                                                }
-                                            @endphp
-                                            @if ($url == '/storage/')
-                                                {{ 'Không có ảnh' }}
-                                            @else
-                                                <img width="30" height="30" src="{{ $url }}" alt="">
-                                            @endif
-                                        </td>
+                                        <td><img width="30" height="30" src="{{ \Storage::url($disease->feature_img) }}" alt=""></td>
                                         <td>{{ \Carbon\Carbon::parse($disease->verify_date)->format('H:m:s d/m/Y') }}</td>
                                         <td>
                                             @if ($disease->danger_level === 'low')
