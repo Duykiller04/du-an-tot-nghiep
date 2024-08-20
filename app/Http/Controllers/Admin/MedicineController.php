@@ -22,7 +22,7 @@ class MedicineController extends Controller
      */
     public function create()
     {
-        return view('admin.medicine.add');
+        return view('admin.medicine.create');
     }
 
     /**

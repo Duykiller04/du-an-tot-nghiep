@@ -145,7 +145,7 @@
                     <div class="collapse menu-dropdown" id="sidebarCatalogue">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.catalogues.add') }}" class="nav-link" role="button"
+                                <a href="{{ route('admin.catalogues.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>

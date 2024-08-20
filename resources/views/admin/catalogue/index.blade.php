@@ -45,7 +45,7 @@
                                 <div class="d-flex flex-wrap align-items-start gap-2">
                                     <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
                                             class="ri-delete-bin-2-line"></i></button>
-                                    <a href="{{ route('admin.catalogues.add') }}" class="btn btn-success add-btn"
+                                    <a href="{{ route('admin.catalogues.create') }}" class="btn btn-success add-btn"
                                         id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm danh mục</a>
                                 </div>
                             </div>

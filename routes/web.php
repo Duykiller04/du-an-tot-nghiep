@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\CatalogueController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
@@ -38,26 +38,9 @@ Route::prefix('admin')
     //->middleware('auth')
     ->group(function () {
 
-        Route::controller(DiseaseController::class)
-            ->prefix('diseases')->as('diseases.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/add', 'store')->name('store');
-                Route::get('/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
-                Route::delete('/{id}', 'destroy')->name('destroy');
-            });
-        Route::controller(CatalogueController::class)
-            ->prefix('catalogues')->as('catalogues.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/add', 'create')->name('add');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::put('/update/{id}', 'update')->name('update');
-                Route::delete('/delete/{id}', 'destroy')->name('destroy');
-            });
+        Route::resource('diseases', DiseaseController::class);
+
+        Route::resource('catalogues', CategoryController::class);
 
         Route::resource('users', UserController::class);
 
@@ -66,7 +49,9 @@ Route::prefix('admin')
         Route::resource('suppliers', SupplierController::class);
       
         Route::resource('medicalInstruments', MedicalInstrumentController::class);
+
         Route::resource('medicines', MedicineController::class);
+
         Route::resource('units', UnitController::class);
     });
 

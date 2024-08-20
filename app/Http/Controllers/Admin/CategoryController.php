@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Catalogue;
+use App\Models\Category;
 use App\Models\Medicine;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class CatalogueController extends Controller
+class CategoryController extends Controller
 {
     public function index()
     {
-        $catalogues = Catalogue::with('children')->whereNull('parent_id')->orderBy('id','desc')->get();
+        $catalogues = Category::with('children')->whereNull('parent_id')->orderBy('id','desc')->get();
         return view('admin.catalogue.index', compact('catalogues'));
     }
     /**
@@ -22,7 +22,7 @@ class CatalogueController extends Controller
      */
     public function create()
     {
-        $catalogues = Catalogue::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->get();
+        $catalogues = Category::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->get();
 
         return view('admin.catalogue.add', compact('catalogues'));
     }
@@ -63,7 +63,7 @@ class CatalogueController extends Controller
     {
 
         $catalogue = DB::table('categories')->where('id', $id)->first();
-        $catalogues = Catalogue::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->whereNot('id',$id)->get();
+        $catalogues = Category::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->whereNot('id',$id)->get();
         if (!$catalogue) {
             return redirect()->route('admin.catalogues.index')->with('error', 'Danh mục không tồn tại');
         }
@@ -104,10 +104,10 @@ class CatalogueController extends Controller
      */
     public function destroy(string $id)
     {
-        $catalogue = Catalogue::findOrFail($id);
+        $catalogue = Category::findOrFail($id);
 
         // Cập nhật danh mục con cấp đầu
-        Catalogue::where('parent_id', $catalogue->id)->update(['parent_id' => null]);
+        Category::where('parent_id', $catalogue->id)->update(['parent_id' => null]);
     
         // Chuyển các sản phẩm của danh mục bị xóa sang danh mục có id là 1
         //Medicine::where('catalogue_id', $catalogue->id)->update(['catalogue_id' => 1]);
