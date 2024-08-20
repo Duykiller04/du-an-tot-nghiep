@@ -91,7 +91,29 @@
                         </ul>
                     </div>
                 </li>
-                
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#units" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="units">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đơn vị tính</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="units">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.units.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.units.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>      
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarProduct" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarProduct">
@@ -115,7 +137,29 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarCatalogue">
+                        <i class="ri-layout-3-line"></i> <span data-key="t-apps">Danh mục</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarCatalogue">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.catalogues.add') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
 
+                            <li class="nav-item">
+                                <a href="{{ route('admin.catalogues.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#user" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="user">
@@ -180,6 +224,60 @@
 
                             <li class="nav-item">
                                 <a href="{{route('admin.suppliers.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+                {{-- ---------------------------------------------------------------------------------------------------------------- --}}
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#medicalInstrument" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="medicalInstrument">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Dụng cụ</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="medicalInstrument">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicalInstruments.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicalInstruments.index')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#medicine" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="medicine">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="medicine">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicines.create')}}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('admin.medicines.index')}}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
