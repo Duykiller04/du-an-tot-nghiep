@@ -11,7 +11,6 @@ class CutDoseOrderDetails extends Model
     protected $fillable = [
         'medicine_id',
         'cut_dose_order_id',
-        'medical_instrument_id',
         'unit_id',
         'quantity',
         'dosage',
@@ -32,8 +31,4 @@ class CutDoseOrderDetails extends Model
         return $this->belongsTo(Unit::class);
     }
 
-    public function medicalInstrument()
-    {
-        return $this->belongsTo(MedicalInstrument::class);
-    }
 }

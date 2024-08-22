@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\InventoryAudit;
-use App\Models\MedicalInstrument;
 use App\Models\Medicine;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(InventoryAudit::class)->constrained();
             $table->foreignIdFor(Medicine::class)->constrained();
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->double('quantity');
             $table->enum('status',['checked','unchecked']);
             $table->timestamps();

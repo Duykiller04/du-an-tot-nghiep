@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Thêm thuốc
+    Thêm dụng cụ
 @endsection
 
 @section('content')
@@ -11,12 +11,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Thêm Thuốc</h4>
+                    <h4 class="mb-sm-0">Thêm dụng cụ</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Thuốc</a></li>
-                            <li class="breadcrumb-item active">Thêm Thuốc</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dụng cụ</a></li>
+                            <li class="breadcrumb-item active">Thêm dụng cụ</li>
                         </ol>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
             <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
         @endif
 
-        <form id="create-disease-form" method="POST" action="{{ route('admin.medicines.store') }}" enctype="multipart/form-data">
+        <form id="create-disease-form" method="POST" action="{{ route('admin.medicalInstruments.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <!-- Cột chính bên trái -->
@@ -40,7 +40,7 @@
                         <div class="card-body">
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Mã thuốc</label>
+                                <label class="form-label" for="name">Mã dụng cụ</label>
                                 <input type="text" class="form-control @error('medicine.medicine_code') is-invalid @enderror" id="name" name="medicine[medicine_code]"
                                     value="{{ old('medicine.medicine_code') }}">
                                 @error('medicine.medicine_code')
@@ -58,7 +58,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Tên thuốc</label>
+                                <label class="form-label" for="name">Tên dụng cụ</label>
                                 <input type="text" class="form-control @error('medicine.name') is-invalid @enderror" id="name" name="medicine[name]"
                                     value="{{ old('medicine.name') }}">
                                 @error('medicine.name')
@@ -152,30 +152,6 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label" for="active_ingredient">Hoạt chất</label>
-                                <textarea class="form-control" id="active_ingredient" name="medicine[active_ingredient]">{{ old('medicine.active_ingredient') }}</textarea>
-                                @error('medicine.active_ingredient')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="concentration">Hàm lượng</label>
-                                <textarea class="form-control" id="concentration" name="medicine[concentration]">{{ old('medicine.concentration') }}</textarea>
-                                @error('medicine.concentration')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="dosage">Liều dùng</label>
-                                <textarea class="form-control" id="dosage" name="medicine[dosage]">{{ old('medicine.dosage') }}</textarea>
-                                @error('medicine.dosage')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -198,7 +174,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Danh mục thuốc</h5>
+                            <h5 class="card-title mb-0">Danh mục dụng cụ</h5>
                         </div>
                         <div class="card-body">
                             <select class="form-select" id="medicine[category_id]" name="medicine[category_id]">
@@ -224,10 +200,10 @@
                         </div>
                     </div>
 
-                    <!-- Card cho Ảnh thuốc -->
+                    <!-- Card cho Ảnh dụng cụ -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ảnh thuốc</h5>
+                            <h5 class="card-title mb-0">Ảnh dụng cụ</h5>
                         </div>
                         <div class="card-body">
                             <input type="file" class="form-control" id="image" name="image"

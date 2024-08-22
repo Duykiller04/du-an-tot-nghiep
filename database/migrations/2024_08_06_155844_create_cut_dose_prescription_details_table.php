@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\CutDosePrescription;
-use App\Models\MedicalInstrument;
 use App\Models\Medicine;
 use App\Models\Unit;
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(Medicine::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->foreignIdFor(CutDosePrescription::class)->constrained();
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->double('quantity');
             $table->unsignedBigInteger('current_price');
             $table->string('dosage')->comment('liều lượng');

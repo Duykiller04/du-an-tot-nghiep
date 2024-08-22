@@ -14,15 +14,11 @@ class InventoryCheckDetail extends Model
         'medicine_id',
         'quantity',
         'status',
-        'medical_instrument_id',
     ];
     protected function inventoryaudit(){
         return $this->belongsTo(InventoryAudit::class,'inventory_audit_id','id');
     }
     protected function medicine(){
         return $this->belongsTo(Medicine::class,'medicine_id','id');
-    }
-    protected function medicalinstrument(){
-        return $this->belongsTo(MedicalInstrument::class,'medical_instrument_id','id');
     }
 }
