@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CutDoseOrderController;
+use App\Http\Controllers\Admin\CutDosePrescriptionController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
@@ -53,6 +55,10 @@ Route::prefix('admin')
         Route::resource('medicines', MedicineController::class);
 
         Route::resource('units', UnitController::class);
+
+        Route::resource('cutDoseOrders', CutDoseOrderController::class);
+
+        Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
     });
 
 

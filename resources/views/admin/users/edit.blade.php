@@ -51,7 +51,7 @@ Cập nhật User
                 </div>
             @endif
 
-            <form action="{{ route(' admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
