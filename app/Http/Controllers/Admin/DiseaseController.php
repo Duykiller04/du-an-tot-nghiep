@@ -7,7 +7,7 @@ use App\Models\Disease;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class DeseaseController extends Controller
+class DiseaseController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\CutDoseOrder;
+use App\Http\Controllers\Controller;
+use App\Models\CutDosePrescription;
 use Illuminate\Http\Request;
 
-class CutDoseOrderController extends Controller
+class CutDosePrescriptionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = CutDoseOrder::query()->with('disease')->latest('id')->paginate(5);
+        $data = CutDosePrescription::query()->with('disease')->latest('id')->paginate(5);
 
-        return view('admin.cutdoseorder.' . __FUNCTION__, compact('data'));
+        return view('admin.cutdoseprescription.' . __FUNCTION__, compact('data'));
     }
 
     /**

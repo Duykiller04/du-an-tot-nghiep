@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\MedicalInstrument;
 use App\Models\Medicine;
 use App\Models\Prescription;
 use App\Models\Unit;
@@ -19,7 +18,6 @@ return new class extends Migration {
             $table->foreignIdFor(Medicine::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->foreignIdFor(Prescription::class)->constrained();
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->double('quantity');
             $table->double('current_price');
             $table->string('dosage');

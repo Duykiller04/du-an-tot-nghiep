@@ -14,7 +14,6 @@ class ExpiredMedications extends Model
         'quantity',
         'expiration_date',
         'medicine_id',
-        'medical_instrument_id',
     ];
 
     public function storage()
@@ -25,10 +24,5 @@ class ExpiredMedications extends Model
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
-    }
-
-    public function medicalInstruments()
-    {
-        return $this->hasMany(MedicalInstrument::class);
     }
 }
