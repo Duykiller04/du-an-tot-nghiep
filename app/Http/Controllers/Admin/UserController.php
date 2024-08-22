@@ -37,12 +37,16 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $data = $request->except('image');
-        if ($request->hasFile('image')) {
-            $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
+        try {
+            $data = $request->except('image');
+            if ($request->hasFile('image')) {
+                $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
+            }
+            User::create($data);
+            return redirect()->route('admin.users.index')->with('success', 'Thành công');
+        } catch (\Exception $exception) {
+            return back()->with('error' . $exception->getMessage());
         }
-        User::create($data);
-        return redirect()->route('admin.users.index');
     }
     /**
      * Display the specified resource.
@@ -65,23 +69,28 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        $model = User::query()->findOrFail($id);
+        try {
+            $model = User::query()->findOrFail($id);
 
-        $data = $request->except('image');
-        if ($request->hasFile('image')) {
-            $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
+            $data = $request->except('image');
+            if ($request->hasFile('image')) {
+                $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
+            }
+            $currentImgThumb = $model->image;
+            $model->update($data);
+            if (
+                $request->hasFile('image')
+                && $currentImgThumb
+                && Storage::exists($currentImgThumb)
+            ) {
+                Storage::delete($currentImgThumb);
+            }
+            return back()->with('success', 'Thành công');
+        } catch (\Exception $exception) {
+            return back()->with('error' . $exception->getMessage());
         }
-        $currentImgThumb = $model->image;
-        $model->update($data);
-        if (
-            $request->hasFile('image')
-            && $currentImgThumb
-            && Storage::exists($currentImgThumb)
-        ) {
-            Storage::delete($currentImgThumb);
-        }
-        return back();
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -96,6 +105,9 @@ class UserController extends Controller
             Storage::delete($data->image);
         }
 
-        return back();
+        return back()->with('success', 'Thành công');
     }
 }
+
+
+// đâye code
