@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DeseaseController;
+use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -46,6 +47,27 @@ Route::prefix('admin')
                 Route::get('/{id}', 'edit')->name('edit');
                 Route::put('/{id}', 'update')->name('update');
                 Route::delete('/{id}', 'destroy')->name('destroy');
+            });
+      
+        Route::controller(CatalogueController::class)
+            ->prefix('catalogues')->as('catalogues.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/add', 'create')->name('add');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+            });
+        Route::controller(EnvironmentController::class)
+            ->prefix('environments')->as('environments.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/add', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
 
         Route::resource('users', UserController::class);
