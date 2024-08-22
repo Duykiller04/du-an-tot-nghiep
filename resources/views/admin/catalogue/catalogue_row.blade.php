@@ -8,6 +8,7 @@
     <td>
         <div class="d-flex gap-2">
             <a href="{{route('admin.catalogues.edit', $catalogue->id)}}" class="btn btn-warning">Sửa</a>
+            
             <form action="{{route('admin.catalogues.destroy',$catalogue->id)}}" method="POST">
                 @csrf
                 @method('DELETE')
