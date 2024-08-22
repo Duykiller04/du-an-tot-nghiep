@@ -14,9 +14,17 @@ class Environment extends Model
         'storage_id',
         'time',
         'temperature',
-        'huminity'
+        'huminity',
+        'real_humidity',
+        'real_temperature',
     ];
 
+    protected $dates = ['time', 'deleted_at'];
+
+    protected $casts = [
+        'time' => 'datetime',
+    ];
+    
     protected function storage(){
         return $this->belongsTo(Storage::class,'storage_id','id');
     }

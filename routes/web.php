@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DiseaseController;
+use App\Http\Controllers\Admin\DeseaseController;
+use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\UnitController;
@@ -43,6 +45,8 @@ Route::prefix('admin')
         Route::resource('diseases', DiseaseController::class);
 
         Route::resource('catalogues', CategoryController::class);
+        
+        Route::resource('environments', EnvironmentController::class);
 
         Route::resource('users', UserController::class);
 
