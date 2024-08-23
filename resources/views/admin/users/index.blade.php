@@ -38,7 +38,7 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-sm">
                                 <div>
-                                    <h5 class="card-title mb-0">Danh sách bệnh</h5>
+                                    <h5 class="card-title mb-0">Danh sách người dùng</h5>
                                 </div>
                             </div>
                             <div class="col-sm-auto">
@@ -113,18 +113,21 @@
                                         </td>
 
                                         <td>
-                                            <a class="btn btn-info"
-                                                href="{{ route('admin.users.show', $item->id) }}">Xem</a>
-                                            <a class="btn btn-warning"
-                                                href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
-                                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
+                                            <div class="d-flex">
+                                                <a class="btn btn-info"
+                                                    href="{{ route('admin.users.show', $item->id) }}">Xem</a>
+                                                <a class="btn btn-warning ms-2"
+                                                    href="{{ route('admin.users.edit', $item->id) }}">Sửa</a>
+                                                <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST"
+                                                    class="ms-2">
+                                                    @csrf
+                                                    @method('DELETE')
 
-                                                <button class="btn btn-danger "
-                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa ko')"
-                                                    type="submit">Delete</button>
-                                            </form>
+                                                    <button class="btn btn-danger "
+                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa ko')"
+                                                        type="submit">Delete</button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -39,11 +39,18 @@ class UserController extends Controller
     {
         try {
             $data = $request->except('image');
+
             if ($request->hasFile('image')) {
-                $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
+                $image = $request->file('image');
+                $data['image'] = $image->store('users', 'public');
+            } else {
+                $data['image'] = null;
             }
+
             User::create($data);
+
             return redirect()->route('admin.users.index')->with('success', 'Thành công');
+
         } catch (\Exception $exception) {
             return back()->with('error' . $exception->getMessage());
         }
@@ -73,11 +80,18 @@ class UserController extends Controller
             $model = User::query()->findOrFail($id);
 
             $data = $request->except('image');
-            if ($request->hasFile('image')) {
-                $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
-            }
+
             $currentImgThumb = $model->image;
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $data['image'] = $image->store('users', 'public');
+            } else {
+                $data['image'] = null;
+            }
+
             $model->update($data);
+
             if (
                 $request->hasFile('image')
                 && $currentImgThumb
@@ -85,7 +99,9 @@ class UserController extends Controller
             ) {
                 Storage::delete($currentImgThumb);
             }
+
             return back()->with('success', 'Thành công');
+
         } catch (\Exception $exception) {
             return back()->with('error' . $exception->getMessage());
         }
