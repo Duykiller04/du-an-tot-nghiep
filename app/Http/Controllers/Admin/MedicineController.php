@@ -20,8 +20,10 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        $data = Medicine::query()->with(['suppliers', 'category','storage'])->latest('id')->get();
-        return view('admin.medicine.index', compact('data'));
+        
+        $medicines = Medicine::query()->with(['suppliers', 'category','storage', 'inventory'])->where('type_product' , 0)->latest('id')->get();
+        // dd($medicines->toArray());
+        return view('admin.medicine.index', compact('medicines'));
     }
 
     /**
@@ -102,7 +104,7 @@ class MedicineController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

@@ -46,4 +46,7 @@ class Medicine extends Model
     {
         return $this->belongsToMany(Supplier::class);
     }
+    public function inventory(){
+        return $this->hasOne(Inventory::class);
+    }
 }

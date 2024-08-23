@@ -58,18 +58,18 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name Category</th>
-                                    <th>Name supplier</th>
-                                    <th>Name Instrument</th>
-                                    <th>Image</th>
-                                    <th>Price Sale</th>
-                                    <th>Price Import</th>
-                                    <th>Quatity</th>
-                                    <th>Action</th>
+                                    <th>Danh mục</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Tên dụng cụ</th>
+                                    <th>Ảnh</th>
+                                    <th>Giá nhập</th>
+                                    <th>Giá bán</th>
+                                    <th>Số lượng</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
+                                @foreach ($medicalInstrument as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->category->name }}</td>
@@ -92,9 +92,9 @@
                                                 <img width="30" height="30" src="{{ $url }}" alt="">
                                             @endif
                                         </td>
-                                        <td>{{ $item->price_sale }}</td>
                                         <td>{{ $item->price_import }}</td>
-                                        <td>{{ $item->storage->quantity }}</td>
+                                        <td>{{ $item->price_sale }}</td>
+                                        <td>{{ $item->inventory->quantity }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('admin.medicalInstruments.show', $item->id) }}"

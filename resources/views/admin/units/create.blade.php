@@ -31,23 +31,10 @@
                         <div class="live-preview">
                             <div class="row gy-4">
 
-                                <div class="col-lg-4">
+                                <div class="col-lg-12">
                                     <label for="name">Tên đơn vị tính</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="Enter name">
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <label for="parent_id" class="form-label">Đơn vị tính cha</label>
-                                    <select id="" class="js-example-basic-single form-control" name="parent_id"
-                                        id="parent_id">
-                                        <option value="" selected>Trống</option>
-
-                                        @foreach ($parentUnits as $parent)
-                                            @php($each = ' ')
-                                            @include('admin.units.nested-unit', ['unit' => $parent])
-                                        @endforeach
-                                    </select>
                                 </div>
 
                                 <div class="d-flex justify-content-center">
