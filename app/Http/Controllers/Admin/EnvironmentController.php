@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Environment;
 use Illuminate\Http\Request;
 use App\Services\WeatherService;
+use App\Exports\EnvironmentsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EnvironmentController extends Controller
 {
@@ -21,7 +23,10 @@ class EnvironmentController extends Controller
         $environments = Environment::all();
         return view('admin.environments.index', compact('environments'));
     }
-
+    public function export()
+    {
+        return Excel::download(new EnvironmentsExport, 'environments.xlsx');
+    }
     public function create()
     {
         return view('admin.environments.add');
@@ -31,7 +36,7 @@ class EnvironmentController extends Controller
     {
         // Xác thực dữ liệu
         $validated = $request->validate([
-            
+
             'real_temperature' => 'required|numeric',
             'real_humidity' => 'required|numeric',
             'time' => 'required|date',
@@ -76,10 +81,10 @@ class EnvironmentController extends Controller
     {
         // Xác thực dữ liệu
         $validated = $request->validate([
-            
+
             'real_temperature' => 'required|numeric',
             'real_humidity' => 'required|numeric',
-            
+
         ], [
             'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
             'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
@@ -89,7 +94,7 @@ class EnvironmentController extends Controller
 
         $environment = Environment::findOrFail($id);
         $environment->update([
-           
+
             'real_temperature' => $validated['real_temperature'],
             'real_humidity' => $validated['real_humidity'],
         ]);

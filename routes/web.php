@@ -60,6 +60,7 @@ Route::prefix('admin')
             ->prefix('environments')->as('environments.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
+                Route::get('/export-environments', 'export')->name('export');
                 Route::get('/add', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');

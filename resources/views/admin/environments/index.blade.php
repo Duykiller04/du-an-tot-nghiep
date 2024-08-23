@@ -41,8 +41,10 @@
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
+                                    <a href="{{ route('admin.environments.export') }}" class="btn btn-primary">Xuất Excel</a>
                                     <a href="{{ route('admin.environments.create') }}" class="btn btn-success add-btn"
                                         id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm môi trường</a>
+
                                 </div>
                             </div>
                         </div>
