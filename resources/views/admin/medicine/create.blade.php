@@ -25,6 +25,7 @@
         <!-- end page title -->
 
         @if ($errors->any())
+        @dd($errors->toArray())
             <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
         @endif
 
@@ -86,8 +87,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="name">Số lượng</label>
-                                <input type="number" class="form-control @error('so_luong') is-invalid @enderror" id="name" name="so_luong[]"
-                                    value="{{ old('so_luong') }}">
+                                <input type="number" class="form-control @error('so_luong') is-invalid @enderror" id="name" name="so_luong[]">
                                 @error('so_luong')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -96,7 +96,7 @@
                             <div class="mb-3">
                                 <div class="row" id="form-fields">
                                     <div class="col-2">
-                                        <label for="">Don vi 1</label>
+                                        <label for="">Đơn vị 1</label>
                                         <select name="don_vi[]" id="" class="form-control">
                                             @foreach ($donvis as $donvi)
                                                 <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
@@ -105,12 +105,12 @@
                                     </div>
                 
                                     <div class="col-2">
-                                        <label for="">So luong</label>
+                                        <label for="">Số lượng</label>
                                         <input type="number" name="so_luong[]" id="" class="form-control">
                                     </div>
                 
                                     <div class="col-2">
-                                        <label for="">Don vi 2</label>
+                                        <label for="">Đơn vị 2</label>
                                         <select name="don_vi[]" id="" class="form-control">
                                             @foreach ($donvis as $donvi)
                                                 <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
@@ -119,12 +119,12 @@
                                     </div>
                 
                                     <div class="col-2">
-                                        <label for="">So luong</label>
+                                        <label for="">Số lượng</label>
                                         <input type="number" name="so_luong[]" id="" class="form-control">
                                     </div>
                 
                                     <div class="col-2">
-                                        <label for="">Don vi 3</label>
+                                        <label for="">Đơn vị 3</label>
                                         <select name="don_vi[]" id="" class="form-control">
                                             @foreach ($donvis as $donvi)
                                                 <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
@@ -193,8 +193,12 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('supplier_id.*')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
+                    
 
                     <div class="card">
                         <div class="card-header">
@@ -207,6 +211,9 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('medicine.category_id')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -221,6 +228,9 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('storage_id')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 

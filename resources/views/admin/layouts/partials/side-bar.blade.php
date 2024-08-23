@@ -314,7 +314,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdosepre" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="cutdosepre">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Danh sách đơn thuốc mẫu</span>
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đơn thuốc mẫu</span>
                     </a>
                     <div class="collapse menu-dropdown" id="cutdosepre">
                         <ul class="nav nav-sm flex-column">
@@ -340,7 +340,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdoseorder" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="cutdoseorder">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Danh sách thuốc cắt liều</span>
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thuốc cắt liều</span>
                     </a>
                     <div class="collapse menu-dropdown" id="cutdoseorder">
                         <ul class="nav nav-sm flex-column">
