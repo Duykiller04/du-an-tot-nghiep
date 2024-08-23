@@ -58,30 +58,24 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Medicine Code</th>
-                                    <th>Name Category</th>
-                                    <th>Name Medicine</th>
-                                    <th>Image Medicine</th>
-                                    <th>Price Sale</th>
-                                    <th>Price Import</th>
-                                    <th>Expiration Date</th>
-                                    <th>Name supplier</th>
-                                    <th>Quatity</th>
-                                    <th>Is Active</th>
-                                    <th>Action</th>
+                                    <th>Mã thuốc</th>
+                                    <th>Danh mục</th>
+                                    <th>Tên thuốc</th>
+                                    <th>Ảnh thuốc</th>
+                                    <th>Giá nhập</th>
+                                    <th>Giá bán</th>
+                                    <th>Ngày hết hạn</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Số lượng</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
+                                @foreach ($medicines as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->medicine_code }}</td>
                                         <td>{{ $item->category->name }}</td>
-                                        <td>
-                                            @foreach ($item->suppliers as $value)
-                                                <p>{{ $value->name }}</p>
-                                            @endforeach
-                                        </td>
                                         <td>{{ $item->name }}</td>
                                         <td>
                                             @php
@@ -96,11 +90,15 @@
                                                 <img width="30" height="30" src="{{ $url }}" alt="">
                                             @endif
                                         </td>
-                                        <td>{{ $item->price_sale }}</td>
                                         <td>{{ $item->price_import }}</td>
+                                        <td>{{ $item->price_sale }}</td>
                                         <td>{{ $item->expiration_date }}</td>
-                                        <td>{{ $item->storage->quantity }}</td>
-                                        <td>{!! $item->is_active ? '<span class="badge bg-primary">YES</span>' : '<span class="badge bg-danger">NO</span>' !!}</td>
+                                        <td>
+                                            @foreach ($item->suppliers as $value)
+                                                <p>{{ $value->name }}</p>
+                                            @endforeach
+                                        </td>
+                                        <td>{{ $item->inventory->quantity }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('admin.medicines.show', $item->id) }}"

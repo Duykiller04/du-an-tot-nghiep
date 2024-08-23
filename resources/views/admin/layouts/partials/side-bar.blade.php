@@ -160,11 +160,11 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarCatalogue">
+                    <a class="nav-link menu-link" href="#moitruong" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="moitruong">
                         <i class="ri-layout-3-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarCatalogue">
+                    <div class="collapse menu-dropdown" id="moitruong">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="{{ route('admin.environments.create') }}" class="nav-link" role="button"

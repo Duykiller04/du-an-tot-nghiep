@@ -25,13 +25,12 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:10',
+            'phone' => 'required|string|max:15|min:10',
             'address' => 'required|string',
             'birth' => 'required|date_format:Y-m-d',
             'image' => 'nullable|image|max:2048',
             'description' => 'nullable|string',
             'email' => 'required|email',
-            'password' => 'required|string|min:8',
             'type' => [
                 'required',
                 Rule::in([User::TYPE_ADMIN, User::TYPE_STAFF]),
@@ -49,7 +48,8 @@ class UpdateUserRequest extends FormRequest
 
             'phone.required' => 'Trường này là bắt buộc phải được điền',
             'phone.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
-            'phone.max' => 'Giá trị của trường này không được vượt quá 10 ký tự.',
+            'phone.max' => 'Giá trị của trường này không được vượt quá 15 ký tự.',
+            'phone.min' => 'Giá trị của trường này tối thiểu 10 ký tự.',
 
             'address.required' => 'Trường này là bắt buộc phải được điền',
             'address.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
@@ -57,24 +57,15 @@ class UpdateUserRequest extends FormRequest
             'birth.required' => 'Trường này là bắt buộc phải được điền',
             'birth.date_format' => 'Giá trị của trường này phải là một ngày tháng năm và ở định dạng "Y-m-d" (ví dụ: "2023-08-15")',
 
-
             'image.image' => 'Giá trị của trường này phải là một tệp hình ảnh (ảnh).',
             'image.max' => ' Kích thước tệp hình ảnh không được vượt quá 2MB..',
 
             'description.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
 
-
             'email.required' => ' Trường này là bắt buộc phải được điền.',
             'email.email' => '  Giá trị của trường này phải là một địa chỉ email hợp lệ..',
 
-
-            'password.required' => 'Trường này là bắt buộc phải được điền.',
-            'password.string' => 'Giá trị của trường này phải là một chuỗi ký tự.',
-            'password.min' => ' Giá trị của trường này phải có ít nhất 8 ký tự.',
-
             'type' => ' Type',
-
-
         ];
     }
 }

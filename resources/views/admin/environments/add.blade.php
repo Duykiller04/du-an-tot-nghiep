@@ -24,7 +24,7 @@
         <!-- end page title -->
 
         @if ($errors->any())
-             @dd($errors);
+             {{-- @dd($errors); --}}
             <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
         @endif
 

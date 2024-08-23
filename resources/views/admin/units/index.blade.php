@@ -41,8 +41,6 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Tên</th>
-                                <th>Đơn vị tính cha</th>
-                                <th>Đơn vị tính con</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Action</th>
@@ -53,18 +51,6 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->parent ? $item->parent->name : 'N/A' }}</td>
-                                    <td>
-                                        @if ($item->children->count())
-                                            <ul>
-                                                @foreach ($item->children as $child)
-                                                    <li>{{ $child->name }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            Trống
-                                        @endif
-                                    </td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>{{ $item->updated_at }}</td>
                                     <td>

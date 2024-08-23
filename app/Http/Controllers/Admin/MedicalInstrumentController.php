@@ -21,8 +21,9 @@ class MedicalInstrumentController extends Controller
      */
     public function index()
     {
-        $data = Medicine::query()->with(['suppliers', 'category','storage'])->latest('id')->get();
-        return view('admin.medicine.index', compact('data'));
+        $medicalInstrument = Medicine::query()->with(['suppliers', 'category','storage', 'inventory'])->where('type_product' , 1)->latest('id')->get();
+        // dd($medicines->toArray());
+        return view('admin.medicalInstrument.index', compact('medicalInstrument'));
     }
 
     /**

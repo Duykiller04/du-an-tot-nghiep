@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách Users
+    Danh sách người dùng
 @endsection
 
 @section('content')
@@ -10,11 +10,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0"> Danh sách Users</h4>
+                    <h4 class="mb-sm-0"> Danh sách người dùng</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách User</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách người dùng</a></li>
                             <li class="breadcrumb-item active">Danh sách</li>
                         </ol>
                     </div>
@@ -58,16 +58,16 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>NAME</th>
-                                    <th>PHOME</th>
-                                    <td>ADDRESS</td>
-                                    <td>BIRTH</td>
-                                    <th>IMAGE</th>
-                                    <th>EMAIL</th>
-                                    <th>TYPE</th>
-                                    <th>CREATED AT</th>
-                                    <th>UPDATED AT</th>
-                                    <th>ACTION</th>
+                                    <th>Tên</th>
+                                    <th>Số điện thoại</th>
+                                    <td>Địa chỉ</td>
+                                    <td>Ngày sinh</td>
+                                    <th>Ảnh</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày sửa</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
