@@ -21,8 +21,44 @@ class EnvironmentController extends Controller
     public function index()
     {
         $environments = Environment::all();
-        return view('admin.environments.index', compact('environments'));
+        $location = $this->getMachineLocation(); 
+        $weatherData = $this->getWeatherData($location);
+
+        return view('admin.environments.index', [
+            'environments' => $environments,
+            'weatherData' => $weatherData,
+        ]);
     }
+
+    private function getMachineLocation()
+    {
+        return 'Hà Nội'; 
+    }
+
+    private function getWeatherData($location)
+    {
+        $apiKey = 'd3eb768e20a191025c902daa66b1203d'; // Thay bằng API key thực tế của bạn
+        $encodedLocation = urlencode($location); // Mã hóa tên địa phương để sử dụng trong URL
+        $url = "http://api.openweathermap.org/data/2.5/weather?q={$encodedLocation}&appid={$apiKey}&units=metric";
+        
+        // Gửi yêu cầu và lấy dữ liệu
+        $response = file_get_contents($url);
+        
+        if ($response === FALSE) {
+            // Xử lý lỗi khi không thể truy cập API
+            return [
+                'main' => [
+                    'temp' => 'N/A',
+                    'humidity' => 'N/A',
+                ],
+                'message' => 'Không thể truy cập dữ liệu thời tiết.'
+            ];
+        }
+        
+        return json_decode($response, true);
+    }
+    
+
     public function export()
     {
         return Excel::download(new EnvironmentsExport, 'environments.xlsx');

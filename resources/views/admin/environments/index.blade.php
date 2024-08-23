@@ -11,7 +11,7 @@
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 class="mb-sm-0">Danh sách Môi Trường</h4>
-
+        
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Môi Trường</a></li>
@@ -19,8 +19,24 @@
                         </ol>
                     </div>
                 </div>
+        
+                <!-- Tiêu đề và thông tin nhiệt độ, độ ẩm -->
+                <div class="page-title-box text-center mt-4">
+                    <h2 class="mb-4">Nhiệt độ và Độ ẩm hiện tại</h2>
+                    <div class="d-flex justify-content-center align-items-center gap-4">
+                        <div class="d-flex align-items-center">
+                            <i class="ri-thermometer-line me-2 text-warning" style="font-size: 24px;"></i>
+                            <span class="text-warning" style="font-size: 24px; font-weight: bold;">{{ $weatherData['main']['temp'] }}°C</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="ri-humidity-line me-2 text-primary" style="font-size: 24px;"></i>
+                            <span class="text-primary" style="font-size: 24px; font-weight: bold;">{{ $weatherData['main']['humidity'] }}%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        
         <!-- end page title -->
 
         @if (session('success'))
@@ -44,7 +60,6 @@
                                     <a href="{{ route('admin.environments.export') }}" class="btn btn-primary">Xuất Excel</a>
                                     <a href="{{ route('admin.environments.create') }}" class="btn btn-success add-btn"
                                         id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm môi trường</a>
-
                                 </div>
                             </div>
                         </div>
@@ -54,6 +69,9 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
+                                    <!-- Hiển thị nhiệt độ và độ ẩm từ API -->
+                                    
+
                                     <table id="environments-table"
                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
                                         style="width:100%">
@@ -108,6 +126,8 @@
     <!--datatable responsive css-->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <!-- Feather Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.css">
 @endsection
 
 @section('script-libs')

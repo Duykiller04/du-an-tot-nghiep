@@ -91,10 +91,8 @@
                         </ul>
                     </div>
                 </li>
-<<<<<<< HEAD
 
-=======
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link" href="#units" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="units">
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đơn vị tính</span>
@@ -116,8 +114,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>      
->>>>>>> 77f75f470239f2dc5d486c45a7a4c77d444e78ab
+                </li>       --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarProduct" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarProduct">
@@ -132,8 +129,6 @@
                                 </a>
                             </li>
 
-<<<<<<< HEAD
-=======
                             <li class="nav-item">
                                 <a href="{{route('admin.diseases.index')}}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
@@ -142,7 +137,6 @@
                             </li>
                         </ul>
                     </div>
->>>>>>> 77f75f470239f2dc5d486c45a7a4c77d444e78ab
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
@@ -266,7 +260,7 @@
 
                 {{-- ---------------------------------------------------------------------------------------------------------------- --}}
 
-
+{{-- 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#medicalInstrument" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="medicalInstrument">
@@ -315,7 +309,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
             </ul>
         </div>
@@ -352,7 +346,7 @@
     </li>
 
 
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link menu-link" href="#sidebarutm" data-bs-toggle="collapse" role="button"
             aria-expanded="false" aria-controls="sidebaruUer">
             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đanh sách đơn thuốc mẫu</span>
@@ -370,19 +364,19 @@
                                 <a href="{{ route('admin.products.variant') }}" class="nav-link" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                 Thuộc tính
                 </a>
-    </li> --}}
+    </li> --}} 
 
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a href="{{route('admin.cutdoseprescription.index')}}" class="nav-link" role="button"
             aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
             Danh sách
         </a>
-    </li>
+    </li> --}}
     </ul>
 </div>
 </li>
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a class="nav-link menu-link" href="#sidebarutl" data-bs-toggle="collapse" role="button"
         aria-expanded="false" aria-controls="sidebaruUer">
         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đanh sách thuốc cắt liều</span>
@@ -402,12 +396,12 @@
             </a>
 </li> --}}
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{route('admin.cutdoseorder.index')}}" class="nav-link" role="button"
         aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
         Danh sách
     </a>
-</li>
+</li> --}}
 </ul>
 </div>
 </li>
