@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +46,7 @@ Route::prefix('admin')
         Route::resource('diseases', DiseaseController::class);
 
         Route::resource('catalogues', CategoryController::class);
-        
+
         Route::resource('environments', EnvironmentController::class);
 
         Route::resource('users', UserController::class);
@@ -53,7 +54,7 @@ Route::prefix('admin')
         Route::resource('customers', CustomerController::class);
 
         Route::resource('suppliers', SupplierController::class);
-      
+
         Route::resource('medicalInstruments', MedicalInstrumentController::class);
 
         Route::resource('medicines', MedicineController::class);
@@ -64,6 +65,5 @@ Route::prefix('admin')
 
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
     });
-
-
+    
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
