@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Medicine;
@@ -41,7 +42,7 @@ class MedicineController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         // dd($request->all());
 
@@ -104,7 +105,7 @@ class MedicineController extends Controller
             return redirect()->route('admin.medicines.index')->with('success', 'Thêm thành công');
         } catch (\Exception $exception) {
             DB::rollback();
-            dd($exception->getMessage());
+            return back()->with('error' . $exception->getMessage());
         }
     }
 

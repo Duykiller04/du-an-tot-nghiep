@@ -92,29 +92,61 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label" for="name">Số lượng</label>
-                                <input type="number" class="form-control @error('so_luong') is-invalid @enderror" id="name" name="so_luong[]"
-                                    value="{{ old('so_luong') }}">
-                                @error('so_luong')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
+
+
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Đơn vị</h5>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-end">
+                                <button id="addProductNew" type="button" class="btn btn-primary">Thêm đơn vị</button>
                             </div>
 
                             <div class="mb-3">
-                                <div class="row" id="form-fields">
-                                    <div class="col-2">
-                                        <label for="">Don vi 1</label>
-                                        <select name="don_vi[]" id="" class="form-control">
-                                            @foreach ($donvis as $donvi)
-                                                <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
-                                            @endforeach
-                                        </select>
+                                <div class="row productNew mt-3">
+
+                                    <div class="row mb-3 form-item mt-3">
+                                        <div class="col-5">
+                                            <label class="form-label" for="name">Số lượng</label>
+                                            <input type="number"
+                                                class="form-control @error('so_luong') is-invalid @enderror" id="name"
+                                                name="so_luong[]">
+                                            @error('so_luong.0')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-5">
+                                            <label for="">Đơn vị</label>
+                                            <select name="don_vi[]" id="" class="form-control">
+                                                @foreach ($donvis as $donvi)
+                                                    <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                
-                                    <div class="col-2">
-                                        <label for="">So luong</label>
-                                        <input type="number" name="so_luong[]" id="" class="form-control">
+
+                                    <div class="row mb-3 form-item mt-3">
+                                        <div class="col-5">
+                                            <label for="">Số lượng</label>
+                                            <input type="number" name="so_luong[]" id="" class="form-control">
+                                            @error('so_luong.1')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-5">
+                                            <label for="">Đơn vị</label>
+                                            <select name="don_vi[]" id="" class="form-control">
+                                                @foreach ($donvis as $donvi)
+                                                    <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                 
                                     <div class="col-2">
@@ -310,8 +342,12 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('supplier_id.*')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
+
 
                     <div class="card">
                         <div class="card-header">
@@ -324,6 +360,9 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('medicine.category_id')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -338,6 +377,9 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
+                            @error('storage_id')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 

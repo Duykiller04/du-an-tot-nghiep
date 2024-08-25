@@ -10,11 +10,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Danh sách nhà cung cấp</h4>
+                    <h4 class="mb-sm-0">Danh sách dụng cụ</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách dụng cụ</a></li>
                             <li class="breadcrumb-item active">Danh sách</li>
                         </ol>
                     </div>
@@ -38,7 +38,7 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-sm">
                                 <div>
-                                    <h5 class="card-title mb-0">Danh sách nhà cung cấp</h5>
+                                    <h5 class="card-title mb-0">Danh sách dụng cụ</h5>
                                 </div>
                             </div>
                             <div class="col-sm-auto">
@@ -59,7 +59,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Danh mục</th>
-                                    <th>Nhà cung cấp</th>
+                                    <th>dụng cụ</th>
                                     <th>Tên dụng cụ</th>
                                     <th>Ảnh</th>
                                     <th>Giá nhập</th>
