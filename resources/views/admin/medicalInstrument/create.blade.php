@@ -29,7 +29,7 @@
             <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
         @endif
 
-        <form id="create-disease-form" method="POST" action="{{ route('admin.medicines.store') }}"
+        <form id="create-disease-form" method="POST" action="{{ route('admin.medicalInstruments.store') }}"
             enctype="multipart/form-data">
             @csrf
             <div class="row">
