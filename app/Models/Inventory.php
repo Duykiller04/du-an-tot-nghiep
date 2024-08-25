@@ -11,8 +11,8 @@ class Inventory extends Model
     protected $fillable = [
         'storage_id',
         'medicine_id',
+        'unit_id',
         'quantity',
-        'medical_instrument_id',
     ];
 
     public function storage()
@@ -23,10 +23,5 @@ class Inventory extends Model
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
-    }
-
-    public function medicalInstruments()
-    {
-        return $this->hasMany(MedicalInstrument::class);
     }
 }

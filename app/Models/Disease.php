@@ -16,7 +16,6 @@ class Disease extends Model
         'treatment_direction',
         'danger_level',
         'verify_date',
-
     ];
   
 }

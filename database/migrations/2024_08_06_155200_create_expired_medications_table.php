@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\MedicalInstrument;
 use App\Models\Medicine;
 use App\Models\Storage;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Storage::class)->constrained();
             $table->foreignIdFor(Medicine::class)->constrained();
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->unsignedInteger('quantity')->default(0);
             $table->dateTime('expiration_date')->comment('ngày hết hạn');
             $table->timestamps();

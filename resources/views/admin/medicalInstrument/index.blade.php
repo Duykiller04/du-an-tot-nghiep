@@ -10,11 +10,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Danh sách nhà cung cấp</h4>
+                    <h4 class="mb-sm-0">Danh sách dụng cụ</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách dụng cụ</a></li>
                             <li class="breadcrumb-item active">Danh sách</li>
                         </ol>
                     </div>
@@ -38,7 +38,7 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-sm">
                                 <div>
-                                    <h5 class="card-title mb-0">Danh sách nhà cung cấp</h5>
+                                    <h5 class="card-title mb-0">Danh sách dụng cụ</h5>
                                 </div>
                             </div>
                             <div class="col-sm-auto">
@@ -58,18 +58,18 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name Category</th>
-                                    <th>Name supplier</th>
-                                    <th>Name Instrument</th>
-                                    <th>Image</th>
-                                    <th>Price Sale</th>
-                                    <th>Price Import</th>
-                                    <th>Quatity</th>
-                                    <th>Action</th>
+                                    <th>Danh mục</th>
+                                    <th>dụng cụ</th>
+                                    <th>Tên dụng cụ</th>
+                                    <th>Ảnh</th>
+                                    <th>Giá nhập</th>
+                                    <th>Giá bán</th>
+                                    <th>Số lượng</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
+                                @foreach ($medicalInstrument as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->category->name }}</td>
@@ -92,9 +92,9 @@
                                                 <img width="30" height="30" src="{{ $url }}" alt="">
                                             @endif
                                         </td>
-                                        <td>{{ $item->price_sale }}</td>
                                         <td>{{ $item->price_import }}</td>
-                                        <td>{{ $item->storage->quantity }}</td>
+                                        <td>{{ $item->price_sale }}</td>
+                                        <td>{{ $item->inventory->quantity }}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('admin.medicalInstruments.show', $item->id) }}"

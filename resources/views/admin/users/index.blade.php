@@ -14,7 +14,7 @@
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách người dùng</a></li>
                             <li class="breadcrumb-item active">Danh sách</li>
                         </ol>
                     </div>
@@ -68,16 +68,16 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>NAME</th>
-                                    <th>PHOME</th>
-                                    <td>ADDRESS</td>
-                                    <td>BIRTH</td>
-                                    <th>IMAGE</th>
-                                    <th>EMAIL</th>
-                                    <th>TYPE</th>
-                                    <th>CREATED AT</th>
-                                    <th>UPDATED AT</th>
-                                    <th>ACTION</th>
+                                    <th>Tên</th>
+                                    <th>Số điện thoại</th>
+                                    <td>Địa chỉ</td>
+                                    <td>Ngày sinh</td>
+                                    <th>Ảnh</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày sửa</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,7 +108,13 @@
                                         <td>
                                             {{ $item->email }}
                                         </td>
-                                        <td>{!! $item->type ? '<span class="badge bg-primary">Admin</span>' : '<span class="badge bg-danger">Staff</span>' !!}</td>
+                                        <td>
+                                            @if ($item->type == 'admin')
+                                                <span class="badge bg-primary">Admin</span>
+                                            @elseif($item->type == 'staff')
+                                                <span class="badge bg-danger">Staff</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             {{ $item->created_at }}
                                         </td>
@@ -130,17 +136,19 @@
                                                     onclick="return confirm('Bạn có chắc chắn muốn xóa ko')"
                                                     type="submit">Delete</button>
                                             </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
+                    </td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                    </table>
                 </div>
             </div>
-            <!--end col-->
         </div>
-        <!--end row-->
+
+        <!--end col-->
+    </div>
+    <!--end row-->
 
     </div>
     <!-- container-fluid -->
@@ -182,37 +190,25 @@
                 buttons: [{
                         extend: 'copy',
                         exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột Action (cột 10)
-                                return idx !== 9;
-                            }
+                            columns: ':visible:not(:last-child)' // Loại bỏ cột cuối cùng
                         }
                     },
                     {
                         extend: 'csv',
                         exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột Action (cột 10)
-                                return idx !== 9;
-                            }
+                            columns: ':visible:not(:last-child)' // Loại bỏ cột cuối cùng
                         }
                     },
                     {
                         extend: 'excel',
                         exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột Action (cột 10)
-                                return idx !== 9;
-                            }
+                            columns: ':visible:not(:last-child)' // Loại bỏ cột cuối cùng
                         }
                     },
                     {
                         extend: 'pdf',
                         exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột Action (cột 10)
-                                return idx !== 9;
-                            }
+                            columns: ':visible:not(:last-child)' // Loại bỏ cột cuối cùng
                         }
                     },
                     'print'
@@ -222,25 +218,25 @@
                 ]
             });
 
-            setTimeout(function() {
-                element.style.width = "100px";
-            }, 1000);
-
-            // Sử dụng requestAnimationFrame:
-            requestAnimationFrame(function() {
-                element.style.width = "100px";
-            });
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    var min = $('#minDate').val();
-                    var max = $('#maxDate').val();
-                    var createdAt = new Date(data[8]); // Sử dụng cột `CREATED AT` (thứ 9)
+                    var minDate = $('#minDate').val();
+                    var maxDate = $('#maxDate').val();
 
+                    // Convert to Date objects for comparison
+                    var minDateObj = minDate ? new Date(minDate + 'T00:00:00') : null;
+                    var maxDateObj = maxDate ? new Date(maxDate + 'T23:59:59') : null;
+
+                    // Giả sử cột thời gian tạo là cột số 7 (chỉ số 7)
+                    var createdAt = data[8] || ''; // Cột thời gian tạo
+                    var createdAtDate = new Date(createdAt);
+
+                    // So sánh ngày
                     if (
-                        (!min && !max) ||
-                        (!min && createdAt <= new Date(max)) ||
-                        (new Date(min) <= createdAt && !max) ||
-                        (new Date(min) <= createdAt && createdAt <= new Date(max))
+                        (minDateObj === null && maxDateObj === null) ||
+                        (minDateObj === null && createdAtDate <= maxDateObj) ||
+                        (minDateObj <= createdAtDate && maxDateObj === null) ||
+                        (minDateObj <= createdAtDate && createdAtDate <= maxDateObj)
                     ) {
                         return true;
                     }
@@ -248,9 +244,13 @@
                 }
             );
 
-            // Lắng nghe sự thay đổi của input ngày và áp dụng filter
             $('#minDate, #maxDate').on('change', function() {
                 table.draw();
+            });
+
+            // Tạo filter tìm kiếm văn bản
+            $('#searchText').on('keyup', function() {
+                table.search(this.value).draw();
             });
         });
     </script>

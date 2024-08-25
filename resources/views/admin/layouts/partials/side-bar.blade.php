@@ -43,8 +43,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse"
-                        role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
+                    <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarMultilevel">
                         <i class="ri-share-line"></i> <span data-key="t-multi-level">Multi Level</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMultilevel">
@@ -53,9 +53,8 @@
                                 {{-- <a href="{{route('customer.index')}}" class="nav-link" data-key="t-level-1.1">Customers</a> --}}
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="sidebarAccount"
-                                    data-key="t-level-1.2"> Level
+                                <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse" role="button"
+                                    aria-expanded="false" aria-controls="sidebarAccount" data-key="t-level-1.2"> Level
                                     1.2
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarAccount">
@@ -65,21 +64,20 @@
                                                 Level 2.1 </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="#sidebarCrm" class="nav-link"
-                                                data-bs-toggle="collapse" role="button"
-                                                aria-expanded="false" aria-controls="sidebarCrm"
+                                            <a href="#sidebarCrm" class="nav-link" data-bs-toggle="collapse"
+                                                role="button" aria-expanded="false" aria-controls="sidebarCrm"
                                                 data-key="t-level-2.2"> Level 2.2
                                             </a>
                                             <div class="collapse menu-dropdown" id="sidebarCrm">
                                                 <ul class="nav nav-sm flex-column">
                                                     <li class="nav-item">
-                                                        <a href="#" class="nav-link"
-                                                            data-key="t-level-3.1"> Level 3.1
+                                                        <a href="#" class="nav-link" data-key="t-level-3.1"> Level
+                                                            3.1
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a href="#" class="nav-link"
-                                                            data-key="t-level-3.2"> Level 3.2
+                                                        <a href="#" class="nav-link" data-key="t-level-3.2"> Level
+                                                            3.2
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -91,6 +89,7 @@
                         </ul>
                     </div>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#units" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="units">
@@ -99,21 +98,21 @@
                     <div class="collapse menu-dropdown" id="units">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.units.create')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.units.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.units.index')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.units.index') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
                             </li>
                         </ul>
                     </div>
-                </li>      
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarProduct" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarProduct">
@@ -122,14 +121,14 @@
                     <div class="collapse menu-dropdown" id="sidebarProduct">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.diseases.create')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.diseases.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.diseases.index')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.diseases.index') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
@@ -145,7 +144,7 @@
                     <div class="collapse menu-dropdown" id="sidebarCatalogue">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin.catalogues.add') }}" class="nav-link" role="button"
+                                <a href="{{ route('admin.catalogues.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
@@ -161,6 +160,29 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#moitruong" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="moitruong">
+                        <i class="ri-layout-3-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="moitruong">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.environments.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.environments.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#user" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="user">
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Người dùng</span>
@@ -168,14 +190,14 @@
                     <div class="collapse menu-dropdown" id="user">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.users.create')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.users.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.users.index')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.users.index') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
@@ -192,14 +214,14 @@
                     <div class="collapse menu-dropdown" id="customer">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.customers.create')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.customers.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.customers.index')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.customers.index') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
@@ -216,14 +238,14 @@
                     <div class="collapse menu-dropdown" id="suppliers">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.suppliers.create')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.suppliers.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.suppliers.index')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.suppliers.index') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
@@ -231,6 +253,7 @@
                         </ul>
                     </div>
                 </li>
+                
 
 
                 {{-- ---------------------------------------------------------------------------------------------------------------- --}}
@@ -244,15 +267,17 @@
                     <div class="collapse menu-dropdown" id="medicalInstrument">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.medicalInstruments.create')}}" class="nav-link" role="button"
-                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                <a href="{{ route('admin.medicalInstruments.create') }}" class="nav-link"
+                                    role="button" aria-expanded="false" aria-controls="sidebarEcommerce"
+                                    data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.medicalInstruments.index')}}" class="nav-link" role="button"
-                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                <a href="{{ route('admin.medicalInstruments.index') }}" class="nav-link"
+                                    role="button" aria-expanded="false" aria-controls="sidebarInvoices"
+                                    data-key="t-invoices">
                                     Danh sách
                                 </a>
                             </li>
@@ -270,14 +295,64 @@
                     <div class="collapse menu-dropdown" id="medicine">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.medicines.create')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.medicines.create') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                     Thêm mới
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('admin.medicines.index')}}" class="nav-link" role="button"
+                                <a href="{{ route('admin.medicines.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#cutdosepre" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="cutdosepre">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đơn thuốc mẫu</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="cutdosepre">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.cutDosePrescriptions.create') }}" class="nav-link"
+                                    role="button" aria-expanded="false" aria-controls="sidebarEcommerce"
+                                    data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.cutDosePrescriptions.index') }}" class="nav-link"
+                                    role="button" aria-expanded="false" aria-controls="sidebarInvoices"
+                                    data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#cutdoseorder" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="cutdoseorder">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thuốc cắt liều</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="cutdoseorder">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.cutDoseOrders.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.cutDoseOrders.index') }}" class="nav-link" role="button"
                                     aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                     Danh sách
                                 </a>
@@ -288,8 +363,11 @@
 
             </ul>
         </div>
-        <!-- Sidebar -->
+        </li>
+        </ul>
     </div>
+    <!-- Sidebar -->
+</div>
 
-    <div class="sidebar-background"></div>
+<div class="sidebar-background"></div>
 </div>

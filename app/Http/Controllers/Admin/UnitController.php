@@ -17,7 +17,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $data = Unit::query()->with(['children.parent'])->latest('id')->get();
+        $data = Unit::query()->latest('id')->get();
         return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
     }
 
@@ -26,8 +26,7 @@ class UnitController extends Controller
      */
     public function create()
     {
-        $parentUnits = Unit::query()->with(['children'])->whereNull('parent_id')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('parentUnits'));
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -57,8 +56,7 @@ class UnitController extends Controller
      */
     public function edit(Unit $unit)
     {
-        $parentUnits = Unit::query()->with(['children'])->whereNull('parent_id')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('parentUnits','unit'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('unit'));
     }
 
     /**

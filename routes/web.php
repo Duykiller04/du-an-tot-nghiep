@@ -1,10 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\CatalogueController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CutDoseOrderController;
+use App\Http\Controllers\Admin\CutDosePrescriptionController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DiseaseController;
 use App\Http\Controllers\Admin\DeseaseController;
+use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\UnitController;
@@ -38,26 +42,11 @@ Route::prefix('admin')
     //->middleware('auth')
     ->group(function () {
 
-        Route::controller(DeseaseController::class)
-            ->prefix('diseases')->as('diseases.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/add', 'store')->name('store');
-                Route::get('/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
-                Route::delete('/{id}', 'destroy')->name('destroy');
-            });
-        Route::controller(CatalogueController::class)
-            ->prefix('catalogues')->as('catalogues.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/add', 'create')->name('add');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::put('/update/{id}', 'update')->name('update');
-                Route::delete('/delete/{id}', 'destroy')->name('destroy');
-            });
+        Route::resource('diseases', DiseaseController::class);
+
+        Route::resource('catalogues', CategoryController::class);
+        
+        Route::resource('environments', EnvironmentController::class);
 
         Route::resource('users', UserController::class);
 
@@ -66,8 +55,14 @@ Route::prefix('admin')
         Route::resource('suppliers', SupplierController::class);
       
         Route::resource('medicalInstruments', MedicalInstrumentController::class);
+
         Route::resource('medicines', MedicineController::class);
+
         Route::resource('units', UnitController::class);
+
+        Route::resource('cutDoseOrders', CutDoseOrderController::class);
+
+        Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
     });
 
 
