@@ -11,8 +11,9 @@ use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\UnitConversion;
-use DB;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicalInstrumentController extends Controller
 {
@@ -22,7 +23,7 @@ class MedicalInstrumentController extends Controller
     public function index()
     {
         $medicalInstrument = Medicine::query()->with(['suppliers', 'category','storage', 'inventory'])->where('type_product' , 1)->latest('id')->get();
-        // dd($medicines->toArray());
+        // dd($medicalInstrument->toArray());
         return view('admin.medicalInstrument.index', compact('medicalInstrument'));
     }
 

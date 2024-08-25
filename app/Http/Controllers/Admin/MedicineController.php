@@ -11,8 +11,9 @@ use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\UnitConversion;
-use DB;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicineController extends Controller
 {
