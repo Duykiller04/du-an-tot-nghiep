@@ -31,96 +31,74 @@ Danh sách khách hàng
                 <h5 class="card-title mb-0">Danh sách</h5>
 
                 <a href="{{route('admin.customers.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
-                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <!-- Gắn ID "buttons-datatables_wrapper-->
-
-                        <div class="d-flex justify-content-between">
-                            <div class="mb-4 me-3">
-                                <label for="minDate">Ngày tạo từ:</label>
-                                <input type="date" id="minDate" class="form-control">
-                            </div>
-                            <div class="mb-4 ms-3">
-                                <label for="maxDate">Ngày tạo đến:</label>
-                                <input type="date" id="maxDate" class="form-control">
-                            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                    <div class="d-flex justify-content-between">
+                        <div class="mb-4 me-3">
+                            <label for="minDate">Ngày tạo từ:</label>
+                            <input type="date" id="minDate" class="form-control">
                         </div>
-
-                        <!-- Lọc theo ngày -->
-                        <table id="example" class="display table table-bordered dataTable no-footer" style="width: 100%;" aria-describedby="buttons-datatables_info">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Email</th>
-                                    <th>Tuổi</th>
-                                    <th>Cân nặng</th>
-                                    <th>Thời gian tạo</th>
-                                    <th>Thời gian cập cập nhập</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @foreach ($listCustomer as $item)
-                                <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->name}}</td>
-                                    <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->address}}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>{{ $item->age }}</td>
-                                    <td>{{ $item->weight}}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->updated_at }}</td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="{{route('admin.customers.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
-                                            <form action="{{ route('admin.customers.destroy', $item) }}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                    class="btn btn-danger mb-3">DELETE
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        
+                        <div class="mb-4 ms-3">
+                            <label for="maxDate">Ngày tạo đến:</label>
+                            <input type="date" id="maxDate" class="form-control">
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--end row-->
+                    <!-- Lọc theo ngày -->
 
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <script>
-                    document.write(new Date().getFullYear());
-                </script>2024
-                © Velzon.
-            </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end d-none d-sm-block">
-                    Design &amp; Develop by Themesbrand
+                    <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%;" aria-describedby="buttons-datatables_info">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên khách hàng</th>
+                                <th>Số điện thoại</th>
+                                <th>Địa chỉ</th>
+                                <th>Email</th>
+                                <th>Tuổi</th>
+                                <th>Cân nặng</th>
+                                <th>Thời gian tạo</th>
+                                <th>Thời gian cập cập nhập</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($listCustomer as $item)
+                            <tr>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->name}}</td>
+                                <td>{{ $item->phone }}</td>
+                                <td>{{ $item->address}}</td>
+                                <td>{{ $item->email }}</td>
+                                <td>{{ $item->age }}</td>
+                                <td>{{ $item->weight}}</td>
+                                <td>{{ $item->created_at }}</td>
+                                <td>{{ $item->updated_at }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{route('admin.customers.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
+                                        <form action="{{ route('admin.customers.destroy', $item) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button onclick="return confirm('Chắc chắn không?')" type="submit"
+                                                class="btn btn-danger mb-3">DELETE
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</footer>
 </div>
+
+
 @endsection
 
 @section('style-libs')
@@ -148,6 +126,10 @@ Danh sách khách hàng
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.6.0/jspdf.umd.min.js"></script>
+
+
 <script>
     $(document).ready(function() {
         var table = $('#example').DataTable({
@@ -156,7 +138,6 @@ Danh sách khách hàng
                     extend: 'copy',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            // Loại bỏ cột Action (cột 10)
                             return idx !== 9;
                         }
                     }
@@ -165,7 +146,6 @@ Danh sách khách hàng
                     extend: 'csv',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            // Loại bỏ cột Action (cột 10)
                             return idx !== 9;
                         }
                     }
@@ -174,7 +154,6 @@ Danh sách khách hàng
                     extend: 'excel',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            // Loại bỏ cột Action (cột 10)
                             return idx !== 9;
                         }
                     }
@@ -183,9 +162,19 @@ Danh sách khách hàng
                     extend: 'pdf',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            // Loại bỏ cột Action (cột 10)
                             return idx !== 9;
                         }
+                    }
+                },
+                {
+                    text: 'png',
+                    action: function(e, dt, node, config) {
+                        html2canvas(document.querySelector('#example')).then(canvas => {
+                            var link = document.createElement('a');
+                            link.href = canvas.toDataURL('image/png');
+                            link.download = 'table-image.png';
+                            link.click();
+                        });
                     }
                 },
                 'print'
@@ -195,13 +184,38 @@ Danh sách khách hàng
             ]
         });
 
-        // Tạo filter cho ngày
-        $('#minDate, #maxDate').on('change', function() {
-            var minDate = $('#minDate').val();
-            var maxDate = $('#maxDate').val();
+        // Xóa các bộ lọc cũ và áp dụng bộ lọc mới
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var minDate = $('#minDate').val();
+                var maxDate = $('#maxDate').val();
 
-            table.columns(7).search(minDate ? '^' + minDate : '', true, false).draw();
-            table.columns(8).search(maxDate ? '^' + maxDate : '', true, false).draw();
+                // Convert to Date objects for comparison
+                var minDateObj = minDate ? new Date(minDate + 'T00:00:00') : null;
+                var maxDateObj = maxDate ? new Date(maxDate + 'T23:59:59') : null;
+
+                var createdAt = data[7] || ''; // Cột thời gian tạo
+                var createdAtDate = new Date(createdAt);
+
+                if (
+                    (minDateObj === null && maxDateObj === null) ||
+                    (minDateObj === null && createdAtDate <= maxDateObj) ||
+                    (minDateObj <= createdAtDate && maxDateObj === null) ||
+                    (minDateObj <= createdAtDate && createdAtDate <= maxDateObj)
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        $('#minDate, #maxDate').on('change', function() {
+            table.draw();
+        });
+
+        // Tạo filter tìm kiếm văn bản
+        $('#searchText').on('keyup', function() {
+            table.search(this.value).draw();
         });
     });
 </script>
