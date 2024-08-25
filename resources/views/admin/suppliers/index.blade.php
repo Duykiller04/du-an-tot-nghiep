@@ -154,7 +154,7 @@ Danh sách nhà cung cấp
                     extend: 'copy',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            return idx !== 6; // Ẩn cột "Action" (cột thứ 7, chỉ số bắt đầu từ 0)
+                            return idx !== 8; // Ẩn cột "Action" (cột thứ 7, chỉ số bắt đầu từ 0)
                         }
                     }
                 },
@@ -162,7 +162,7 @@ Danh sách nhà cung cấp
                     extend: 'csv',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            return idx !== 6; // Ẩn cột "Action"
+                            return idx !== 8; // Ẩn cột "Action"
                         }
                     }
                 },
@@ -170,7 +170,7 @@ Danh sách nhà cung cấp
                     extend: 'excel',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            return idx !== 6; // Ẩn cột "Action"
+                            return idx !== 8; // Ẩn cột "Action"
                         }
                     }
                 },
@@ -178,7 +178,7 @@ Danh sách nhà cung cấp
                     extend: 'pdf',
                     exportOptions: {
                         columns: function(idx, data, node) {
-                            return idx !== 6; // Ẩn cột "Action"
+                            return idx !== 8; // Ẩn cột "Action"
                         }
                     }
                 },
