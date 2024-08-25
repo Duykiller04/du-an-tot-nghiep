@@ -5,100 +5,121 @@ Danh sách khách hàng
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Danh sách khách hàng</h4>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">Danh sách khách hàng</h4>
 
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item">
-                        <a href="javascript: void(0);">Danh sách Khách hàng</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        Danh sách
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h5 class="card-title mb-0">Danh sách</h5>
-
-                <a href="{{route('admin.customers.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                    <div class="d-flex justify-content-between">
-                        <div class="mb-4 me-3">
-                            <label for="minDate">Ngày tạo từ:</label>
-                            <input type="date" id="minDate" class="form-control">
-                        </div>
-                        <div class="mb-4 ms-3">
-                            <label for="maxDate">Ngày tạo đến:</label>
-                            <input type="date" id="maxDate" class="form-control">
-                        </div>
-                    </div>
-                    <!-- Lọc theo ngày -->
-
-                    <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%;" aria-describedby="buttons-datatables_info">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Tên khách hàng</th>
-                                <th>Số điện thoại</th>
-                                <th>Địa chỉ</th>
-                                <th>Email</th>
-                                <th>Tuổi</th>
-                                <th>Cân nặng</th>
-                                <th>Thời gian tạo</th>
-                                <th>Thời gian cập cập nhập</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($listCustomer as $item)
-                            <tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->name}}</td>
-                                <td>{{ $item->phone }}</td>
-                                <td>{{ $item->address}}</td>
-                                <td>{{ $item->email }}</td>
-                                <td>{{ $item->age }}</td>
-                                <td>{{ $item->weight}}</td>
-                                <td>{{ $item->created_at }}</td>
-                                <td>{{ $item->updated_at }}</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <a href="{{route('admin.customers.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
-                                        <form action="{{ route('admin.customers.destroy', $item) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                class="btn btn-danger mb-3">DELETE
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách khách hàng</a></li>
+                        <li class="breadcrumb-item active">Danh sách</li>
+                    </ol>
                 </div>
             </div>
         </div>
     </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
+            <div class="card" id="diseaseList">
+                <div class="card-header border-bottom-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-sm">
+                            <div>
+                                <h5 class="card-title mb-0">Danh sách khách hàng</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                <a href="{{ route('admin.customers.create') }}" type="button" class="btn btn-success add-btn">
+                                    <i class="ri-add-line align-bottom me-1"></i> Thêm mới
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                            <div class="d-flex justify-content-between">
+                                <div class="mb-4 me-3">
+                                    <label for="minDate">Ngày tạo từ:</label>
+                                    <input type="date" id="minDate" class="form-control">
+                                </div>
+                                <div class="mb-4 ms-3">
+                                    <label for="maxDate">Ngày tạo đến:</label>
+                                    <input type="date" id="maxDate" class="form-control">
+                                </div>
+                            </div>
+                            <!-- Lọc theo ngày -->
+
+                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%;" aria-describedby="buttons-datatables_info">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Email</th>
+                                        <th>Tuổi</th>
+                                        <th>Cân nặng</th>
+                                        <th>Thời gian tạo</th>
+                                        <th>Thời gian cập cập nhập</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($listCustomer as $item)
+                                    <tr>
+                                        <td>{{ $item->id }}</td>
+                                        <td>{{ $item->name}}</td>
+                                        <td>{{ $item->phone }}</td>
+                                        <td>{{ $item->address}}</td>
+                                        <td>{{ $item->email }}</td>
+                                        <td>{{ $item->age }}</td>
+                                        <td>{{ $item->weight}}</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item->updated_at }}</td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{{route('admin.customers.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
+                                                <form action="{{ route('admin.customers.destroy', $item) }}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button onclick="return confirm('Chắc chắn không?')" type="submit"
+                                                        class="btn btn-danger mb-3">DELETE
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end col-->
+    </div>
+    <!--end row-->
+
 </div>
-
-
 @endsection
 
 @section('style-libs')
