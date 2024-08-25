@@ -45,6 +45,15 @@ class MedicineController extends Controller
     {
         // dd($request->all());
 
+        $priceImport = $request->input('medicine.price_import');
+        $priceSale = $request->input('medicine.price_sale');
+
+        if ($priceSale < $priceImport) {
+            return redirect()->back()->withErrors([
+                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+            ])->withInput();
+        }
+
         try {
             DB::beginTransaction();
 
@@ -92,7 +101,7 @@ class MedicineController extends Controller
             $medicine->suppliers()->attach($request->supplier_id);
 
             DB::commit();
-            dd('Thêm thành công');
+            return redirect()->route('admin.medicines.index')->with('success', 'Thêm thành công');
         } catch (\Exception $exception) {
             DB::rollback();
             dd($exception->getMessage());
