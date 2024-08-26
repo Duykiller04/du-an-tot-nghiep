@@ -66,7 +66,7 @@
                                     <th>Giá bán</th>
                                     <th>Ngày hết hạn</th>
                                     <th>Nhà cung cấp</th>
-                                    <th>Số lượng</th>
+                                    <th>Số lượng (Theo cấp nhỏ nhất)</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>

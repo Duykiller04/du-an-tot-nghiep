@@ -24,4 +24,8 @@ class Inventory extends Model
     {
         return $this->belongsTo(Medicine::class);
     }
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 }

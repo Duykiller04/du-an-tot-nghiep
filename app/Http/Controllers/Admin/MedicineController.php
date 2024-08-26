@@ -93,7 +93,7 @@ class MedicineController extends Controller
             $medicine->suppliers()->attach($request->supplier_id);
 
             DB::commit();
-            return view('admin.medicine.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.medicines.index')->with('success', 'Thêm thành công');
         } catch (\Exception $exception) {
             DB::rollback();
             return back()->with('error' . $exception->getMessage());
