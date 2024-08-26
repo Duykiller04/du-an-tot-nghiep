@@ -51,7 +51,6 @@ Danh sách thuốc
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div class="mb-4 me-3">

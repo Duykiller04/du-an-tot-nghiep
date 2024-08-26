@@ -64,9 +64,9 @@ Danh sách đơn thuốt mẫu
                             <td>{{ $item->updated_at }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="{{route('admin.cutdoseprescription.show',$item)}}" class="btn btn-warning mb-3">Show</a>
-                                    <a href="{{route('admin.cutdoseprescription.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
-                                    <form action="{{ route('admin.cutdoseprescription.destroy', $item) }}" method="post">
+                                    <a href="{{route('admin.cutDosePrescriptions.show',$item)}}" class="btn btn-warning mb-3">Show</a>
+                                    <a href="{{route('admin.cutDosePrescriptions.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
+                                    <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button onclick="return confirm('Chắc chắn không?')" type="submit"
