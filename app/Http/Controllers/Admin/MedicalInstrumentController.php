@@ -11,8 +11,9 @@ use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\UnitConversion;
-use DB;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicalInstrumentController extends Controller
 {
@@ -22,7 +23,7 @@ class MedicalInstrumentController extends Controller
     public function index()
     {
         $medicalInstrument = Medicine::query()->with(['suppliers', 'category','storage', 'inventory'])->where('type_product' , 1)->latest('id')->get();
-        // dd($medicines->toArray());
+        // dd($medicalInstrument->toArray());
         return view('admin.medicalInstrument.index', compact('medicalInstrument'));
     }
 
@@ -44,6 +45,15 @@ class MedicalInstrumentController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+
+        $priceImport = $request->input('medicine.price_import');
+        $priceSale = $request->input('medicine.price_sale');
+
+        if ($priceSale < $priceImport) {
+            return redirect()->back()->withErrors([
+                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+            ])->withInput();
+        }
 
         try {
             DB::beginTransaction();
@@ -92,10 +102,10 @@ class MedicalInstrumentController extends Controller
             $medicine->suppliers()->attach($request->supplier_id);
 
             DB::commit();
-            dd('Thêm thành công');
+            return redirect()->route('admin.medicalInstruments.index')->with('success', 'Thêm thành công');
         } catch (\Exception $exception) {
             DB::rollback();
-            dd($exception->getMessage());
+            return back()->with('error' . $exception->getMessage());
         }
     }
 
