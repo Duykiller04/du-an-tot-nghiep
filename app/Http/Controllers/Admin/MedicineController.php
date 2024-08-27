@@ -11,8 +11,9 @@ use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\UnitConversion;
-use DB;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicineController extends Controller
 {
@@ -45,6 +46,15 @@ class MedicineController extends Controller
     public function store(StoreProductRequest $request)
     {
         // dd($request->all());
+
+        $priceImport = $request->input('medicine.price_import');
+        $priceSale = $request->input('medicine.price_sale');
+
+        if ($priceSale < $priceImport) {
+            return redirect()->back()->withErrors([
+                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+            ])->withInput();
+        }
 
         try {
             DB::beginTransaction();
