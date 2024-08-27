@@ -10,18 +10,20 @@ class InventoryAudit extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
+        'title',
         'storage_id',
-        'time',
-        'date_recorded',
-        'user_id',
+        'check_date',
+        'checked_by',
+        'status',
+        'remarks'
     ];
-    protected function detail(){
-        return $this->hasMany(InventoryCheckDetail::class,'inventory_audit_id','id');
+    public function details()
+    {
+        return $this->hasMany(InventoryCheckDetail::class);
     }
-    protected function storage(){
-        return $this->belongsTo(Storage::class,'storage_id','id');
+    public function storage()
+    {
+        return $this->belongsTo(Storage::class, 'storage_id', 'id');
     }
-    protected function user(){
-        return $this->belongsTo(User::class,'user_id','id');
-    }
+    
 }

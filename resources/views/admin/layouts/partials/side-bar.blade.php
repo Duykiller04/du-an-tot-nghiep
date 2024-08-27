@@ -162,6 +162,12 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('admin.inventoryaudit.index') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="ri-pages-line"></i> <span data-key="t-pages">Kiểm kho</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarCatalogue">
                         <i class="ri-layout-3-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DeseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
+use App\Http\Controllers\Admin\InventoryAuditController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -71,6 +72,16 @@ Route::prefix('admin')
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
+        Route::controller(InventoryAuditController::class)
+            ->prefix('inventoryaudit')->as('inventoryaudit.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/export-environments', 'export')->name('export');
+                Route::get('/add', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/detail/{id}', 'show')->name('show');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+            });
 
         Route::resource('users', UserController::class);
 
@@ -80,4 +91,4 @@ Route::prefix('admin')
     });
 
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); inventoryaudit
