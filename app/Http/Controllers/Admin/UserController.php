@@ -37,6 +37,10 @@ class UserController extends Controller
                 }
             }
             return DataTables::of($query)
+                ->addColumn('image', function ($row) {
+                    $url = Storage::url($row->image);
+                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.users.show', $row->id);  // Sửa đường dẫn
                     $editUrl = route('admin.users.edit', $row->id);  // Sửa đường dẫn
@@ -51,7 +55,7 @@ class UserController extends Controller
             </form>
             ';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['image','action'])
                 ->make(true);
         }
         return view(self::PATH_VIEW . __FUNCTION__);

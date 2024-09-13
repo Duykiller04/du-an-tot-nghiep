@@ -55,6 +55,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Tên</th>
+                                <th>Ảnh</th>
                                 <th>Email</th>
                                 <th>Vai trò</th>
                                 <th>Ngày tạo</th>
@@ -101,7 +102,7 @@
 @endsection
 
 @section('js')
-   <script>
+<script>
     $(document).ready(function() {
         var table = $('#userDataTable').DataTable({
             processing: true,
@@ -116,19 +117,26 @@
             columns: [
                 { data: 'id' },
                 { data: 'name' },
+                {
+                    data: 'image',
+                    name: 'image',
+                    orderable: false,
+                    searchable: false  
+                  
+                },
                 { data: 'email' },
+
                 {
                     data: 'type',
                     render: function(data, type, row) {
-    if (data === 'admin') {
-        return '<span class="badge bg-primary">Administrator</span>';
-    } else if (data === 'staff') {
-        return '<span class="badge bg-success">Staff Member</span>';
-    } else {
-        return '<span class="badge bg-secondary">Unknown</span>';
-    }
-}
-
+                        if (data === 'admin') {
+                            return '<span class="badge bg-primary">Administrator</span>';
+                        } else if (data === 'staff') {
+                            return '<span class="badge bg-success">Staff Member</span>';
+                        } else {
+                            return '<span class="badge bg-secondary">Unknown</span>';
+                        }
+                    }
                 },
                 { data: 'created_at' },
                 { data: 'updated_at' },
@@ -140,36 +148,47 @@
                 }
             ],
             dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'excel',
-                    text: 'Export Excel',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
+            buttons: [{
+                        extend: 'excel',
+                        text: 'Export Excel',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'Export CSV',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'Export PDF',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
                     }
-                },
-                {
-                    extend: 'csv',
-                    text: 'Export CSV',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    text: 'Export PDF',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
-                    }
-                },
-                {
-                    extend: 'print',
-                    text: 'Print',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)'
-                    }
-                }
-            ]
+                ]
         });
 
         $('#filter-btn').click(function() {
@@ -177,5 +196,6 @@
         });
     });
 </script>
+
 
 @endsection
