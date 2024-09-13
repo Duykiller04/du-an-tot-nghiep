@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class SupplierController extends Controller
 {
@@ -16,8 +17,41 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $data = Supplier::query()->latest('id')->paginate(5);
-        return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
+        if (request()->ajax()) {
+            $query = Supplier::query();
+            // Lọc theo ngày tháng nếu có
+             if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+                
+                // Kiểm tra định dạng ngày và lọc
+                if ($startDate && $endDate) {
+                    // Convert to datetime to include the full day
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+                    
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
+            return DataTables::of($query)
+                ->addColumn('action', function ($row) {
+                    $viewUrl = route('admin.suppliers.show', $row->id);
+                    $editUrl = route('admin.suppliers.edit', $row->id);
+                    $deleteUrl = route('admin.suppliers.destroy', $row->id);
+
+                    return '
+                <a href="' . $viewUrl . '" class="btn btn-sm btn-primary">Xem</a>
+                <a href="' . $editUrl . '" class="btn btn-sm btn-warning">Sửa</a>
+                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
+                ' . csrf_field() . method_field('DELETE') . '
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                </form>
+                ';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
