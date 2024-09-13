@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DiseaseController;
 use App\Http\Controllers\Admin\DeseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
+use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\StorageController;
@@ -67,6 +68,7 @@ Route::prefix('admin')
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
 
         Route::resource('storage', StorageController::class);
+
     });
     
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
