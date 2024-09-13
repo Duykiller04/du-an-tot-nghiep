@@ -57,7 +57,7 @@
                                 <th>Tên</th>
                                 <th>Thời gian tạo</th>
                                 <th>Thời gian cập nhật</th>
-                                <th>Action</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
