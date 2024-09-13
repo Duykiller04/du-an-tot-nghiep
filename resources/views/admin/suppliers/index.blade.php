@@ -76,14 +76,14 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Tax code</th>
-                                            <th>Name</th>
+                                            <th>Mã số thuế</th>
+                                            <th>Tên nhà cung cấp</th>
                                             <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Address</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Địa chỉ</th>
                                             <th>Thời gian tạo</th>
                                             <th>Thời gian cập cập nhập</th>
-                                            <th>Action</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     </thead>
 
