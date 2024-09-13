@@ -129,7 +129,7 @@
 
             <div class="d-flex align-items-center">
 
-                {{-- <div class="dropdown d-md-none topbar-head-dropdown header-item">
+                <div class="dropdown d-md-none topbar-head-dropdown header-item">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                         id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -164,7 +164,7 @@
                     </button>
                 </div>
 
-                <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                {{-- <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                         id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
                         data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
