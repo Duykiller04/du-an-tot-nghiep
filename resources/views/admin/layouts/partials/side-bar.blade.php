@@ -361,6 +361,31 @@
                     </div>
                 </li>
 
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#storage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="storage">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps"> Kho thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="storage">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.storage.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.storage.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
             </ul>
         </div>
         </li>

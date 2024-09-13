@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DeseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
+use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,8 @@ Route::prefix('admin')
         Route::resource('cutDoseOrders', CutDoseOrderController::class);
 
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
+
+        Route::resource('storage', StorageController::class);
     });
     
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
