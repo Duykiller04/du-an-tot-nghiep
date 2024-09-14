@@ -9,14 +9,46 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $catalogues = Category::with('children')->whereNull('parent_id')->orderBy('id','desc')->get();
-        return view('admin.catalogue.index', compact('catalogues'));
+        if (request()->ajax()) {
+            $query = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
+
+            return DataTables::of($query)
+                ->addColumn('details-control', function() {
+                    return '';
+                })
+                ->addColumn('action', function ($row) {
+                    $editUrl = route('admin.catalogues.edit', $row->id);
+                    $deleteUrl = route('admin.catalogues.destroy', $row->id);
+
+                    return '
+                        <a href="' . $editUrl . '" class="btn btn-sm btn-warning">Sửa</a>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                        </form>
+                    ';
+                })
+                ->addColumn('children', function($row) {
+                    $children = $row->children;
+                    foreach ($children as $child) {
+                        $child->edit_url = route('admin.catalogues.edit', $child->id);
+                        $child->delete_url = route('admin.catalogues.destroy', $child->id);
+                    }
+                    return $children;  // Trả về danh mục con để xử lý trong JavaScript
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('admin.catalogue.index');
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -34,16 +66,16 @@ class CategoryController extends Controller
     {
         $validate = $request->validate([
             'name' => 'required|string|max:100',
-            
+
         ], [
             'name.required' => 'Trường tên là bắt buộc.',
             'name.string' => 'Trường tên phải là chuỗi.',
             'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
-            
+
         ]);
         $validate['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
         $validate['is_active'] = $request->input('is_active') === '1' ? 1 : 0;
-       
+
 
         DB::table('categories')->insert([
             'name' => $validate['name'],
@@ -67,7 +99,7 @@ class CategoryController extends Controller
         if (!$catalogue) {
             return redirect()->route('admin.catalogues.index')->with('error', 'Danh mục không tồn tại');
         }
-        
+
         return view('admin.catalogue.edit', ['catalogue' => $catalogue, 'catalogues' => $catalogues]);
     }
 
@@ -78,17 +110,17 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:100',
-            
+
         ], [
             'name.required' => 'Trường tên là bắt buộc.',
             'name.string' => 'Trường tên phải là chuỗi.',
             'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
-           
+
         ]);
         $validatedData['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
         $validatedData['is_active'] = $request->input('is_active') === '1' ? 1 : 0;
 
-        
+
 
         DB::table('categories')->where('id', $id)->update([
             'name' => $validatedData['name'],
@@ -108,7 +140,7 @@ class CategoryController extends Controller
 
         // Cập nhật danh mục con cấp đầu
         Category::where('parent_id', $catalogue->id)->update(['parent_id' => null]);
-    
+
         // Chuyển các sản phẩm của danh mục bị xóa sang danh mục có id là 1
         //Medicine::where('catalogue_id', $catalogue->id)->update(['catalogue_id' => 1]);
 
