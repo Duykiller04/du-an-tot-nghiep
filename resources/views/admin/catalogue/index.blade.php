@@ -128,7 +128,7 @@
         var table = $('#example').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('admin.catalogues.index') }}',  // Đảm bảo rằng route này trả về cả dữ liệu children
+            ajax: '{{ route('admin.catalogues.index') }}',
             columns: [
                 {
                     className: 'details-control',
@@ -144,6 +144,42 @@
                 { data: 'action', orderable: false, searchable: false }
             ],
             order: [[1, 'desc']],
+            dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    'print'
+                ]
         });
 
         $('#example tbody').on('click', 'td.details-control', function () {
