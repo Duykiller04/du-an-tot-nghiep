@@ -4,19 +4,19 @@
         <!-- Dark Logo-->
         <a href="index.html" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="/theme/admin/assets/images/logo-sm.png" alt="" height="22">
+                <img src="/theme/admin/assets/images/logo-sm.png" alt="" height="42">
             </span>
             <span class="logo-lg">
-                <img src="/theme/admin/assets/images/logo-dark.png" alt="" height="17">
+                <img src="/theme/admin/assets/images/logo-dark.png" alt="" height="37">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="index.html" class="logo logo-light">
             <span class="logo-sm">
-                <img src="/theme/admin/assets/images/logo-sm.png" alt="" height="22">
+                <img src="/theme/admin/assets/images/logo-sm.png" alt="" height="42">
             </span>
             <span class="logo-lg">
-                <img src="/theme/admin/assets/images/logo-light.png" alt="" height="17">
+                <img src="/theme/admin/assets/images/logo-light.png" alt="" height="37">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -93,7 +93,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#units" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="units">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đơn vị tính</span>
+                        <i class="bx bxs-shapes"></i> <span data-key="t-apps">Đơn vị tính</span>
                     </a>
                     <div class="collapse menu-dropdown" id="units">
                         <ul class="nav nav-sm flex-column">
@@ -116,7 +116,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarProduct" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarProduct">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Các loại bệnh</span>
+                        <i class="bx bxs-virus"></i> <span data-key="t-apps">Các loại bệnh</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarProduct">
                         <ul class="nav nav-sm flex-column">
@@ -139,7 +139,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarCatalogue">
-                        <i class="ri-layout-3-line"></i> <span data-key="t-apps">Danh mục</span>
+                        <i class="bx bx-category"></i> <span data-key="t-apps">Danh mục</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarCatalogue">
                         <ul class="nav nav-sm flex-column">
@@ -162,7 +162,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#moitruong" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="moitruong">
-                        <i class="ri-layout-3-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
+                        <i class="ri-fahrenheit-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
                     </a>
                     <div class="collapse menu-dropdown" id="moitruong">
                         <ul class="nav nav-sm flex-column">
@@ -185,7 +185,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#user" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="user">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Người dùng</span>
+                        <i class="ri-folder-user-fill"></i> <span data-key="t-apps">Người dùng</span>
                     </a>
                     <div class="collapse menu-dropdown" id="user">
                         <ul class="nav nav-sm flex-column">
@@ -209,7 +209,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#customer" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="customer">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Khách hàng</span>
+                        <i class="ri-group-2-fill"></i> <span data-key="t-apps">Khách hàng</span>
                     </a>
                     <div class="collapse menu-dropdown" id="customer">
                         <ul class="nav nav-sm flex-column">
@@ -233,7 +233,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#suppliers" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="suppliers">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Nhà cung cấp</span>
+                        <i class="ri-building-4-fill"></i> <span data-key="t-apps">Nhà cung cấp</span>
                     </a>
                     <div class="collapse menu-dropdown" id="suppliers">
                         <ul class="nav nav-sm flex-column">
@@ -253,7 +253,7 @@
                         </ul>
                     </div>
                 </li>
-                
+
 
 
                 {{-- ---------------------------------------------------------------------------------------------------------------- --}}
@@ -262,7 +262,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#medicalInstrument" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="medicalInstrument">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Dụng cụ</span>
+                        <i class="bx bx-injection"></i> <span data-key="t-apps">Dụng cụ</span>
                     </a>
                     <div class="collapse menu-dropdown" id="medicalInstrument">
                         <ul class="nav nav-sm flex-column">
@@ -290,7 +290,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#medicine" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="medicine">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thuốc</span>
+                        <i class="bx bxs-capsule"></i> <span data-key="t-apps">Thuốc</span>
                     </a>
                     <div class="collapse menu-dropdown" id="medicine">
                         <ul class="nav nav-sm flex-column">
@@ -314,7 +314,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdosepre" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="cutdosepre">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Đơn thuốc mẫu</span>
+                        <i class="bx bx-notepad"></i> <span data-key="t-apps">Đơn thuốc mẫu</span>
                     </a>
                     <div class="collapse menu-dropdown" id="cutdosepre">
                         <ul class="nav nav-sm flex-column">
@@ -340,7 +340,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdoseorder" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="cutdoseorder">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thuốc cắt liều</span>
+                        <i class="bx bx-receipt"></i> <span data-key="t-apps">Thuốc cắt liều</span>
                     </a>
                     <div class="collapse menu-dropdown" id="cutdoseorder">
                         <ul class="nav nav-sm flex-column">
@@ -365,7 +365,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#storage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="storage">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps"> Kho thuốc</span>
+                        <i class="ri-store-2-fill"></i> <span data-key="t-apps"> Kho thuốc</span>
                     </a>
                     <div class="collapse menu-dropdown" id="storage">
                         <ul class="nav nav-sm flex-column">

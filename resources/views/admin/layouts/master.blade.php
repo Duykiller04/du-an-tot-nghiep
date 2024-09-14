@@ -10,10 +10,12 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
 
+    <link rel="icon" href="{{ asset('theme/admin/assets/images/logo-sm.png') }}" type="image/x-icon">
+
     @yield('style-libs')
 
     @include('admin.layouts.partials.css')
-    
+
     @yield('css')
 
 </head>
@@ -23,6 +25,16 @@
     @if (Session::has('error') || Session::has('success'))
         @include('admin.layouts.partials.notification')
     @endif
+
+
+    <!--preloader-->
+    {{-- <div id="preloader">
+        <div id="status">
+            <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div> --}}
 
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -64,7 +76,7 @@
     @yield('script-libs')
 
     @yield('js')
-    
+
 </body>
 
 </html>

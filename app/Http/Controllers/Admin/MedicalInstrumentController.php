@@ -11,9 +11,10 @@ use App\Models\Storage;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\UnitConversion;
-
+use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MedicalInstrumentController extends Controller
 {
@@ -22,10 +23,48 @@ class MedicalInstrumentController extends Controller
      */
     public function index()
     {
-        $medicalInstrument = Medicine::query()->with(['suppliers', 'category','storage', 'inventory'])->where('type_product' , 1)->latest('id')->get();
-        // dd($medicalInstrument->toArray());
-        return view('admin.medicalInstrument.index', compact('medicalInstrument'));
+        if (request()->ajax()) {
+            $query = Medicine::query()->with(['suppliers', 'category', 'storage', 'inventory'])
+                ->where('type_product', 1);
+
+            // Lọc theo ngày tháng nếu có
+            if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+
+                // Kiểm tra định dạng ngày và lọc
+                if ($startDate && $endDate) {
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
+
+            return DataTables::of($query)
+                ->addColumn('image', function($row) {
+                    $url = \Illuminate\Support\Facades\Storage::url($row->image);
+                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                })
+                ->addColumn('action', function ($row) {
+                    $editUrl = route('admin.medicalInstruments.edit', $row->id);
+                    $deleteUrl = route('admin.medicalInstruments.destroy', $row->id);
+
+                    return '
+                        <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                        </form>
+                    ';
+                })
+                ->rawColumns(['image', 'action'])
+                ->make(true);
+        }
+
+        return view('admin.medicalInstrument.index');
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -64,7 +103,7 @@ class MedicalInstrumentController extends Controller
             } else {
                 $imagePath = null;
             }
-    
+
             $medicineData = $request->input('medicine');
 
             $medicineData['type_product'] = 1;
@@ -89,7 +128,7 @@ class MedicalInstrumentController extends Controller
 
             foreach ($units as $id => $unit_id_2) {
                 if ($unit_id_2 != $inventories['unit_id']) {
-                    
+
                     UnitConversion::create([
                         'medicine_id' => $inventories['medicine_id'],
                         'unit_id_1' => $inventories['unit_id'],
