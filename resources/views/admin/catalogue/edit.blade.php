@@ -28,10 +28,11 @@
     <!-- end page title -->
 
     <div class="row">
-        
-        <div class="col-lg-8">
+
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
+                    <a class="btn btn-primary mb-3" href="{{route('admin.catalogues.index')}}">Quay lại</a>
                     <form action="{{route('admin.catalogues.update',$catalogue->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -68,9 +69,7 @@
                     </div>
 
 
-                    <div class="text-end mb-4 mt-4">
-                        
-                        <a class="btn btn-primary" href="{{route('admin.catalogues.index')}}">Quay lại</a>
+                    <div class="text-end mb-4 mt-4 d-flex justify-content-center">
                         <button type="submit" class="btn btn-success w-sm">Sửa</button>
                     </div>
                 </form>
@@ -78,8 +77,8 @@
                 <!-- end card body -->
             </div>
             <!-- end card -->
-            
-            
+
+
         </div>
         <!-- end col -->
     </div>

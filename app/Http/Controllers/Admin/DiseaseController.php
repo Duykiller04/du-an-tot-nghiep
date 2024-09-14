@@ -44,10 +44,10 @@ class DiseaseController extends Controller
                     $deleteUrl = route('admin.diseases.destroy', $row->id);
 
                     return '
-                <a href="' . $editUrl . '" class="btn btn-sm btn-warning">Sửa</a>
+                <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
                 <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
                 ' . csrf_field() . method_field('DELETE') . '
-                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
                 </form>
                 ';
                 })
