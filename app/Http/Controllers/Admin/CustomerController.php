@@ -16,7 +16,7 @@ class CustomerController extends Controller
     public function index()
     {
         $listCustomer = Customer::query()->latest('id')->get();
-        return view('admin.customer.index',compact('listCustomer'));
+        return view('admin.customer.index', compact('listCustomer'));
     }
 
     /**
@@ -40,18 +40,15 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $customer = Customer::findOrFail($id);//trả về 404
-        return view('admin.customer.edit',compact('customer'));
+        $customer = Customer::findOrFail($id); //trả về 404
+        return view('admin.customer.edit', compact('customer'));
     }
 
     /**
