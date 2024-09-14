@@ -28,7 +28,7 @@ class Medicine extends Model
     ];
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
     public function CutDoseOrderDetails()
     {
@@ -36,7 +36,7 @@ class Medicine extends Model
     }
     public function storage()
     {
-        return $this->belongsTo(Storage::class);
+        return $this->belongsTo(Storage::class, 'storage_id');
     }
     public function unit()
     {
@@ -46,7 +46,8 @@ class Medicine extends Model
     {
         return $this->belongsToMany(Supplier::class);
     }
-    public function inventory(){
-        return $this->hasOne(Inventory::class);
+    public function inventory()
+    {
+        return $this->hasOne(Inventory::class, 'medicine_id');
     }
 }
