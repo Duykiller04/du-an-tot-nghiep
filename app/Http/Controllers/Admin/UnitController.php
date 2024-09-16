@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUnitRequest;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
 
 class UnitController extends Controller
 {
@@ -17,8 +18,41 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $data = Unit::query()->with(['children.parent'])->latest('id')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
+        if (request()->ajax()) {
+            $query = Unit::query();
+            // Lọc theo ngày tháng nếu có
+             if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+
+                // Kiểm tra định dạng ngày và lọc
+                if ($startDate && $endDate) {
+                    // Convert to datetime to include the full day
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
+            return DataTables::of($query)
+                ->addColumn('action', function ($row) {
+                    $viewUrl = route('admin.units.show', $row->id);
+                    $editUrl = route('admin.units.edit', $row->id);
+                    $deleteUrl = route('admin.units.destroy', $row->id);
+
+                    return '
+                <a href="' . $viewUrl . '" class="btn btn btn-primary">Xem</a>
+                <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
+                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
+                ' . csrf_field() . method_field('DELETE') . '
+                <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                </form>
+                ';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -26,8 +60,7 @@ class UnitController extends Controller
      */
     public function create()
     {
-        $parentUnits = Unit::query()->with(['children'])->whereNull('parent_id')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('parentUnits'));
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -57,8 +90,7 @@ class UnitController extends Controller
      */
     public function edit(Unit $unit)
     {
-        $parentUnits = Unit::query()->with(['children'])->whereNull('parent_id')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('parentUnits','unit'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('unit'));
     }
 
     /**

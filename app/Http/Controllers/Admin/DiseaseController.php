@@ -6,16 +6,55 @@ use App\Http\Controllers\Controller;
 use App\Models\Disease;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
 
-class DeseaseController extends Controller
+class DiseaseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $diseases = Disease::all();
-        return view('admin.diseases.index', compact('diseases'));
+        // $diseases = Disease::all();
+
+        if (request()->ajax()) {
+            $query = Disease::query();
+            // Lọc theo ngày tháng nếu có
+             if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+
+                // Kiểm tra định dạng ngày và lọc
+                if ($startDate && $endDate) {
+                    // Convert to datetime to include the full day
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
+            return DataTables::of($query)
+                ->addColumn('image', function($row) {
+                    $url = Storage::url($row->feature_img);
+                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                })
+                ->addColumn('action', function ($row) {
+                    $editUrl = route('admin.diseases.edit', $row->id);
+                    $deleteUrl = route('admin.diseases.destroy', $row->id);
+
+                    return '
+                <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
+                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
+                ' . csrf_field() . method_field('DELETE') . '
+                <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                </form>
+                ';
+                })
+                ->rawColumns(['image', 'action'])
+                ->make(true);
+        }
+        return view('admin.diseases.index');
     }
 
     /**
@@ -106,40 +145,40 @@ class DeseaseController extends Controller
             'danger_level.required' => 'Mức độ nguy hiểm là bắt buộc.',
             'danger_level.in' => 'Mức độ nguy hiểm không hợp lệ.',
         ]);
-    
+
         // Tìm bệnh theo ID
         $disease = Disease::findOrFail($id);
-    
+
         // Cập nhật thông tin bệnh
         $disease->disease_name = $validated['disease_name'];
         $disease->symptom = $validated['symptom'];
         $disease->treatment_direction = $validated['treatment_direction'];
         $disease->danger_level = $validated['danger_level'];
-    
+
         // Xử lý ảnh đại diện
         if ($request->hasFile('feature_img')) {
             // Xóa ảnh cũ nếu có
             if ($disease->feature_img) {
                 Storage::delete('public/' . $disease->feature_img);
             }
-    
+
             // Xử lý ảnh mới
             $feature_img_path = $this->uploadImage($request->file('feature_img'));
-    
+
             // Cập nhật đường dẫn ảnh mới vào cơ sở dữ liệu
             $disease->feature_img = $feature_img_path;
         }
-    
+
         // Cập nhật ngày xác minh
         $disease->verify_date = now();
-    
+
         // Lưu thay đổi vào cơ sở dữ liệu
         $disease->save();
-    
+
         // Chuyển hướng với thông báo thành công
         return redirect()->route('admin.diseases.index')->with('success', 'Bệnh đã được cập nhật thành công.');
     }
-    
+
 
     /**
      * Remove the specified resource from storage.

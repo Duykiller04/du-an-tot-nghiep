@@ -10,16 +10,15 @@ class ImportOrderDetail extends Model
     use HasFactory;
     protected $fillable = [
         'import_order_id',
+        'unit_id',
+        'medicine_id',
         'date_added',
         'quantity',
-        'unit_id',
         'import_price',
         'total',
-        'medicine_id',
         'note',
         'medication_name',
         'expiration_date',
-        'medical_instrument_id',
     ];
 
     public function import_order()
@@ -34,9 +33,5 @@ class ImportOrderDetail extends Model
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
-    }
-    public function memedicalInstrumentsdicine()
-    {
-        return $this->belongsTo(MedicalInstrument::class);
     }
 }

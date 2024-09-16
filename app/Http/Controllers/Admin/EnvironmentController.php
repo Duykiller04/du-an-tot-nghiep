@@ -72,7 +72,6 @@ class EnvironmentController extends Controller
     {
         // Xác thực dữ liệu
         $validated = $request->validate([
-
             'real_temperature' => 'required|numeric',
             'real_humidity' => 'required|numeric',
             'time' => 'required|date',

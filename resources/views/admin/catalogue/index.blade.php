@@ -30,7 +30,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card" id="customerList">
@@ -45,7 +45,7 @@
                                 <div class="d-flex flex-wrap align-items-start gap-2">
                                     <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
                                             class="ri-delete-bin-2-line"></i></button>
-                                    <a href="{{ route('admin.catalogues.add') }}" class="btn btn-success add-btn"
+                                    <a href="{{ route('admin.catalogues.create') }}" class="btn btn-success add-btn"
                                         id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm danh mục</a>
                                 </div>
                             </div>
@@ -56,11 +56,20 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <table id="example"
-                                        class="table table-bordered dt-responsive nowrap table-striped align-middle"
-                                        style="width:100%">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="mb-4 me-3">
+                                            <label for="minDate">Ngày tạo từ:</label>
+                                            <input type="date" id="minDate" class="form-control">
+                                        </div>
+                                        <div class="mb-4 ms-3">
+                                            <label for="maxDate">Ngày tạo đến:</label>
+                                            <input type="date" id="maxDate" class="form-control">
+                                        </div>
+                                    </div>
+                                    <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th></th> <!-- Cột để click mở rộng -->
                                                 <th>ID</th>
                                                 <th>Tên danh mục</th>
                                                 <th>Thời gian tạo</th>
@@ -69,12 +78,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($catalogues as $item)
-                                                @php($each = '')
-                                                @include('admin.catalogue.catalogue_row', [
-                                                    'catalogue' => $item,
-                                                ])
-                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -90,28 +93,148 @@
     <!-- container-fluid -->
 @endsection
 
-@section('style-libs')
-    <!--datatable css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-    <!--datatable responsive css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+@section('css')
+   <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+
 @endsection
 
 @section('script-libs')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <!-- jQuery -->
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+   <!-- DataTables JS -->
+   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+   <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
-    <!--datatable js-->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+   <!-- DataTables Buttons JS -->
+   <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
-    <script src="{{ asset('theme/admin/assets/js/pages/datatables.init.js') }}"></script>
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('admin.catalogues.index') }}',
+            columns: [
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '<i class="bx bx-sort-down"></i>',
+                    width: '20px'
+                },
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'action', orderable: false, searchable: false }
+            ],
+            order: [[1, 'desc']],
+            dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 5; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    'print'
+                ]
+        });
+
+        $('#example tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // Nếu đang mở, đóng lại
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Nếu đang đóng, mở rộng để hiển thị các danh mục con
+                var rowData = row.data();
+                var children = rowData.children;
+
+                // Phân tích chuỗi JSON thành đối tượng JavaScript nếu cần
+                if (typeof children === 'string') {
+                    try {
+                        children = JSON.parse(children);
+                    } catch (e) {
+                        console.error('Error parsing children JSON:', e);
+                        children = [];
+                    }
+                }
+
+                // Kiểm tra xem children có phải là mảng không
+                if (Array.isArray(children)) {
+                    if (children.length > 0) {
+                        var html = '<table class="table"><tr><th></th><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
+                        children.forEach(function(child) {
+                            html += '<tr><td></td><td>' + child.id + '</td><td>' + child.name + '</td><td>' + child.created_at + '</td><td>' + child.updated_at + '</td>';
+                            html += '<td><a href="' + child.edit_url + '" class="btn btn-sm btn-warning">Sửa</a>';
+                            html += '<form action="' + child.delete_url + '" method="post" style="display:inline;" class="ms-2">' +
+                                '<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">' +
+                                '<input type="hidden" name="_method" value="DELETE">' +
+                                '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>' +
+                                '</form></td></tr>';
+                        });
+                        html += '</table>';
+                        row.child(html).show();
+                        tr.addClass('shown');
+                    } else {
+                        // Nếu danh mục con là mảng nhưng không có phần tử
+                        row.child('<div>Không có danh mục con</div>').show();
+                        tr.addClass('shown');
+                    }
+                } else {
+                    // Nếu children không phải là mảng
+                    row.child('<div>Không có danh mục con</div>').show();
+                    tr.addClass('shown');
+                }
+            }
+        });
+    });
+
+</script>
 
 @endsection

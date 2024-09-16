@@ -1,15 +1,21 @@
 <?php
 
-use App\Http\Controllers\Admin\CatalogueController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CutDoseOrderController;
+use App\Http\Controllers\Admin\CutDosePrescriptionController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DiseaseController;
 use App\Http\Controllers\Admin\DeseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\InventoryAuditController;
+use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
-use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -40,27 +46,6 @@ Route::prefix('admin')
     //->middleware('auth')
     ->group(function () {
 
-        Route::controller(DeseaseController::class)
-            ->prefix('diseases')->as('diseases.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/add', 'store')->name('store');
-                Route::get('/{id}', 'edit')->name('edit');
-                Route::put('/{id}', 'update')->name('update');
-                Route::delete('/{id}', 'destroy')->name('destroy');
-            });
-      
-        Route::controller(CatalogueController::class)
-            ->prefix('catalogues')->as('catalogues.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/add', 'create')->name('add');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::put('/update/{id}', 'update')->name('update');
-                Route::delete('/delete/{id}', 'destroy')->name('destroy');
-            });
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {
@@ -72,6 +57,7 @@ Route::prefix('admin')
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
+      
         Route::controller(InventoryAuditController::class)
             ->prefix('inventoryaudit')->as('inventoryaudit.')
             ->group(function () {
@@ -83,12 +69,28 @@ Route::prefix('admin')
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
 
+        Route::resource('diseases', DiseaseController::class);
+      
+        Route::resource('catalogues', CategoryController::class);
+
         Route::resource('users', UserController::class);
 
         Route::resource('customers', CustomerController::class);
 
         Route::resource('suppliers', SupplierController::class);
+
+        Route::resource('medicalInstruments', MedicalInstrumentController::class);
+
+        Route::resource('medicines', MedicineController::class);
+
+        Route::resource('units', UnitController::class);
+
+        Route::resource('cutDoseOrders', CutDoseOrderController::class);
+
+        Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
+
+        Route::resource('storage', StorageController::class);
+
     });
-
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); inventoryaudit
+    
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

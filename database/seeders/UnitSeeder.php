@@ -13,10 +13,6 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        $find = Unit::find(1);
-        $category1 = Unit::query()->create([
-             'name' => 'Children 1',
-             'parent_id' => $find->id,
-        ]);
+       Unit::factory(10)->create();
     }
 }

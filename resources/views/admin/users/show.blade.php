@@ -65,9 +65,9 @@ Chi tiết User
                         <tr>
                             <th class="ps-0" scope="row">Type:</th>
                             <td>
-                                @if($user->type == 'Admin')
+                                @if($user->type == 'admin')
                                 <span class="badge bg-primary">Admin</span>
-                                @elseif($user->type == 'Staff')
+                                @elseif($user->type == 'staff')
                                 <span class="badge bg-danger">Staff</span>
                                 @endif
                             </td>

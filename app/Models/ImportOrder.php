@@ -9,17 +9,17 @@ class ImportOrder extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'user_id',
+        'storage_id',
+        'supplier_id',
         'total',
         'price_paid',
         'still_in_debt',
-        'storage_id',
-        'supplier_id',
-        'input_day',
+        'date_added',
         'note',
         'status',
-        'user_id',
     ];
-// 
+
     public function storage()
     {
         return $this->belongsTo(Storage::class);

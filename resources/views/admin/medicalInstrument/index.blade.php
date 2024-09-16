@@ -1,148 +1,194 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách dụng cụ
+Danh sách dụng cụ
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Danh sách nhà cung cấp</h4>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">Danh sách dụng cụ</h4>
 
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
-                            <li class="breadcrumb-item active">Danh sách</li>
-                        </ol>
-                    </div>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách dụng cụ</a></li>
+                        <li class="breadcrumb-item active">Danh sách</li>
+                    </ol>
                 </div>
             </div>
         </div>
-        <!-- end page title -->
+    </div>
+    <!-- end page title -->
 
-        <div class="row">
-            <div class="col-lg-12">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+    <div class="row">
+        <div class="col-lg-12">
+            @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
 
-                @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
+            @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
 
-                <div class="card" id="diseaseList">
-                    <div class="card-header border-bottom-dashed">
-                        <div class="row g-4 align-items-center">
-                            <div class="col-sm">
-                                <div>
-                                    <h5 class="card-title mb-0">Danh sách nhà cung cấp</h5>
-                                </div>
+            <div class="card" id="diseaseList">
+                <div class="card-header border-bottom-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-sm">
+                            <div>
+                                <h5 class="card-title mb-0">Danh sách dụng cụ</h5>
                             </div>
-                            <div class="col-sm-auto">
-                                <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route('admin.medicalInstruments.create') }}" type="button"
-                                        class="btn btn-success add-btn">
-                                        <i class="ri-add-line align-bottom me-1"></i> Thêm mới
-                                    </a>
-                                </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                <a href="{{ route('admin.medicalInstruments.create') }}" type="button"
+                                    class="btn btn-success add-btn">
+                                    <i class="ri-add-line align-bottom me-1"></i> Thêm mới
+                                </a>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="card-body">
-                        <table id="diseaseTable"
-                            class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name Category</th>
-                                    <th>Name supplier</th>
-                                    <th>Name Instrument</th>
-                                    <th>Image</th>
-                                    <th>Price Sale</th>
-                                    <th>Price Import</th>
-                                    <th>Quatity</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->category->name }}</td>
-                                        <td>
-                                            @foreach ($item->suppliers as $value)
-                                            <p>{{ $value->name }}</p>
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>
-                                            @php
-                                                $url = $item->image;
-                                                if (!Str::contains($url, 'http')) {
-                                                    $url = Storage::url($url);
-                                                }
-                                            @endphp
-                                            @if ($url == '/storage/')
-                                                {{ 'Không có ảnh' }}
-                                            @else
-                                                <img width="30" height="30" src="{{ $url }}" alt="">
-                                            @endif
-                                        </td>
-                                        <td>{{ $item->price_sale }}</td>
-                                        <td>{{ $item->price_import }}</td>
-                                        <td>{{ $item->storage->quantity }}</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="{{ route('admin.medicalInstruments.show', $item->id) }}"
-                                                    class="btn btn-primary me-2">Xem</a>
-                                                <a href="{{ route('admin.medicalInstruments.edit', $item->id) }}"
-                                                    class="btn btn-warning me-2">Sửa</a>
-                                                <form action="{{ route('admin.medicalInstruments.destroy', $item->id) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" onclick="return confirm('Chắc chắn chưa?')"
-                                                        class="btn btn-danger">Xóa</button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="mb-4 me-3">
+                            <label for="minDate">Ngày tạo từ:</label>
+                            <input type="date" id="minDate" class="form-control">
+                        </div>
+                        <div class="mb-4 ms-3">
+                            <label for="maxDate">Ngày tạo đến:</label>
+                            <input type="date" id="maxDate" class="form-control">
+                        </div>
                     </div>
+                    <table id="example"
+                        class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Danh mục</th>
+                                <th>Nhà cung cấp</th>
+                                <th>Tên dụng cụ</th>
+                                <th>Ảnh</th>
+                                <th>Giá nhập</th>
+                                <th>Giá bán</th>
+                                <th>Số lượng</th>
+                                <th>Thời gian tạo</th>
+                                <th>Thời gian cập cập nhập</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <!--end col-->
         </div>
-        <!--end row-->
-
+        <!--end col-->
     </div>
-    <!-- container-fluid -->
+    <!--end row-->
+
+</div>
+<!-- container-fluid -->
 @endsection
 
 @section('style-libs')
-    <!--datatable css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-    <!--datatable responsive css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 @endsection
 
 @section('script-libs')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <!--datatable js-->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#diseaseTable').DataTable();
+            var table = $('#example').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('admin.medicalInstruments.index') }}',
+                    data: function(d) {
+                        d.startDate = $('#minDate').val();
+                        d.endDate = $('#maxDate').val();
+                    }
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'category.name', name: 'category.name' },
+                    { data: 'suppliers', render: function (data, type, row) {
+                        return data.map(supplier => `<p>${supplier.name}</p>`).join('');
+                    }},
+                    { data: 'name' },
+                    { data: 'image', name: 'image', orderable: false, searchable: false },
+                    { data: 'price_import' },
+                    { data: 'price_sale' },
+                    { data: 'inventory.quantity', name: 'inventory.quantity' },
+                    { data: 'created_at' },
+                    { data: 'updated_at' },
+                    { data: 'action', orderable: false, searchable: false }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10; // Ẩn cột "Action"
+                            }
+                        }
+                    },
+                    'print'
+                ]
+            });
+
+            $('#minDate, #maxDate').on('change', function() {
+                table.draw();
+            });
         });
     </script>
+
 @endsection

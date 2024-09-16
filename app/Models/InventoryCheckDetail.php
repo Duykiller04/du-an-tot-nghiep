@@ -17,7 +17,6 @@ class InventoryCheckDetail extends Model
         'actual_quantity',
         'difference',
         'remarks'
-
     ];
     public function inventoryAudit()
     {
@@ -27,5 +26,4 @@ class InventoryCheckDetail extends Model
     {
         return $this->belongsTo(Medicine::class);
     }
-   
 }

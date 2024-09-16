@@ -9,5 +9,5 @@
 <script type='text/javascript' src='theme/admin/assets/libs/flatpickr/flatpickr.min.js'></script>
 
 <!-- App js -->
-{{-- <script src="/theme/admin/assets/js/app.js"></script> --}}
+<script src="/theme/admin/assets/js/app.js"></script>
 

@@ -37,10 +37,6 @@
                                     <label for="name" class="form-label">Tên đơn vị tính</label>
                                     <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $unit->name) }}" disabled>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="parent_id" class="form-label">Đơn vị cha</label>
-                                    <input type="text" name="parent_name" id="parent_name" class="form-control" value="{{ $unit->parent ? $unit->parent->name : 'Không có' }}" disabled>
-                                </div>
                                 <a href="{{ route('admin.units.index') }}" class="btn btn-primary mt-3">Quay lại danh sách</a>
                             </div>
                         </div>
