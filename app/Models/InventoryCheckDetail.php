@@ -9,16 +9,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class InventoryCheckDetail extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $table = "inventory_check_details";
     protected $fillable = [
         'inventory_audit_id',
         'medicine_id',
-        'quantity',
-        'status',
+        'expected_quantity',
+        'actual_quantity',
+        'difference',
+        'remarks'
     ];
-    protected function inventoryaudit(){
-        return $this->belongsTo(InventoryAudit::class,'inventory_audit_id','id');
+    public function inventoryAudit()
+    {
+        return $this->belongsTo(InventoryAudit::class);
     }
-    protected function medicine(){
-        return $this->belongsTo(Medicine::class,'medicine_id','id');
+    public function medicine()
+    {
+        return $this->belongsTo(Medicine::class);
     }
 }

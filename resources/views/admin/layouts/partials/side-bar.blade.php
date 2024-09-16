@@ -89,7 +89,6 @@
                         </ul>
                     </div>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#units" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="units">
@@ -160,9 +159,15 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#moitruong" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="moitruong">
-                        <i class="ri-fahrenheit-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
+                    <a class="nav-link menu-link" href="{{ route('admin.inventoryaudit.index') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="ri-pages-line"></i> <span data-key="t-pages">Kiểm kho</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarCatalogue">
+                        <i class="ri-layout-3-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
                     </a>
                     <div class="collapse menu-dropdown" id="moitruong">
                         <ul class="nav nav-sm flex-column">
@@ -258,7 +263,7 @@
 
                 {{-- ---------------------------------------------------------------------------------------------------------------- --}}
 
-
+{{-- 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#medicalInstrument" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="medicalInstrument">
@@ -309,7 +314,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdosepre" data-bs-toggle="collapse" role="button"
@@ -336,7 +341,6 @@
                         </ul>
                     </div>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdoseorder" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="cutdoseorder">
@@ -360,8 +364,6 @@
                         </ul>
                     </div>
                 </li>
-
-
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#storage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="storage">

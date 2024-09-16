@@ -46,8 +46,8 @@ class Medicine extends Model
     {
         return $this->belongsToMany(Supplier::class);
     }
-    public function inventory()
+    public function inventoryCheckDetails()
     {
-        return $this->hasOne(Inventory::class, 'medicine_id');
+        return $this->hasMany(InventoryCheckDetail::class, 'medicine_id', 'id');
     }
 }
