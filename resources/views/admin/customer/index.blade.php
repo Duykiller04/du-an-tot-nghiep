@@ -54,19 +54,24 @@ Danh sách khách hàng
                 <div class="card-body">
                     <div class="table-responsive">
                         <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                            <div class="d-flex justify-content-between">
-                                <div class="mb-4 me-3">
-                                    <label for="minDate">Ngày tạo từ:</label>
-                                    <input type="date" id="minDate" class="form-control">
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label for="start-date">Ngày bắt đầu:</label>
+                                    <input type="date" id="start-date" class="form-control" />
                                 </div>
-                                <div class="mb-4 ms-3">
-                                    <label for="maxDate">Ngày tạo đến:</label>
-                                    <input type="date" id="maxDate" class="form-control">
+                                <div class="col-6">
+                                    <label for="end-date">Ngày kết thúc:</label>
+                                    <div class="d-flex">
+                                        <input type="date" id="end-date" class="form-control me-2" />
+                                        <button id="filter-btn" class="btn btn-primary">Lọc</button>
+
+                                    </div>
                                 </div>
                             </div>
                             <!-- Lọc theo ngày -->
 
-                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%;" aria-describedby="buttons-datatables_info">
+                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                            style="width: 100%;" aria-describedby="buttons-datatables_info">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -78,36 +83,12 @@ Danh sách khách hàng
                                         <th>Cân nặng</th>
                                         <th>Thời gian tạo</th>
                                         <th>Thời gian cập cập nhập</th>
-                                        <th>Thao tác</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    @foreach ($listCustomer as $item)
-                                    <tr>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->name}}</td>
-                                        <td>{{ $item->phone }}</td>
-                                        <td>{{ $item->address}}</td>
-                                        <td>{{ $item->email }}</td>
-                                        <td>{{ $item->age }}</td>
-                                        <td>{{ $item->weight}}</td>
-                                        <td>{{ $item->created_at }}</td>
-                                        <td>{{ $item->updated_at }}</td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <a href="{{route('admin.customers.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
-                                                <form action="{{ route('admin.customers.destroy', $item) }}" method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                        class="btn btn-danger mb-3">DELETE
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -153,92 +134,101 @@ Danh sách khách hàng
 
 <script>
     $(document).ready(function() {
-        var table = $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'copy',
-                    exportOptions: {
-                        columns: function(idx, data, node) {
-                            return idx !== 9;
+            $(document).ready(function() {
+                var table = $('#example').DataTable({
+                    processing: true,
+                    serverSide: true,
+
+                    ajax: {
+                        url: '{{ route('admin.customers.index') }}',
+                        data: function(d) {
+                            d.startDate = $('#start-date').val();
+                            d.endDate = $('#end-date').val();
                         }
-                    }
-                },
-                {
-                    extend: 'csv',
-                    exportOptions: {
-                        columns: function(idx, data, node) {
-                            return idx !== 9;
+                    },
+                    columns: [{
+                            data: 'id'
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'phone'
+                        },
+                        {
+                            data: 'address'
+                        },
+                        {
+                            data: 'email'
+                        },
+                        {
+                            data: 'age'
+                        },
+                        {
+                            data: 'weight'
+                        },
+                        {
+                            data: 'created_at'
+                        },
+                        {
+                            data: 'updated_at'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
                         }
-                    }
-                },
-                {
-                    extend: 'excel',
-                    exportOptions: {
-                        columns: function(idx, data, node) {
-                            return idx !== 9;
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'excel',
+                            text: 'Export Excel',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 8
+                                }
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'Export CSV',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 9
+                                }
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: 'Export PDF',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 9
+                                }
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            text: 'Print',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 9
+                                }
+                            }
                         }
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    exportOptions: {
-                        columns: function(idx, data, node) {
-                            return idx !== 9;
-                        }
-                    }
-                },
-                {
-                    text: 'png',
-                    action: function(e, dt, node, config) {
-                        html2canvas(document.querySelector('#example')).then(canvas => {
-                            var link = document.createElement('a');
-                            link.href = canvas.toDataURL('image/png');
-                            link.download = 'table-image.png';
-                            link.click();
-                        });
-                    }
-                },
-                'print'
-            ],
-            order: [
-                [0, 'desc']
-            ]
+                    ]
+                });
+
+                $('#filter-btn').click(function() {
+                    table.draw();
+                });
+            });
         });
-
-        // Xóa các bộ lọc cũ và áp dụng bộ lọc mới
-        $.fn.dataTable.ext.search.push(
-            function(settings, data, dataIndex) {
-                var minDate = $('#minDate').val();
-                var maxDate = $('#maxDate').val();
-
-                // Convert to Date objects for comparison
-                var minDateObj = minDate ? new Date(minDate + 'T00:00:00') : null;
-                var maxDateObj = maxDate ? new Date(maxDate + 'T23:59:59') : null;
-
-                var createdAt = data[7] || ''; // Cột thời gian tạo
-                var createdAtDate = new Date(createdAt);
-
-                if (
-                    (minDateObj === null && maxDateObj === null) ||
-                    (minDateObj === null && createdAtDate <= maxDateObj) ||
-                    (minDateObj <= createdAtDate && maxDateObj === null) ||
-                    (minDateObj <= createdAtDate && createdAtDate <= maxDateObj)
-                ) {
-                    return true;
-                }
-                return false;
-            }
-        );
-
-        $('#minDate, #maxDate').on('change', function() {
-            table.draw();
-        });
-
-        // Tạo filter tìm kiếm văn bản
-        $('#searchText').on('keyup', function() {
-            table.search(this.value).draw();
-        });
-    });
 </script>
 
 <!-- JS CỦA LOC VS XUẤT excel VÀ CÁC FILE -->
