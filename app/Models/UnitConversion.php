@@ -10,16 +10,11 @@ class UnitConversion extends Model
     use HasFactory;
     protected $fillable = [
         'medicine_id',
-        'unit_id_1',
-        'unit_id_2',
+        'unit_id',
         'proportion',
     ];
-    public function unit1()
+    public function unit()
     {
-        return $this->belongsTo(Unit::class, 'unit_id_1');
-    }
-    public function unit2()
-    {
-        return $this->belongsTo(Unit::class, 'unit_id_2');
+        return $this->belongsTo(Unit::class);
     }
 }

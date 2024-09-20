@@ -8,6 +8,7 @@ use App\Models\Medicine;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -91,6 +92,12 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    public function show($id)
+    {
+        $catalogue = Category::findOrFail($id);
+        return view('admin.catalogue.show', compact('catalogue'));
+    }
+
     public function edit(string $id)
     {
 

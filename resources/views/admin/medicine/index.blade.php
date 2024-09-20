@@ -146,10 +146,10 @@
                             data: 'id'
                         },
                         {
-                            data: 'category.name'
+                            data: 'medicine_code'
                         },
                         {
-                            data: 'medicine_code'
+                            data: 'category.name'
                         },
                         {
                             data: 'name'

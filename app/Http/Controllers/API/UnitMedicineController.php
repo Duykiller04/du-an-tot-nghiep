@@ -13,60 +13,39 @@ class UnitMedicineController extends Controller
 {
     public function getUnits($medicineId)
     {
-        // Lấy đơn vị nhỏ nhất
-        $smallestUnit = Inventory::where('medicine_id', $medicineId)->first();
-    
-        // Kiểm tra nếu không có đơn vị nào
-        if (!$smallestUnit) {
-            return response()->json(['units' => [], 'smallestUnit' => null]);
+        $units = UnitConversion::with('unit')
+        ->where('medicine_id', $medicineId)
+        ->get()
+        ->pluck('unit')
+        ->filter()
+        ->values();
+
+        $price_sale = Medicine::findOrFail($medicineId)->price_sale;
+
+        $proportion = UnitConversion::where('medicine_id', $medicineId)
+        ->get()
+        ->pluck('proportion')
+        ->filter()
+        ->values();
+
+        $proportion[0] = 1; //Thay thế tỉ lệ đầu tiên = 1 để tính giá
+
+        // Khởi tạo mảng mới
+        $newPrices = [];
+        $product = 1; // Biến để giữ tích
+
+        // Tính toán cho newPrices
+        foreach ($proportion as $value) {
+            $product *= $value; // Cập nhật tích
+            $newPrices[] = $price_sale / $product; // Tính giá mới
         }
-    
-        $smallestUnitName = Unit::find($smallestUnit->unit_id)->name;
-        $smallestUnitId = $smallestUnit->unit_id;
-    
-        // Lấy các đơn vị lớn hơn và tỷ lệ chuyển đổi
-        $largerUnits = UnitConversion::where('medicine_id', $medicineId)
-            ->with('unit2')
-            ->get();
-            
-        $units = [];
-        $proportions = [];
-        $largestProportion = 1;
-        $unitLargest = null;
-        // dd($largerUnits->toArray());
-    
-        foreach ($largerUnits as $conversion) {
-            // Lấy đơn vị từ các quan hệ đã được định nghĩa trong model
-            $units[$conversion->unit2->id] = $conversion->unit2->name;
-    
-            // Xác định đơn vị lớn nhất dựa vào tỷ lệ chuyển đổi
-            if ($conversion->proportion > $largestProportion) {
-                $unitLargest = $conversion->unit2;
-                $largestProportion = $conversion->proportion;
-                
-            }
-            
-            // Lưu tỷ lệ chuyển đổi từ đơn vị lớn hơn về đơn vị nhỏ nhất
-            $proportions[$conversion->unit2->id] = $conversion->proportion;
-        }
-    
-        // Lấy giá bán cho đơn vị lớn nhất (giá hộp)
-        $medicine = Medicine::find($medicineId);
-        $pricePerLargestUnit = $medicine->price_sale;
-    
-        // Tính giá cho đơn vị nhỏ nhất (viên) dựa trên tỷ lệ chuyển đổi tổng
-        $pricePerSmallestUnit = $pricePerLargestUnit / $largestProportion;
-    
+
         return response()->json([
             'units' => $units,
-            'smallestUnit' => $smallestUnit, // Đơn vị nhỏ nhất
-            'smallestUnitName' => $smallestUnitName, // Tên đơn vị nhỏ nhất
-            'smallestUnitId' => $smallestUnitId, // ID đơn vị nhỏ nhất
-            'pricePerSmallestUnit' => $pricePerSmallestUnit, // Giá cho đơn vị nhỏ nhất
-            'pricePerLargestUnit' => $pricePerLargestUnit, // Giá cho đơn vị lớn nhất
-            'largestUnitId' => $unitLargest ? $unitLargest->id : null, // ID đơn vị lớn nhất
-            'proportions' => $proportions // Tỷ lệ chuyển đổi
+            'price_sale' => $price_sale,
+            'proportion' => $proportion,
+            'newPrices' => $newPrices
         ]);
     }
-    
+
 }

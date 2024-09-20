@@ -57,7 +57,7 @@ Route::prefix('admin')
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
-      
+
         Route::controller(InventoryAuditController::class)
             ->prefix('inventoryaudit')->as('inventoryaudit.')
             ->group(function () {
@@ -70,7 +70,7 @@ Route::prefix('admin')
             });
 
         Route::resource('diseases', DiseaseController::class);
-      
+
         Route::resource('catalogues', CategoryController::class);
 
         Route::resource('users', UserController::class);
@@ -92,5 +92,5 @@ Route::prefix('admin')
         Route::resource('storage', StorageController::class);
 
     });
-    
+
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

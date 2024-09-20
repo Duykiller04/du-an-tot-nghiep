@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('inventory_check_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(InventoryAudit::class)->constrained();
-            $table->foreignIdFor(Medicine::class)->constrained();
-            $table->double('quantity');
-            $table->enum('status',['checked','unchecked']);
+            $table->foreignIdFor(InventoryAudit::class)->constrained(); // Khóa ngoại đến InventoryAudit
+            $table->foreignIdFor(Medicine::class)->constrained(); // Khóa ngoại đến Medicine
+            $table->double('expected_quantity'); // Số lượng dự kiến
+            $table->double('actual_quantity')->nullable(); // Số lượng thực tế
+            $table->double('difference')->nullable(); // Chênh lệch
+            $table->text('remarks')->nullable(); // Ghi chú
             $table->timestamps();
             $table->softDeletes();
         });

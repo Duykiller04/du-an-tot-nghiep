@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('inventory_audits', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Storage::class)->constrained();
-            $table->foreignIdFor(User::class)->constrained();
-            $table->time('time');
-            $table->time('date_recorded');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->foreignIdFor(Storage::class)->constrained(); // Khóa ngoại storage_id
+            $table->foreignIdFor(User::class)->constrained(); //Người kiểm kho
+            $table->string('title'); // Thêm trường title
+            $table->date('check_date'); // Ngày kiểm kho
+            $table->string('checked_by'); // Tên người kiểm
+            $table->enum('status', ['Đang kiểm', 'Hoàn thành', 'Chờ duyệt'])->default('Đang kiểm'); // Trạng thái kiểm
+            $table->text('remarks')->nullable(); // Ghi chú
+            $table->timestamps(); // created_at, updated_at
+            $table->softDeletes(); // deleted_at
         });
     }
 
