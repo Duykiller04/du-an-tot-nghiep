@@ -3,122 +3,110 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUnitRequest;
-use App\Http\Requests\UpdateUnitRequest;
 use App\Models\Unit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class UnitController extends Controller
 {
-    const PATH_VIEW = 'admin.units.';
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         if (request()->ajax()) {
-            $query = Unit::query();
-            // Lọc theo ngày tháng nếu có
-             if (request()->has('startDate') && request()->has('endDate')) {
-                $startDate = request()->get('startDate');
-                $endDate = request()->get('endDate');
+            $query = Unit::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
 
-                // Kiểm tra định dạng ngày và lọc
-                if ($startDate && $endDate) {
-                    // Convert to datetime to include the full day
-                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
-                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
-
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
-                }
-            }
             return DataTables::of($query)
                 ->addColumn('action', function ($row) {
-                    $viewUrl = route('admin.units.show', $row->id);
                     $editUrl = route('admin.units.edit', $row->id);
                     $deleteUrl = route('admin.units.destroy', $row->id);
 
                     return '
-                <a href="' . $viewUrl . '" class="btn btn btn-primary">Xem</a>
-                <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
-                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
-                ' . csrf_field() . method_field('DELETE') . '
-                <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
-                </form>
-                ';
+                        <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                        </form>
+                    ';
+                })
+                ->addColumn('children', function($row) {
+                    $children = $row->children;
+                    foreach ($children as $child) {
+                        $child->edit_url = route('admin.units.edit', $child->id);
+                        $child->delete_url = route('admin.units.destroy', $child->id);
+                    }
+                    return $children;  // Trả về danh mục con để xử lý trong JavaScript
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view(self::PATH_VIEW . __FUNCTION__);
+
+        return view('admin.unit.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view(self::PATH_VIEW . __FUNCTION__);
+        // Nếu bạn có cần lấy dữ liệu để chọn đơn vị cha hay không
+        $units = Unit::whereNull('parent_id')->orderBy('id','desc')->get();
+
+        return view('admin.unit.add', compact('units'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUnitRequest $request)
+    public function store(Request $request)
     {
-        try {
-            Unit::query()->create($request->all());
-            return redirect()->route('admin.units.index')->with('success', 'Thêm đơn vị thành công');
-        } catch (\Exception $exception) {
-            Log::error('Lỗi thêm đơn vị ' . $exception->getMessage());
-            return back()->with('error', 'Lỗi thêm đơn vị');
-        }
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+        ], [
+            'name.required' => 'Trường tên là bắt buộc.',
+            'name.string' => 'Trường tên phải là chuỗi.',
+            'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
+        ]);
+
+        $validatedData['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
+
+        Unit::create($validatedData);
+
+        return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được thêm thành công');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Unit $unit)
+    public function edit(string $id)
     {
-        return view(self::PATH_VIEW . __FUNCTION__, compact('unit'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Unit $unit)
-    {
-        return view(self::PATH_VIEW . __FUNCTION__, compact('unit'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUnitRequest $request, Unit $unit)
-    {
-        try {
-            $unit->update($request->all());
-            return back()->with('success', 'Cập nhật đơn vị thành công');
-        } catch (\Exception $e) {
-            Log::error('Lỗi cập nhật danh mục sản phẩm ' . $e->getMessage());
-            return back()->with('error', 'Lỗi cập nhật đơn vị thành công');
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Unit $unit)
-    {
-        try {
-            $unit->delete();
-            return back()->with('success', 'Xóa đơn vị thành công');
-        } catch (\Exception $e) {
-            Log::error('Lỗi xóa danh mục sản phẩm ' . $e->getMessage());
-            return back()->with('error', 'Lỗi xóa đơn vị');
+        $unit = Unit::find($id);
+        if (!$unit) {
+            return redirect()->route('admin.units.index')->with('error', 'Đơn vị không tồn tại');
         }
 
+        $units = Unit::whereNull('parent_id')->where('id', '!=', $id)->orderBy('id','desc')->get();
+
+        return view('admin.unit.edit', compact('unit', 'units'));
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+        ], [
+            'name.required' => 'Trường tên là bắt buộc.',
+            'name.string' => 'Trường tên phải là chuỗi.',
+            'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
+        ]);
+
+        $validatedData['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
+
+        $unit = Unit::findOrFail($id);
+        $unit->update($validatedData);
+
+        return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được sửa thành công');
+    }
+
+    public function destroy(string $id)
+    {
+        $unit = Unit::findOrFail($id);
+
+        // Cập nhật các đơn vị con (nếu có) để không có cha
+        Unit::where('parent_id', $unit->id)->update(['parent_id' => null]);
+
+        $unit->delete();
+
+        return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được xóa thành công');
     }
 }

@@ -66,6 +66,9 @@ document.addEventListener("click", function (e) {
         e.target.closest(".medicine-row").remove();
     }
 });
+
+let largest_price; //Giá theo đơn vị lớn nhất
+
 //render đơn vị theo id thuốc
 $(document).on("change", 'select[name$="[medicine_id]"]', function () {
     var medicineId = $(this).val();
@@ -81,29 +84,23 @@ $(document).on("change", 'select[name$="[medicine_id]"]', function () {
             url: `/api/get-units/${medicineId}`,
             method: "GET",
             success: function (response) {
+                console.log(response);
+
                 unitsSelect.empty(); // Xóa tất cả tùy chọn hiện tại
                 unitsSelect.append('<option value="">Chọn đơn vị</option>');
 
-                // Thêm đơn vị nhỏ nhất vào danh sách
-                if (response.smallestUnit) {
+                // Thêm các đơn vị vào danh sách
+                $.each(response.units, function (index, unit) {
                     unitsSelect.append(
-                        `<option value="${response.smallestUnitId}">${response.smallestUnitName}</option>`
+                        `<option value="${unit.id}">${unit.name}</option>`
                     );
-                }
-                // Thêm các đơn vị lớn hơn vào danh sách
-                $.each(response.units, function (id, name) {
-                    unitsSelect.append(
-                        `<option value="${id}">${name}</option>`
-                    ); // Thêm các tùy chọn từ dữ liệu phản hồi
                 });
 
                 // Lưu giá gốc vào input để dùng cho tính toán sau này
-                priceInput.data("base-price", response.pricePerLargestUnit);
-                priceInput.data("smallest-price",response.pricePerSmallestUnit);
-                priceInput.data("smallest-unit-id", response.smallestUnitId);
-                priceInput.data("largest-unit-id", response.largestUnitId);
-                priceInput.data("unit-proportions", response.proportions); // Lưu tỷ lệ chuyển đổi từ response
-       
+                priceInput.data("new_prices", response.newPrices);
+
+                largest_price = response.price_sale; // Lưu giá bán lớn nhất
+
             },
             error: function (xhr) {
                 console.error("Error:", xhr.responseText);
@@ -125,24 +122,22 @@ $(document).on("input", 'input[name$="[quantity]"]', function () {
 });
 
 function updatePrice($medicineRow) {
-    var selectedUnitId = $medicineRow.find('select[name$="[unit_id]"]').val();
+    var selectedUnitId = $medicineRow.find('select[name$="[unit_id]"]').val() - 1;
+
     var quantity = $medicineRow.find('input[name$="[quantity]"]').val();
-    var pricePerSmallestUnit = $medicineRow
-        .find('input[name$="[current_price]"]')
-        .data("smallest-price");
-    var unitProportions = $medicineRow
-        .find('input[name$="[current_price]"]')
-        .data("unit-proportions");
 
-    var price = 0;
+    // Lấy new_prices từ data của priceInput
+    var priceInput = $medicineRow.find('input[name$="[current_price]"]');
+    var new_prices = priceInput.data("new_prices");
 
-    if (selectedUnitId && unitProportions) {
-        var proportion = unitProportions[selectedUnitId] || 1;
-        price = pricePerSmallestUnit * proportion * quantity;
-        price = Math.round(price); // Làm tròn giá trị
+    var gia_ban = new_prices[selectedUnitId] || 1; // Kiểm tra giá trị của new_prices
+    console.log(new_prices);
 
-        $medicineRow.find('input[name$="[current_price]"]').val(price);
-    } else {
-        $medicineRow.find('input[name$="[current_price]"]').val("0");
+    if (gia_ban === 0) {
+        var gia_ban = largest_price;
     }
+    var price = gia_ban * quantity;
+    price = parseFloat(price).toFixed(2); // Làm tròn giá trị sau 2 số thập phân
+
+    $medicineRow.find('input[name$="[current_price]"]').val(price);
 }

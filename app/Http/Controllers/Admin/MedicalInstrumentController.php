@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Medicine;
@@ -81,7 +81,73 @@ class MedicalInstrumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    // public function store(Request $request)
+    // {
+    //     // dd($request->all());
+
+    //     $priceImport = $request->input('medicine.price_import');
+    //     $priceSale = $request->input('medicine.price_sale');
+
+    //     if ($priceSale < $priceImport) {
+    //         return redirect()->back()->withErrors([
+    //             'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+    //         ])->withInput();
+    //     }
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         if ($request->hasFile('image')) {
+    //             $image = $request->file('image');
+    //             $imagePath = $image->store('medicalInstruments', 'public');
+    //         } else {
+    //             $imagePath = null;
+    //         }
+
+    //         $medicineData = $request->input('medicine');
+
+    //         $medicineData['type_product'] = 1;
+
+    //         $medicineData['image'] = $imagePath;
+
+    //         $inventories = [];
+    //         $units = $request->don_vi;
+    //         $quantityByUnit = array_slice($request->so_luong, 0);
+
+    //         $medicine = Medicine::create($medicineData);
+
+    //         $inventories['medicine_id'] = $medicine->id;
+
+    //         $inventories['storage_id'] = $request->storage_id;
+
+    //         $inventories['quantity'] = array_product($request->so_luong);
+
+    //         $inventories['unit_id'] = end($units);
+
+    //         Inventory::create($inventories);
+
+    //         foreach ($units as $id => $unit_id_2) {
+    //             if ($unit_id_2 != $inventories['unit_id']) {
+
+    //                 UnitConversion::create([
+    //                     'medicine_id' => $inventories['medicine_id'],
+    //                     'unit_id_1' => $inventories['unit_id'],
+    //                     'unit_id_2' => $unit_id_2,
+    //                     'proportion' => $inventories['quantity'] / $quantityByUnit[$id]
+    //                 ]);
+    //             }
+    //         }
+
+    //         $medicine->suppliers()->attach($request->supplier_id);
+
+    //         DB::commit();
+    //         return redirect()->route('admin.medicalInstruments.index')->with('success', 'Thêm thành công');
+    //     } catch (\Exception $exception) {
+    //         DB::rollback();
+    //         return back()->with('error' . $exception->getMessage());
+    //     }
+    // }
+    public function store(StoreProductRequest $request)
     {
         // dd($request->all());
 
@@ -111,8 +177,12 @@ class MedicalInstrumentController extends Controller
             $medicineData['image'] = $imagePath;
 
             $inventories = [];
+
             $units = $request->don_vi;
+            $quantities = $request->so_luong;
+
             $quantityByUnit = array_slice($request->so_luong, 0);
+
 
             $medicine = Medicine::create($medicineData);
 
@@ -120,22 +190,18 @@ class MedicalInstrumentController extends Controller
 
             $inventories['storage_id'] = $request->storage_id;
 
-            $inventories['quantity'] = array_product($request->so_luong);
+            $inventories['quantity'] = array_product($request->so_luong); //Số lượng tổng theo đơn vị bé nhất
 
-            $inventories['unit_id'] = end($units);
+            $inventories['unit_id'] = end($units); // ID đơn vị bé nhất
 
             Inventory::create($inventories);
 
-            foreach ($units as $id => $unit_id_2) {
-                if ($unit_id_2 != $inventories['unit_id']) {
-
-                    UnitConversion::create([
-                        'medicine_id' => $inventories['medicine_id'],
-                        'unit_id_1' => $inventories['unit_id'],
-                        'unit_id_2' => $unit_id_2,
-                        'proportion' => $inventories['quantity'] / $quantityByUnit[$id]
-                    ]);
-                }
+            foreach ($units as $i => $unit){
+                UnitConversion::create([
+                    'medicine_id' => $inventories['medicine_id'],
+                    'unit_id' => $unit,
+                    'proportion' => $quantities[$i]
+                ]);
             }
 
             $medicine->suppliers()->attach($request->supplier_id);
@@ -144,8 +210,10 @@ class MedicalInstrumentController extends Controller
             return redirect()->route('admin.medicalInstruments.index')->with('success', 'Thêm thành công');
         } catch (\Exception $exception) {
             DB::rollback();
+            dd($exception->getMessage());
             return back()->with('error' . $exception->getMessage());
         }
+
     }
 
     /**

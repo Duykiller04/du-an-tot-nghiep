@@ -88,55 +88,55 @@
                 </div>
                 <!-- Cột bên phải -->
                 <div class="col-12">
-                    <!-- Thông tin chi tiết thuốc -->
-                    <div id="medicine-container">
-                        <div class="row mb-3 medicine-row">
-                            <div class="col-md-3">
-                                <label for="medicine_id" class="form-label">Thuốc</label>
-                                <select name="medicines[0][medicine_id]" class="form-select select2">
-                                    <option value="">Chọn thuốc</option>
-                                    @foreach ($medicines as $id => $name)
-                                        <option value="{{ $id }}">{{ $name }}</option>
-                                    @endforeach
-                                </select>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Thông tin thuốc và dụng cụ</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Thông tin chi tiết thuốc -->
+                            <div id="medicine-container">
+                                <div class="row mb-3 medicine-row">
+                                    <div class="col-md-3">
+                                        <label for="medicine_id" class="form-label">Thuốc</label>
+                                        <select name="medicines[0][medicine_id]" class="form-select select2">
+                                            <option value="">Chọn thuốc</option>
+                                            @foreach ($medicines as $id => $name)
+                                                <option value="{{ $id }}">{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="unit_id" class="form-label">Đơn vị</label>
+                                        <select name="medicines[0][unit_id]" class="form-select select2">
+                                            <option value="">Chọn đơn vị</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="quantity" class="form-label">Số lượng</label>
+                                        <input type="number" name="medicines[0][quantity]" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="current_price" class="form-label">Giá</label>
+                                        <input type="number" name="medicines[0][current_price]" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="dosage" class="form-label">Liều lượng</label>
+                                        <input type="text" name="medicines[0][dosage]" class="form-control">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-md-2">
-                                <label for="unit_id" class="form-label">Đơn vị</label>
-                                <select name="medicines[0][unit_id]" class="form-select select2">
-                                    <option value="">Chọn đơn vị</option>
-                                    @foreach ($units as $id => $name)
-                                        <option value="{{ $id }}">{{ $name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="quantity" class="form-label">Số lượng</label>
-                                <input type="number" name="medicines[0][quantity]" class="form-control">
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="current_price" class="form-label">Giá</label>
-                                <input type="number" name="medicines[0][current_price]" class="form-control">
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="dosage" class="form-label">Liều lượng</label>
-                                <input type="text" name="medicines[0][dosage]" class="form-control">
-                            </div>
-
-                            <div class="col-md-1 d-flex align-items-end">
-                                <button type="button" class="btn btn-danger remove-medicine">Xóa</button>
+                            <!-- Nút thêm thuốc -->
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success" id="add-medicine">
+                                    <i class="bx bx-plus-medical me-2"></i> Thêm thuốc
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Nút thêm thuốc -->
-                    <div class="mb-3">
-                        <button type="button" class="btn btn-success" id="add-medicine">
-                            <i class="bx bx-plus-medical me-2"></i> Thêm thuốc
-                        </button>
                     </div>
                 </div>
             </div>

@@ -165,11 +165,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarCatalogue" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarCatalogue">
+                    <a class="nav-link menu-link" href="#enviroment" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="enviroment">
                         <i class="ri-layout-3-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="moitruong">
+                    <div class="collapse menu-dropdown" id="enviroment">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="{{ route('admin.environments.create') }}" class="nav-link" role="button"
@@ -263,7 +263,6 @@
 
                 {{-- ---------------------------------------------------------------------------------------------------------------- --}}
 
-{{-- 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#medicalInstrument" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="medicalInstrument">
@@ -314,7 +313,7 @@
                             </li>
                         </ul>
                     </div>
-                </li> --}}
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#cutdosepre" data-bs-toggle="collapse" role="button"

@@ -108,47 +108,22 @@
 
                             <div class="mb-3">
                                 <div class="row productNew mt-3">
-
                                     <div class="row mb-3 form-item mt-3">
                                         <div class="col-5">
                                             <label class="form-label" for="name">Số lượng</label>
-                                            <input type="number"
-                                                class="form-control @error('so_luong') is-invalid @enderror" id="name"
-                                                name="so_luong[]">
-                                            @error('so_luong.0')
-                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                            @enderror
+                                            <input type="number" class="form-control" name="so_luong[]">
                                         </div>
-
                                         <div class="col-5">
                                             <label for="">Đơn vị</label>
-                                            <select name="don_vi[]" id="" class="form-control">
+                                            <select name="don_vi[]" class="form-control">
+                                                <option value="">Chọn đơn vị</option>
                                                 @foreach ($donvis as $donvi)
-                                                    <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
+                                                    <option value="{{ $donvi->id }}" data-parent="{{ $donvi->parent_id }}">{{ $donvi->name }}</option>
                                                 @endforeach
                                             </select>
+
                                         </div>
                                     </div>
-
-                                    <div class="row mb-3 form-item mt-3">
-                                        <div class="col-5">
-                                            <label for="">Số lượng</label>
-                                            <input type="number" name="so_luong[]" id="" class="form-control">
-                                            @error('so_luong.1')
-                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
-                                        <div class="col-5">
-                                            <label for="">Đơn vị</label>
-                                            <select name="don_vi[]" id="" class="form-control">
-                                                @foreach ($donvis as $donvi)
-                                                    <option value="{{ $donvi->id }}">{{ $donvi->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói</label>
@@ -162,47 +137,91 @@
                                 </div>
                             </div>
 
+
                             <script>
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
 
                                     const donvis = @json($donvis);
+                                    const unitsByParent = donvis.reduce((acc, donvi) => {
+                                        if (!acc[donvi.parent_id]) {
+                                            acc[donvi.parent_id] = [];
+                                        }
+                                        acc[donvi.parent_id].push(donvi);
+                                        return acc;
+                                    }, {});
+
+                                    function renderChildUnits(parentId, selectElement) {
+                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                        if (unitsByParent[parentId]) {
+                                            unitsByParent[parentId].forEach(donvi => {
+                                                const option = document.createElement('option');
+                                                option.value = donvi.id;
+                                                option.textContent = donvi.name;
+                                                selectElement.appendChild(option);
+                                            });
+                                        }
+                                    }
+
+                                    productNew.addEventListener('change', function(event) {
+                                        if (event.target.name === 'don_vi[]') {
+                                            const selectedParentId = event.target.value; // Lấy ID của đơn vị được chọn
+                                            const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
+                                            const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
+
+                                            // Reset tất cả các ô chọn sau ô đã thay đổi
+                                            for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
+                                                allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                                allSelects[i].value = ''; // Reset giá trị ô chọn
+                                            }
+
+                                            // Render các đơn vị con dựa trên ID của đơn vị đã chọn
+                                            if (currentSelectIndex < allSelects.length - 1) {
+                                                const nextSelect = allSelects[currentSelectIndex + 1];
+                                                renderChildUnits(selectedParentId, nextSelect);
+                                            }
+                                        }
+                                    });
 
                                     btnAdd.addEventListener('click', function() {
                                         const newFieldHTML = `
-                                <div class="row mb-3 form-item mt-3">
-                                    <div class="col-5">
-                                        <label for="">Số lượng</label>
-                                        <input type="number" name="so_luong[]" class="form-control">
-                                    </div>
-                                    <div class="col-5">
-                                        <label for="">Đơn vị</label>
-                                        <select name="don_vi[]" class="form-control">
-                                            ${donvis.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
-                                        </select>
-                                    </div>
-                                    <div class="col-2">
-                                        <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
-                                    </div>
-                                </div>
-                                `;
+                                            <div class="row mb-3 form-item mt-3">
+                                                <div class="col-5">
+                                                    <label for="">Số lượng</label>
+                                                    <input type="number" name="so_luong[]" class="form-control">
+                                                </div>
+                                                <div class="col-5">
+                                                    <label for="">Đơn vị</label>
+                                                    <select name="don_vi[]" class="form-control">
+                                                        <option value="">Chọn đơn vị</option>
+                                                        ${donvis.map(donvi => `<option value="${donvi.id}" data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
+                                                    </select>
+                                                </div>
+                                                <div class="col-2">
+                                                    <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                                                </div>
+                                            </div>
+                                        `;
 
                                         productNew.insertAdjacentHTML('beforeend', newFieldHTML);
                                     });
 
-                                    function handleDeleteClick(event) {
+                                    productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
                                             const formItem = event.target.closest('.form-item');
                                             if (formItem) {
                                                 formItem.remove();
                                             }
                                         }
-                                    }
-
-                                    productNew.addEventListener('click', handleDeleteClick);
+                                    });
                                 });
-                            </script>
+                                </script>
+
+
+
+
+
                         </div>
                     </div>
                     <div class="card">
@@ -325,6 +344,30 @@
                             <input type="text" class="form-control @error('medicine.origin') is-invalid @enderror"
                                 id="origin" name="medicine[origin]" value="{{ old('medicine.origin') }}">
                             @error('medicine.origin')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Nhiệt độ - Độ ẩm</h5>
+                        </div>
+                        <div class="card-body">
+                            <label class="form-label" for="temperature">Nhiệt độ (Độ C)</label>
+                            <input type="number"
+                                class="form-control @error('medicine.temperature') is-invalid @enderror"
+                                id="temperature" name="medicine[temperature]">
+                            @error('medicine.temperature')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="card-body">
+                            <label class="form-label" for="moisture">Độ ẩm (%)</label>
+                            <input type="number"
+                                class="form-control @error('medicine.moisture') is-invalid @enderror"
+                                id="moisture" name="medicine[moisture]">
+                            @error('medicine.moisture')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>

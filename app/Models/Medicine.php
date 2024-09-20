@@ -25,6 +25,8 @@ class Medicine extends Model
         'origin',
         'type_product',
         'expiration_date',
+        'temperature',
+        'moisture',
     ];
     public function category()
     {
@@ -49,5 +51,8 @@ class Medicine extends Model
     public function inventoryCheckDetails()
     {
         return $this->hasMany(InventoryCheckDetail::class, 'medicine_id', 'id');
+    }
+    public function inventory(){
+        return $this->hasOne(Inventory::class);
     }
 }

@@ -12,10 +12,11 @@ class InventoryAudit extends Model
     protected $fillable = [
         'title',
         'storage_id',
+        'user_id',
         'check_date',
         'checked_by',
         'status',
-        'remarks'
+        'remarks',
     ];
     public function details()
     {
@@ -25,5 +26,9 @@ class InventoryAudit extends Model
     {
         return $this->belongsTo(Storage::class, 'storage_id', 'id');
     }
-    
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

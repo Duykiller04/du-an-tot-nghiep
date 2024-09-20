@@ -24,7 +24,8 @@ class MedicineController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Medicine::query()->with(['suppliers', 'category', 'storage', 'inventory']);
+            $query = Medicine::query()->with(['suppliers', 'category', 'storage', 'inventory'])
+            ->where('type_product', 0);
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -120,8 +121,12 @@ class MedicineController extends Controller
             $medicineData['image'] = $imagePath;
 
             $inventories = [];
+
             $units = $request->don_vi;
+            $quantities = $request->so_luong;
+
             $quantityByUnit = array_slice($request->so_luong, 0);
+
 
             $medicine = Medicine::create($medicineData);
 
@@ -129,22 +134,18 @@ class MedicineController extends Controller
 
             $inventories['storage_id'] = $request->storage_id;
 
-            $inventories['quantity'] = array_product($request->so_luong);
+            $inventories['quantity'] = array_product($request->so_luong); //Số lượng tổng theo đơn vị bé nhất
 
-            $inventories['unit_id'] = end($units);
+            $inventories['unit_id'] = end($units); // ID đơn vị bé nhất
 
             Inventory::create($inventories);
-
-            foreach ($units as $id => $unit_id_2) {
-                if ($unit_id_2 != $inventories['unit_id']) {
-
-                    UnitConversion::create([
-                        'medicine_id' => $inventories['medicine_id'],
-                        'unit_id_1' => $inventories['unit_id'],
-                        'unit_id_2' => $unit_id_2,
-                        'proportion' => $inventories['quantity'] / $quantityByUnit[$id]
-                    ]);
-                }
+            
+            foreach ($units as $i => $unit){
+                UnitConversion::create([
+                    'medicine_id' => $inventories['medicine_id'],
+                    'unit_id' => $unit,
+                    'proportion' => $quantities[$i]
+                ]);
             }
 
             $medicine->suppliers()->attach($request->supplier_id);
@@ -153,9 +154,10 @@ class MedicineController extends Controller
             return redirect()->route('admin.medicines.index')->with('success', 'Thêm thành công');
         } catch (\Exception $exception) {
             DB::rollback();
+            dd($exception->getMessage());
             return back()->with('error' . $exception->getMessage());
         }
-        
+
     }
 
     /**
