@@ -3,7 +3,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách danh mục
+    Danh sách kiểm kho
 @endsection
 
 @section('title')

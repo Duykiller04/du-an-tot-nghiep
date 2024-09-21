@@ -7,6 +7,7 @@ use App\Models\Environment;
 use Illuminate\Http\Request;
 use App\Services\WeatherService;
 use App\Exports\EnvironmentsExport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EnvironmentController extends Controller
@@ -65,40 +66,36 @@ class EnvironmentController extends Controller
     }
     public function create()
     {
-        return view('admin.environments.add');
+        $location = $this->getMachineLocation(); 
+        $weatherData = $this->getWeatherData($location);
+        return view('admin.environments.add',['weatherData' => $weatherData,]);
     }
 
     public function store(Request $request)
     {
         // Xác thực dữ liệu
+        //dd($request->all());
         $validated = $request->validate([
-
             'real_temperature' => 'required|numeric',
             'real_humidity' => 'required|numeric',
-            'time' => 'required|date',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            
         ], [
             'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
             'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
             'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
-            'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
-            'time.required' => 'Thời gian là bắt buộc.',
-            'time.date' => 'Thời gian không hợp lệ.',
-            'latitude.required' => 'Vĩ độ là bắt buộc.',
-            'longitude.required' => 'Kinh độ là bắt buộc.',
+            'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',   
         ]);
 
-        // Gọi API để lấy dữ liệu thời tiết
-        $temperature = $this->weatherService->getTemperature($validated['latitude'], $validated['longitude']);
-        $humidity = $this->weatherService->getHumidity($validated['latitude'], $validated['longitude']);
-
+        // // Gọi API để lấy dữ liệu thời tiết
+        // $temperature = $this->weatherService->getTemperature($validated['latitude'], $validated['longitude']);
+        // $humidity = $this->weatherService->getHumidity($validated['latitude'], $validated['longitude']);
+        $currentTime = Carbon::now('Asia/Ho_Chi_Minh');
         // Tạo bản ghi mới
         Environment::create([
             'storage_id' => 1,
-            'time' => $validated['time'],
-            'temperature' => $temperature,
-            'huminity' => $humidity,
+            'time' => $currentTime,
+            'temperature' => $request->temperature,
+            'huminity' => $request->huminity,
             'real_temperature' => $validated['real_temperature'],
             'real_humidity' => $validated['real_humidity'],
         ]);

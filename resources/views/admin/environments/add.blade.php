@@ -49,11 +49,16 @@
                             </div> --}}
 
                             <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ thực tế</label>
+                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho</label>
                                 <input type="number" step="0.01" class="form-control" id="real_temperature" name="real_temperature" value="{{ old('real_temperature') }}">
                                 @error('real_temperature')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường</label>
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="temperature" value="{{ old('real_temperature',$weatherData['main']['temp'],32) }}" readonly>
+                               
                             </div>
 
                             <div class="mb-3">
@@ -63,10 +68,13 @@
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <input type="hidden" id="latitude" name="latitude">
-                            <input type="hidden" id="longitude" name="longitude">
-                            <input type="hidden" id="time" name="time">
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết</label>
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="huminity" value="{{ old('real_temperature',$weatherData['main']['humidity'],80) }}" readonly>
+                               
+                            </div>
+                           
+                            
                             
                         </div>
                     </div>
@@ -74,6 +82,7 @@
             </div>
 
             <div class="text-end mb-3">
+                <a class="btn btn-primary" href="{{route('admin.environments.index')}}">Quay lại</a>
                 <button type="submit" class="btn btn-success w-sm">Lưu môi trường</button>
             </div>
         </form>
@@ -82,28 +91,7 @@
 
 @section('script-libs')
     <script>
-        // Lấy vị trí của người dùng và thời gian hiện tại
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                document.getElementById('latitude').value = position.coords.latitude;
-                document.getElementById('longitude').value = position.coords.longitude;
-                
-                // Thêm thời gian hiện tại
-                var now = new Date();
-                var year = now.getFullYear();
-                var month = (now.getMonth() + 1).toString().padStart(2, '0');
-                var day = now.getDate().toString().padStart(2, '0');
-                var hours = now.getHours().toString().padStart(2, '0');
-                var minutes = now.getMinutes().toString().padStart(2, '0');
-                var seconds = now.getSeconds().toString().padStart(2, '0');
-                
-                var formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-                document.getElementById('time').value = formattedDateTime;
-            }, function (error) {
-                console.error('Lỗi khi lấy vị trí: ' + error.message);
-            });
-        } else {
-            alert("Trình duyệt của bạn không hỗ trợ Geolocation.");
-        }
+        
+           
     </script>
 @endsection
