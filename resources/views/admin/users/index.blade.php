@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách Users
+    Danh sách người dùng
 @endsection
 
 @section('content')
@@ -10,153 +10,205 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0"> Danh sách Users</h4>
+                    <h4 class="mb-sm-0">Danh sách người dùng</h4>
 
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách User</a></li>
-                        <li class="breadcrumb-item active">Danh sách</li>
-                    </ol>
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item">
+                                <a href="javascript: void(0);">Tables</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                Danh sách người dùng
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- end page title -->
+        <!-- end page title -->
 
-    <div class="row">
-        <div class="col-lg-12">
-            @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
-
-                <div class="card" id="diseaseList">
-                    <div class="card-header border-bottom-dashed">
-                        <div class="row g-4 align-items-center">
-                            <div class="col-sm">
-                                <div>
-                                    <h5 class="card-title mb-0">Danh sách bệnh</h5>
-                                </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title mb-0">
+                            Danh sách người dùng
+                        </h5>
+                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="start-date">Ngày bắt đầu:</label>
+                                <input type="date" id="start-date" class="form-control" />
                             </div>
-                            <div class="col-sm-auto">
-                                <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route(' admin.users.create') }}" type="button" class="btn btn-success add-btn">
-                                        <i class="ri-add-line align-bottom me-1"></i> Thêm
-                                    </a>
+                            <div class="col-6">
+                                <label for="end-date">Ngày kết thúc:</label>
+                                <div class="d-flex">
+                                    <input type="date" id="end-date" class="form-control me-2" />
+                                    <button id="filter-btn" class="btn btn-primary">Lọc</button>
                                 </div>
                             </div>
                         </div>
+                        <table id="userDataTable"
+                            class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                            style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên</th>
+                                    <th>Ảnh</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày cập nhật</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dữ liệu người dùng sẽ được load tại đây -->
+                            </tbody>
+                        </table>
                     </div>
-
-                <div class="card-body">
-                    <table id="diseaseTable"
-                        class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>NAME</th>
-                                <th>PHOME</th>
-                                <td>ADDRESS</td>
-                                <td>BIRTH</td>
-                                <th>IMAGE</th>
-                                <th>EMAIL</th>
-                                <th>TYPE</th>
-                                <th>CREATED AT</th>
-                                <th>UPDATED AT</th>
-                                <th>ACTION</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data as $item)
-                            <tr>
-                                <td>
-                                    {{ $item->id }}
-                                </td>
-                                <td>
-                                    {{ $item->name }}
-                                </td>
-                                <td>
-                                    {{ $item->phone }}
-                                </td>
-                                <td>
-                                    {{ $item->address }}
-                                </td>
-                                <td>{{ date('m/d/Y', strtotime($item->birth)) }}</td>
-                                <td>
-                                    @php
-                                    $url = $item->image;
-                                    if (!Str::contains($url, 'http')) {
-                                    $url = Storage::url($url);
-                                    }
-                                    @endphp
-                                    <img src="{{ $url }}" alt="" width="100px">
-                                </td>
-                                <td>
-                                    {{ $item->email }}
-                                </td>
-                                <td>
-                                    @if($item->type == 'admin')
-                                    <span class="badge bg-primary">Admin</span>
-                                    @elseif($item->type == 'staff')
-                                    <span class="badge bg-danger">Staff</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    {{ $item->created_at }}
-                                </td>
-                                <td>
-                                    {{ $item->updated_at }}
-                                </td>
-
-                                        <td>
-                                            <a class="btn btn-info" href="{{ route(' admin.users.show', $item->id) }}">Xem</a>
-                                            <a class="btn btn-warning" href="{{ route(' admin.users.edit', $item->id) }}">Sửa</a>
-                                            <form action="{{ route(' admin.users.destroy', $item->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-
-                                        <button class="btn btn-danger "
-                                            onclick="return confirm('Bạn có chắc chắn muốn xóa ko')"
-                                            type="submit">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
                 </div>
             </div>
+            <!--end col-->
         </div>
-        
-        <!--end col-->
     </div>
-    <!--end row-->
-
-</div>
-<!-- container-fluid -->
 @endsection
 
-@section('style-libs')
-<!--datatable css-->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-<!--datatable responsive css-->
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+@section('css')
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 @endsection
 
 @section('script-libs')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<!--datatable js-->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+@endsection
 
-<script>
-    $(document).ready(function() {
-        $('#diseaseTable').DataTable();
-    });
-</script>
+@section('js')
+    <script>
+        $(document).ready(function() {
+            var table = $('#userDataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('admin.users.index') }}',
+                    data: function(d) {
+                        d.startDate = $('#start-date').val();
+                        d.endDate = $('#end-date').val();
+                    }
+                },
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'image',
+                        name: 'image',
+                        orderable: false,
+                        searchable: false
+
+                    },
+                    {
+                        data: 'email'
+                    },
+
+                    {
+                        data: 'type',
+                        render: function(data, type, row) {
+                            if (data === 'admin') {
+                                return '<span class="badge bg-primary">Administrator</span>';
+                            } else if (data === 'staff') {
+                                return '<span class="badge bg-success">Staff Member</span>';
+                            } else {
+                                return '<span class="badge bg-secondary">Unknown</span>';
+                            }
+                        }
+                    },
+                    {
+                        data: 'created_at'
+                    },
+                    {
+                        data: 'updated_at'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'excel',
+                        text: 'Export Excel',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !==
+                                    7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'Export CSV',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !==
+                                    7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'Export PDF',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !==
+                                    7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                // Loại bỏ cột `action` khi xuất
+                                return idx !== 2 && idx !==
+                                    7; // Ví dụ: Nếu cột `action` là cột số 7
+                            }
+                        }
+                    }
+                ]
+            });
+
+            $('#filter-btn').click(function() {
+                table.draw();
+            });
+        });
+    </script>
 @endsection

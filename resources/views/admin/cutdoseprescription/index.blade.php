@@ -9,12 +9,12 @@ Danh sách đơn thuốt mẫu
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Danh sách đơn thuốt mẫu</h4>
+            <h4 class="mb-sm-0">Danh sách đơn thuốc mẫu</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
-                    <li class="breadcrumb-item active">Danh sách đơn thuốt mẫu</li>
+                    <li class="breadcrumb-item active">Danh sách đơn thuốc mẫu</li>
                 </ol>
             </div>
 
@@ -29,7 +29,7 @@ Danh sách đơn thuốt mẫu
             <div class="card-header d-flex justify-content-between">
                 <h5 class="card-title mb-0">Danh sách</h5>
 
-                <a href="{{route('admin.cutdoseprescription.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
+                <a href="{{route('admin.cutDosePrescriptions.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
             </div>
             <div class="card-body">
                 <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -64,9 +64,9 @@ Danh sách đơn thuốt mẫu
                             <td>{{ $item->updated_at }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="{{route('admin.cutdoseprescription.show',$item)}}" class="btn btn-warning mb-3">Show</a>
-                                    <a href="{{route('admin.cutdoseprescription.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
-                                    <form action="{{ route('admin.cutdoseprescription.destroy', $item) }}" method="post">
+                                    <a href="{{route('admin.cutDosePrescriptions.show',$item)}}" class="btn btn-warning mb-3">Show</a>
+                                    <a href="{{route('admin.cutDosePrescriptions.edit',$item)}}" class="btn btn-info mb-3">Edit</a>
+                                    <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button onclick="return confirm('Chắc chắn không?')" type="submit"

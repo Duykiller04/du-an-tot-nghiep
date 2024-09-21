@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -16,12 +17,48 @@ class UserController extends Controller
      */
 
 
-    const PATH_UPLOAD = 'users';
+    const PATH_VIEW = 'admin.users.';
     public function index()
     {
-        $data = User::query()->latest('id')->paginate(5);
+        if (request()->ajax()) {
+            $query = User::query(); // Đổi từ Unit thành User
+            // Lọc theo ngày tháng nếu có
+            if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
 
-        return view('admin.users.index', compact('data'));
+                // Kiểm tra định dạng ngày và lọc
+                if ($startDate && $endDate) {
+                    // Convert to datetime to include the full day
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
+            return DataTables::of($query)
+                ->addColumn('image', function ($row) {
+                    $url = Storage::url($row->image);
+                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                })
+                ->addColumn('action', function ($row) {
+                    $viewUrl = route('admin.users.show', $row->id);  // Sửa đường dẫn
+                    $editUrl = route('admin.users.edit', $row->id);  // Sửa đường dẫn
+                    $deleteUrl = route('admin.users.destroy', $row->id);  // Sửa đường dẫn
+
+                    return '
+            <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
+            <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
+            <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
+            ' . csrf_field() . method_field('DELETE') . '
+            <button type="submit" class="btn  btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+            </form>
+            ';
+                })
+                ->rawColumns(['image','action'])
+                ->make(true);
+        }
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -39,10 +76,16 @@ class UserController extends Controller
     {
         try {
             $data = $request->except('image');
+
             if ($request->hasFile('image')) {
-                $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
+                $image = $request->file('image');
+                $data['image'] = $image->store('users', 'public');
+            } else {
+                $data['image'] = null;
             }
+
             User::create($data);
+
             return redirect()->route('admin.users.index')->with('success', 'Thành công');
         } catch (\Exception $exception) {
             return back()->with('error' . $exception->getMessage());
@@ -70,24 +113,34 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id)
     {
         try {
-            $model = User::query()->findOrFail($id);
+            $model = User::findOrFail($id);
 
+            // Lấy toàn bộ dữ liệu trừ 'image'
             $data = $request->except('image');
-            if ($request->hasFile('image')) {
-                $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
-            }
+
+            // Lấy ảnh hiện tại của người dùng
             $currentImgThumb = $model->image;
-            $model->update($data);
-            if (
-                $request->hasFile('image')
-                && $currentImgThumb
-                && Storage::exists($currentImgThumb)
-            ) {
-                Storage::delete($currentImgThumb);
+
+            // Nếu người dùng tải lên ảnh mới
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $data['image'] = $image->store('users', 'public'); // Lưu ảnh mới
+            } else {
+                // Không thay đổi ảnh thì giữ ảnh cũ
+                $data['image'] = $currentImgThumb;
             }
-            return back()->with('success', 'Thành công');
+
+            // Cập nhật dữ liệu người dùng
+            $model->update($data);
+
+            // Xóa ảnh cũ nếu có ảnh mới và ảnh cũ tồn tại
+            if ($request->hasFile('image') && $currentImgThumb && Storage::disk('public')->exists($currentImgThumb)) {
+                Storage::disk('public')->delete($currentImgThumb);
+            }
+
+            return back()->with('success', 'Cập nhật thành công');
         } catch (\Exception $exception) {
-            return back()->with('error' . $exception->getMessage());
+            return back()->with('error', 'Cập nhật thất bại: ' . $exception->getMessage());
         }
     }
 

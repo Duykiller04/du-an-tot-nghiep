@@ -18,8 +18,6 @@ class UnitFactory extends Factory
     {
         return [
            'name' => fake()->name,
-            'parent_id' => null,
-
         ];
     }
 }

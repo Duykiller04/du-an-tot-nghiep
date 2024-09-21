@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\ImportOrder;
-use App\Models\MedicalInstrument;
 use App\Models\Medicine;
 use App\Models\Unit;
 use Illuminate\Database\Migrations\Migration;
@@ -20,12 +19,11 @@ return new class extends Migration
             $table->foreignIdFor(ImportOrder::class)->constrained();
             $table->foreignIdFor(Unit::class)->constrained();
             $table->foreignIdFor(Medicine::class)->constrained();
-            $table->foreignIdFor(MedicalInstrument::class)->constrained();
             $table->dateTime('date_added')->comment('ngày nhập');
             $table->unsignedInteger('quantity')->default(0);
             $table->double('import_price')->comment('giá nhập');
             $table->double('total')->comment('tổng tiền');
-            $table->text('note')->nullable()->comment('ghi chứ');
+            $table->text('note')->nullable()->comment('ghi chú');
             $table->string('medication_name')->comment('tên thuốc');
             $table->dateTime('expiration_date')->comment('ngày hết hạn');
             $table->timestamps();

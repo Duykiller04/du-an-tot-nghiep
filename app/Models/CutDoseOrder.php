@@ -15,7 +15,6 @@ class CutDoseOrder extends Model
         'age_min',
         'age_max',
         'gender',
-
     ];
 
     public function disease()

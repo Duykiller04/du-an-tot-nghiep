@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách nhà cung cấp
+    Danh sách thuốc
 @endsection
 
 @section('content')
@@ -10,11 +10,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Danh sách nhà cung cấp</h4>
+                    <h4 class="mb-sm-0">Danh sách thuốc</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách thuốc</a></li>
                             <li class="breadcrumb-item active">Danh sách</li>
                         </ol>
                     </div>
@@ -38,12 +38,12 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-sm">
                                 <div>
-                                    <h5 class="card-title mb-0">Danh sách nhà cung cấp</h5>
+                                    <h5 class="card-title mb-0">Danh sách thuốc</h5>
                                 </div>
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route('admin.suppliers.create') }}" type="button"
+                                    <a href="{{ route('admin.medicines.create') }}" type="button"
                                         class="btn btn-success add-btn">
                                         <i class="ri-add-line align-bottom me-1"></i> Thêm mới
                                     </a>
@@ -51,75 +51,48 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card-body">
-                        <table id="diseaseTable"
-                            class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Medicine Code</th>
-                                    <th>Name Category</th>
-                                    <th>Name Medicine</th>
-                                    <th>Image Medicine</th>
-                                    <th>Price Sale</th>
-                                    <th>Price Import</th>
-                                    <th>Expiration Date</th>
-                                    <th>Name supplier</th>
-                                    <th>Quatity</th>
-                                    <th>Is Active</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->medicine_code }}</td>
-                                        <td>{{ $item->category->name }}</td>
-                                        <td>
-                                            @foreach ($item->suppliers as $value)
-                                                <p>{{ $value->name }}</p>
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>
-                                            @php
-                                                $url = $item->image;
-                                                if (!Str::contains($url, 'http')) {
-                                                    $url = Storage::url($url);
-                                                }
-                                            @endphp
-                                            @if ($url == '/storage/')
-                                                {{ 'Không có ảnh' }}
-                                            @else
-                                                <img width="30" height="30" src="{{ $url }}" alt="">
-                                            @endif
-                                        </td>
-                                        <td>{{ $item->price_sale }}</td>
-                                        <td>{{ $item->price_import }}</td>
-                                        <td>{{ $item->expiration_date }}</td>
-                                        <td>{{ $item->storage->quantity }}</td>
-                                        <td>{!! $item->is_active ? '<span class="badge bg-primary">YES</span>' : '<span class="badge bg-danger">NO</span>' !!}</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="{{ route('admin.medicines.show', $item->id) }}"
-                                                    class="btn btn-primary me-2">Xem</a>
-                                                <a href="{{ route('admin.medicines.edit', $item->id) }}"
-                                                    class="btn btn-warning me-2">Sửa</a>
-                                                <form action="{{ route('admin.medicines.destroy', $item->id) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" onclick="return confirm('Chắc chắn chưa?')"
-                                                        class="btn btn-danger">Xóa</button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label for="start-date">Ngày bắt đầu:</label>
+                                        <input type="date" id="start-date" class="form-control" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="end-date">Ngày kết thúc:</label>
+                                        <div class="d-flex">
+                                            <input type="date" id="end-date" class="form-control me-2" />
+                                            <button id="filter-btn" class="btn btn-primary">Lọc</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="example"
+                                    class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                                    style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Mã thuốc</th>
+                                            <th>Danh mục</th>
+                                            <th>Tên thuốc</th>
+                                            <th>Ảnh thuốc</th>
+                                            <th>Giá nhập</th>
+                                            <th>Giá bán</th>
+                                            <th>Ngày hết hạn</th>
+                                            <th>Nhà cung cấp</th>
+                                            <th>Số lượng</th>
+                                            <th>Thời gian tạo</th>
+                                            <th>Thời gian cập cập nhập</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,10 +118,118 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.6.0/jspdf.umd.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#diseaseTable').DataTable();
+            $(document).ready(function() {
+                var table = $('#example').DataTable({
+                    processing: true,
+                    serverSide: true,
+
+                    ajax: {
+                        url: '{{ route('admin.medicines.index') }}',
+                        data: function(d) {
+                            d.startDate = $('#start-date').val();
+                            d.endDate = $('#end-date').val();
+                        }
+                    },
+                    columns: [{
+                            data: 'id'
+                        },
+                        {
+                            data: 'category.name'
+                        },
+                        {
+                            data: 'medicine_code'
+                        },
+                        {
+                            data: 'name'
+                        },
+                        { data: 'image', orderable: false, searchable: false },
+                        {
+                            data: 'price_import'
+                        },
+                        {
+                            data: 'price_sale'
+                        },
+                        {
+                            data: 'expiration_date'
+                        },
+                        { data: 'suppliers', render: function (data, type, row) {
+                        return data.map(supplier => `<p>${supplier.name}</p>`).join('');
+                    }},
+                        {
+                            data: 'inventory.quantity'
+                        },
+                        {
+                            data: 'created_at'
+                        },
+                        {
+                            data: 'updated_at'
+                        },
+                        {
+                            data: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'excel',
+                            text: 'Export Excel',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 8
+                                }
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'Export CSV',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: 'Export PDF',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            text: 'Print',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
+                            }
+                        }
+                    ]
+                });
+
+                $('#filter-btn').click(function() {
+                    table.draw();
+                });
+            });
         });
     </script>
 @endsection

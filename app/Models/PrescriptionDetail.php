@@ -13,7 +13,6 @@ class PrescriptionDetail extends Model
         'medicine_id',
         'unit_id',
         'prescription_id',
-        'medical_instrument_id',
         'quantity',
         'current_price',
         'dosage',
@@ -34,10 +33,5 @@ class PrescriptionDetail extends Model
     public function prescription()
     {
         return $this->belongsTo(Prescription::class);
-    }
-
-    public function medicalInstrument()
-    {
-        return $this->belongsTo(MedicalInstrument::class);
     }
 }

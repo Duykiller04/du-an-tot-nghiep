@@ -9,10 +9,8 @@ class Storage extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'inventory_code',
+        'name',
         'location',
-        'quantity',
-        'unit_id',
     ];
 
     public function inventoryAudits()
@@ -28,10 +26,5 @@ class Storage extends Model
     public function unit()
     {
         return $this->hasMany(Unit::class);
-    }
-
-    public function medicalInstruments()
-    {
-        return $this->hasMany(MedicalInstrument::class);
     }
 }

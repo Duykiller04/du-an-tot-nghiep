@@ -11,22 +11,9 @@ class Unit extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'name',
-        'parent_id',
     ];
-    public function parent()
-    {
-        return $this->belongsTo(Unit::class, 'parent_id');
-    }
-    public function children()
-    {
-        return $this->hasMany(Unit::class, 'parent_id');
-    }
     public function medicines()
     {
         return $this->hasMany(Medicine::class);
-    }
-    public function medicalInstruments()
-    {
-        return $this->hasMany(MedicalInstrument::class);
     }
 }
