@@ -23,5 +23,14 @@ class Category extends Model
     public function medicines(){
         return $this->hasMany(Medicine::class);
     }
-    
+    public function ancestors()
+    {
+        $parent = $this->parent;
+
+        if ($parent) {
+            return $parent->ancestors()->prepend($parent);
+        }
+
+        return collect();
+    }
 }
