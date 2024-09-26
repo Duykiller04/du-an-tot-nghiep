@@ -43,7 +43,7 @@ Auth::routes();
 
 Route::prefix('admin')
     ->as('admin.')
-    //->middleware('auth')
+    ->middleware('auth')
     ->group(function () {
 
         Route::controller(EnvironmentController::class)
@@ -90,6 +90,8 @@ Route::prefix('admin')
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
 
         Route::resource('storage', StorageController::class);
+
+        Route::resource('importorder', ImportOrderController::class);
 
     });
 

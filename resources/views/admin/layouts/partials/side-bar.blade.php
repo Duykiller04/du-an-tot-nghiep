@@ -386,6 +386,30 @@
                         </ul>
                     </div>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#importorder" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="importorder">
+                        <i class="ri-store-2-fill"></i> <span data-key="t-apps"> Nhập kho thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="importorder">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.importorder.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.importorder.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         </li>
