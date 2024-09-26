@@ -45,7 +45,9 @@ Route::prefix('admin')
     ->as('admin.')
     //->middleware('auth')
     ->group(function () {
-
+        Route::get('/', function () {
+            return view("admin.dashboard");
+        })->name('dashboard');
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {
