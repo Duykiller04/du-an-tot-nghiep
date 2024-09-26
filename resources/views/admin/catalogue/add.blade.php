@@ -27,7 +27,7 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <div class="card">     
+            <div class="card">
                 <div class="card-body">
                     <form action="{{route('admin.catalogues.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -65,14 +65,14 @@
 
                     <div class="text-end mb-4 mt-4">
                         <a class="btn btn-primary" href="{{route('admin.catalogues.index')}}">Quay lại</a>
-                        
+
                         <button type="submit" class="btn btn-success w-sm">Thêm</button>
                     </div>
                 </form>
                 </div>
                 <!-- end card body -->
             </div>
-            <!-- end card -->    
+            <!-- end card -->
         </div>
         <!-- end col -->
     </div>

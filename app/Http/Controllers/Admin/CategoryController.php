@@ -57,6 +57,18 @@ class CategoryController extends Controller
     {
         $catalogues = Category::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->get();
 
+        // $categories = Category::all();
+
+        // foreach ($categories as $category) {
+        //     echo "Category: " . $category->name . "\n";
+        //     $ancestors = $category->ancestors();
+        //     if ($ancestors->isNotEmpty()) {
+        //         echo "Ancestors: " . implode(' -> ', $ancestors->pluck('name')->toArray()) . "\n";
+        //     } else {
+        //         echo "No ancestors\n";
+        //     }
+        // }
+        // return 0;
         return view('admin.catalogue.add', compact('catalogues'));
     }
 

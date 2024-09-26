@@ -12,8 +12,7 @@ class CutDoseOrder extends Model
     protected $fillable = [
         'disease_id ',
         'weight',
-        'age_min',
-        'age_max',
+        'age',
         'gender',
     ];
 
