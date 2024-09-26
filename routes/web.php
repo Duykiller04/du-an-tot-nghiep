@@ -43,7 +43,7 @@ Auth::routes();
 
 Route::prefix('admin')
     ->as('admin.')
-    //->middleware('auth')
+    ->middleware('auth')
     ->group(function () {
 
         Route::controller(EnvironmentController::class)
@@ -91,6 +91,10 @@ Route::prefix('admin')
 
         Route::resource('storage', StorageController::class);
 
+        Route::prefix('restore')->group(function(){
+            Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
+            Route::post('/categories', [CategoryController::class, 'restore']);
+        });
     });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

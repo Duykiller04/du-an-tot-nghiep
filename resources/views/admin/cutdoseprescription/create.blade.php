@@ -62,7 +62,7 @@
                             <div class="mb-3">
                                 <label class="form-label" for="name_doctor">Tên bác sĩ</label>
                                 <input type="text" class="form-control @error('name_doctor') is-invalid @enderror"
-                                    id="name_doctor" name="name_doctor" value="{{ old('name_doctor') }}">
+                                    id="name_doctor" name="name_doctor" value="{{ Auth::user()->name }}">
                                 @error('name_doctor')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -78,7 +78,7 @@
                             <div class="mb-3">
                                 <label class="form-label" for="phone_doctor">Số điện thoại</label>
                                 <input type="number" class="form-control @error('phone_doctor') is-invalid @enderror"
-                                    id="phone_doctor" name="phone_doctor" value="{{ old('phone_doctor') }}">
+                                id="name_doctor" name="name_doctor" value="{{ Auth::user()->name }}">
                                 @error('phone_doctor')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
