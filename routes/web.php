@@ -91,6 +91,10 @@ Route::prefix('admin')
 
         Route::resource('storage', StorageController::class);
 
+        Route::get('strashCan', function () {
+            return view('admin.strashCan.index');
+        })->name('strashCan');
+
     });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
