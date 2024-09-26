@@ -92,7 +92,9 @@ Route::prefix('admin')
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
 
         Route::resource('storage', StorageController::class);
-        
+      
+        Route::resource('importorder', ImportOrderController::class);
+      
         Route::prefix('restore')->group(function(){
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);

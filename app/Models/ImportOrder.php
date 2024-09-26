@@ -34,4 +34,10 @@ class ImportOrder extends Model
     {
         return $this->belongsTo(Supplier::class);
     }
+
+
+    public function details()
+    {
+        return $this->hasMany(ImportOrderDetail::class);
+    }
 }
