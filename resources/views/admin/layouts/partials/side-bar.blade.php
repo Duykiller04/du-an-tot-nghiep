@@ -33,14 +33,14 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Pages</span>
+                
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets.html">
-                        <i class="ri-honour-line"></i> <span data-key="t-widgets">Widgets</span>
+                    <a class="nav-link menu-link" href="{{ route('admin.dashboard') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Trang chủ</span>
                     </a>
-                </li>
+                </li> <!-- end Dashboard Menu -->
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button"
@@ -387,26 +387,6 @@
                     </div>
                 </li>
 
-
-
-
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#strashcan" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="strashcan">
-                        <i class="ri-store-2-fill"></i> <span data-key="t-apps"> strashCan</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="strashcan">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('admin.strashCan') }}" class="nav-link" role="button"
-                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
-                                    Danh sách
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
             </ul>
         </div>
         </li>

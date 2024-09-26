@@ -43,9 +43,11 @@ Auth::routes();
 
 Route::prefix('admin')
     ->as('admin.')
-    //->middleware('auth')
+    // ->middleware('auth')
     ->group(function () {
-
+        Route::get('/', function () {
+            return view("admin.dashboard");
+        })->name('dashboard');
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {
@@ -90,11 +92,9 @@ Route::prefix('admin')
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
 
         Route::resource('storage', StorageController::class);
-
-        Route::get('strashCan', function () {
-            return view('admin.strashCan.index');
-        })->name('strashCan');
-
+        
+        Route::prefix('restore')->group(function(){
+            Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
+            Route::post('/categories', [CategoryController::class, 'restore']);
+        });
     });
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
