@@ -56,8 +56,43 @@
                 <div class="container-fluid">
 
                     <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+
+                                <div class="card-header align-items-center d-flex">
+                                    <h4 class="card-title mb-0  me-2">Danh Sách :</h4>
+                                    <div class="flex-shrink-0 ">
+                                        <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs border-bottom-0"
+                                            role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#today"
+                                                    role="tab">
+                                                    Catalogues
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#weekly" role="tab">
+                                                    users
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#monthly" role="tab">
+                                                    medicine
+                                                </a>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div><!-- end card -->
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                    <div class="row">
                         @yield('content')
                     </div>
+
 
                 </div>
                 <!-- container-fluid -->

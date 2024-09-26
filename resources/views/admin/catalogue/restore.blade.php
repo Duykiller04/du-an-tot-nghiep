@@ -7,97 +7,431 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <!-- start page title -->
-        <div class="row mt-3">
-            <div class="col-12">
-                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Danh mục sản phẩm đã xóa</h4>
 
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh mục sản phẩm</a></li>
-                            <li class="breadcrumb-item active">Danh sách</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end page title -->
 
-        @if (session('success'))
-            <div class="alert alert-success mb-3">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card" id="customerList">
-                    <div class="card-header border-bottom-dashed">
-                        <div class="row g-4 align-items-center">
-                            <div class="col-sm">
-                                <div>
-                                    <h5 class="card-title mb-0">Danh sách danh mục</h5>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+
+  
+                <div class="card-body">
+                    <div class="tab-content text-muted">
+                        <div class="tab-pane active" id="today" role="tabpanel">
+                            <div class="profile-timeline">
+                                <div class="accordion accordion-flush" id="todayExample">
+                                    <!-- start page title -->
+                                    <h4>Danh mục đã xóa</h4>
+                                <!-- end page title -->
+                                    <div class="table-responsive">
+                                        <table class="table align-middle mb-0">
+
+                                                
+                                        
+                                                @if (session('success'))
+                                                    <div class="alert alert-success mb-3">
+                                                        {{ session('success') }}
+                                                    </div>
+                                                @endif
+                                        
+                                            <thead class="table-light">
+                                                <form action="{{ route('admin.restore.categories') }}" method="POST">
+                                                    @csrf
+                                                    <table id="example"
+                                                        class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                                                        style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="checkbox" id="select-all"></th>
+                                                                <th>Mã danh mục</th>
+                                                                <th>Tên danh mục</th>
+                                                                <th>Ngày xóa</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse ($data as $category)
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" name="ids[]"
+                                                                            value="{{ $category->id }}">
+                                                                    </td>
+                                                                    <td>{{ $category->id }}</td>
+                                                                    <td>{{ $category->name }}</td>
+                                                                    <td>{{ $category->deleted_at->format('d-m-Y') }}</td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="4">Không có danh mục nào đã xóa mềm.</td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                    <button type="submit" class="btn btn-primary">Khôi phục các danh mục đã
+                                                        chọn</button>
+                                                </form>
+                                            </thead>
+                                        </table>
+                                        <!-- end table -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-auto">
-                                <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
-                                            class="ri-delete-bin-2-line"></i></button>
-                                </div>
+                                <!--end accordion-->
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <form action="{{ route('admin.restore.categories') }}" method="POST">
-                                        @csrf
-                                        <table id="example"
-                                            class="table table-bordered dt-responsive nowrap table-striped align-middle"
-                                            style="width:100%">
-                                            <thead>
+                        <div class="tab-pane" id="weekly" role="tabpanel">
+                            <div class="profile-timeline">
+                                <div class="accordion accordion-flush" id="weeklyExample">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle mb-0">
+                                            <thead class="table-light">
                                                 <tr>
-                                                    <th><input type="checkbox" id="select-all"></th>
-                                                    <th>Mã danh mục</th>
-                                                    <th>Tên danh mục</th>
-                                                    <th>Ngày xóa</th>
+                                                    <th scope="col">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck"></label>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Customer</th>
+                                                    <th scope="col">Purchased</th>
+                                                    <th scope="col">Revenue</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($data as $category)
-                                                    <tr>
-                                                        <td>
-                                                            <input type="checkbox" name="ids[]"
-                                                                value="{{ $category->id }}">
-                                                        </td>
-                                                        <td>{{ $category->id }}</td>
-                                                        <td>{{ $category->name }}</td>
-                                                        <td>{{ $category->deleted_at->format('d-m-Y') }}</td>
-                                                    </tr>
-                                                @empty
-                                                    <tr>
-                                                        <td colspan="4">Không có danh mục nào đã xóa mềm.</td>
-                                                    </tr>
-                                                @endforelse
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck01">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck01"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2110</a></td>
+                                                    <td>10 Oct, 14:47</td>
+                                                    <td class="text-success"><i
+                                                            class="ri-checkbox-circle-line fs-17 align-middle"></i>
+                                                        Paid</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-3.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Jordan Kennedy
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Mastering the grid</td>
+                                                    <td>$9.98</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck02">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck02"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2109</a></td>
+                                                    <td>17 Oct, 02:10</td>
+                                                    <td class="text-success"><i
+                                                            class="ri-checkbox-circle-line fs-17 align-middle"></i>
+                                                        Paid</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-4.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Jackson Graham
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Splashify</td>
+                                                    <td>$270.60</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck03">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck03"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2108</a></td>
+                                                    <td>26 Oct, 08:20</td>
+                                                    <td class="text-primary"><i
+                                                            class="ri-refresh-line fs-17 align-middle"></i>
+                                                        Refunded
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-5.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Lauren Trujillo
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Wireframing Kit for Figma</td>
+                                                    <td>$145.42</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck04">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck04"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2107</a></td>
+                                                    <td>02 Nov, 04:52</td>
+                                                    <td class="text-danger"><i
+                                                            class="ri-close-circle-line fs-17 align-middle"></i>
+                                                        Cancel
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-6.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Curtis Weaver
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Wireframing Kit for Figma</td>
+                                                    <td>$170.68</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck05">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck05"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2106</a></td>
+                                                    <td>10 Nov, 07:20</td>
+                                                    <td class="text-success"><i
+                                                            class="ri-checkbox-circle-line fs-17 align-middle"></i>
+                                                        Paid</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-1.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Jason schuller
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Splashify</td>
+                                                    <td>$350.87</td>
+                                                </tr>
                                             </tbody>
                                         </table>
-                                        <button type="submit" class="btn btn-primary">Khôi phục các danh mục đã chọn</button>
-                                    </form>
-
+                                        <!-- end table -->
+                                    </div>
                                 </div>
+                                <!--end accordion-->
                             </div>
-                        </div><!--end col-->
-                    </div><!--end row-->
-                </div>
-            </div>
-            <!--end col-->
-        </div>
-        <!--end row-->
-    </div>
+                        </div>
+                        <div class="tab-pane" id="monthly" role="tabpanel">
+                            <div class="profile-timeline">
+                                <div class="accordion accordion-flush" id="monthlyExample">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="col">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck"></label>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Customer</th>
+                                                    <th scope="col">Purchased</th>
+                                                    <th scope="col">Revenue</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck01">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck01"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2110</a></td>
+                                                    <td>10 Oct, 14:47</td>
+                                                    <td class="text-success"><i
+                                                            class="ri-checkbox-circle-line fs-17 align-middle"></i>
+                                                        Paid</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-3.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Jordan Kennedy
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Mastering the grid</td>
+                                                    <td>$9.98</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck02">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck02"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2109</a></td>
+                                                    <td>17 Oct, 02:10</td>
+                                                    <td class="text-success"><i
+                                                            class="ri-checkbox-circle-line fs-17 align-middle"></i>
+                                                        Paid</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-4.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Jackson Graham
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Splashify</td>
+                                                    <td>$270.60</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck03">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck03"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2108</a></td>
+                                                    <td>26 Oct, 08:20</td>
+                                                    <td class="text-primary"><i
+                                                            class="ri-refresh-line fs-17 align-middle"></i>
+                                                        Refunded
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-5.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Lauren Trujillo
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Wireframing Kit for Figma</td>
+                                                    <td>$145.42</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck04">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck04"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2107</a></td>
+                                                    <td>02 Nov, 04:52</td>
+                                                    <td class="text-danger"><i
+                                                            class="ri-close-circle-line fs-17 align-middle"></i>
+                                                        Cancel
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-6.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Curtis Weaver
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Wireframing Kit for Figma</td>
+                                                    <td>$170.68</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                value="" id="responsivetableCheck05">
+                                                            <label class="form-check-label"
+                                                                for="responsivetableCheck05"></label>
+                                                        </div>
+                                                    </th>
+                                                    <td><a href="#" class="fw-semibold">#VZ2106</a></td>
+                                                    <td>10 Nov, 07:20</td>
+                                                    <td class="text-success"><i
+                                                            class="ri-checkbox-circle-line fs-17 align-middle"></i>
+                                                        Paid</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <img src="assets/images/users/avatar-1.jpg" alt=""
+                                                                    class="avatar-xs rounded-circle" />
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                Jason schuller
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Splashify</td>
+                                                    <td>$350.87</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <!-- end table -->
+                                    </div>
+                                </div>
+                                <!--end accordion-->
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end card body -->
+
+            </div><!-- end card -->
+        </div><!-- end col -->
+    </div><!-- end row -->
     <!-- container-fluid -->
 @endsection
 
