@@ -25,6 +25,7 @@ return new class extends Migration
             $table->dateTime('date_added')->comment('ngày nhập');
             $table->text('note')->nullable();
             $table->string('status');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
