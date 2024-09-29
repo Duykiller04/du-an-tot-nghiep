@@ -96,7 +96,28 @@ Route::prefix('admin')
         Route::resource('importorder', ImportOrderController::class);
       
         Route::prefix('restore')->group(function(){
+            // restore categories
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);
+
+            // restore disease
+            Route::get('/diseases', [DiseaseController::class, 'getRestore'])->name('restore.diseases');
+            Route::post('/diseases', [DiseaseController::class, 'restore']);
+
+            // restore suppliers
+            Route::get('/suppliers', [SupplierController::class, 'getRestore'])->name('restore.suppliers');
+            Route::post('/suppliers', [SupplierController::class, 'restore']);
+
+            // restore users
+            Route::get('/users', [UserController::class, 'getRestore'])->name('restore.users');
+            Route::post('/users', [UserController::class, 'restore']);
+
+            // restore units
+            Route::get('/units', [UnitController::class, 'getRestore'])->name('restore.units');
+            Route::post('/units', [UnitController::class, 'restore']);
+
+            // restore units
+            Route::get('/medicines', [MedicineController::class, 'getRestore'])->name('restore.medicines');
+            Route::post('/medicines', [MedicineController::class, 'restore']);
         });
     });

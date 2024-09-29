@@ -409,6 +409,11 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('admin.restore.categories') }}">
+                        <i class="bx bxs-shapes"></i> <span data-key="t-apps">Thùng rác</span>
+                    </a>
+                </li>
             </ul>
         </div>
         </li>

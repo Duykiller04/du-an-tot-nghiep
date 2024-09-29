@@ -3,7 +3,7 @@
 @extends('admin.layouts.trash')
 
 @section('title')
-    Danh sách danh mục đã xóa
+    Danh sách đơn vị đã xóa
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="categoriesExample">
                                     <!-- start page title -->
-                                    <h4>Danh mục đã xóa</h4>
+                                    <h4>Đơn vị đã xóa</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -32,7 +32,7 @@
                                             @endif
 
                                             <thead class="table-light">
-                                                <form action="{{ route('admin.restore.categories') }}" method="POST">
+                                                <form action="{{ route('admin.restore.units') }}" method="POST">
                                                     @csrf
                                                     <table id="example"
                                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -40,21 +40,21 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Mã danh mục</th>
-                                                                <th>Tên danh mục</th>
+                                                                <th>Mã đơn vị</th>
+                                                                <th>Tên đơn vị</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($data as $category)
+                                                            @foreach ($data as $item)
                                                                 <tr>
                                                                     <td>
                                                                         <input type="checkbox" name="ids[]"
-                                                                            value="{{ $category->id }}">
+                                                                            value="{{ $item->id }}">
                                                                     </td>
-                                                                    <td>{{ $category->id }}</td>
-                                                                    <td>{{ $category->name }}</td>
-                                                                    <td>{{ $category->deleted_at->format('d-m-Y') }}</td>
+                                                                    <td>{{ $item->id }}</td>
+                                                                    <td>{{ $item->name }}</td>
+                                                                    <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -106,13 +106,6 @@
 @endsection
 
 @section('js')
-    {{-- <script>
-        new DataTable("#example", {
-            order: [
-                [0, 'desc']
-            ]
-        });
-    </script> --}}
     <script>
         document.getElementById('select-all').addEventListener('click', function() {
             var checkboxes = document.querySelectorAll('input[name="ids[]"]');

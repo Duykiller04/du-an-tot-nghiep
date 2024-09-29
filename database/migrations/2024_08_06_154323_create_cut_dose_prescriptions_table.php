@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('age');
             $table->string('phone_doctor');
             $table->double('total');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('symptom');
             $table->string('feature_img')->nullable();
             $table->string('verify_date');
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

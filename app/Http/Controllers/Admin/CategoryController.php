@@ -176,9 +176,9 @@ class CategoryController extends Controller
     {
         // dd($request->all());
         try {
-            $categoriesIds = $request->input('ids');
-            if ($categoriesIds) {
-                Category::onlyTrashed()->whereIn('id', $categoriesIds)->restore();
+            $categoryIds = $request->input('ids');
+            if ($categoryIds) {
+                Category::onlyTrashed()->whereIn('id', $categoryIds)->restore();
                 return back()->with('success', 'Khôi phục bản ghi thành công.');
             } else {
                 return back()->with('error', 'Không bản ghi nào cần khôi phục.');
