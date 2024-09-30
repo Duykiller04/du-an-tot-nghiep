@@ -8,6 +8,7 @@ use App\Models\Disease;
 use App\Models\Medicine;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CutDoseOrderController extends Controller
 {
@@ -76,5 +77,26 @@ class CutDoseOrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getRestore()
+    {
+        $data = CutDoseOrder::onlyTrashed()->get();
+        return view('admin.cutdoseorder.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        try {
+            $cutDoseOrdersIds = $request->input('ids');
+            if ($cutDoseOrdersIds) {
+                CutDoseOrder::onlyTrashed()->whereIn('id', $cutDoseOrdersIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

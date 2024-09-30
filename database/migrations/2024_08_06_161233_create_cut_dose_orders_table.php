@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('age_min');
             $table->unsignedBigInteger('age_max');
             $table->boolean('gender');
+            $table->softDeletes();
             $table->timestamps();
 
         });
