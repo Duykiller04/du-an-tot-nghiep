@@ -34,6 +34,8 @@ class UserFactory extends Factory
             'birth' => $this->faker->date,
             'image' => $this->faker->imageUrl,
             'description' => $this->faker->text,
+            'account_num' => $this->faker->numerify('######'),
+            'bank' => $this->faker->company,
             'type' => $this->faker->boolean(),
         ];
     }

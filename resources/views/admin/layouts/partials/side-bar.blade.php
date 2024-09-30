@@ -386,6 +386,30 @@
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#workshift" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="workshift">
+                        <i class="ri-user-fill"></i> <span data-key="t-apps"> Quản lí ca làm</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="workshift">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.workshifts.create') }}" class="nav-link" role="button"
+                                   aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+                
+                            <li class="nav-item">
+                                <a href="{{ route('admin.workshifts.index') }}" class="nav-link" role="button"
+                                   aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
             </ul>
         </div>
         </li>

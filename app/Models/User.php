@@ -84,6 +84,10 @@ class User extends Authenticatable
         $this->attributes['type'] = $value ? self::TYPE_ADMIN : self::TYPE_STAFF;
     }
 
+    public function workshifts()
+{
+    return $this->belongsToMany(Workshift::class, 'user_workshift');
+}
     //Tùy chỉnh việc gán giá trị cho thuộc tính "type".
     //Gán self::TYPE_ADMIN nếu giá trị mới là true, ngược lại gán self::TYPE_STAFF.
 }

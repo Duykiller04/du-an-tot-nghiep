@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->date('birth')->nullable()->comment('Năm sinh');
             $table->string('image')->nullable();
             $table->string('description')->nullable();
+            $table->string('account_num', 255);
+            $table->string('bank', 255);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
