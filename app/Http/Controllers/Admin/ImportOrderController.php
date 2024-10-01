@@ -287,4 +287,27 @@ class ImportOrderController extends Controller
         // Nếu không tìm thấy bản ghi, quay lại với thông báo lỗi
         return redirect()->route('admin.importorder.index')->with('error', 'Đơn hàng không tồn tại.');
     }
+
+
+
+    public function getRestore()
+    {
+        $data = ImportOrder::onlyTrashed()->get();
+        return view('admin.importorder.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        try {
+            $importorderIds = $request->input('ids');
+            if ($importorderIds) {
+                Storage::onlyTrashed()->whereIn('id', $importorderIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
+    }
 }

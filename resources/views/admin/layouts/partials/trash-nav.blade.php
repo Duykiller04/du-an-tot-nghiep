@@ -13,7 +13,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link"  href="{{ route('admin.restore.diseases') }}">
+                            <a class="nav-link" href="{{ route('admin.restore.diseases') }}">
                                 Diseases
                             </a>
                         </li>
@@ -36,6 +36,32 @@
                             <a class="nav-link" href="{{ route('admin.restore.medicines') }}">
                                 Medicines
                             </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.restore.storages') }}">
+                                Storages
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.restore.cutDosePrescriptions') }}">
+                                CutDosePrescriptions
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.restore.importorder') }}">
+                                ImportOrders
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('admin.restore.cutDoseOrders') }}">
+                                CutDoseOrders
+                            </a>
+                        </li>
                         </li>
                     </ul>
                 </div>

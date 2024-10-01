@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Models\Customer;
+use App\Models\Prescription;
+use App\Models\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -119,5 +121,17 @@ Route::prefix('admin')
             // restore units
             Route::get('/medicines', [MedicineController::class, 'getRestore'])->name('restore.medicines');
             Route::post('/medicines', [MedicineController::class, 'restore']);
+
+            Route::get('/storages', [StorageController::class, 'getRestore'])->name('restore.storages');
+            Route::post('/storages', [StorageController::class, 'restore']);
+
+            Route::get('/cutDosePrescriptions', [CutDosePrescriptionController::class, 'getRestore'])->name('restore.cutDosePrescriptions');
+            Route::post('/cutDosePrescriptions', [CutDosePrescriptionController::class, 'restore']);
+
+            Route::get('/importorder', [ImportOrderController::class, 'getRestore'])->name('restore.importorder');
+            Route::post('/importorder', [ImportOrderController::class, 'restore']);
+
+            Route::get('/cutDoseOrders', [CutDoseOrderController::class, 'getRestore'])->name('restore.cutDoseOrders');
+            Route::post('/cutDoseOrders', [CutDoseOrderController::class, 'restore']);
         });
     });
