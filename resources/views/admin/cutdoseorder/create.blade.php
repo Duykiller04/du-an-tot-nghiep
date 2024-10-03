@@ -74,6 +74,14 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email" value="{{ old('email') }}">
+                                    @error('email')
+                                        <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label" for="weight">Cân nặng</label>
                                     <input type="number" class="form-control @error('weight') is-invalid @enderror"
                                         id="weight" name="weight" value="{{ old('weight') }}">

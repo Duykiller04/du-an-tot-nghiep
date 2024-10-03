@@ -57,13 +57,12 @@
 
                                     <div class="mb-3">
                                         <label for="storage_id" class="form-label">Nhà cung cấp:</label>
-                                        <select id="supplier" name="supplier_id[]" class="js-example-basic-multiple"
-                                            multiple="multiple">
+                                        <select id="supplier" name="supplier_id" class="form-select">
                                             @foreach ($suppliers as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('supplier_id.*')
+                                        @error('supplier_id')
                                             <span class="d-block text-danger mt-2">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -220,7 +219,7 @@
 
                 // Tạo khối chi tiết thuốc mới
                 const newDetail = `
-                <div class="mb-3 border p-3 rounded detail-row" data-detail-index="${detailCounter}">
+                <div class="mb-3 border p-3 rounded detail-row" data-detail-index="${detailCounter}" style="background-color: #d5d5d5">
                     <div class="d-flex justify-content-between align-items-center">
                         <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseDetails${detailCounter}" aria-expanded="false" aria-controls="collapseDetails${detailCounter}">
@@ -235,23 +234,23 @@
                                 <select name="details[${detailCounter}][type_product]" class="form-select" onchange="toggleInputs(${detailCounter})">
                                     <option value="0">Thuốc</option>
                                     <option value="1">Dụng cụ</option>
-                                </select> 
+                                </select>
 
                                 <label for="details[${detailCounter}][name]" class="form-label">Tên thuốc:</label>
                                 <input type="text" name="details[${detailCounter}][name]" class="form-control">
-        
+
                                 <label for="details[${detailCounter}][category_id]" class="form-label">Danh mục thuốc:</label>
                                 <select name="details[${detailCounter}][category_id]" class="form-select">
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
-        
+
                                 <label for="details[${detailCounter}][medicine_code]" class="form-label">Mã thuốc:</label>
                                 <input type="text" name="details[${detailCounter}][medicine_code]" class="form-control">
                                 <div class="text-danger" id="medicine-code-error-${detailCounter}"></div>
-        
-                                
+
+
                                 <div class="m-2">
                                          <label class="form-label">Đơn vị:</label>
                                         <div class="mb-3 units" data-detail-index="${detailCounter}">
@@ -261,8 +260,8 @@
                                             <button type="button" class="btn btn-primary add-unit" data-detail-index="${detailCounter}">Thêm đơn vị</button>
                                         </div>
                                 </div>
-                               
-        
+
+
                                 <label for="details[${detailCounter}][price_import]" class="form-label">Giá nhập:</label>
                                 <div class="input-group mb-3">
                                     <input type="number" name="details[${detailCounter}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal(${detailCounter})" placeholder="Nhập giá nhập" required>
@@ -273,7 +272,7 @@
                                 <label for="details[${detailCounter}][price_sale]" class="form-label">Giá bán:</label>
                                 <input type="number" name="details[${detailCounter}][price_sale]" class="form-control price-sale" step="0.01">
                                 <div class="text-danger" id="price-sale-error-${detailCounter}"></div>
-        
+
                                 <label for="details[${detailCounter}][total]" class="form-label">Tổng:</label>
                                 <div class="input-group mb-3">
                                     <input type="number" name="details[${detailCounter}][total]" class="form-control total" placeholder="Tổng số tiền" readonly>
@@ -289,7 +288,7 @@
 
                                 <label for="details[${detailCounter}][origin]" class="form-label">Xuất xứ:</label>
                                 <input type="text" name="details[${detailCounter}][origin]" class="form-control">
-                                <div class="text-danger" id="origin-error-${detailCounter}"></div> 
+                                <div class="text-danger" id="origin-error-${detailCounter}"></div>
 
                                 <label for="details[${detailCounter}][packaging_specification]" class="form-label">Quy cách đóng gói:</label>
                                 <input type="text" name="details[${detailCounter}][packaging_specification]" class="form-control">
@@ -337,7 +336,7 @@
                                 <input type="file" name="details[${detailCounter}][image]" class="form-control">
                                 <div class="text-danger" id="image-error-${detailCounter}"></div>
                             </div>
-                       </div> 
+                       </div>
                     </div>
                 </div>`;
 

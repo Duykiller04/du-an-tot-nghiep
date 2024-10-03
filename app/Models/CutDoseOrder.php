@@ -10,10 +10,14 @@ class CutDoseOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'disease_id ',
+        'disease_id',
+        'customer_id',
         'weight',
         'age',
         'gender',
+        'customer_name',
+        'phone',
+        'address',
     ];
 
     public function disease()
