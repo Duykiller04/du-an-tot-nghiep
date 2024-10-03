@@ -3,7 +3,7 @@
 @extends('admin.layouts.trash')
 
 @section('title')
-    Danh sách danh mục đã xóa
+    Danh sách kho đã xóa
 @endsection
 
 @section('content')
@@ -14,11 +14,11 @@
 
                 <div class="card-body">
                     <div class="tab-content text-muted">
-                        <div class="tab-pane active" id="categories" role="tabpanel">
+                        <div class="tab-pane active" id="storages" role="tabpanel">
                             <div class="profile-timeline">
-                                <div class="accordion accordion-flush" id="categoriesExample">
+                                <div class="accordion accordion-flush" id="storagesExample">
                                     <!-- start page title -->
-                                    <h4>Danh mục đã xóa</h4>
+                                    <h4>Kho đã xóa</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -32,7 +32,7 @@
                                             @endif
 
                                             <thead class="table-light">
-                                                <form action="{{ route('admin.restore.categories') }}" method="POST">
+                                                <form action="{{ route('admin.restore.storages') }}" method="POST">
                                                     @csrf
                                                     <table id="example"
                                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -40,21 +40,26 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Mã danh mục</th>
-                                                                <th>Tên danh mục</th>
-                                                                <th>Ngày xóa</th>
+                                                                <th>ID</th>
+                                                                <th>Tên kho</th>
+                                                                <th>Địa chỉ</th>
+                                                                <th>Thời gian tạo</th>
+                                                                <th>Thời gian cập nhật</th>
+                                                                <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($data as $category)
+                                                            @foreach ($data as $item)
                                                                 <tr>
                                                                     <td>
                                                                         <input type="checkbox" name="ids[]"
-                                                                            value="{{ $category->id }}">
+                                                                            value="{{ $item->id }}">
                                                                     </td>
-                                                                    <td>{{ $category->id }}</td>
-                                                                    <td>{{ $category->name }}</td>
-                                                                    <td>{{ $category->deleted_at->format('d-m-Y') }}</td>
+                                                                    <td>{{ $item->id }}</td>
+                                                                    <td>{{ $item->name }}</td>
+                                                                    <td>{{ $item->location }}</td>
+                                                                    <td>{{ $item->created_at }}</td>
+                                                                    <td>{{ $item->updated_at }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -107,12 +112,12 @@
 
 @section('js')
     {{-- <script>
-        new DataTable("#example", {
-            order: [
-                [0, 'desc']
-            ]
-        });
-    </script> --}}
+    new DataTable("#example", {
+        order: [
+            [0, 'desc']
+        ]
+    });
+</script> --}}
     <script>
         document.getElementById('select-all').addEventListener('click', function() {
             var checkboxes = document.querySelectorAll('input[name="ids[]"]');

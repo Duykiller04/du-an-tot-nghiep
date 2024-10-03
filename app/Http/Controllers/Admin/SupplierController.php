@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class SupplierController extends Controller
@@ -111,5 +112,26 @@ class SupplierController extends Controller
     {
         $supplier->delete();
         return back()->with('success', 'Thành công');
+    }
+    public function getRestore()
+    {
+        $data = Supplier::onlyTrashed()->get();
+        return view('admin.suppliers.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $supplierIds = $request->input('ids');
+            if ($supplierIds) {
+                Supplier::onlyTrashed()->whereIn('id', $supplierIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

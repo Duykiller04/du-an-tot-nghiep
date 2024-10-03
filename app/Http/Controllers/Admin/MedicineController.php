@@ -14,6 +14,7 @@ use App\Models\UnitConversion;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class MedicineController extends Controller
@@ -185,8 +186,30 @@ class MedicineController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Medicine $medicine)
     {
-        //
+        $medicine->delete();
+        return back()->with('success', 'Xóa thuốc thành công.');
+    }
+    public function getRestore()
+    {
+        $data = Medicine::onlyTrashed()->get();
+        return view('admin.medicine.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $medicinesIds = $request->input('ids');
+            if ($medicinesIds) {
+                Medicine::onlyTrashed()->whereIn('id', $medicinesIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

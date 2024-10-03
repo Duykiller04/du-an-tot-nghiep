@@ -7,6 +7,7 @@ use App\Http\Requests\StoreStorageRequest;
 use App\Http\Requests\UpdateStorageRequest;
 use App\Models\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class StorageController extends Controller
@@ -123,5 +124,26 @@ class StorageController extends Controller
         $model->delete();
 
         return back()->with('success', 'Xóa Thành công');
+    }
+
+    public function getRestore()
+    {
+        $data = Storage::onlyTrashed()->get();
+        return view('admin.storage.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        try {
+            $storageIds = $request->input('ids');
+            if ($storageIds) {
+                Storage::onlyTrashed()->whereIn('id', $storageIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

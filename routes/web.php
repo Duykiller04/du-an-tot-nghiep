@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Models\Customer;
+use App\Models\Prescription;
+use App\Models\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -96,7 +98,40 @@ Route::prefix('admin')
         Route::resource('importorder', ImportOrderController::class);
       
         Route::prefix('restore')->group(function(){
+            // restore categories
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);
+
+            // restore disease
+            Route::get('/diseases', [DiseaseController::class, 'getRestore'])->name('restore.diseases');
+            Route::post('/diseases', [DiseaseController::class, 'restore']);
+
+            // restore suppliers
+            Route::get('/suppliers', [SupplierController::class, 'getRestore'])->name('restore.suppliers');
+            Route::post('/suppliers', [SupplierController::class, 'restore']);
+
+            // restore users
+            Route::get('/users', [UserController::class, 'getRestore'])->name('restore.users');
+            Route::post('/users', [UserController::class, 'restore']);
+
+            // restore units
+            Route::get('/units', [UnitController::class, 'getRestore'])->name('restore.units');
+            Route::post('/units', [UnitController::class, 'restore']);
+
+            // restore units
+            Route::get('/medicines', [MedicineController::class, 'getRestore'])->name('restore.medicines');
+            Route::post('/medicines', [MedicineController::class, 'restore']);
+
+            Route::get('/storages', [StorageController::class, 'getRestore'])->name('restore.storages');
+            Route::post('/storages', [StorageController::class, 'restore']);
+
+            Route::get('/cutDosePrescriptions', [CutDosePrescriptionController::class, 'getRestore'])->name('restore.cutDosePrescriptions');
+            Route::post('/cutDosePrescriptions', [CutDosePrescriptionController::class, 'restore']);
+
+            Route::get('/importorder', [ImportOrderController::class, 'getRestore'])->name('restore.importorder');
+            Route::post('/importorder', [ImportOrderController::class, 'restore']);
+
+            Route::get('/cutDoseOrders', [CutDoseOrderController::class, 'getRestore'])->name('restore.cutDoseOrders');
+            Route::post('/cutDoseOrders', [CutDoseOrderController::class, 'restore']);
         });
     });
