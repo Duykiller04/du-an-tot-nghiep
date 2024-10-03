@@ -80,6 +80,7 @@ class CutDosePrescriptionController extends Controller
                 ->with('success', 'Thêm đơn thuốc thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
+            dd($exception->getMessage());
             Log::error('Lỗi thêm đơn thuốc ' . $exception->getMessage());
             return back()->with('error', 'Lỗi thêm đơn thuốc');
         }
