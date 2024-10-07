@@ -25,7 +25,7 @@ class StoreCutDosePrescriptionRequest extends FormRequest
             'disease_id' => 'exists:diseases,id',
             'name_hospital' => 'required|string|max:255',
             'name_doctor' => 'required|string|max:255',
-            'age' => 'date',
+            'age' => 'required|integer',
             // 'phone_doctor' => 'required|integer|max:15',
 
             'medicines' => 'array',
@@ -49,7 +49,7 @@ class StoreCutDosePrescriptionRequest extends FormRequest
             'name_doctor.max' => 'Tên bác sĩ không được vượt quá 255 ký tự.',
 
             'age.required' => 'Tuổi không được để trống.',
-            'age.date' => 'Tuổi phải là kiểu date.',
+            'age.integer' => 'Tuổi phải là kiểu số.',
 
             // 'phone_doctor.required' => 'Số điện thoại bác sĩ không được để trống.',
             // 'phone_doctor.max' => 'Số điện thoại bác sĩ không được vượt quá 15 ký tự.',

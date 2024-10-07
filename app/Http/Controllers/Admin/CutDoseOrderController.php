@@ -12,7 +12,8 @@ use App\Models\Medicine;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
 
 class CutDoseOrderController extends Controller
 {
@@ -22,10 +23,29 @@ class CutDoseOrderController extends Controller
     const PATH_VIEW = 'admin.cutdoseorder.';
     public function index()
     {
-        $data = CutDoseOrder::query()->with('disease')->latest('id')->paginate(5);
+        if (request()->ajax()) {
+            $data = CutDoseOrder::with('cutDoseOrderDetails')->get();
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
+            return DataTables::of($data)
+                ->addColumn('gender', function ($row) {
+                    return $row->gender == 0 ? 'Nam' : 'Nữ';
+                })
+                ->addColumn('action', function ($row) {
+                    return '
+                        <a href="' . route('admin.cutDoseOrders.show', $row->id) . '" class="btn btn-info">Show</a>
+                        <form action="' . route('admin.cutDoseOrders.destroy', $row->id) . '" method="POST" style="display:inline;">
+                            ' . csrf_field() . '
+                            ' . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                        </form>
+                    ';
+                })
+                ->make(true);
+        }
+
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -59,7 +79,7 @@ class CutDoseOrderController extends Controller
             // Nếu khách hàng chưa tồn tại, tạo mới
             if (!$customer) {
                 $customer = Customer::create([
-                    'customer_name' => $request->input('customer_name'),
+                    'name' => $request->input('customer_name'),
                     'age' => $request->input('age'),
                     'phone' => $request->input('phone'),
                     'address' => $request->input('address'),
@@ -103,7 +123,7 @@ class CutDoseOrderController extends Controller
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
-
+            dd($e->getMessage());
             // Trả về view lỗi
             return back()->with('error' . $e->getMessage());
         }
@@ -116,7 +136,9 @@ class CutDoseOrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $cutDoseOrder = CutDoseOrder::with(['cutDoseOrderDetails.medicines', 'cutDoseOrderDetails.unit'])->findOrFail($id);
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDoseOrder'));
     }
 
     /**

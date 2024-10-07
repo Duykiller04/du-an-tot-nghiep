@@ -3,11 +3,11 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CutDoseOrderController;
 use App\Http\Controllers\Admin\CutDosePrescriptionController;
+use App\Http\Controllers\Admin\PrescriptionsController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DiseaseController;
-use App\Http\Controllers\Admin\DeseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
 use App\Http\Controllers\Admin\InventoryAuditController;
 use App\Http\Controllers\Admin\ImportOrderController;
@@ -15,9 +15,6 @@ use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
-use App\Models\Customer;
-use App\Models\Prescription;
-use App\Models\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -96,6 +93,8 @@ Route::prefix('admin')
         Route::resource('storage', StorageController::class);
       
         Route::resource('importorder', ImportOrderController::class);
+
+        Route::resource('prescriptions', PrescriptionsController::class);
       
         Route::prefix('restore')->group(function(){
             // restore categories

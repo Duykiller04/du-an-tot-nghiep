@@ -1,12 +1,12 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Chi tiết đơn thuốc cắt liều')
+@section('title', 'Chi tiết đơn thuốc')
 
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Chi tiết đơn thuốc cắt liều</h4>
+                <h4 class="mb-sm-0">Chi tiết đơn thuốc</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -22,51 +22,59 @@
 
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">Thông tin đơn thuốc cắt liều</h4>
+            <h4 class="card-title">Thông tin đơn thuốc</h4>
         </div>
         <div class="card-body">
             <div class="mb-3">
                 <label><strong>ID:</strong></label>
-                <span>{{ $cutDoseOrder->id }}</span>
+                <span>{{ $prescription->id }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Tên khách hàng:</strong></label>
-                <span>{{ $cutDoseOrder->customer_name }}</span>
+                <span>{{ $prescription->name_customer }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Giới tính:</strong></label>
-                <span>{{ $cutDoseOrder->gender == 0 ? 'Nam' : 'Nữ' }}</span>
+                <span>{{ $prescription->gender == 0 ? 'Nam' : 'Nữ' }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Tuổi:</strong></label>
-                <span>{{ $cutDoseOrder->age }}</span>
+                <span>{{ $prescription->age }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Điện thoại:</strong></label>
-                <span>{{ $cutDoseOrder->phone }}</span>
+                <span>{{ $prescription->phone }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Địa chỉ:</strong></label>
-                <span>{{ $cutDoseOrder->address }}</span>
+                <span>{{ $prescription->address }}</span>
+            </div>
+            <div class="mb-3">
+                <label><strong>Email:</strong></label>
+                <span>{{ $prescription->email }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Cân nặng:</strong></label>
-                <span>{{ $cutDoseOrder->weight }}</span>
+                <span>{{ $prescription->weight }}</span>
+            </div>
+            <div class="mb-3">
+                <label><strong>Tổng:</strong></label>
+                <span>{{ number_format($prescription->total, 2) }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Thời gian tạo:</strong></label>
-                <span>{{ $cutDoseOrder->created_at }}</span>
+                <span>{{ $prescription->created_at }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Thời gian cập nhật:</strong></label>
-                <span>{{ $cutDoseOrder->updated_at }}</span>
+                <span>{{ $prescription->updated_at }}</span>
             </div>
         </div>
     </div>
 
     <div class="card mt-4">
         <div class="card-header">
-            <h4 class="card-title">Chi tiết đơn thuốc cắt liều</h4>
+            <h4 class="card-title">Chi tiết đơn thuốc</h4>
         </div>
         <div class="card-body">
             <table class="table table-bordered">
@@ -81,8 +89,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if($cutDoseOrder->cutDoseOrderDetails && $cutDoseOrder->cutDoseOrderDetails->count())
-                        @foreach ($cutDoseOrder->cutDoseOrderDetails as $detail)
+                    @if($prescription->prescriptionDetails && $prescription->prescriptionDetails->count())
+                        @foreach ($prescription->prescriptionDetails as $detail)
                             <tr>
                                 <td>{{ $detail->id }}</td>
                                 <td>{{ $detail->medicine->name }}</td>
@@ -103,6 +111,6 @@
     </div>
 
     <div class="text-end m-3">
-        <a href="{{ route('admin.cutDoseOrders.index') }}" class="btn btn-primary">Quay lại</a>
+        <a href="{{ route('admin.prescriptions.index') }}" class="btn btn-primary">Quay lại</a>
     </div>
 @endsection

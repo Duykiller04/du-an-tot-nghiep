@@ -410,6 +410,29 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#prescriptions" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="prescriptions">
+                        <i class="bx bx-receipt"></i> <span data-key="t-apps">Đơn thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="prescriptions">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.prescriptions.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Bán hàng
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.prescriptions.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.restore.categories') }}">
                         <i class="bx bxs-shapes"></i> <span data-key="t-apps">Thùng rác</span>
                     </a>

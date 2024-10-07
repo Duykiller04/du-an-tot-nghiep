@@ -15,8 +15,13 @@ class Prescription extends Model
         'age',
         'type_sell',
         'name_customer',
+        'phone',
+        'address',
+        'email',
+        'weight',
+        'gender',
     ];
-    public function prescriptionDetail(){
-        return $this->hasOne(PrescriptionDetail::class);
+    public function prescriptionDetails(){
+        return $this->hasMany(PrescriptionDetail::class);
     }
 }

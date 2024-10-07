@@ -1,15 +1,16 @@
 @extends('admin.layouts.master')
 
 @section('title')
-Danh sách đơn thuốc cắt liều
+Danh sách đơn thuốc
 @endsection
 
 @section('content')
 <div class="container-fluid">
+    <!-- start page title -->
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Danh sách đơn thuốc cắt liều</h4>
+                <h4 class="mb-sm-0">Danh sách đơn thuốc</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -20,6 +21,7 @@ Danh sách đơn thuốc cắt liều
             </div>
         </div>
     </div>
+    <!-- end page title -->
 
     <div class="row">
         <div class="col-lg-12">
@@ -35,18 +37,22 @@ Danh sách đơn thuốc cắt liều
                 <div class="card-header border-bottom-dashed">
                     <div class="row g-4 align-items-center">
                         <div class="col-sm">
-                            <h5 class="card-title mb-0">Danh sách đơn thuốc cắt liều</h5>
+                            <div>
+                                <h5 class="card-title mb-0">Danh sách đơn thuốc</h5>
+                            </div>
                         </div>
                         <div class="col-sm-auto">
-                            <a href="{{ route('admin.cutDoseOrders.create') }}" class="btn btn-success add-btn">
-                                <i class="ri-add-line align-bottom me-1"></i> Thêm mới
-                            </a>
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                <a href="{{ route('admin.prescriptions.create') }}" class="btn btn-success add-btn">
+                                    <i class="ri-add-line align-bottom me-1"></i> Thêm mới
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <table id="cutDoseOrdersTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                    <table id="prescriptionsTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -54,8 +60,11 @@ Danh sách đơn thuốc cắt liều
                                 <th>Giới tính</th>
                                 <th>Tuổi</th>
                                 <th>Điện thoại</th>
+                                <th>Loại bán</th>
                                 <th>Địa chỉ</th>
+                                <th>Email</th>
                                 <th>Cân nặng</th>
+                                <th>Tổng đơn hàng</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -65,8 +74,12 @@ Danh sách đơn thuốc cắt liều
                 </div>
             </div>
         </div>
+        <!--end col-->
     </div>
+    <!--end row-->
+
 </div>
+<!-- container-fluid -->
 @endsection
 
 @section('style-libs')
@@ -96,26 +109,24 @@ Danh sách đơn thuốc cắt liều
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#cutDoseOrdersTable').DataTable({
+            $('#prescriptionsTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: {
-                    url: '{{ route('admin.cutDoseOrders.index') }}',
-                    type: 'GET',
-                    error: function(xhr) {
-                        console.log(xhr.responseText); // In ra thông tin lỗi
-                    }
-                },
+                ajax: '{{ route('admin.prescriptions.index') }}',
                 columns: [
                     { data: 'id' },
-                    { data: 'customer_name' },
+                    { data: 'name_customer' },
                     { data: 'gender' },
                     { data: 'age' },
                     { data: 'phone' },
+                    { data: 'type_sell' },
                     { data: 'address' },
+                    { data: 'email' },
                     { data: 'weight' },
+                    { data: 'total' },
                     { data: 'action', orderable: false, searchable: false }
                 ]
+
             });
         });
     </script>

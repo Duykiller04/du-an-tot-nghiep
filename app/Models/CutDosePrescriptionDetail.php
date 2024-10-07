@@ -33,4 +33,9 @@ class CutDosePrescriptionDetail extends Model
         return $this->belongsTo(CutDosePrescription::class);
     }
 
+    public function inventory()
+    {
+        return $this->hasOneThrough(Inventory::class, Medicine::class, 'id', 'medicine_id', 'medicine_id', 'id');
+    }
+
 }

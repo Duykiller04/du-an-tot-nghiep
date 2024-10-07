@@ -69,7 +69,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="age">Tuổi</label>
-                                <input type="date" class="form-control" id="age" name="age"
+                                <input type="number" class="form-control" id="age" name="age"
                                     value="{{ old('age') }}">
                                 @error('age')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>

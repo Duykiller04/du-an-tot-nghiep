@@ -197,3 +197,16 @@ function updateTotalPrice() {
     // Cập nhật input
     $('input[name="total_price"]').val(totalPrice.toFixed(2));
 }
+
+// Thêm sự kiện input cho input thành tiền
+// Không cho nhập số âm vào input thành tiền và xử lý trường hợp xóa trắng
+$(document).on("input", 'input[name$="[current_price]"]', function () {
+    const value = parseFloat($(this).val());
+    if (isNaN(value) || value < 0) {
+        $(this).val(0); // Đặt lại giá trị thành 0 nếu nhập số âm hoặc xóa trắng
+    }
+    updateTotalPrice(); // Cập nhật tổng tiền
+});
+
+
+
