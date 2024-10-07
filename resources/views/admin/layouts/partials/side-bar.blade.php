@@ -386,6 +386,12 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="ri-pages-line"></i> <span data-key="t-pages">Cấu hình thông báo</span>
+                    </a>
+                </li>
             </ul>
         </div>
         </li>
