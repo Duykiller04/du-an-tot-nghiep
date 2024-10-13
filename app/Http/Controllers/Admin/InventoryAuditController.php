@@ -70,6 +70,39 @@ class InventoryAuditController extends Controller
             'details.*.actual_quantity' => 'required|integer|min:0',
             'details.*.difference' => 'required|integer|min:0',
             'details.*.remarks' => 'nullable|string',
+        ],[
+            'title.required' => 'Tiêu đề là bắt buộc.',
+            'title.string' => 'Tiêu đề phải là chuỗi ký tự.',
+            'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
+            
+            'storage_id.required' => 'Kho là bắt buộc.',
+            'storage_id.exists' => 'Kho không hợp lệ.',
+            
+            'check_date.required' => 'Ngày kiểm tra là bắt buộc.',
+            'check_date.date' => 'Ngày kiểm tra không hợp lệ (phải là ngày).',
+            
+            'check_by.required' => 'Người kiểm tra là bắt buộc.',
+            'check_by.string' => 'Người kiểm tra phải là chuỗi ký tự.',
+            'check_by.max' => 'Người kiểm tra không được vượt quá 255 ký tự.',
+            
+            'remarks.string' => 'Ghi chú phải là chuỗi ký tự.',
+            
+            'details.*.medicine_id.required' => 'Mã thuốc là bắt buộc.',
+            'details.*.medicine_id.exists' => 'Mã thuốc không hợp lệ.',
+            
+            'details.*.expected_quantity.required' => 'Số lượng dự kiến là bắt buộc.',
+            'details.*.expected_quantity.integer' => 'Số lượng dự kiến phải là số nguyên.',
+            'details.*.expected_quantity.min' => 'Số lượng dự kiến phải lớn hơn hoặc bằng 0.',
+            
+            'details.*.actual_quantity.required' => 'Số lượng thực tế là bắt buộc.',
+            'details.*.actual_quantity.integer' => 'Số lượng thực tế phải là số nguyên.',
+            'details.*.actual_quantity.min' => 'Số lượng thực tế phải lớn hơn hoặc bằng 0.',
+            
+            'details.*.difference.required' => 'Chênh lệch là bắt buộc.',
+            'details.*.difference.integer' => 'Chênh lệch phải là số nguyên.',
+            'details.*.difference.min' => 'Chênh lệch phải lớn hơn hoặc bằng 0.',
+            
+            'details.*.remarks.string' => 'Ghi chú phải là chuỗi ký tự.',
         ]);
 
         if ($validator->fails()) {
