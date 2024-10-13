@@ -31,15 +31,15 @@
                             @csrf
 
                             <div class="mb-3">
-                                <label class="form-label" for="title">Tiêu đề phiếu kiểm</label>
+                                <label class="form-label" for="title">Tiêu đề phiếu kiểm<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}">
                                 @error('title')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="storage_id">Kho</label>
+                                <label class="form-label" for="storage_id">Kho<span class="text-danger">*</span></label>
                                 <select class="form-control @error('storage_id') is-invalid @enderror" id="storage_id" name="storage_id">
                                     <option value="">Chọn kho</option>
                                     @foreach($storages as $storage)
@@ -47,23 +47,23 @@
                                     @endforeach
                                 </select>
                                 @error('storage_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="check_date">Ngày kiểm</label>
+                                <label class="form-label" for="check_date">Ngày kiểm<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control @error('check_date') is-invalid @enderror" id="check_date" name="check_date" value="{{ old('check_date') }}">
                                 @error('check_date')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="check_by">Người kiểm</label>
+                                <label class="form-label" for="check_by">Người kiểm<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('check_by') is-invalid @enderror" id="check_by" name="check_by" value="{{ old('check_by') }}">
                                 @error('check_by')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -71,7 +71,7 @@
                                 <label class="form-label" for="remarks">Ghi chú</label>
                                 <input type="text" class="form-control @error('remarks') is-invalid @enderror" id="remarks" name="remarks" value="{{ old('remarks') }}">
                                 @error('remarks')
-                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -79,7 +79,7 @@
                                 @for ($i = 0; $i < max(count(old('details', [1])), session('detail_count', 1)); $i++)
                                     <div class="row mb-3 detail-row">
                                         <div class="col-lg-3">
-                                            <label class="form-label" for="medicine_id">Loại thuốc</label>
+                                            <label class="form-label" for="medicine_id">Loại thuốc<span class="text-danger">*</span></label>
                                             <select class="form-control @error('details.'.$i.'.medicine_id') is-invalid @enderror" name="details[{{ $i }}][medicine_id]">
                                                 <option value="">Chọn thuốc</option>
                                                 @foreach($medicines as $medicine)
@@ -87,35 +87,35 @@
                                                 @endforeach
                                             </select>
                                             @error('details.'.$i.'.medicine_id')
-                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="col-lg-2">
-                                            <label class="form-label" for="expected_quantity">Số lượng mong muốn</label>
-                                            <input type="number" class="form-control @error('details.'.$i.'.expected_quantity') is-invalid @enderror" name="details[{{ $i }}][expected_quantity]" value="{{ old('details.'.$i.'.expected_quantity') }}" required>
+                                            <label class="form-label" for="expected_quantity">Số lượng mong muốn<span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control @error('details.'.$i.'.expected_quantity') is-invalid @enderror" name="details[{{ $i }}][expected_quantity]" value="{{ old('details.'.$i.'.expected_quantity') }}" >
                                             @error('details.'.$i.'.expected_quantity')
-                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="col-lg-2">
-                                            <label class="form-label" for="actual_quantity">Số lượng thực tế</label>
-                                            <input type="number" class="form-control @error('details.'.$i.'.actual_quantity') is-invalid @enderror" name="details[{{ $i }}][actual_quantity]" value="{{ old('details.'.$i.'.actual_quantity') }}" required>
+                                            <label class="form-label" for="actual_quantity">Số lượng thực tế<span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control @error('details.'.$i.'.actual_quantity') is-invalid @enderror" name="details[{{ $i }}][actual_quantity]" value="{{ old('details.'.$i.'.actual_quantity') }}" >
                                             @error('details.'.$i.'.actual_quantity')
-                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="col-lg-2">
-                                            <label class="form-label" for="difference">Chênh lệch</label>
-                                            <input type="number" class="form-control @error('details.'.$i.'.difference') is-invalid @enderror" name="details[{{ $i }}][difference]" value="{{ old('details.'.$i.'.difference') }}" required>
+                                            <label class="form-label" for="difference">Chênh lệch<span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control @error('details.'.$i.'.difference') is-invalid @enderror" name="details[{{ $i }}][difference]" value="{{ old('details.'.$i.'.difference') }}">
                                             @error('details.'.$i.'.difference')
-                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="form-label" for="remarks">Ghi chú</label>
                                             <input type="text" class="form-control @error('details.'.$i.'.remarks') is-invalid @enderror" name="details[{{ $i }}][remarks]" value="{{ old('details.'.$i.'.remarks') }}">
                                             @error('details.'.$i.'.remarks')
-                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="col-lg-1 d-flex align-items-end">
@@ -130,9 +130,11 @@
                             </div>
 
                             <div class="text-end mb-4">
+                                
+                                <a href="{{ route('admin.inventoryaudit.index') }}" class="btn btn-warning w-sm">Quay lại</a>
                                 <button type="submit" class="btn btn-success w-sm">Lưu</button>
-                                <a href="{{ route('admin.inventoryaudit.index') }}" class="btn btn-danger w-sm">Quay lại</a>
                             </div>
+
                         </form>
                     </div>
                     <!-- end card body -->
@@ -168,23 +170,23 @@
             <div class="col-lg-3">
                 <label class="form-label" for="medicine_id">Loại thuốc</label>
                 <select class="form-control" name="details[${index}][medicine_id]">
-                    <option value="">Chọn thuốc</option>
+                    <option value="">Chọn thuốc<span class="text-danger">*</span></option>
                     @foreach($medicines as $medicine)
                         <option value="{{ $medicine->id }}">{{ $medicine->medicine_code}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="col-lg-2">
-                <label class="form-label" for="expected_quantity">Số lượng mong muốn</label>
-                <input type="number" class="form-control" name="details[${index}][expected_quantity]" required>
+                <label class="form-label" for="expected_quantity">Số lượng mong muốn<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="details[${index}][expected_quantity]" >
             </div>
             <div class="col-lg-2">
-                <label class="form-label" for="actual_quantity">Số lượng thực tế</label>
-                <input type="number" class="form-control" name="details[${index}][actual_quantity]" required>
+                <label class="form-label" for="actual_quantity">Số lượng thực tế<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="details[${index}][actual_quantity]" >
             </div>
             <div class="col-lg-2">
-                <label class="form-label" for="difference">Chênh lệch</label>
-                <input type="number" class="form-control" name="details[${index}][difference]" required>
+                <label class="form-label" for="difference">Chênh lệch<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="details[${index}][difference]" >
             </div>
             <div class="col-lg-2">
                 <label class="form-label" for="remarks">Ghi chú</label>

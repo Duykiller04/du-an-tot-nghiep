@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\InventoryAuditController;
 use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,17 @@ Route::prefix('admin')
         Route::get('/', function () {
             return view("admin.dashboard");
         })->name('dashboard');
+        Route::controller(SettingController::class)
+        ->prefix('setting')->as('setting.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/export-environments', 'export')->name('export');
+            Route::get('/add', 'create')->name('create');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::put('/update/{id}', 'update')->name('update');
+            Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        });
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {

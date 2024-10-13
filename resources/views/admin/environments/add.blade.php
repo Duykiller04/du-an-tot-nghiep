@@ -50,27 +50,27 @@
                             </div> --}}
 
                             <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho</label>
+                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" class="form-control" id="real_temperature" name="real_temperature" value="{{ old('real_temperature') }}">
                                 @error('real_temperature')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường</label>
+                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường<span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" class="form-control" id="real_temperature" name="temperature" value="{{ old('real_temperature',$weatherData['main']['temp'],32) }}" readonly>
                                
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="real_humidity">Độ ẩm thực tế</label>
+                                <label class="form-label" for="real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" class="form-control" id="real_humidity" name="real_humidity" value="{{ old('real_humidity') }}">
                                 @error('real_humidity')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết</label>
+                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết<span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" class="form-control" id="real_temperature" name="huminity" value="{{ old('real_temperature',$weatherData['main']['humidity'],80) }}" readonly>
                                
                             </div>
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="text-end mb-3">
+            <div class="text-start mb-3">
                 <a class="btn btn-primary" href="{{route('admin.environments.index')}}">Quay lại</a>
                 <button type="submit" class="btn btn-success w-sm">Lưu môi trường</button>
             </div>
