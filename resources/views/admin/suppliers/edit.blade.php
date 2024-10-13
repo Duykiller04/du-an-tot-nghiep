@@ -37,7 +37,7 @@
                             <div class="row gy-4">
                                 <div class="col-6">
                                     <div>
-                                        <label for="tax_code" class="form-label">Tax code</label>
+                                        <label for="tax_code" class="form-label">Mã số thuế (<span class="text-danger">*</span>)</label>
                                         <input type="text" class="form-control" id="tax_code" name="tax_code"
                                             value="{{ $supplier->tax_code }}">
                                         @error('tax_code')
@@ -45,7 +45,7 @@
                                         @enderror
                                     </div>
                                     <div class="mt-3">
-                                        <label for="name" class="form-label">Name</label>
+                                        <label for="name" class="form-label">Tên nhà cung cấp (<span class="text-danger">*</span>)</label>
                                         <input type="text" class="form-control" id="name" name="name"
                                             value="{{ $supplier->name }}">
                                         @error('name')
@@ -53,7 +53,7 @@
                                         @enderror
                                     </div>
                                     <div class="mt-3">
-                                        <label for="email" class="form-label">Email</label>
+                                        <label for="email" class="form-label">Email (<span class="text-danger">*</span>)</label>
                                         <input type="email" class="form-control" id="email" name="email"
                                             value="{{ $supplier->email }}">
                                         @error('email')
@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <label for="phone" class="form-label">Phone</label>
+                                        <label for="phone" class="form-label">Số điện thoại (<span class="text-danger">*</span>)</label>
                                         <input type="text" class="form-control" id="phone" name="phone"
                                             value="{{ $supplier->phone }}">
                                         @error('phone')
@@ -72,7 +72,7 @@
                                         @enderror
                                     </div>
                                     <div class="mt-3">
-                                        <label for="address" class="form-label">Address</label>
+                                        <label for="address" class="form-label">Địa chỉ (<span class="text-danger">*</span>)</label>
                                         <input type="text" class="form-control" id="address" name="address"
                                             value="{{ $supplier->address }}">
                                         @error('address')
@@ -93,7 +93,8 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header align-items-center d-flex">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary me-2">Thêm mới</button>
+                        <a href="{{ route('admin.suppliers.index') }}" class="btn btn-success">Quay lại</a>
                     </div><!-- end card header -->
                 </div>
             </div>
