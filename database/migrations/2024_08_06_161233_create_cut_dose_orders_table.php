@@ -15,10 +15,11 @@ return new class extends Migration
         Schema::create('cut_dose_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Disease::class)->constrained();
-            $table->unsignedBigInteger('weight')->comment('cân nặng');
+            $table->integer('weight')->comment('cân nặng');
             $table->unsignedBigInteger('age_min');
             $table->unsignedBigInteger('age_max');
             $table->boolean('gender');
+            $table->softDeletes();
             $table->timestamps();
 
         });

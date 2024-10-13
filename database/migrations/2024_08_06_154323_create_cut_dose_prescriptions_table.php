@@ -17,9 +17,10 @@ return new class extends Migration
             $table->foreignIdFor(Disease::class)->constrained();
             $table->string('name_hospital', 50)->comment('tên_bệnh_viện');
             $table->string('name_doctor', 50);
-            $table->date('age');
+            $table->integer('age');
             $table->string('phone_doctor');
             $table->double('total');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

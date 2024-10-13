@@ -80,6 +80,7 @@ class CutDosePrescriptionController extends Controller
                 ->with('success', 'Thêm đơn thuốc thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
+            dd($exception->getMessage());
             Log::error('Lỗi thêm đơn thuốc ' . $exception->getMessage());
             return back()->with('error', 'Lỗi thêm đơn thuốc');
         }
@@ -115,5 +116,28 @@ class CutDosePrescriptionController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function getRestore()
+    {
+        $data = CutDosePrescription::onlyTrashed()->get();
+        return view('admin.cutDosePrescription.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $cutDosePrescriptionsIds = $request->input('ids');
+            if ($cutDosePrescriptionsIds) {
+                Medicine::onlyTrashed()->whereIn('id', $cutDosePrescriptionsIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

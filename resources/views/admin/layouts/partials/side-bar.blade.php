@@ -33,7 +33,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
-                
+
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.dashboard') }}" role="button"
@@ -387,9 +387,60 @@
                     </div>
                 </li>
                 <li class="nav-item">
+
                     <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="ri-pages-line"></i> <span data-key="t-pages">Cấu hình thông báo</span>
+
+                    <a class="nav-link menu-link" href="#importorder" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="importorder">
+                        <i class="ri-store-2-fill"></i> <span data-key="t-apps"> Nhập kho thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="importorder">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.importorder.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.importorder.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#prescriptions" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="prescriptions">
+                        <i class="bx bx-receipt"></i> <span data-key="t-apps">Đơn thuốc</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="prescriptions">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.prescriptions.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Bán hàng
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.prescriptions.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('admin.restore.categories') }}">
+                        <i class="bx bxs-shapes"></i> <span data-key="t-apps">Thùng rác</span>
+
                     </a>
                 </li>
             </ul>

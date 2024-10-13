@@ -34,7 +34,7 @@ class Medicine extends Model
     }
     public function CutDoseOrderDetails()
     {
-        return $this->belongsTo(CutDoseOrderDetails::class);
+        return $this->hasMany(CutDoseOrderDetails::class);
     }
     public function storage()
     {

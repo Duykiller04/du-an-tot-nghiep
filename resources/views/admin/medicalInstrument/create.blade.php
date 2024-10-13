@@ -42,7 +42,8 @@
                         <div class="card-body">
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Mã dụng cụ</label>
+                                <label class="form-label" for="name">Mã dụng cụ <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="text"
                                     class="form-control @error('medicine.medicine_code') is-invalid @enderror"
                                     id="name" name="medicine[medicine_code]"
@@ -53,7 +54,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Số đăng ký</label>
+                                <label class="form-label" for="name">Số đăng ký <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="number"
                                     class="form-control @error('medicine.registration_number') is-invalid @enderror"
                                     id="name" name="medicine[registration_number]"
@@ -64,7 +66,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Tên dụng cụ</label>
+                                <label class="form-label" for="name">Tên dụng cụ <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="text" class="form-control @error('medicine.name') is-invalid @enderror"
                                     id="name" name="medicine[name]" value="{{ old('medicine.name') }}">
                                 @error('medicine.name')
@@ -73,7 +76,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Giá nhập</label>
+                                <label class="form-label" for="name">Giá nhập <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="number"
                                     class="form-control @error('medicine.price_import') is-invalid @enderror" id="name"
                                     name="medicine[price_import]" value="{{ old('medicine.price_import') }}">
@@ -83,7 +87,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Giá bán</label>
+                                <label class="form-label" for="name">Giá bán <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="number"
                                     class="form-control @error('medicine.price_sale') is-invalid @enderror" id="name"
                                     name="medicine[price_sale]" value="{{ old('medicine.price_sale') }}">
@@ -110,15 +115,17 @@
                                 <div class="row productNew mt-3">
                                     <div class="row mb-3 form-item mt-3">
                                         <div class="col-5">
-                                            <label class="form-label" for="name">Số lượng</label>
+                                            <label class="form-label" for="name">Số lượng <span
+                                                    class="text-danger">(*)</span></label>
                                             <input type="number" class="form-control" name="so_luong[]">
                                         </div>
                                         <div class="col-5">
-                                            <label for="">Đơn vị</label>
+                                            <label for="">Đơn vị <span class="text-danger">(*)</span></label>
                                             <select name="don_vi[]" class="form-control">
                                                 <option value="">Chọn đơn vị</option>
                                                 @foreach ($donvis as $donvi)
-                                                    <option value="{{ $donvi->id }}" data-parent="{{ $donvi->parent_id }}">{{ $donvi->name }}</option>
+                                                    <option value="{{ $donvi->id }}"
+                                                        data-parent="{{ $donvi->parent_id }}">{{ $donvi->name }}</option>
                                                 @endforeach
                                             </select>
 
@@ -126,7 +133,8 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="packaging_specification">Quy cách đóng gói</label>
+                                    <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
+                                            class="text-danger">(*)</span></label>
                                     <input type="text"
                                         class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
                                         id="packaging_specification" name="medicine[packaging_specification]"
@@ -172,7 +180,8 @@
 
                                             // Reset tất cả các ô chọn sau ô đã thay đổi
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
-                                                allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                                allSelects[i].innerHTML =
+                                                    '<option value="">Chọn đơn vị</option>'; // Reset các option
                                                 allSelects[i].value = ''; // Reset giá trị ô chọn
                                             }
 
@@ -188,15 +197,15 @@
                                         const newFieldHTML = `
                                             <div class="row mb-3 form-item mt-3">
                                                 <div class="col-5">
-                                                    <label for="">Số lượng</label>
+                                                    <label for="">Số lượng <span class="text-danger">(*)</span></label>
                                                     <input type="number" name="so_luong[]" class="form-control">
                                                 </div>
                                                 <div class="col-5">
-                                                    <label for="">Đơn vị</label>
+                                                    <label for="">Đơn vị <span class="text-danger">(*)</span></label>
                                                     <select name="don_vi[]" class="form-control">
                                                         <option value="">Chọn đơn vị</option>
                                                         ${donvis.map(donvi => `<option value="${donvi.id}" data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
-                                                    </select>
+                                                    </select>             
                                                 </div>
                                                 <div class="col-2">
                                                     <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
@@ -216,12 +225,7 @@
                                         }
                                     });
                                 });
-                                </script>
-
-
-
-
-
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -231,7 +235,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Nhà cung cấp</h5>
+                            <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <select id="supplier" name="supplier_id[]" class="js-example-basic-multiple"
@@ -249,7 +253,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Danh mục dụng cụ</h5>
+                            <h5 class="card-title mb-0">Danh mục dụng cụ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <select class="form-select" id="medicine[category_id]" name="medicine[category_id]">
@@ -266,7 +270,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Kho lưu trữ</h5>
+                            <h5 class="card-title mb-0">Kho lưu trữ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <select class="form-select" id="storage_id" name="storage_id">
@@ -297,7 +301,7 @@
 
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Xuất xứ</h5>
+                            <h5 class="card-title mb-0">Xuất xứ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <input type="text" class="form-control @error('medicine.origin') is-invalid @enderror"
@@ -314,8 +318,7 @@
                         </div>
                         <div class="card-body">
                             <label class="form-label" for="temperature">Nhiệt độ (Độ C)</label>
-                            <input type="number"
-                                class="form-control @error('medicine.temperature') is-invalid @enderror"
+                            <input type="number" class="form-control @error('medicine.temperature') is-invalid @enderror"
                                 id="temperature" name="medicine[temperature]">
                             @error('medicine.temperature')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
@@ -323,8 +326,7 @@
                         </div>
                         <div class="card-body">
                             <label class="form-label" for="moisture">Độ ẩm (%)</label>
-                            <input type="number"
-                                class="form-control @error('medicine.moisture') is-invalid @enderror"
+                            <input type="number" class="form-control @error('medicine.moisture') is-invalid @enderror"
                                 id="moisture" name="medicine[moisture]">
                             @error('medicine.moisture')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
@@ -334,7 +336,7 @@
 
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ngày hết hạn</h5>
+                            <h5 class="card-title mb-0">Ngày hết hạn <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <input type="date"
@@ -374,28 +376,6 @@
     {{-- select2 --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script>
-        ClassicEditor.create(document.querySelector('#symptom'))
-            .catch(error => {
-                console.error(error);
-            });
-
-        ClassicEditor.create(document.querySelector('#dosage'))
-            .catch(error => {
-                console.error(error);
-            });
-
-        ClassicEditor.create(document.querySelector('#active_ingredient'))
-            .catch(error => {
-                console.error(error);
-            });
-
-        ClassicEditor.create(document.querySelector('#concentration'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
 
     <script>
         $(document).ready(function() {

@@ -4,25 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CutDoseOrder extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'disease_id ',
+        'disease_id',
+        'customer_id',
         'weight',
-        'age_min',
-        'age_max',
+        'age',
         'gender',
+        'customer_name',
+        'phone',
+        'address',
     ];
 
     public function disease()
     {
         return $this->belongsTo(Disease::class);
     }
-    public function cutDoseOrderDetail()
+    public function cutDoseOrderDetails()
     {
-        return $this->hasOne(CutDoseOrderDetails::class);
+        return $this->hasMany(CutDoseOrderDetails::class);
     }
 }
