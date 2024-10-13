@@ -70,7 +70,7 @@
                                 </div>
                                 <table id="example"
                                     class="table table-bordered dt-responsive nowrap table-striped align-middle"
-                                    style="width:100%">
+                                    style="width: 100%;" aria-describedby="buttons-datatables_info">
                                     <thead>
                                         <tr>
                                             <th>ID</th>

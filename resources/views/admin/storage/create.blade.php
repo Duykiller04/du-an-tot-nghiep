@@ -34,7 +34,7 @@
                         <div class="live-preview">
                             <div class="row gy-4">
                                 <div class="mt-3">
-                                    <label for="name" class="form-label">Tên kho</label>
+                                    <label for="name" class="form-label">Tên kho <span style="color: rgb(171, 24, 24);">*</span></label>
                                     <input type="text" name="name" id="name"
                                         class="form-control @error('name')is-invalid @enderror" value="{{ old('name') }}">
                                     <div class="invalid-feedback">
@@ -45,7 +45,7 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <label for="location" class="form-label">Địa chỉ</label>
+                                    <label for="location" class="form-label">Địa chỉ <span style="color: rgb(171, 24, 24);">*</span></label>
                                     <input type="text" name="location" id="location"
                                         class="form-control @error('location')is-invalid @enderror"
                                         value="{{ old('location') }}">
@@ -68,8 +68,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header align-items-center d-flex">
+                    <div class="card-header align-items-center d-flex gap-2">
                         <button class="btn btn-primary" type="submit">Save</button>
+                        <a class="btn btn-success" href="{{ route('admin.storage.index') }}" class="btn btn-success mb-3">Quay lại</a>
                     </div><!-- end card header -->
                 </div>
             </div>
