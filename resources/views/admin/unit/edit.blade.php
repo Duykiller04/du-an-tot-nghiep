@@ -29,7 +29,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card vh-100">
                 <div class="card-body">
                     <a class="btn btn-primary mb-3" href="{{ route('admin.units.index') }}">Quay lại</a>
                     <form action="{{ route('admin.units.update', $unit->id) }}" method="POST" enctype="multipart/form-data">

@@ -26,13 +26,13 @@
     <!-- end page title -->
 
     <div class="row">
-        <div class="col-lg-8">
-            <div class="card">
+        <div class="col-lg-12">
+            <div class="card vh-100">
                 <div class="card-body">
                     <form action="{{ route('admin.units.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label" for="unit-name-input">Tên đơn vị</label>
+                            <label class="form-label" for="unit-name-input">Tên đơn vị (<span class="text-danger">*</span>)</label>
                             <input type="text" name="name" class="form-control" id="unit-name-input" placeholder="Nhập tên đơn vị" value="{{ old('name') }}">
                             @error('name')
                             <div class="text-danger mt-2">{{ $message }}</div>

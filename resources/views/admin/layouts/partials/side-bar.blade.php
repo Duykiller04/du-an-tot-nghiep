@@ -387,6 +387,11 @@
                     </div>
                 </li>
                 <li class="nav-item">
+
+                    <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="ri-pages-line"></i> <span data-key="t-pages">Cấu hình thông báo</span>
+
                     <a class="nav-link menu-link" href="#importorder" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="importorder">
                         <i class="ri-store-2-fill"></i> <span data-key="t-apps"> Nhập kho thuốc</span>
@@ -435,6 +440,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.restore.categories') }}">
                         <i class="bx bxs-shapes"></i> <span data-key="t-apps">Thùng rác</span>
+
                     </a>
                 </li>
             </ul>

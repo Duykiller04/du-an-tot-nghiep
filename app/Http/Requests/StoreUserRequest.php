@@ -24,48 +24,46 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:15|min:10',
-            'address' => 'required|string',
-            'birth' => 'required|date_format:Y-m-d',
+            'phone' => 'required|string|max:10|min:10|unique:users,phone',
+            'address' => 'nullable|string|max:255',
+            'birth' => 'nullable|date_format:Y-m-d',
             'image' => 'image|max:2048',
             'description' => 'nullable|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
-
             'type' => ['required', 'in:' . User::TYPE_ADMIN . ',' . User::TYPE_STAFF],
         ];
     }
     public function messages()
     {
         return [
-            'name.required' => 'Trường này là bắt buộc phải được điền',
+            'name.required' => 'Tên người dùng này là bắt buộc phải được điền',
             'name.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
             'name.max' => 'Giá trị của trường này không được vượt quá 255 ký tự.',
 
-            'phone.required' => 'Trường này là bắt buộc phải được điền',
-            'phone.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
-            'phone.max' => 'Giá trị của trường này không được vượt quá 15 ký tự.',
-            'phone.min' => 'Giá trị của trường này tối thiểu 10 ký tự.',
+            'phone.required' => 'Số này bắt buộc phải được điền',
+            'phone.string' => 'Số này phải là một chuỗi ký tự',
+            'phone.max' => 'Số này không được vượt quá 10 ký tự.',
+            'phone.min' => 'Số này tối thiểu 10 ký tự.',
+            'phone.unique' => 'Số điện thoại đã tồn tại vui lòng nhập số khác',
 
-            'address.required' => 'Trường này là bắt buộc phải được điền',
-            'address.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
+            'address.string' => 'địa chỉ phải là chuỗi ký tự hợp lệ.',
+            'address.max' => 'địa chỉ không được vượt quá 255 ký tự.',
 
-            'birth.required' => 'Trường này là bắt buộc phải được điền',
-            'birth.date_format' => 'Giá trị của trường này phải là một ngày tháng năm và ở định dạng "Y-m-d" (ví dụ: "2023-08-15")',
+            'birth.date_format' => 'Ngày sinh này phải là một ngày tháng năm và ở định dạng "Y-m-d" (ví dụ: "2023-08-15")',
 
-            'image.image' => 'Giá trị của trường này phải là một tệp hình ảnh (ảnh).',
+            'image.image' => 'Ảnh này phải là một tệp hình ảnh (ảnh).',
             'image.max' => ' Kích thước tệp hình ảnh không được vượt quá 2MB..',
 
-            'description.string' => 'Giá trị của trường này phải là một chuỗi ký tự',
+            'description.string' => 'Ghi chú của trường này phải là một chuỗi ký tự',
 
+            'email.required' => 'Email này là bắt buộc phải được điền.',
+            'email.email' => 'Email này phải là một địa chỉ email hợp lệ..',
+            'email.unique' => 'Email này phải là duy nhất trong bảng "users" (tức là không được trùng với email của người dùng khác).',
 
-            'email.required' => ' Trường này là bắt buộc phải được điền.',
-            'email.email' => '  Giá trị của trường này phải là một địa chỉ email hợp lệ..',
-            'email.unique' => ' Giá trị của trường này phải là duy nhất trong bảng "users" (tức là không được trùng với email của người dùng khác).',
-
-            'password.required' => 'Trường này là bắt buộc phải được điền.',
-            'password.min' => ' Giá trị của trường này phải có ít nhất 8 ký tự.',
-            'password.confirmed' => 'password không giống nhau vui lòng nhập lại.',
+            'password.required' => 'Mật khẩu này là bắt buộc phải được điền.',
+            'password.min' => ' Mật khẩu của trường này phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Mật khẩu không giống nhau vui lòng nhập lại.',
 
             'type' => ' Type',
         ];
