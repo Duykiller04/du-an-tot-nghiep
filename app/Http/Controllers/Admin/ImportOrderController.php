@@ -115,7 +115,7 @@ class ImportOrderController extends Controller
         'note' => 'nullable|string|max:255',
         'details' => 'required|array',
     ]);
-
+    dd($request->all());
     $data = $request->all();
 
     // Khởi động transaction

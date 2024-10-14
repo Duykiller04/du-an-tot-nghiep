@@ -20,7 +20,6 @@
             </div>
         </div>
     </div>
-
     <form action="{{ route('admin.storage.update', $storage) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -44,8 +43,6 @@
                                         @enderror
                                     </div>
                                 </div>
-
-
                                 <div class="mt-3">
                                     <label for="location" class="form-label">Địa chỉ <span
                                             class="text-danger">*</span></label>
@@ -73,11 +70,11 @@
 
             <!--end col-->
         </div>
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header align-items-center d-flex">
+                        <a class="btn btn-success" href="{{ route('admin.storage.index') }}" class="btn btn-success mb-3">Quay lại</a>
                         <button class="btn btn-primary" type="submit">Save</button>
                     </div><!-- end card header -->
                 </div>

@@ -187,7 +187,7 @@ Danh sách khách hàng
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
@@ -197,7 +197,7 @@ Danh sách khách hàng
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 9
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
@@ -207,7 +207,7 @@ Danh sách khách hàng
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 9
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
@@ -217,7 +217,7 @@ Danh sách khách hàng
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 9; // Ví dụ: Nếu cột `action` là cột số 9
+                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         }
