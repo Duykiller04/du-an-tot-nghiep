@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportOrderRequest;
 use App\Http\Requests\StoreImportOrderRequest;
 use App\Models\Category;
 use App\Models\ImportOrder;
@@ -101,21 +102,8 @@ class ImportOrderController extends Controller
      */
     // Phương thức lưu đơn nhập kho
 
-    public function store(Request $request)
+    public function store(ImportOrderRequest $request)
 {
-    // dd($request->all());
-    // Validate dữ liệu đầu vào
-    $request->validate([
-        'user_id' => 'required|integer',
-        'storage_id' => 'required|integer',
-        'supplier_id' => 'required|integer', // Đảm bảo là số nguyên
-        'price_paid' => 'required|numeric',
-        'still_in_debt' => 'required|numeric',
-        'status' => 'required|string|max:255',
-        'note' => 'nullable|string|max:255',
-        'details' => 'required|array',
-    ]);
-
     $data = $request->all();
 
     // Khởi động transaction

@@ -33,17 +33,21 @@ class StoreProductRequest extends FormRequest
             'medicine.dosage' => 'nullable|string|max:100',
             'medicine.administration_route' => 'nullable|string|max:50',
             'medicine.origin' => 'required|string|max:50',
-            'medicine.expiration_date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'medicine.temperature' => 'nullable|numeric|between:-50,50',
             'medicine.moisture' => 'nullable|numeric|between:0,100',
 
             'so_luong.*' => 'required|integer|min:1',
-            'don_vi.*' => 'required|integer|exists:units,id',
-            'supplier_id.*' => 'required|integer|exists:suppliers,id',
+
+            'don_vi.*' => 'required|exists:units,id|distinct',
+
+            'supplier_id' => 'required|array',
+            'supplier_id.*' => 'exists:suppliers,id',
 
             'medicine.category_id' => 'required|integer|exists:categories,id',
             'storage_id' => 'required|integer|exists:storages,id',
+
+            'medicine.expiration_date' => 'required|date|after_or_equal:' . now()->format('Y-m-d'),
         ];
     }
 
@@ -89,23 +93,20 @@ class StoreProductRequest extends FormRequest
             'medicine.origin.string' => 'Xuất xứ phải là một chuỗi ký tự.',
             'medicine.origin.max' => 'Xuất xứ không được vượt quá 50 ký tự.',
 
-            'medicine.expiration_date.required' => 'Ngày hết hạn là bắt buộc.',
-            'medicine.expiration_date.date' => 'Ngày hết hạn phải là một ngày hợp lệ.',
-
             'image.image' => 'Tệp tải lên phải là một ảnh.',
             'image.mimes' => 'Ảnh phải có định dạng: jpeg, png, jpg, gif.',
             'image.max' => 'Ảnh không được vượt quá 2MB.',
 
-            'so_luong.*.required' => 'Số lượng là bắt buộc.',
-            'so_luong.*.integer' => 'Số lượng phải là một số nguyên.',
-            'so_luong.*.min' => 'Số lượng phải lớn hơn hoặc bằng 1.',
+            'so_luong.*.required' => 'Vui lòng nhập số lượng.',
+            'so_luong.*.integer' => 'Số lượng phải là số nguyên.',
+            'so_luong.*.min' => 'Số lượng phải lớn hơn 0.',
+        
+            'don_vi.*.required' => 'Vui lòng chọn đơn vị.',
+            'don_vi.*.exists' => 'Đơn vị đã chọn không hợp lệ.',
+            'don_vi.*.distinct' => 'Các đơn vị không được trùng lặp.',
 
-            'don_vi.*.required' => 'Đơn vị là bắt buộc.',
-            'don_vi.*.integer' => 'Đơn vị phải là một số nguyên.',
-            'don_vi.*.exists' => 'Đơn vị không tồn tại.',
-
-            'supplier_id.*.required' => 'Nhà cung cấp là bắt buộc.',
-            'supplier_id.*.integer' => 'Nhà cung cấp phải là một số nguyên.',
+            'supplier_id.required' => 'Bạn phải chọn ít nhất một nhà cung cấp.',
+            'supplier_id.array' => 'Nhà cung cấp không hợp lệ.',
             'supplier_id.*.exists' => 'Nhà cung cấp không tồn tại.',
 
             'medicine.category_id.required' => 'Danh mục thuốc là bắt buộc.',
@@ -121,6 +122,10 @@ class StoreProductRequest extends FormRequest
 
             'medicine.moisture.numeric' => 'Độ ẩm phải là một số.',
             'medicine.moisture.between' => 'Độ ẩm phải trong khoảng từ 0 đến 100%.',
+
+            'medicine.expiration_date.required' => 'Ngày hết hạn là bắt buộc.',
+            'medicine.expiration_date.date' => 'Ngày hết hạn phải là một ngày hợp lệ.',
+            'medicine.expiration_date.after_or_equal' => 'Ngày hết hạn phải là ngày hôm nay hoặc trong tương lai.',
         ];
     }
 }

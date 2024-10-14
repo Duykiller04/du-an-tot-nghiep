@@ -97,8 +97,6 @@
                                 @enderror
                             </div>
 
-
-
                         </div>
                     </div>
                     <div class="card">
@@ -114,24 +112,35 @@
                             <div class="mb-3">
                                 <div class="row productNew mt-3">
                                     <div class="row mb-3 form-item mt-3">
+                                        @error('so_luong.*')
+                                            <span class="mb-3 alert alert-danger">{{ $message }}</span>
+                                        @enderror
+                                        @error('don_vi.*')
+                                            <span class="mb-3 alert alert-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                         <div class="col-5">
                                             <label class="form-label" for="name">Số lượng <span
                                                     class="text-danger">(*)</span></label>
-                                            <input type="number" class="form-control" name="so_luong[]">
+                                            <input type="number" class="form-control" name="so_luong[]"
+                                                value="{{ old('so_luong.0') }}">
                                         </div>
+
                                         <div class="col-5">
                                             <label for="">Đơn vị <span class="text-danger">(*)</span></label>
                                             <select name="don_vi[]" class="form-control">
                                                 <option value="">Chọn đơn vị</option>
                                                 @foreach ($donvis as $donvi)
                                                     <option value="{{ $donvi->id }}"
-                                                        data-parent="{{ $donvi->parent_id }}">{{ $donvi->name }}</option>
+                                                        @if (old('don_vi.0') == $donvi->id) selected @endif>
+                                                        {{ $donvi->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
-
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="mb-3">
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
                                             class="text-danger">(*)</span></label>
@@ -152,6 +161,9 @@
                                     const productNew = document.querySelector('.productNew');
 
                                     const donvis = @json($donvis);
+                                    const oldQuantities = @json(old('so_luong', []));
+                                    const oldUnits = @json(old('don_vi', []));
+
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
                                             acc[donvi.parent_id] = [];
@@ -194,17 +206,18 @@
                                     });
 
                                     btnAdd.addEventListener('click', function() {
+                                        const index = productNew.querySelectorAll('.form-item').length; // Lấy chỉ số mới cho trường
                                         const newFieldHTML = `
                                             <div class="row mb-3 form-item mt-3">
                                                 <div class="col-5">
                                                     <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                    <input type="number" name="so_luong[]" class="form-control">
+                                                    <input type="number" name="so_luong[]" class="form-control" value="${oldQuantities[index] || ''}">
                                                 </div>
                                                 <div class="col-5">
                                                     <label for="">Đơn vị <span class="text-danger">(*)</span></label>
                                                     <select name="don_vi[]" class="form-control">
                                                         <option value="">Chọn đơn vị</option>
-                                                        ${donvis.map(donvi => `<option value="${donvi.id}" data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
+                                                        ${donvis.map(donvi => `<option value="${donvi.id}" ${oldUnits[index] == donvi.id ? 'selected' : ''} data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
                                                     </select>             
                                                 </div>
                                                 <div class="col-2">
@@ -224,8 +237,18 @@
                                             }
                                         }
                                     });
+
+                                    // Giữ lại giá trị cho các trường đã tạo sẵn
+                                    oldQuantities.forEach((quantity, index) => {
+                                        if (index > 0) {
+                                            btnAdd.click(); // Tạo trường mới cho mỗi giá trị cũ
+                                        }
+                                        productNew.querySelectorAll('input[name="so_luong[]"]')[index].value = quantity;
+                                        productNew.querySelectorAll('select[name="don_vi[]"]')[index].value = oldUnits[index];
+                                    });
                                 });
                             </script>
+
                         </div>
                     </div>
                 </div>
@@ -238,13 +261,16 @@
                             <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <select id="supplier" name="supplier_id[]" class="js-example-basic-multiple"
+                            <select id="supplier" name="supplier_id[]"
+                                class="js-example-basic-multiple @error('supplier_id') is-invalid @enderror"
                                 multiple="multiple">
                                 @foreach ($suppliers as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" @if (in_array($item->id, old('supplier_id', []))) selected @endif>
+                                        {{ $item->name }}
+                                    </option>
                                 @endforeach
                             </select>
-                            @error('supplier_id.*')
+                            @error('supplier_id')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
@@ -256,10 +282,14 @@
                             <h5 class="card-title mb-0">Danh mục dụng cụ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <select class="form-select" id="medicine[category_id]" name="medicine[category_id]">
+                            <select class="form-select @error('medicine.category_id') is-invalid @enderror"
+                                id="medicine[category_id]" name="medicine[category_id]">
                                 <option value="">-- Chọn danh mục --</option>
                                 @foreach ($categories as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}"
+                                        @if (old('medicine.category_id') == $item->id) selected @endif>
+                                        {{ $item->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('medicine.category_id')
@@ -273,10 +303,14 @@
                             <h5 class="card-title mb-0">Kho lưu trữ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <select class="form-select" id="storage_id" name="storage_id">
+                            <select class="form-select @error('storage_id') is-invalid @enderror" id="storage_id"
+                                name="storage_id">
                                 <option value="">-- Chọn kho lưu trữ --</option>
                                 @foreach ($storages as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}"
+                                        @if (old('storage_id') == $item->id) selected @endif>
+                                        {{ $item->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('storage_id')
@@ -318,8 +352,9 @@
                         </div>
                         <div class="card-body">
                             <label class="form-label" for="temperature">Nhiệt độ (Độ C)</label>
-                            <input type="number" class="form-control @error('medicine.temperature') is-invalid @enderror"
-                                id="temperature" name="medicine[temperature]">
+                            <input type="number"
+                                class="form-control @error('medicine.temperature') is-invalid @enderror" id="temperature"
+                                name="medicine[temperature]" value="{{ old('medicine.temperature') }}">
                             @error('medicine.temperature')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
@@ -327,7 +362,7 @@
                         <div class="card-body">
                             <label class="form-label" for="moisture">Độ ẩm (%)</label>
                             <input type="number" class="form-control @error('medicine.moisture') is-invalid @enderror"
-                                id="moisture" name="medicine[moisture]">
+                                id="moisture" name="medicine[moisture]" value="{{ old('medicine.moisture') }}">
                             @error('medicine.moisture')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
@@ -341,7 +376,8 @@
                         <div class="card-body">
                             <input type="date"
                                 class="form-control @error('medicine.expiration_date') is-invalid @enderror"
-                                id="expiration_date" name="medicine[expiration_date]">
+                                id="expiration_date" name="medicine[expiration_date]"
+                                value="{{ old('medicine.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
                             @error('medicine.expiration_date')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
