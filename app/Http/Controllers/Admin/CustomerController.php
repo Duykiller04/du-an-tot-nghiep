@@ -74,7 +74,9 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(Customer $customer) {
+        return view('admin.customer.show',compact('customer'));
+    }
 
     /**
      * Show the form for editing the specified resource.
