@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Disease;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
@@ -192,5 +193,26 @@ class DiseaseController extends Controller
         }
         $item->delete();
         return redirect()->route('admin.diseases.index')->with('success', 'Bệnh đã được xóa thành công.');
+    }
+    public function getRestore()
+    {
+        $data = Disease::onlyTrashed()->get();
+        return view('admin.diseases.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $diseaseIds = $request->input('ids');
+            if ($diseaseIds) {
+                Disease::onlyTrashed()->whereIn('id', $diseaseIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

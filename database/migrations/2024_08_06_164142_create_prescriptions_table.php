@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->id();
             $table->double('total');
-            $table->date('age');
+            $table->integer('age');
             $table->enum('type_sell', ['Bán lẻ', 'bán giá nhập', 'Trả lại nhà cung cấp', 'xuất', 'hủy'])->comment('loại_bán');
             $table->string('name_customer', 50);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

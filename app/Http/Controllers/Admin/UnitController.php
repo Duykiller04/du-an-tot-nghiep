@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class UnitController extends Controller
@@ -108,5 +109,26 @@ class UnitController extends Controller
         $unit->delete();
 
         return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được xóa thành công');
+    }
+    public function getRestore()
+    {
+        $data = Unit::onlyTrashed()->get();
+        return view('admin.unit.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $unitIds = $request->input('ids');
+            if ($unitIds) {
+                Unit::onlyTrashed()->whereIn('id', $unitIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }

@@ -20,7 +20,7 @@ class CategoryController extends Controller
             $query = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
 
             return DataTables::of($query)
-                ->addColumn('details-control', function() {
+                ->addColumn('details-control', function () {
                     return '';
                 })
                 ->addColumn('action', function ($row) {
@@ -35,7 +35,7 @@ class CategoryController extends Controller
                         </form>
                     ';
                 })
-                ->addColumn('children', function($row) {
+                ->addColumn('children', function ($row) {
                     $children = $row->children;
                     foreach ($children as $child) {
                         $child->edit_url = route('admin.catalogues.edit', $child->id);
@@ -55,8 +55,20 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $catalogues = Category::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->get();
+        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
 
+        // $categories = Category::all();
+
+        // foreach ($categories as $category) {
+        //     echo "Category: " . $category->name . "\n";
+        //     $ancestors = $category->ancestors();
+        //     if ($ancestors->isNotEmpty()) {
+        //         echo "Ancestors: " . implode(' -> ', $ancestors->pluck('name')->toArray()) . "\n";
+        //     } else {
+        //         echo "No ancestors\n";
+        //     }
+        // }
+        // return 0;
         return view('admin.catalogue.add', compact('catalogues'));
     }
 
@@ -102,7 +114,7 @@ class CategoryController extends Controller
     {
 
         $catalogue = DB::table('categories')->where('id', $id)->first();
-        $catalogues = Category::query()->with('children')->orderBy('id','desc')->whereNull('parent_id')->whereNot('id',$id)->get();
+        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->whereNot('id', $id)->get();
         if (!$catalogue) {
             return redirect()->route('admin.catalogues.index')->with('error', 'Danh mục không tồn tại');
         }
@@ -152,7 +164,28 @@ class CategoryController extends Controller
         //Medicine::where('catalogue_id', $catalogue->id)->update(['catalogue_id' => 1]);
 
 
-        DB::table('categories')->where('id',$id)->delete();
+        DB::table('categories')->where('id', $id)->delete();
         return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được xóa thành công (Những loại thuốc đã xóa sẽ được chuyển qua danh mục: Không xác định)');
+    }
+    public function getRestore()
+    {
+        $data = Category::onlyTrashed()->get();
+        return view('admin.catalogue.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $categoryIds = $request->input('ids');
+            if ($categoryIds) {
+                Category::onlyTrashed()->whereIn('id', $categoryIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 }
