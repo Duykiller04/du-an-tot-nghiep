@@ -182,6 +182,7 @@
     <!-- container-fluid -->
 
 @section('js')
+
     <script>
         var detailCount = {{ max(count(old('details', [1])), session('detail_count', 1)) }};
 
@@ -196,6 +197,7 @@
             addRemoveButtonEvent(newDetail.querySelector('.btn-remove-detail'));
             detailCount++;
         });
+
 
         function createDetailElement(index) {
             var newDetail = document.createElement('div');
@@ -233,12 +235,18 @@
             return newDetail;
         }
 
-        function addRemoveButtonEvent(button) {
-            button.addEventListener('click', function() {
-                this.closest('.detail-row').remove();
-                detailCount--;
-            });
+
+    function addRemoveButtonEvent(button) {
+        button.addEventListener('click', function() {
+            if (detailCount > 1) {
+            this.closest('.detail-row').remove();
+            detailCount--;
+        } else {
+            alert('Phiếu kiểm kho phải có ít nhất một loại thuốc.');
         }
+        });
+    }
+
 
         document.querySelectorAll('.btn-remove-detail').forEach(addRemoveButtonEvent);
     </script>

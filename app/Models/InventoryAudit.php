@@ -27,8 +27,5 @@ class InventoryAudit extends Model
         return $this->belongsTo(Storage::class, 'storage_id', 'id');
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+  
 }
