@@ -24,8 +24,8 @@ class UpdateCustomerRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
-            'address' => ['required', 'string'], 
-            'email' => ['required', 'email'],
+            'address' => ['required', 'string','max:255'], 
+            'email' => ['required', 'email','max:255'],
             'age' => ['required', 'numeric', 'min:0', 'max:150'],
             'weight' => ['required', 'numeric', 'min:0', 'max:200'],
         ];
@@ -34,7 +34,7 @@ class UpdateCustomerRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Trường tên là bắt buộc.',
+           'name.required' => 'Trường tên là bắt buộc.',
             'name.string' => 'Tên phải là một chuỗi ký tự.',
             'name.max' => 'Tên không được vượt quá 255 ký tự.',
 
@@ -42,21 +42,24 @@ class UpdateCustomerRequest extends FormRequest
             'phone.regex' => 'Số điện thoại không đúng định dạng.',
 
             'address.required' => 'Trường địa chỉ là bắt buộc.',
-            'address.integer' => 'Địa chỉ phải là một số nguyên.',
-            'address.min' => 'Địa chỉ phải là số lớn hơn hoặc bằng 1.',
+            'address.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+            'address.string' => 'Địa chỉ phải là một chuỗi ký tự.',
 
             'email.required' => 'Trường email là bắt buộc.',
             'email.email' => 'Trường email không đúng đinh dạng.',
+            'email.max' => 'email không được vượt quá 255 ký tự.',
 
             'age.required' => 'Trường tuổi là bắt buộc.',
             'age.integer' => 'Tuổi phải là một số nguyên.',
-            'age.min' => 'Tuổi phải lớn hơn hoặc bằng 1.',
-            'age.max' => 'Tuổi không được vượt quá 150.',
+            'age.max' => 'Tuổi không được vượt quá 150 tuổi.',
+            'age.min' => 'Tuổi phải là số lớn hơn hoặc bằng 1.',
+            'age.numeric' => 'Tuổi phải là một số.',
 
             'weight.required' => 'Trường cân nặng là bắt buộc.',
             'weight.numeric' => 'Cân nặng phải là một số.',
-            'weight.min' => 'Tuổi phải lớn hơn hoặc bằng 1.',
             'weight.max' => 'Cân nặng không được vượt quá 200kg.',
+            'weight.min' => 'Cân nặng là số lớn hơn hoặc bằng 1.',
+            'weight.integer' => 'Cân nặng phải là một số nguyên.',
         ];
     }
 }
