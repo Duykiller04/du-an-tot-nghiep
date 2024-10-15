@@ -37,7 +37,7 @@
                              <!-- Nút tổng quát bật/tắt thông báo -->
                              <div class="mb-3 row">
                                 <label for="notification_enabled" class="col-sm-3 col-form-label">Bật/Tắt chế độ thông báo</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-6">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="notification_enabled" name="notification_enabled"
                                                {{ $settings->notification_enabled ? 'checked' : '' }}>
@@ -48,7 +48,7 @@
                             <!-- Số ngày trước khi hết hạn -->
                             <div class="mb-3 row">
                                 <label for="expiration_notification_days" class="col-sm-3 col-form-label">Số ngày thông báo trước khi hết hạn</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-3">
                                     <input type="number" class="form-control" id="expiration_notification_days" name="expiration_notification_days" 
                                            value="{{ $settings->expiration_notification_days }}" required>
                                 </div>

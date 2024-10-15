@@ -7,6 +7,7 @@ use App\Models\Environment;
 use Illuminate\Http\Request;
 use App\Services\WeatherService;
 use App\Exports\EnvironmentsExport;
+use App\Models\Storage;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -21,6 +22,7 @@ class EnvironmentController extends Controller
 
     public function index()
     {
+       
         $environments = Environment::all();
         $location = $this->getMachineLocation(); 
         $weatherData = $this->getWeatherData($location);
@@ -28,6 +30,7 @@ class EnvironmentController extends Controller
         return view('admin.environments.index', [
             'environments' => $environments,
             'weatherData' => $weatherData,
+            
         ]);
     }
 
@@ -38,8 +41,8 @@ class EnvironmentController extends Controller
 
     private function getWeatherData($location)
     {
-        $apiKey = 'd3eb768e20a191025c902daa66b1203d'; // Thay bằng API key thực tế của bạn
-        $encodedLocation = urlencode($location); // Mã hóa tên địa phương để sử dụng trong URL
+        $apiKey = 'd3eb768e20a191025c902daa66b1203d'; 
+        $encodedLocation = urlencode($location); 
         $url = "http://api.openweathermap.org/data/2.5/weather?q={$encodedLocation}&appid={$apiKey}&units=metric";
         
         // Gửi yêu cầu và lấy dữ liệu
@@ -66,9 +69,11 @@ class EnvironmentController extends Controller
     }
     public function create()
     {
+        $storage = Storage::all();
         $location = $this->getMachineLocation(); 
         $weatherData = $this->getWeatherData($location);
-        return view('admin.environments.add',['weatherData' => $weatherData,]);
+        //dd($weatherData);
+        return view('admin.environments.add',['weatherData' => $weatherData,'storages' =>$storage]);
     }
 
     public function store(Request $request)
@@ -76,14 +81,15 @@ class EnvironmentController extends Controller
         // Xác thực dữ liệu
         //dd($request->all());
         $validated = $request->validate([
-            'real_temperature' => 'required|numeric',
-            'real_humidity' => 'required|numeric',
-            
+            'real_temperature' => 'required|numeric|min:-50',
+            'real_humidity' => 'required|numeric|between:10,100',
         ], [
             'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
             'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
+            'real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
+            'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
             'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
-            'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',   
+            'real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
         ]);
 
         // // Gọi API để lấy dữ liệu thời tiết
@@ -92,7 +98,7 @@ class EnvironmentController extends Controller
         $currentTime = Carbon::now('Asia/Ho_Chi_Minh');
         // Tạo bản ghi mới
         Environment::create([
-            'storage_id' => 1,
+            'storage_id' => $request->storage_id,
             'time' => $currentTime,
             'temperature' => $request->temperature,
             'huminity' => $request->huminity,
@@ -114,15 +120,15 @@ class EnvironmentController extends Controller
     {
         // Xác thực dữ liệu
         $validated = $request->validate([
-
-            'real_temperature' => 'required|numeric',
-            'real_humidity' => 'required|numeric',
-
+            'real_temperature' => 'required|numeric|min:-50',
+            'real_humidity' => 'required|numeric|between:10,100',
         ], [
             'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
             'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
-            'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
+            'real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
             'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
+            'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
+            'real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
         ]);
 
         $environment = Environment::findOrFail($id);

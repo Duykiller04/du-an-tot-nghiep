@@ -152,6 +152,7 @@
     var detailCount = {{ max(count(old('details', [1])), session('detail_count', 1)) }};
 
     document.getElementById('btn-add-detail').addEventListener('click', function() {
+        
         if (detailCount >= 5) {
             alert('Chỉ được phép thêm tối đa 5 chi tiết.');
             return;
@@ -201,8 +202,12 @@
 
     function addRemoveButtonEvent(button) {
         button.addEventListener('click', function() {
+            if (detailCount > 1) {
             this.closest('.detail-row').remove();
             detailCount--;
+        } else {
+            alert('Phiếu kiểm kho phải có ít nhất một loại thuốc.');
+        }
         });
     }
 

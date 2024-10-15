@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Disease;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -100,7 +101,7 @@ class DiseaseController extends Controller
         } else {
             $feature_img_path = null; // Hoặc thiết lập đường dẫn mặc định nếu cần
         }
-
+        $currentTime = Carbon::now('Asia/Ho_Chi_Minh');
         // Tạo bản ghi bệnh mới
         Disease::create([
             'disease_name' => $validated['disease_name'],
@@ -108,7 +109,7 @@ class DiseaseController extends Controller
             'treatment_direction' => $validated['treatment_direction'],
             'feature_img' => $feature_img_path,
             'danger_level' => $validated['danger_level'],
-            'verify_date' => now()
+            'verify_date' => $currentTime
         ]);
 
         // Chuyển hướng với thông báo thành công
