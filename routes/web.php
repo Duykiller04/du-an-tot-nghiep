@@ -48,17 +48,14 @@ Route::prefix('admin')
         Route::get('/', function () {
             return view("admin.dashboard");
         })->name('dashboard');
+
         Route::controller(SettingController::class)
-        ->prefix('setting')->as('setting.')
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/export-environments', 'export')->name('export');
-            Route::get('/add', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::put('/update/{id}', 'update')->name('update');
-            Route::delete('/delete/{id}', 'destroy')->name('destroy');
-        });
+            ->prefix('setting')->as('setting.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+            });
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {
@@ -80,6 +77,7 @@ Route::prefix('admin')
                 Route::post('/store', 'store')->name('store');
                 Route::get('/detail/{id}', 'show')->name('show');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
+                Route::get('/download-template', 'downloadTemplate')->name('downloadTemplate');
             });
 
         Route::resource('diseases', DiseaseController::class);
@@ -103,12 +101,12 @@ Route::prefix('admin')
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
 
         Route::resource('storage', StorageController::class);
-      
+
         Route::resource('importorder', ImportOrderController::class);
 
         Route::resource('prescriptions', PrescriptionsController::class);
-      
-        Route::prefix('restore')->group(function(){
+
+        Route::prefix('restore')->group(function () {
             // restore categories
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);

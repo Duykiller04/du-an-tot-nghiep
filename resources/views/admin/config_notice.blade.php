@@ -32,19 +32,25 @@
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.setting.update',$settings->id) }}">
+                        <form method="POST" action="{{ route('admin.setting.update', $settings->id) }}">
                             @csrf
-                             <!-- Nút tổng quát bật/tắt thông báo -->
-                             <div class="mb-3 row">
+                            @method('PUT')
+
+                            <!-- Nút tổng quát bật/tắt thông báo -->
+                            <div class="mb-3 row">
                                 <label for="notification_enabled" class="col-sm-3 col-form-label">Bật/Tắt chế độ thông báo</label>
                                 <div class="col-sm-6">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="notification_enabled" name="notification_enabled"
                                                {{ $settings->notification_enabled ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="notification_enabled">Có</label>
+
+                                        <label class="form-check-label" id="notification_status" for="notification_enabled">
+                                                {{ $settings->notification_enabled ? 'Có' : 'Không' }}
+                                            </label>
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Số ngày trước khi hết hạn -->
                             <div class="mb-3 row">
                                 <label for="expiration_notification_days" class="col-sm-3 col-form-label">Số ngày thông báo trước khi hết hạn</label>
@@ -58,10 +64,15 @@
                             <div class="mb-3 row">
                                 <label for="receive_email_notifications" class="col-sm-3 col-form-label">Nhận email thông báo</label>
                                 <div class="col-sm-9">
+                                    <!-- Hidden input để gửi giá trị 0 nếu checkbox không được chọn -->
+                                    <input type="hidden" id="hidden_email_notifications" name="receive_email_notifications" value="0">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="receive_email_notifications" name="receive_email_notifications"
-                                               {{ $settings->receive_email_notifications ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="receive_email_notifications">Có</label>
+                                               value="1" {{ $settings->receive_email_notifications ? 'checked' : '' }}>
+
+                                        <label class="form-check-label" id="notification_status" for="notification_enabled">
+                                                {{ $settings->receive_email_notifications ? 'Có' : 'Không' }}
+                                            </label>
                                     </div>
                                 </div>
                             </div>
@@ -70,10 +81,15 @@
                             <div class="mb-3 row">
                                 <label for="receive_temperature_warnings" class="col-sm-3 col-form-label">Nhận cảnh báo về nhiệt độ bảo quản</label>
                                 <div class="col-sm-9">
+                                    <!-- Hidden input để gửi giá trị 0 nếu checkbox không được chọn -->
+                                    <input type="hidden" id="hidden_temperature_warnings" name="receive_temperature_warnings" value="0">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="receive_temperature_warnings" name="receive_temperature_warnings"
-                                               {{ $settings->receive_temperature_warnings ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="receive_temperature_warnings">Có</label>
+                                               value="1" {{ $settings->temperature_warning ? 'checked' : '' }}>
+
+                                        <label class="form-check-label" id="notification_status" for="notification_enabled">
+                                                {{ $settings->temperature_warning ? 'Có' : 'Không' }}
+                                            </label>
                                     </div>
                                 </div>
                             </div>
@@ -93,14 +109,46 @@
     </div>
 @endsection
 
-@section('style-libs')
-    <!-- Thêm các tệp CSS nếu cần -->
-@endsection
-
-@section('script-libs')
-    <!-- Thêm các tệp JavaScript nếu cần -->
-@endsection
-
 @section('js')
-    <!-- Các tệp JavaScript khác -->
+    <script>
+       document.getElementById('notification_enabled').addEventListener('change', function () {
+    const isEnabled = this.checked;
+
+    const expirationInput = document.getElementById('expiration_notification_days');
+    const emailCheckbox = document.getElementById('receive_email_notifications');
+    const temperatureCheckbox = document.getElementById('receive_temperature_warnings');
+
+    // Disable trường nhập số ngày nếu tắt thông báo, nhưng không disable các checkbox khác
+    if (!isEnabled) {
+        expirationInput.readonly = true;
+        emailCheckbox.checked = false;
+        temperatureCheckbox.checked = false;
+    } else {
+        expirationInput.disabled = false;
+    }
+});
+
+const checkboxes = ['receive_email_notifications', 'receive_temperature_warnings'];
+
+checkboxes.forEach(id => {
+    document.getElementById(id).addEventListener('change', function () {
+        // Nếu bất kỳ checkbox nào được bật, tự động bật thông báo
+        const notificationEnabled = document.getElementById('notification_enabled');
+        if (this.checked) {
+            notificationEnabled.checked = true;
+            notificationEnabled.dispatchEvent(new Event('change')); // Gọi sự kiện thay đổi để kích hoạt trạng thái mới
+        }
+    });
+});
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    const isEnabled = document.getElementById('notification_enabled').checked;
+    const expirationInput = document.getElementById('expiration_notification_days');
+
+    if (!isEnabled) {
+        expirationInput.disabled = true;
+    }
+});
+
+    </script>
 @endsection

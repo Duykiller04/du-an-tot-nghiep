@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                            
+                                    <a href="{{ route('admin.inventoryaudit.downloadTemplate') }}" class="btn btn-info w-sm">Tải xuống mẫu</a>
                                     <a href="{{ route('admin.inventoryaudit.create') }}" class="btn btn-success add-btn"
                                         id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Tạo phiếu kiểm kho</a>
                                 </div>
