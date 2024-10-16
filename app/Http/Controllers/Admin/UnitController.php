@@ -47,7 +47,7 @@ class UnitController extends Controller
     public function create()
     {
         // Nếu bạn có cần lấy dữ liệu để chọn đơn vị cha hay không
-        $units = Unit::whereNull('parent_id')->orderBy('id','desc')->get();
+        $units = Unit::orderBy('id','desc')->whereNull('parent_id')->get();
 
         return view('admin.unit.add', compact('units'));
     }
