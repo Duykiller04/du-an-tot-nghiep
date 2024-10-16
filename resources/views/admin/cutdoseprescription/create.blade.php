@@ -40,7 +40,8 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="medicine_id" class="form-label">Bệnh</label>
+                                <label for="medicine_id" class="form-label">Bệnh (<span
+                                        class="text-danger">*</span>)</label>
                                 <select name="disease_id" id="disease_id" class="form-select select2">
                                     <option value="">Chọn bệnh</option>
                                     @foreach ($diseases as $id => $name)
@@ -52,7 +53,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="name_hospital">Tên bệnh viện</label>
+                                <label class="form-label" for="name_hospital">Tên bệnh viện (<span
+                                        class="text-danger">*</span>)</label>
                                 <input type="text" class="form-control @error('name_hospital') is-invalid @enderror"
                                     id="name_hospital" name="name_hospital" value="{{ old('name_hospital') }}">
                                 @error('name_hospital')
@@ -60,7 +62,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="name_doctor">Tên bác sĩ</label>
+                                <label class="form-label" for="name_doctor">Tên bác sĩ (<span
+                                        class="text-danger">*</span>)</label>
                                 <input type="text" class="form-control @error('name_doctor') is-invalid @enderror"
                                     id="name_doctor" name="name_doctor" value="{{ Auth::user()->name }}">
                                 @error('name_doctor')
@@ -68,7 +71,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="age">Tuổi</label>
+                                <label class="form-label" for="age">Tuổi (<span class="text-danger">*</span>)</label>
                                 <input type="number" class="form-control" id="age" name="age"
                                     value="{{ old('age') }}">
                                 @error('age')
@@ -76,9 +79,10 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="phone_doctor">Số điện thoại</label>
+                                <label class="form-label" for="phone_doctor">Số điện thoại (<span
+                                        class="text-danger">*</span>)</label>
                                 <input type="number" class="form-control @error('phone_doctor') is-invalid @enderror"
-                                id="phone_doctor" name="phone_doctor" value="{{ Auth::user()->name }}">
+                                    id="phone_doctor" name="phone_doctor" value="{{ old('phone_doctor') }}">
                                 @error('phone_doctor')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -144,7 +148,7 @@
 
     <!-- Nút Lưu bệnh -->
     <div class="text-end mb-3">
-        <a href="{{ route('admin.medicines.index') }}"><button type="button" class="btn btn-primary w-sm">Quay
+        <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button" class="btn btn-primary w-sm">Quay
                 lại</button></a>
         <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
     </div>

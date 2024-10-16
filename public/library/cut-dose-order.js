@@ -7,24 +7,28 @@ initializeSelect2();
 
 document.getElementById("add-medicine").addEventListener("click", function () {
     const medicineContainer = document.getElementById("medicine-container");
-    const index = medicineContainer.children.length;
+    const index = medicineContainer.children.length; // Đếm số hàng hiện có để xác định chỉ số mới
+
     // Option thuốc
     let medicineOptions = '<option value="">Chọn thuốc</option>';
     for (const [id, name] of Object.entries(medicines)) {
         medicineOptions += `<option value="${id}">${name}</option>`;
     }
+
     // Option đơn vị
     let unitOptions = '<option value="">Chọn đơn vị</option>';
     for (const [id, name] of Object.entries(units)) {
         unitOptions += `<option value="${id}">${name}</option>`;
     }
+
     const newRow = `
     <div class="row mb-3 medicine-row">
         <div class="col-md-2">
             <label for="medicine_id" class="form-label">Thuốc</label>
             <select name="medicines[${index}][medicine_id]" class="form-select select2">
-                 ${medicineOptions}
+                ${medicineOptions}
             </select>
+            <div class="text-danger" id="error-medicine-${index}"></div>
         </div>
 
         <div class="col-md-2">
@@ -32,6 +36,7 @@ document.getElementById("add-medicine").addEventListener("click", function () {
             <select name="medicines[${index}][unit_id]" class="form-select select2">
                 ${unitOptions}
             </select>
+            <div class="text-danger" id="error-unit-${index}"></div>
         </div>
 
         <div class="col-md-1">
@@ -41,27 +46,33 @@ document.getElementById("add-medicine").addEventListener("click", function () {
 
         <div class="col-md-2">
             <label for="quantity" class="form-label">Số lượng bán</label>
-            <input type="number" name="medicines[${index}][quantity]" class="form-control" min="1">
+            <input type="number" name="medicines[${index}][quantity]" class="form-control" min="1" value="1">
+            <div class="text-danger" id="error-quantity-${index}"></div>
         </div>
 
         <div class="col-md-2">
             <label for="dosage" class="form-label">Liều lượng</label>
             <input type="text" name="medicines[${index}][dosage]" class="form-control">
+            <div class="text-danger" id="error-dosage-${index}"></div>
         </div>
 
         <div class="col-md-2">
             <label for="current_price" class="form-label">Thành tiền</label>
             <input type="number" name="medicines[${index}][current_price]" class="form-control">
+            <div class="text-danger" id="error-price-${index}"></div>
         </div>
 
         <div class="col-md-1 d-flex align-items-end">
             <button type="button" class="btn btn-danger remove-medicine">Xóa</button>
         </div>
     </div>
-`;
+    `;
+
     medicineContainer.insertAdjacentHTML("beforeend", newRow);
     initializeSelect2();
 });
+
+
 
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("remove-medicine")) {
