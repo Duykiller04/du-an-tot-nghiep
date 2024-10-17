@@ -12,7 +12,9 @@ class NotificationSetting extends Model
 
     
     protected $fillable = [
-        'medicine_expiry_alert',
-        'email_alert',
+        'notification_enabled',
+        'expiration_notification_days',
+        'receive_email_notifications',
+        'temperature_warning',
     ];
 }
