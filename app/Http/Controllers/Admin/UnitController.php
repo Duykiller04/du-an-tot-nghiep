@@ -47,7 +47,7 @@ class UnitController extends Controller
     public function create()
     {
         // Nếu bạn có cần lấy dữ liệu để chọn đơn vị cha hay không
-        $units = Unit::whereNull('parent_id')->orderBy('id','desc')->get();
+        $units = Unit::orderBy('id','desc')->whereNull('parent_id')->get();
 
         return view('admin.unit.add', compact('units'));
     }
@@ -72,11 +72,11 @@ class UnitController extends Controller
     public function edit(string $id)
     {
         $unit = Unit::find($id);
+        $units = Unit::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->whereNot('id', $id)->get();
         if (!$unit) {
             return redirect()->route('admin.units.index')->with('error', 'Đơn vị không tồn tại');
         }
 
-        $units = Unit::whereNull('parent_id')->where('id', '!=', $id)->orderBy('id','desc')->get();
 
         return view('admin.unit.edit', compact('unit', 'units'));
     }
