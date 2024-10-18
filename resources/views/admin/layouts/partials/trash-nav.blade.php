@@ -9,57 +9,61 @@
                         role="tablist">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.categories') }}">
-                                Categories
+                                Danh mục
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.diseases') }}">
-                                Diseases
+                                Bệnh
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.suppliers') }}">
-                                Suppliers
+                                Nhà cung cấp
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.users') }}">
-                                Users
+                                Người dùng
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.units') }}">
-                                Units
+                                Đơn vị
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.medicines') }}">
-                                Medicines
+                                Thuốc
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.restore.medicalInstruments') }}">
+                                Dụng cụ
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.storages') }}">
-                                Storages
+                                Kho
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.cutDosePrescriptions') }}">
-                                CutDosePrescriptions
+                                Đơn thuốc mẫu
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.restore.importorder') }}">
-                                ImportOrders
+                                Nhập kho
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link"
                                 href="{{ route('admin.restore.cutDoseOrders') }}">
-                                CutDoseOrders
+                                Đơn thuốc cắt liều
                             </a>
                         </li>
                         </li>
