@@ -507,7 +507,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome {{ Auth::user()->name }} !</h6>
+                        {{-- <h6 class="dropdown-header">Welcome {{ Auth::user()->name }} !</h6>
                         <a class="dropdown-item" href=" {{ route('admin.users.edit', Auth::user()->id) }} "><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profile</span></a>
@@ -515,7 +515,7 @@
                             onclick="event.preventDefault();
                                           document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
-                        </a>
+                        </a> --}}
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

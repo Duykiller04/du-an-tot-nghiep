@@ -387,6 +387,29 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#storage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="storage">
+                        <i class="ri-store-2-fill"></i> <span data-key="t-apps"> Ca làm</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="storage">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.shifts.create') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                    Thêm mới
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.shifts.index') }}" class="nav-link" role="button"
+                                    aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                    Danh sách
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
 
                     <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">

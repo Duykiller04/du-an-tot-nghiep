@@ -69,4 +69,8 @@ class User extends Authenticatable
     {
         return $this->type === self::TYPE_STAFF;
     }
+      public function shiftuser()
+    {
+        return $this->hasMany(shiftuser::class, 'user_id');
+    }
 }

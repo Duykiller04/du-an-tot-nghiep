@@ -37,21 +37,21 @@
                                 <div class="col-6">
                                     <div>
                                         <label for="tax_code" class="form-label">Mã số thuế (<span class="text-danger">*</span>)</label>
-                                        <input type="text" class="form-control" id="tax_code" name="tax_code">
+                                        <input type="text" class="form-control" id="tax_code" name="tax_code" value="{{ old('tax_code') }}">
                                         @error('tax_code')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="mt-3">
                                         <label for="name" class="form-label">Tên nhà cung cấp (<span class="text-danger">*</span>)</label>
-                                        <input type="text" class="form-control" id="name" name="name">
+                                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                                         @error('name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="mt-3">
                                         <label for="email" class="form-label">Email (<span class="text-danger">*</span>)</label>
-                                        <input type="email" class="form-control" id="email" name="email">
+                                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -61,14 +61,14 @@
                                 <div class="col-6">
                                     <div>
                                         <label for="phone" class="form-label">Số điện thoại (<span class="text-danger">*</span>)</label>
-                                        <input type="text" class="form-control" id="phone" name="phone">
+                                        <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}">
                                         @error('phone')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="mt-3">
                                         <label for="address" class="form-label">Địa chỉ (<span class="text-danger">*</span>)</label>
-                                        <input type="text" class="form-control" id="address" name="address">
+                                        <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}">
                                         @error('address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

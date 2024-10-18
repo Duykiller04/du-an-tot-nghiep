@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\InventoryAuditTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Models\InventoryAudit;
 use App\Models\InventoryCheckDetail;
@@ -11,6 +12,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InventoryAuditController extends Controller
 {
@@ -20,7 +22,7 @@ class InventoryAuditController extends Controller
     public function index(Request $request)
     {
         $storages = Storage::all();
-
+       
         // Truy vấn phiếu kiểm kho
         $query = InventoryAudit::query();
 
@@ -167,7 +169,17 @@ class InventoryAuditController extends Controller
         ]);
     }
 
-   
+    public function downloadTemplate()
+    {
+        $filePath = public_path('files/mau_phieu_kiem_kho.xlsx');
+
+        // Kiểm tra xem file có tồn tại không
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            return redirect()->back()->with('error', 'File mẫu không tồn tại.');
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
