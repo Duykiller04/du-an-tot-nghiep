@@ -193,7 +193,7 @@ class MedicineController extends Controller
     }
     public function getRestore()
     {
-        $data = Medicine::onlyTrashed()->get();
+        $data = Medicine::onlyTrashed()->where('type_product', 0)->get();
         return view('admin.medicine.restore', compact('data'));
     }
     public function restore(Request $request)

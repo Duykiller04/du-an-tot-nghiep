@@ -139,9 +139,13 @@ Route::prefix('admin')
             Route::get('/units', [UnitController::class, 'getRestore'])->name('restore.units');
             Route::post('/units', [UnitController::class, 'restore']);
 
-            // restore units
+            // restore medicines
             Route::get('/medicines', [MedicineController::class, 'getRestore'])->name('restore.medicines');
             Route::post('/medicines', [MedicineController::class, 'restore']);
+
+             // restore medicalInstruments
+             Route::get('/medicalInstruments', [MedicalInstrumentController::class, 'getRestore'])->name('restore.medicalInstruments');
+             Route::post('/medicalInstruments', [MedicalInstrumentController::class, 'restore']);
 
             Route::get('/storages', [StorageController::class, 'getRestore'])->name('restore.storages');
             Route::post('/storages', [StorageController::class, 'restore']);
