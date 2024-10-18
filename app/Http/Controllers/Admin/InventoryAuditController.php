@@ -171,7 +171,14 @@ class InventoryAuditController extends Controller
 
     public function downloadTemplate()
     {
-        return Excel::download(new InventoryAuditTemplateExport, 'mau_phieu_kiem_kho.xlsx');
+        $filePath = public_path('files/mau_phieu_kiem_kho.xlsx');
+
+        // Kiểm tra xem file có tồn tại không
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            return redirect()->back()->with('error', 'File mẫu không tồn tại.');
+        }
     }
 
     /**
