@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CutDosePrescriptionController;
 use App\Http\Controllers\Admin\PrescriptionsController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DiseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
@@ -45,9 +46,8 @@ Route::prefix('admin')
     ->as('admin.')
     ->middleware('auth')
     ->group(function () {
-        Route::get('/', function () {
-            return view("admin.dashboard");
-        })->name('dashboard');
+        route::get('/',[DashboardController::class,'index'])->name('dashboard');
+        Route::get('/dashboard-customers', [DashboardController::class, 'getTotalCustomers'])->name('dashboard-customers');
         Route::controller(SettingController::class)
         ->prefix('setting')->as('setting.')
         ->group(function () {
