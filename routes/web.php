@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ShiftController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,7 @@ Auth::routes();
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware('auth')
+    //->middleware('auth')
     ->group(function () {
         Route::get('/', function () {
             return view("admin.dashboard");
@@ -62,6 +63,16 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/export-environments', 'export')->name('export');
+                Route::get('/add', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+            });
+        Route::controller(ShiftController::class)
+            ->prefix('shifts')->as('shifts.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
                 Route::get('/add', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');
