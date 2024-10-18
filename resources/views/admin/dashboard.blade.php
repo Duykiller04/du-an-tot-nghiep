@@ -1311,10 +1311,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            var url = "{{ route('admin.dashboard-customers') }}"; 
-            console.log('Ajax URL:', url); 
+            var url = "{{route('dashboard-customers') }}"; 
             $.ajax({
-                url: '{{ route('admin.dashboard-customers') }}',
+                url: "{{ route('dashboard-customers') }}",
                 method: 'GET',
                 success: function(response) {
                     $('#totalCustomers').text(response.totalCustomers);  

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
@@ -13,9 +13,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // $totalCustomers = Customer::count();
-        // dd($totalCustomers);
-        return view('admin.dashboard');
+        
     }
 
 
