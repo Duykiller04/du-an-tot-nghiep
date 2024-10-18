@@ -32,12 +32,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.layouts.master');
+    // return view('admin.layouts.master');
+    return route('login');
 });
 
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login')->middleware('guest');;
 
 Auth::routes();
 

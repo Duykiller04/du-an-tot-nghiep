@@ -73,9 +73,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header align-items-center d-flex">
-                        <a class="btn btn-success" href="{{ route('admin.storage.index') }}" class="btn btn-success mb-3">Quay lại</a>
+                    <div class="card-header align-items-center d-flex gap-2">
                         <button class="btn btn-primary" type="submit">Save</button>
+                        <a class="btn btn-success" href="{{ route('admin.storage.index') }}"
+                            class="btn btn-success mb-3">Quay lại</a>
                     </div><!-- end card header -->
                 </div>
             </div>
