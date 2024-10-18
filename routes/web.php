@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('admin.layouts.master');
-    return route('login');
+    return view('auth.login');
 });
 
 Route::get('/login', function () {
