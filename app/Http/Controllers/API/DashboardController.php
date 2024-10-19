@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Customer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -27,9 +30,25 @@ class DashboardController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function getTotalCategory()
     {
-        //
+        // Lấy danh sách danh mục thuốc và số lượng thuốc trong từng danh mục
+        $categories = Category::withCount('medicines')->get();
+        // Tính tổng số tên thuốc thuộc cach danh mục
+        $totalMedicines = $categories->sum('medicines_count');
+
+        // Tạo mảng dữ liệu để lưu thông tin danh mục và tỷ lệ phần trăm
+        $data = [];
+        foreach ($categories as $category) {
+            $percentage = ($totalMedicines > 0) ? ($category->medicines_count / $totalMedicines) * 100 : 0;
+            $data[] = [
+                'name' => $category->name,
+                'count' => $category->medicines_count,
+                'percentage' => round($percentage, 2), // Làm tròn phần trăm
+            ];
+        }
+        // Trả về phản hồi JSON với dữ liệu
+        return response()->json($data); 
     }
 
     /**

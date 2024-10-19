@@ -33,3 +33,4 @@ Route::get('get-prescription-details', [PrescriptionsController::class, 'getPres
 
 // dasboard customer
 Route::get('/dashboard-customers', [DashboardController::class, 'getTotalCustomers'])->name('dashboard-customers');
+Route::get('/dashboard-categories', [DashboardController::class, 'getTotalCategory'])->name('dashboard-categories');
