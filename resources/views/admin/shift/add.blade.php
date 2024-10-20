@@ -86,11 +86,11 @@
                             </div>
 
                             <div>
-                                <button id="btn-add-detail" type="button" class="btn btn-primary">Thêm chi tiết +</button>
+                                <button id="btn-add-detail" type="button" class="btn btn-primary">Thêm nhân viên +</button>
                             </div>
 
                             <div class="text-end mb-4">
-                                <a href="{{ route('admin.inventoryaudit.index') }}" class="btn btn-warning w-sm">Quay lại</a>
+                                <a href="{{ route('admin.shifts.index') }}" class="btn btn-warning w-sm">Quay lại</a>
                                 <button type="submit" class="btn btn-success w-sm">Lưu</button>
                             </div>
 
@@ -146,7 +146,7 @@
                     this.closest('.detail-row').remove();
                     detailCount--;
                 } else {
-                    alert('Phiếu kiểm kho phải có ít nhất một nhân viên.');
+                    alert('Ca làm phải có ít nhất một nhân viên.');
                 }
             });
         }

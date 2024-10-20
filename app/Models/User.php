@@ -71,6 +71,6 @@ class User extends Authenticatable
     }
       public function shiftuser()
     {
-        return $this->hasMany(shiftuser::class, 'user_id');
+        return $this->hasMany(shiftUser::class, 'users_id');
     }
 }

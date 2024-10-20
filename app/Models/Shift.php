@@ -22,12 +22,16 @@ class Shift extends Model
      * Quan hệ nhiều-nhiều với người dùng (users) thông qua bảng shift_users.
      */
     
-    // public function order()
-    // {
-    //     return $this->hasMany(CutDoseOrder::class, 'shift_id');
-    // }
-      public function shiftuser()
+    public function order()
     {
-        return $this->hasMany(shiftuser::class, 'shift_id');
+        return $this->hasMany(CutDoseOrder::class, 'shift_id');
+    }
+    public function shiftuser()
+    {
+        return $this->hasMany(shiftUser::class, 'shift_id');
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'shift_users', 'shift_id', 'users_id');
     }
 }
