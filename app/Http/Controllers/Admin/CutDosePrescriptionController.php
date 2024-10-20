@@ -37,10 +37,10 @@ class CutDosePrescriptionController extends Controller
         $units = Unit::query()->pluck('name', 'id');
 
         //khởi tạo biến để lưu các đơn vị của thuốc
-         $unitsSelectMedicine = [];
+        $unitsSelectMedicine = [];
 
         // dd($medicines);
-        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases','unitsSelectMedicine'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases', 'unitsSelectMedicine'));
     }
 
     /**
@@ -89,33 +89,86 @@ class CutDosePrescriptionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(CutDosePrescription $cutDosePrescription)
     {
-        //
+        $diseases = Disease::query()->pluck('disease_name', 'id');
+        $medicines = Medicine::query()->pluck('name', 'id');
+        $units = Unit::query()->pluck('name', 'id');
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'units'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(CutDosePrescription $cutDosePrescription)
     {
-        //
+        $diseases = Disease::query()->pluck('disease_name', 'id');
+        $medicines = Medicine::query()->pluck('name', 'id');
+        $units = Unit::query()->pluck('name', 'id');
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'units'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, CutDosePrescription $cutDosePrescription)
     {
-        //
+        try {
+            // dd($request->all());
+
+            DB::beginTransaction();
+            $data = $request->except('medicines');
+            $cutDosePrescription->update($data);
+            foreach ($request->medicines as  $item) {
+                if (!isset($item['medicine_id'])) {
+                    // Bỏ qua item nếu không có medicine_id
+                    continue;
+                }
+                if (isset($item['id'])) {
+                    $detail = CutDosePrescriptionDetail::find($item['id']);
+                    if ($detail) {
+                        $detail->update([
+                            'medicine_id' => $item['medicine_id'],
+                            'unit_id' => $item['unit_id'],
+                            'quantity' => $item['quantity'],
+                            'current_price' => $item['current_price'],
+                            'dosage' => $item['dosage'],
+                        ]);
+                    }
+                } else {
+                    $detail = $cutDosePrescription->cutDosePrescriptionDetails()->create([
+                        'medicine_id' => $item['medicine_id'],
+                        'unit_id' => $item['unit_id'],
+                        'quantity' => $item['quantity'],
+                        'current_price' => $item['current_price'],
+                        'dosage' => $item['dosage'],
+                    ]);
+                }
+            }
+            if ($request->has('delete_medicines')) {
+                foreach ($request->delete_medicines as  $cutDoseDetailId) {
+                    $cutDoseDetail = CutDosePrescriptionDetail::find($cutDoseDetailId);
+                    $cutDoseDetail->delete();
+                }
+            }
+            DB::commit();
+            return back()->with('success', 'Cập nhật đơn thuốc mẫu thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            Log::error('Lỗi cập nhật đơn thuốc ' . $exception->getMessage());
+            return back()->with('error', 'Lỗi cập nhật đơn thuốc ' . $exception->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(CutDosePrescription $cutDosePrescription)
     {
-        //
+        $cutDosePrescription->delete();
+        return back()->with('success', 'Xóa đơn thuôc mẫu thành công');
     }
 
 
@@ -130,7 +183,7 @@ class CutDosePrescriptionController extends Controller
         try {
             $cutDosePrescriptionsIds = $request->input('ids');
             if ($cutDosePrescriptionsIds) {
-                Medicine::onlyTrashed()->whereIn('id', $cutDosePrescriptionsIds)->restore();
+                CutDosePrescription::onlyTrashed()->whereIn('id', $cutDosePrescriptionsIds)->restore();
                 return back()->with('success', 'Khôi phục bản ghi thành công.');
             } else {
                 return back()->with('error', 'Không bản ghi nào cần khôi phục.');
