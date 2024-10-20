@@ -29,4 +29,8 @@ class CutDoseOrder extends Model
     {
         return $this->hasMany(CutDoseOrderDetails::class);
     }
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
+    }
 }
