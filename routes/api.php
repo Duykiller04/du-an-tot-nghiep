@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\API\CutDoseOrderController;
 use App\Http\Controllers\API\UnitMedicineController;
@@ -29,3 +30,7 @@ Route::get('cut-dose-order/{medicineId}', [CutDoseOrderController::class, 'getUn
 Route::get('admin/catalogues/getChildren', [CategoryController::class, 'getChildren'])->name('admin.catalogues.getChildren');
 
 Route::get('get-prescription-details', [PrescriptionsController::class, 'getPrescriptionDetails']);
+
+// dasboard customer
+Route::get('/dashboard-customers', [DashboardController::class, 'getTotalCustomers'])->name('dashboard-customers');
+Route::get('/dashboard-categories', [DashboardController::class, 'getTotalCategory'])->name('dashboard-categories');
