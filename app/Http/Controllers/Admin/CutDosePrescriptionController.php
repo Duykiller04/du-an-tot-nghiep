@@ -91,7 +91,11 @@ class CutDosePrescriptionController extends Controller
      */
     public function show(CutDosePrescription $cutDosePrescription)
     {
-        //
+        $diseases = Disease::query()->pluck('disease_name', 'id');
+        $medicines = Medicine::query()->pluck('name', 'id');
+        $units = Unit::query()->pluck('name', 'id');
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'units'));
     }
 
     /**
