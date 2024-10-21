@@ -13,6 +13,7 @@ use App\Models\Unit;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class PrescriptionsController extends Controller
@@ -62,7 +63,7 @@ class PrescriptionsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in Prescription.
      */
     public function store(Request $request)
     {
@@ -146,7 +147,7 @@ class PrescriptionsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in Prescription.
      */
     public function update(Request $request, string $id)
     {
@@ -154,12 +155,33 @@ class PrescriptionsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from Prescription.
      */
     public function destroy(Prescription $prescription)
     {
         $prescription->delete();
         return back()->with('success', 'Xóa thuốc thành công.');
+    }
+
+    public function getRestore()
+    {
+        $data = Prescription::onlyTrashed()->get();
+        return view('admin.Prescription.restore', compact('data'));
+    }
+    public function restore(Request $request)
+    {
+        try {
+            $PrescriptionIds = $request->input('ids');
+            if ($PrescriptionIds) {
+                Prescription::onlyTrashed()->whereIn('id', $PrescriptionIds)->restore();
+                return back()->with('success', 'Khôi phục bản ghi thành công.');
+            } else {
+                return back()->with('error', 'Không bản ghi nào cần khôi phục.');
+            }
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return back()->with('error', 'Khôi phục bản ghi thất bại.');
+        }
     }
 
 }

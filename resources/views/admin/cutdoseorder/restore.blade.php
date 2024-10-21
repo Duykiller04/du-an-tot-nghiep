@@ -46,9 +46,7 @@
                                                                 <th>age_min</th>
                                                                 <th>age_max</th>
                                                                 <th>gender</th>
-                                                                <th>Created at</th>
-                                                                <th>Updated at</th>
-                                                                <th>Action</th>
+                                                                <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -64,8 +62,7 @@
                                                                     <td>{{ $item->age_min}}</td>
                                                                     <td>{{ $item->age_max }}</td>
                                                                     <td>{{ $item->gender }}</td>
-                                                                    <td>{{ $item->created_at }}</td>
-                                                                    <td>{{ $item->updated_at }}</td>
+                                                                    <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

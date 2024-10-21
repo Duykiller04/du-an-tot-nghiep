@@ -62,7 +62,14 @@
                                 CutDoseOrders
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('admin.restore.prescriptions') }}">
+                                Prescriptions
+                            </a>
                         </li>
+                        
                     </ul>
                 </div>
             </div>
