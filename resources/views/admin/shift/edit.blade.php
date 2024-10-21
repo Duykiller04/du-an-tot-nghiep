@@ -80,19 +80,7 @@
                 </ul>
             </div>
         </div>
-        <div class="row mb-4">
-            <div class="page-title-box text-center mt-4">
-                <h2 class="mb-4">Tổng doanh thu ca</h2>
-                <div class="d-flex justify-content-center align-items-center gap-4">
-                    <div class="d-flex align-items-center">
-                        {{-- <i class="ri-thermometer-line me-2 text-warning" style="font-size: 24px;"></i> --}}
-                        <span class="text-success" style="font-size: 24px; font-weight: bold;">{{ number_format($shift->total_revenue) }} VND</span>
-                    </div>
-                   
-                </div>
-            </div>
-           
-        </div>
+       
 
        
 
@@ -123,6 +111,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card p-3">
+                    <div class=" text-center mt-4 mb-4">
+                        <h2 class="mb-4">Tổng doanh thu ca</h2>
+                        <div class="d-flex justify-content-center align-items-center gap-4">
+                            <div class="d-flex align-items-center">
+                                {{-- <i class="ri-thermometer-line me-2 text-warning" style="font-size: 24px;"></i> --}}
+                                <span class="text-success" style="font-size: 24px; font-weight: bold;">{{ number_format($shift->revenue_summary) }} VND</span>
+                            </div>
+                           
+                        </div>
+                    </div>
                     <div class="card-body">
                         <form action="{{ route('admin.shifts.update', $shift->id) }}" method="POST">
                             @csrf

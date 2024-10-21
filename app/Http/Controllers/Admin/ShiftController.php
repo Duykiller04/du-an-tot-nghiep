@@ -7,6 +7,7 @@ use App\Models\CutDoseOrder;
 use App\Models\Shift;
 use App\Models\ShiftUser;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -76,19 +77,19 @@ class ShiftController extends Controller
             'start_time' => 'required|date|after_or_equal:today',
             'end_time' => 'required|date|after:start_time',
             'details.*.user_id' => 'required|exists:users,id',
-        ],[
+        ], [
             'title.required' => 'Vui lòng nhập tiêu đề.',
             'title.string' => 'Tiêu đề phải là một chuỗi.',
             'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
-            
+
             'start_time.required' => 'Vui lòng nhập thời gian bắt đầu.',
             'start_time.date' => 'Thời gian bắt đầu không hợp lệ.',
             'start_time.after_or_equal' => 'Thời gian bắt đầu phải là ngày hôm nay hoặc sau đó.',
-            
+
             'end_time.required' => 'Vui lòng nhập thời gian kết thúc.',
             'end_time.date' => 'Thời gian kết thúc không hợp lệ.',
             'end_time.after' => 'Thời gian kết thúc phải sau thời gian bắt đầu.',
-            
+
             'details.*.user_id.required' => 'Vui lòng chọn người dùng.',
             'details.*.user_id.exists' => 'Người dùng không tồn tại.',
         ]);
@@ -136,57 +137,109 @@ class ShiftController extends Controller
     }
 
 
+    public function updateStatus(Request $request, $shiftId, $status)
+    {
+        try {
+            $shift = Shift::findOrFail($shiftId);
+
+            if ($shift->status === 'kế hoạch') {
+
+                $employeesInShift = $shift->users()->count();
+                if ($employeesInShift < 1) {
+                    return redirect()->route('admin.shifts.edit', $shiftId)
+                        ->with('error', 'Ca làm phải có ít nhất một nhân viên.');
+                }
+
+
+                $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh'); // Thời gian hiện tại
+                $startTime = Carbon::parse($shift->start_time);
+                $endTime = Carbon::parse($shift->end_time);
+
+                if ($startTime <= $currentDateTime) {
+                    return redirect()->route('admin.shifts.edit', $shiftId)
+                        ->with('error', 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại.');
+                }
+
+                if ($endTime <= $startTime) {
+                    return redirect()->route('admin.shifts.edit', $shiftId)
+                        ->with('error', 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu.');
+                }
+                // Kiểm tra trùng lặp thời gian với các ca khác trong cùng ngày ở trạng thái "đang mở"
+                $overlappingShifts = Shift::where('status', 'đang mở')
+                    ->whereDate('start_time', $startTime->toDateString()) // Lấy các ca trong cùng ngày
+                    ->where(function ($query) use ($startTime, $endTime) {
+                        $query->whereBetween('start_time', [$startTime, $endTime])
+                            ->orWhereBetween('end_time', [$startTime, $endTime])
+                            ->orWhere(function ($query) use ($startTime, $endTime) {
+                                $query->where('start_time', '<=', $startTime)
+                                    ->where('end_time', '>=', $endTime);
+                            });
+                    })
+                    ->where('id', '!=', $shiftId) // Loại trừ ca hiện tại
+                    ->count();
+
+                if ($overlappingShifts > 0) {
+                    return redirect()->route('admin.shifts.edit', $shiftId)
+                        ->with('error', 'Thời gian ca làm bị trùng lặp với một ca đang mở khác. Vui lòng điều chỉnh thời gian.');
+                }
+            }
+            $shift->status = $status;
+            $shift->save();
+
+            return redirect()->route('admin.shifts.edit', $shiftId)->with('success', 'Trạng thái đã được cập nhật thành công.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.shifts.edit', $shiftId)->with('error', 'Cập nhật trạng thái thất bại: ' . $e->getMessage());
+        }
+    }
 
     public function update(Request $request, $id)
     {
-        // Xác thực dữ liệu
         $request->validate([
             'shift_name' => 'required|string|max:255',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
             'details' => 'required|array',
             'details.*.user_id' => 'required|exists:users,id',
-        ],[
+        ], [
             'title.required' => 'Vui lòng nhập tiêu đề.',
             'title.string' => 'Tiêu đề phải là một chuỗi.',
             'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
-            
+
             'start_time.required' => 'Vui lòng nhập thời gian bắt đầu.',
             'start_time.date' => 'Thời gian bắt đầu không hợp lệ.',
             'start_time.after_or_equal' => 'Thời gian bắt đầu phải là ngày hôm nay hoặc sau đó.',
-            
+
             'end_time.required' => 'Vui lòng nhập thời gian kết thúc.',
             'end_time.date' => 'Thời gian kết thúc không hợp lệ.',
             'end_time.after' => 'Thời gian kết thúc phải sau thời gian bắt đầu.',
-            
+
             'details.*.user_id.required' => 'Vui lòng chọn người dùng.',
             'details.*.user_id.exists' => 'Người dùng không tồn tại.',
         ]);
 
-        // Tìm ca làm theo ID
+
         $shift = Shift::findOrFail($id);
         if (!in_array($shift->status, ['kế hoạch', 'đã hủy'])) {
-            return back()->with('error', 'Chỉ có thể cập nhật ca làm ở trạng thái "kế hoạch" hoặc "đã hủy".')->withInput();
+            return back()->with('error', 'Chỉ có thể cập nhật ca làm ở trạng thái "kế hoạch" hoặc "đã hủy".');
         }
 
-        // Cập nhật thông tin ca làm
         $shift->shift_name = $request->input('shift_name');
         $shift->start_time = $request->input('start_time');
         $shift->end_time = $request->input('end_time');
 
-        // Lưu ca làm
+
         $shift->save();
 
-        // Xóa các nhân viên cũ liên quan đến ca làm
+
         $shift->shiftuser()->delete();
 
-        // Thêm lại các nhân viên mới
+
         foreach ($request->input('details') as $detail) {
             $shift->shiftuser()->create(['users_id' => $detail['user_id']]);
         }
 
-        // Thông báo thành công và chuyển hướng
-        return redirect()->route('admin.shifts.index')->with('success', 'Cập nhật ca làm thành công!');
+
+        return redirect()->route('admin.shifts.edit', $shift->id)->with('success', 'Cập nhật ca làm thành công!');
     }
 
 
@@ -195,20 +248,20 @@ class ShiftController extends Controller
      */
     public function destroy($id)
     {
-       
+
         $shift = Shift::find($id);
 
-        
+
         if (!$shift) {
             return redirect()->route('admin.shifts.index')->with('error', 'Ca làm việc không tồn tại.');
         }
 
-       
+
         if ($shift->status !== 'kế hoạch' && $shift->status !== 'đã hủy') {
             return redirect()->route('admin.shifts.index')->with('error', 'Chỉ có thể xóa ca làm việc ở trạng thái "kế hoạch" hoặc "đã hủy".');
         }
 
-        
+
         $shift->delete();
 
         return redirect()->route('admin.shifts.index')->with('success', 'Ca làm việc đã được xóa thành công.');
