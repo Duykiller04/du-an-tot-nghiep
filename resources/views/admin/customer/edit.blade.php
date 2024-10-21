@@ -36,7 +36,7 @@
                               
                                     <div class="col-6">
                                         <div class="mt-3">
-                                            <label for="name" class="form-label">Name (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="name" class="form-label">Name (<span class="text-danger">*</span>)</label>
                                             <input type="text" class="form-control @error('name')is-invalid @enderror" name="name" id="name" value="{{$customer->name}}">
                                             <div class="invalid-feedback">
                                                 @error('name')
@@ -47,7 +47,7 @@
 
 
                                         <div class="mt-3">
-                                            <label for="phone" class="form-label">Phone (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="phone" class="form-label">Phone (<span class="text-danger">*</span>)</label>
                                             <input type="number" class="form-control @error('phone')is-invalid @enderror" name="phone" id="phone" value="{{$customer->phone}}">
                                             <div class="invalid-feedback">
                                                 @error('phone')
@@ -57,7 +57,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <label for="address" class="form-label">Address (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="address" class="form-label">Address (<span class="text-danger">*</span>)</label>
                                             <input type="text" class="form-control @error('address')is-invalid @enderror" name="address" id="address" value="{{$customer->address}}">
                                             <div class="invalid-feedback">
                                                 @error('address')
@@ -69,7 +69,7 @@
 
                                     <div class="col-6">
                                         <div class="mt-3">
-                                            <label for="email" class="form-label">Email (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="email" class="form-label">Email (<span class="text-danger">*</span>)</label>
                                             <input type="text" class="form-control @error('email')is-invalid @enderror" name="email" id="email" value="{{$customer->email}}">
                                             <div class="invalid-feedback">
                                                 @error('email')
@@ -79,7 +79,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <label for="age" class="form-label">Age (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="age" class="form-label">Age (<span class="text-danger">*</span>)</label>
                                             <input type="number" class="form-control @error('age')is-invalid @enderror" name="age" id="age" value="{{$customer->age}}">
                                             <div class="invalid-feedback">
                                                 @error('age')
@@ -89,7 +89,7 @@
                                         </div>
                                         
                                         <div class="mt-3">
-                                            <label for="weight" class="form-label">Weight (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="weight" class="form-label">Weight (<span class="text-danger">*</span>)</label>
                                             <input type="number" class="form-control @error('weight')is-invalid @enderror" name="weight" id="weight" value="{{$customer->weight}}">
                                             <div class="invalid-feedback">
                                                 @error('weight')

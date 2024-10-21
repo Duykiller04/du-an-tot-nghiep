@@ -10,8 +10,9 @@ use App\Models\Medicine;
 use App\Models\Prescription;
 use App\Models\PrescriptionDetail;
 use App\Models\Unit;
-use DB;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class PrescriptionsController extends Controller
@@ -34,7 +35,7 @@ class PrescriptionsController extends Controller
                         <form action="' . route('admin.prescriptions.destroy', $row->id) . '" method="POST" style="display:inline;">
                             ' . csrf_field() . '
                             ' . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có muốn xóa không ?\')">Xóa</button>
                         </form>
                     ';
                 })
@@ -155,9 +156,10 @@ class PrescriptionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Prescription $prescription)
     {
-        //
+        $prescription->delete();
+        return back()->with('success', 'Xóa thuốc thành công.');
     }
 
 }

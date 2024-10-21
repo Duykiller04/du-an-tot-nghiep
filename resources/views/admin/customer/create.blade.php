@@ -37,7 +37,7 @@
                                     <div class="col-6">
                                         
                                         <div class="mt-3">
-                                            <label for="name" class="form-label">Name (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="name" class="form-label">Name (<span class="text-danger">*</span>)</label>
                                             <input type="text" name="name" id="name" class="form-control @error('name')is-invalid @enderror" value="{{old('name')}}">
                                             <div class="invalid-feedback">
                                                 @error('name')
@@ -47,7 +47,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <label for="phone" class="form-label">Phone (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="phone" class="form-label">Phone (<span class="text-danger">*</span>)</label>
                                             <input type="number" name="phone" id="phone" class="form-control @error('phone')is-invalid @enderror" value="{{old('phone')}}">
                                             <div class="invalid-feedback">
                                                 @error('phone')
@@ -56,7 +56,7 @@
                                             </div>
                                         </div>
                                         <div class="mt-3">
-                                            <label for="address" class="form-label">Address (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="address" class="form-label">Address (<span class="text-danger">*</span>)</label>
                                             <input type="text" name="address" id="address" class="form-control @error('address')is-invalid @enderror" value="{{old('address')}}">
                                             <div class="invalid-feedback">
                                                 @error('address')
@@ -68,7 +68,7 @@
 
                                     <div class="col-6">
                                         <div class="mt-3">
-                                            <label for="email" class="form-label">Email (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="email" class="form-label">Email (<span class="text-danger">*</span>)</label>
                                             <input type="text" name="email" id="email" class="form-control @error('email')is-invalid @enderror" value="{{old('email')}}">
                                             <div class="invalid-feedback">
                                                 @error('email')
@@ -78,7 +78,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <label for="age" class="form-label">Age (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="age" class="form-label">Age (<span class="text-danger">*</span>)</label>
                                             <input type="number" name="age" id="age" class="form-control @error('age')is-invalid @enderror" value="{{old('age')}}">
                                             <div class="invalid-feedback">
                                                 @error('age')
@@ -87,7 +87,7 @@
                                             </div>
                                         </div>
                                         <div class="mt-3">
-                                            <label for="weight" class="form-label">Weight (<span style="color: rgb(207, 21, 21)">*</span>)</label>
+                                            <label for="weight" class="form-label">Weight (<span class="text-danger">*</span>)</label>
                                             <input type="number" name="weight" id="weight" class="form-control @error('weight')is-invalid @enderror" value="{{old('weight')}}">
                                             <div class="invalid-feedback">
                                                 @error('weight')
