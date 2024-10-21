@@ -32,6 +32,17 @@
                     </span>
                 </button>
 
+                <div class="ms-3 header-item d-none d-sm-flex">
+                    <a href="{{ route('admin.prescriptions.create') }}" class="btn btn-primary btn-md" data-key="t-level-2.1">
+                        Bán đơn thông thường
+                    </a>
+                </div>
+                <div class="ms-3 header-item d-none d-sm-flex">
+                    <a href="{{ route('admin.cutDoseOrders.create') }}" class="btn btn-primary btn-md" data-key="t-level-2.1">
+                        Bán đơn cắt liều
+                    </a>
+                </div>
+
                 <!-- App Search-->
                 {{-- <form class="app-search d-none d-md-block">
                     <div class="position-relative">
