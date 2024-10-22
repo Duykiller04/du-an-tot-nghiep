@@ -56,7 +56,7 @@
                 @endif
             </div>
             <div class="col-lg-6 d-flex justify-content-end">
-                <ul class="nav nav-pills bg-gray">
+                <ul class="nav nav-pills bg-gray custom-status-nav">
                     <li class="nav-item">
                         <span class="nav-link {{ $shift->status == 'kế hoạch' ? 'active' : '' }}">
                             Kế hoạch
@@ -78,7 +78,9 @@
                         </span>
                     </li>
                 </ul>
+                
             </div>
+
         </div>
        
 
