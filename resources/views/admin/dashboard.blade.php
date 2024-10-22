@@ -247,8 +247,8 @@
 
                                 <div id="sales-by-locations" data-colors='["--vz-light", "--vz-success", "--vz-primary"]' style="height: 269px" dir="ltr"></div>
 
-                                <div class="px-2 py-2 mt-1">
-                                    <p class="mb-1">Nhà cung cấp A <span class="float-end">75%</span></p>
+                                <div class="px-2 py-2 mt-1" id="dashboard-suppliers">
+                                    {{-- <p class="mb-1">Nhà cung cấp A <span class="float-end">75%</span></p>
                                     <div class="progress mt-2" style="height: 6px;">
                                         <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="75"></div>
                                     </div>
@@ -262,7 +262,7 @@
                                     <p class="mt-3 mb-1">Nhà cung cấp C <span class="float-end">82%</span></p>
                                     <div class="progress mt-2" style="height: 6px;">
                                         <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 82%" aria-valuenow="82" aria-valuemin="0" aria-valuemax="82"></div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <!-- end card body -->
@@ -1314,6 +1314,7 @@
     <!-- Dashboard init -->
     <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ asset('library/dashboard-supplier.js') }}"></script>
     <script>
         $(document).ready(function() {
             var url = "{{route('dashboard-customers') }}"; 
