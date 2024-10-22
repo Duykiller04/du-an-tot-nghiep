@@ -51,7 +51,7 @@
                                         <option value="0" {{ $unit->parent_id === null ? 'selected' : '' }}>Không</option>
                                         @foreach ($units as $item)
                                             @php($indent = "")
-                                            @include('admin.unit.unit_edit_nested', ['unit' => $item])
+                                            @include('admin.unit.unit_edit_nested', ['unit_item' => $item])
                                         @endforeach
                                     </select>
                                 </div>

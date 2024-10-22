@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\InventoryAuditTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Models\InventoryAudit;
 use App\Models\InventoryCheckDetail;
 use App\Models\Medicine;
 use App\Models\Storage;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InventoryAuditController extends Controller
 {
@@ -19,7 +22,7 @@ class InventoryAuditController extends Controller
     public function index(Request $request)
     {
         $storages = Storage::all();
-
+       
         // Truy vấn phiếu kiểm kho
         $query = InventoryAudit::query();
 
@@ -64,7 +67,6 @@ class InventoryAuditController extends Controller
             'storage_id' => 'required|exists:storages,id',
             'check_date' => 'required|date',
             'check_by' => 'required|string|max:255',
-            'remarks' => 'nullable|string',
             'details.*.medicine_id' => 'required|exists:medicines,id',
             'details.*.expected_quantity' => 'required|integer|min:0',
             'details.*.actual_quantity' => 'required|integer|min:0',
@@ -85,7 +87,6 @@ class InventoryAuditController extends Controller
             'check_by.string' => 'Người kiểm tra phải là chuỗi ký tự.',
             'check_by.max' => 'Người kiểm tra không được vượt quá 255 ký tự.',
             
-            'remarks.string' => 'Ghi chú phải là chuỗi ký tự.',
             
             'details.*.medicine_id.required' => 'Mã thuốc là bắt buộc.',
             'details.*.medicine_id.exists' => 'Mã thuốc không hợp lệ.',
@@ -114,6 +115,7 @@ class InventoryAuditController extends Controller
 
             // Tạo phiếu kiểm kho
             $inventoryAudit = InventoryAudit::create([
+                'user_id' => Auth::user()->id,
                 'title' => $request->input('title'),
                 'storage_id' => $request->input('storage_id'),
                 'check_date' => $request->input('check_date'),
@@ -139,6 +141,7 @@ class InventoryAuditController extends Controller
             return redirect()->route('admin.inventoryaudit.index')->with('success', 'Phiếu kiểm kho đã được tạo thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại.')->withInput();
         }
     }
@@ -166,7 +169,17 @@ class InventoryAuditController extends Controller
         ]);
     }
 
-   
+    public function downloadTemplate()
+    {
+        $filePath = public_path('files/mau_phieu_kiem_kho.xlsx');
+
+        // Kiểm tra xem file có tồn tại không
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            return redirect()->back()->with('error', 'File mẫu không tồn tại.');
+        }
+    }
 
     /**
      * Remove the specified resource from storage.

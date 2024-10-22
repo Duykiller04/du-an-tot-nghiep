@@ -38,12 +38,12 @@ Danh sách đơn thuốt mẫu
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Disease_id</th>
-                            <th>Name_hospital</th>
-                            <th>Name_doctor</th>
-                            <th>Age</th>
-                            <th>Phone_doctor</th>
-                            <th>Total</th>
+                            <th>Bệnh</th>
+                            <th>Tên bệnh viện</th>
+                            <th>Tên bác sĩ</th>
+                            <th>Tuổi</th>
+                            <th>Số điện thoại</th>
+                            <th>Tổng tiền</th>
                             <th>Created at</th>
                             <th>Updated at</th>
                             <th>Action</th>

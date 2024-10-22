@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrescriptionRequest;
 use App\Models\CutDosePrescription;
 use App\Models\Disease;
 use App\Models\ImportOrder;
@@ -65,26 +66,8 @@ class PrescriptionsController extends Controller
     /**
      * Store a newly created resource in Prescription.
      */
-    public function store(Request $request)
+    public function store(PrescriptionRequest $request)
     {
-        // Validate request data
-        $request->validate([
-            'customer_name' => 'required|string',
-            'age' => 'required|integer',
-            'phone' => 'nullable|string',
-            'address' => 'nullable|string',
-            'email' => 'nullable|email',
-            'weight' => 'nullable|integer',
-            'gender' => 'nullable|boolean',
-            'type_sell' => 'required|string|in:Bán lẻ,Bán giá nhập,Trả lại nhà cung cấp,Xuất,Hủy',
-            'medicines' => 'required|array',
-            'medicines.*.medicine_id' => 'required|integer',
-            'medicines.*.unit_id' => 'required|integer',
-            'medicines.*.quantity' => 'required|numeric',
-            'medicines.*.dosage' => 'required|string',
-            'medicines.*.current_price' => 'required|numeric',
-        ]);
-
         // Bắt đầu giao dịch
         DB::beginTransaction();
 

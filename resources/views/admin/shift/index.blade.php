@@ -1,13 +1,7 @@
-<!-- index.blade.php -->
-
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách kiểm kho
-@endsection
-
-@section('title')
-    Danh sách Phiếu Kiểm Kho
+    Danh sách ca làm việc
 @endsection
 
 @section('content')
@@ -17,12 +11,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Phiếu Kiểm Kho</h4>
+                    <h4 class="mb-sm-0">Ca Làm Việc</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Kiểm kho</a></li>
-                            <li class="breadcrumb-item active">Danh sách Phiếu Kiểm Kho</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lý ca</a></li>
+                            <li class="breadcrumb-item active">Danh sách ca làm việc</li>
                         </ol>
                     </div>
 
@@ -30,26 +24,35 @@
             </div>
         </div>
         <!-- end page title -->
+        @if(session('success'))
+        <div class="alert alert-success">
+                {{ session('success') }}
+        </div>
+        @endif
 
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="row">
             <div class="col-lg-12">
-                <div class="card" id="inventoryAuditList">
+                <div class="card" id="shiftList">
                     <div class="card-header border-0">
                         <div class="row align-items-center gy-3">
                             <div class="col-sm">
-                                <h5 class="card-title mb-0">Lịch Sử Phiếu Kiểm Kho</h5>
+                                <h5 class="card-title mb-0">Lịch Sử Ca Làm Việc</h5>
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route('admin.inventoryaudit.downloadTemplate') }}" class="btn btn-info w-sm">Tải xuống mẫu</a>
-                                    <a href="{{ route('admin.inventoryaudit.create') }}" class="btn btn-success add-btn"
-                                        id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Tạo phiếu kiểm kho</a>
+                                    <a href="{{ route('admin.shifts.create') }}" class="btn btn-success add-btn"
+                                        id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Tạo ca làm việc mới</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body border border-dashed border-end-0 border-start-0">
-                        <form method="GET" action="{{ route('admin.inventoryaudit.index') }}">
+                        <form method="GET" action="{{ route('admin.shifts.index') }}">
                             <div class="row g-3">
                                 <div class="col-xxl-3 col-sm-6">
                                     <div>
@@ -61,11 +64,13 @@
                                 <!--end col-->
                                 <div class="col-xxl-4 col-sm-4">
                                     <div>
-                                        <select class="form-control" name="storage_id" id="storage">
-                                            <option value="all" selected>Chọn Kho</option>
-                                            @foreach ($storages as $storage)
-                                                <option value="{{ $storage->id }}">{{ $storage->location }}</option>
-                                            @endforeach
+                                        <select class="form-control" name="status" id="status">
+                                            <option value="all" selected>Chọn Trạng Thái</option>
+                                            <option value="kế hoạch">Kế Hoạch</option>
+                                            <option value="đang mở">Đang Mở</option>
+                                            <option value="tạm dừng">Tạm Dừng</option>
+                                            <option value="đã chốt">Đã Chốt</option>
+                                            <option value="đã hủy">Đã Hủy</option>
                                         </select>
                                     </div>
                                 </div>
@@ -88,44 +93,51 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <table id="inventoryAuditTable"
+                                    <table id="shiftTable"
                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
                                         style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Tiêu đề</th>
-                                                <th>Kho</th>
-                                                <th>Người kiểm</th>
-                                                <th>Ngày kiểm</th>
-                                                <th>Ghi chú</th>
+                                                <th>Tên ca</th>
+                                                <th>Bắt đầu</th>
+                                                <th>Kết thúc</th>
+                                                <th>Nhân viên</th>
+                                                <th>Trạng thái</th>
+                                                <th>Tổng thu</th>
                                                 <th>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($inventoryAudits as $audit)
+                                            @foreach ($shifts as $shift)
                                                 <tr>
-                                                    <td>#{{ $audit->id }}</td>
-                                                    <td>{{ $audit->title }}</td>
-                                                    <td>{{ $audit->storage->location }}</td>
-                                                    <td>{{ $audit->checked_by }}</td>
-                                                    <td>{{ $audit->check_date }}</td>
-                                                    <td>{{ $audit->remarks }}</td>
+                                                    <td>#{{ $shift->id }}</td>
+                                                    <td>{{ $shift->shift_name }}</td>
+                                                    <td>{{ $shift->start_time }}</td>
+                                                    <td>{{ $shift->end_time }}</td>
+                                                    <td>
+                                                        @foreach ($shift->users as $user)
+                                                            {{ $user->name }}<br> <!-- Hiển thị tên nhân viên -->
+                                                        @endforeach
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge {{ $getStatusClass($shift->status) }}">
+                                                            {{ ucfirst($shift->status) }}
+                                                        </span>
+                                                    </td>
+                                                    <td>{{ $shift->revenue_summary ?? 'N/A' }}</td>
                                                     <td>
                                                         <ul class="list-unstyled d-flex gap-2">
-                                                            <li><a href="{{ route('admin.inventoryaudit.show', $audit->id) }}"
+                                                            <li><a href="{{ route('admin.shifts.edit', $shift->id) }}"
                                                                     class="btn btn-info">
-                                                                    Chi tiết</a></li>
-                                                            
+                                                                    Xem & Điều chỉnh ca</a></li>
                                                             <li>
-                                                                <form action="{{route('admin.inventoryaudit.destroy',$audit->id)}}" method="POST">
+                                                                <form action="{{ route('admin.shifts.destroy', $shift->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa ca làm việc này?');">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <Button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa')">Xóa</Button>
+                                                                    <button type="submit" class="btn btn-danger">Xóa</button>
                                                                 </form>
-                                                                
-                                                            </li>
-                                                          
+                                                            </li>      
                                                         </ul>
                                                     </td>
                                                 </tr>
@@ -151,14 +163,12 @@
 @section('style-libs')
     <!--datatable css-->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-    <!--datatable responsive css-->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
 
 @section('script-libs')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--datatable js-->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -171,23 +181,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
     <script src="{{ asset('theme/admin/assets/js/pages/datatables.init.js') }}"></script>
-
 @endsection
-@section('js')
-    <!-- Các tệp JavaScript khác -->
 
+@section('js')
     <script>
         $(document).ready(function() {
-            $('#inventoryAuditTable').DataTable({
-                // Các tùy chọn cấu hình cho DataTables
-               responsive: true,
+            $('#shiftTable').DataTable({
+                responsive: true,
                 paging: true,
                 searching: true,
                 ordering: true,
                 info: true,
-                // Thêm các cấu hình khác nếu cần
             });
         });
     </script>
 @endsection
-

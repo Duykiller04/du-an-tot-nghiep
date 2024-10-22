@@ -31,14 +31,63 @@
         <form id="create-environment-form" method="POST" action="{{ route('admin.environments.store') }}">
             @csrf
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Thông tin chung</h5>
                         </div>
                         <div class="card-body">
-                            {{-- <div class="mb-3">
-                                <label class="form-label" for="storage_id">Kho</label>
+                            
+
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
+                                <div class="col-sm-6">
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="real_temperature" value="{{ old('real_temperature') }}">
+                                @error('real_temperature')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="col-sm-6">
+                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường<span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="temperature" value="{{ $weatherData['main']['temp']}}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                
+                                <label class="form-label" for="real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
+                                <div class="col-sm-6">
+                                <input type="number" step="0.01" class="form-control" id="real_humidity" name="real_humidity" value="{{ old('real_humidity') }}">
+                                @error('real_humidity')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết<span class="text-danger">*</span></label>
+                                <div class="col-sm-6">
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="huminity" value="{{ $weatherData['main']['humidity'] }}" readonly>
+                                </div>
+                            </div>
+                           
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <h5 class="card-title flex-grow-1 mb-0">Thông tin theo kho</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="storage_id">Chọn kho</label>
                                 <select class="form-select" id="storage_id" name="storage_id">
                                     @foreach($storages as $storage)
                                         <option value="{{ $storage->id }}">{{ $storage->name }}</option>
@@ -47,38 +96,10 @@
                                 @error('storage_id')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
-                            </div> --}}
-
-                            <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="real_temperature" value="{{ old('real_temperature') }}">
-                                @error('real_temperature')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="temperature" value="{{ old('real_temperature',$weatherData['main']['temp'],32) }}" readonly>
-                               
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_humidity" name="real_humidity" value="{{ old('real_humidity') }}">
-                                @error('real_humidity')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="huminity" value="{{ old('real_temperature',$weatherData['main']['humidity'],80) }}" readonly>
-                               
-                            </div>
-                           
-                            
-                            
                         </div>
                     </div>
+                    <!--end card-->
                 </div>
             </div>
 

@@ -39,7 +39,7 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label" for="name">Tên bệnh<span class="text-danger">*</span></label>
+                                <label class="form-label" for="name">Tên bệnh<span class="text-danger"> (*)</span></label>
                                 <input type="text" class="form-control" id="name" name="disease_name"
                                     value="{{ old('disease_name') }}">
                                 @error('disease_name')
@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="symptom">Triệu chứng<span class="text-danger">*</span></label>
+                                <label class="form-label" for="symptom">Triệu chứng<span class="text-danger"> (*)</span></label>
                                 <textarea class="form-control" id="symptom" name="symptom">{{ old('symptom') }}</textarea>
                                 @error('symptom')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="treatment_direction">Hướng điều trị<span class="text-danger">*</span></label>
+                                <label class="form-label" for="treatment_direction">Hướng điều trị<span class="text-danger"> (*)</span></label>
                                 <textarea class="form-control" id="treatment_direction" name="treatment_direction">{{ old('treatment_direction') }}</textarea>
                                 @error('treatment_direction')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
@@ -79,13 +79,16 @@
                                 <option value="medium" {{ old('danger_level') == 'medium' ? 'selected' : '' }}>Trung bình</option>
                                 <option value="high" {{ old('danger_level') == 'high' ? 'selected' : '' }}>Cao</option>
                             </select>
+                            @error('danger_level')
+                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
                     <!-- Card cho Ảnh đại diện -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ảnh bệnh<span class="text-danger">*</span></h5>
+                            <h5 class="card-title mb-0">Ảnh bệnh</h5>
                         </div>
                         <div class="card-body">
                             <input type="file" class="form-control" id="feature_img" name="feature_img"

@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ShiftController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\UnitController;
 use Illuminate\Support\Facades\Auth;
@@ -31,34 +32,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.layouts.master');
+    // return view('admin.layouts.master');
+    return view('auth.login');
 });
 
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login')->middleware('guest');;
 
 Auth::routes();
 
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware('auth')
+    //->middleware('auth')
     ->group(function () {
         Route::get('/', function () {
             return view("admin.dashboard");
         })->name('dashboard');
+
         Route::controller(SettingController::class)
-        ->prefix('setting')->as('setting.')
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/export-environments', 'export')->name('export');
-            Route::get('/add', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::put('/update/{id}', 'update')->name('update');
-            Route::delete('/delete/{id}', 'destroy')->name('destroy');
-        });
+            ->prefix('setting')->as('setting.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+            });
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {
@@ -67,6 +66,17 @@ Route::prefix('admin')
                 Route::get('/add', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+            });
+        Route::controller(ShiftController::class)
+            ->prefix('shifts')->as('shifts.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/add', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('shifts/{shift}/status/{status}','updateStatus')->name('updateStatus');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
@@ -80,6 +90,7 @@ Route::prefix('admin')
                 Route::post('/store', 'store')->name('store');
                 Route::get('/detail/{id}', 'show')->name('show');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
+                Route::get('/download-template', 'downloadTemplate')->name('downloadTemplate');
             });
 
         Route::resource('diseases', DiseaseController::class);
@@ -103,12 +114,12 @@ Route::prefix('admin')
         Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
 
         Route::resource('storage', StorageController::class);
-      
+
         Route::resource('importorder', ImportOrderController::class);
 
         Route::resource('prescriptions', PrescriptionsController::class);
-      
-        Route::prefix('restore')->group(function(){
+
+        Route::prefix('restore')->group(function () {
             // restore categories
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);
@@ -129,9 +140,13 @@ Route::prefix('admin')
             Route::get('/units', [UnitController::class, 'getRestore'])->name('restore.units');
             Route::post('/units', [UnitController::class, 'restore']);
 
-            // restore units
+            // restore medicines
             Route::get('/medicines', [MedicineController::class, 'getRestore'])->name('restore.medicines');
             Route::post('/medicines', [MedicineController::class, 'restore']);
+
+             // restore medicalInstruments
+             Route::get('/medicalInstruments', [MedicalInstrumentController::class, 'getRestore'])->name('restore.medicalInstruments');
+             Route::post('/medicalInstruments', [MedicalInstrumentController::class, 'restore']);
 
             Route::get('/storages', [StorageController::class, 'getRestore'])->name('restore.storages');
             Route::post('/storages', [StorageController::class, 'restore']);

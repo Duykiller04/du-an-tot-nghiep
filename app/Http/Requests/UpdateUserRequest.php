@@ -23,9 +23,10 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('user'); // Hoặc thay đổi 'user' thành tên route parameter mà bạn đã định nghĩa
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:10|min:10|unique:users,phone',
+            'phone' => 'required|string|regex:/^[0-9]{10}$/|unique:users,phone,' . $id,
             'address' => 'nullable|string',
             'birth' => 'nullable|date_format:Y-m-d',
             'image' => 'nullable|image|max:2048',
@@ -48,9 +49,8 @@ class UpdateUserRequest extends FormRequest
 
             'phone.required' => 'Số điện thoại này là bắt buộc phải được điền',
             'phone.string' => 'Số điện thoại này phải là một chuỗi ký tự',
-            'phone.max' => 'Số điện thoại này không được vượt quá 10 ký tự.',
-            'phone.min' => 'Số điện thoại này tối thiểu 10 ký tự.',
-            'phone.unique'=>'Số điện thoại đã tồn tại vui lòng nhập số khác',
+            'phone.regex' => 'Trường này phải là số điện thoại và nhập đủ 10 số',
+            'phone.unique' => 'Số điện thoại đã tồn tại vui lòng nhập số khác',
 
             'address.string' => 'Địa chỉ này phải là một chuỗi ký tự',
 
@@ -63,7 +63,7 @@ class UpdateUserRequest extends FormRequest
 
             'email.required' => ' Email này là bắt buộc phải được điền.',
             'email.email' => '  Email của trường này phải là một địa chỉ email hợp lệ..',
-            'email.unique'=> 'Email này phải là duy nhất trong bảng "users" (tức là không được trùng với email của người dùng khác',
+            'email.unique' => 'Email này phải là duy nhất trong bảng "users" (tức là không được trùng với email của người dùng khác',
 
             'type' => ' Type',
         ];

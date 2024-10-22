@@ -32,6 +32,17 @@
                     </span>
                 </button>
 
+                <div class="ms-3 header-item d-none d-sm-flex">
+                    <a href="{{ route('admin.prescriptions.create') }}" class="btn btn-primary btn-md" data-key="t-level-2.1">
+                        Bán đơn thông thường
+                    </a>
+                </div>
+                <div class="ms-3 header-item d-none d-sm-flex">
+                    <a href="{{ route('admin.cutDoseOrders.create') }}" class="btn btn-primary btn-md" data-key="t-level-2.1">
+                        Bán đơn cắt liều
+                    </a>
+                </div>
+
                 <!-- App Search-->
                 {{-- <form class="app-search d-none d-md-block">
                     <div class="position-relative">
@@ -507,15 +518,15 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        {{-- <h6 class="dropdown-header">Welcome {{ Auth::user()->name }} !</h6> --}}
-                        {{-- <a class="dropdown-item" href=" {{ route('users.edit', Auth::user()->id) }} "><i
+                        {{-- <h6 class="dropdown-header">Welcome {{ Auth::user()->name }} !</h6>
+                        <a class="dropdown-item" href=" {{ route('admin.users.edit', Auth::user()->id) }} "><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Profile</span></a> --}}
+                                class="align-middle">Profile</span></a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                           document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
-                        </a>
+                        </a> --}}
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

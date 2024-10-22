@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportOrderRequest;
 use App\Http\Requests\StoreImportOrderRequest;
 use App\Models\Category;
 use App\Models\ImportOrder;
@@ -101,120 +102,107 @@ class ImportOrderController extends Controller
      */
     // Phương thức lưu đơn nhập kho
 
-    public function store(Request $request)
-{
-    // dd($request->all());
-    // Validate dữ liệu đầu vào
-    $request->validate([
-        'user_id' => 'required|integer',
-        'storage_id' => 'required|integer',
-        'supplier_id' => 'required|integer', // Đảm bảo là số nguyên
-        'price_paid' => 'required|numeric',
-        'still_in_debt' => 'required|numeric',
-        'status' => 'required|string|max:255',
-        'note' => 'nullable|string|max:255',
-        'details' => 'required|array',
-    ]);
-    dd($request->all());
-    $data = $request->all();
+    public function store(ImportOrderRequest $request)
+    {
+        $data = $request->all();
 
-    // Khởi động transaction
-    try {
-        DB::beginTransaction();
+        // Khởi động transaction
+        try {
+            DB::beginTransaction();
 
-        // Tạo đơn nhập kho
-        $importOrder = ImportOrder::create([
-            'user_id' => $data['user_id'],
-            'storage_id' => $data['storage_id'],
-            'supplier_id' => $data['supplier_id'], // Giữ nguyên là số nguyên
-            'price_paid' => $data['price_paid'],
-            'still_in_debt' => $data['still_in_debt'],
-            'status' => $data['status'],
-            'note' => $data['note'],
-            'total' => array_sum(array_column($data['details'], 'total')),
-            'date_added' => now(),
-        ]);
-
-        // Tạo chi tiết đơn nhập kho
-        foreach ($data['details'] as $detail) {
-            if (!isset($detail['units']) || empty($detail['units'])) {
-                throw new \Exception('Thiếu thông tin đơn vị cho thuốc: ' . json_encode($detail));
-            }
-
-            // Lấy đơn vị đầu tiên làm unit_id
-            $detail['unit_id'] = $detail['units'][0]['unit'];
-
-            // Gán giá trị mặc định cho quantity nếu không có
-            $detail['quantity'] = $detail['quantity'] ?? 1;
-
-            // Kiểm tra thuốc đã tồn tại
-            $existingMedicine = Medicine::where('medicine_code', $detail['medicine_code'])->first();
-
-            // Xử lý hình ảnh nếu có
-            if (isset($detail['image']) && $detail['image']) {
-                $image = $detail['image'];
-                $imagePath = $image->store('medicine', 'public');
-                $detail['image'] = $imagePath;
-            } else {
-                $detail['image'] = null;
-            }
-
-            if ($existingMedicine) {
-                $medicineId = $existingMedicine->id;
-                $detail['name'] = $existingMedicine->name . ' ' . now()->format('d/m/Y');
-            } else {
-                $newMedicine = Medicine::create($detail);
-                $medicineId = $newMedicine->id;
-                $newMedicine->suppliers()->attach($data['supplier_id']);
-
-                foreach ($detail['units'] as $unit) {
-                    UnitConversion::create([
-                        'medicine_id' => $medicineId,
-                        'unit_id' => $unit['unit'],
-                        'proportion' => $unit['quantity']
-                    ]);
-                }
-            }
-
-            $conversion = UnitConversion::where('medicine_id', $medicineId)
-                ->where('unit_id', $detail['unit_id'])
-                ->first();
-
-            if ($conversion) {
-                $smallestUnitQuantity = $detail['quantity'] * $conversion->proportion;
-            } else {
-                throw new \Exception('Không tìm thấy tỷ lệ chuyển đổi cho thuốc này.');
-            }
-
-            Inventory::create([
+            // Tạo đơn nhập kho
+            $importOrder = ImportOrder::create([
+                'user_id' => $data['user_id'],
                 'storage_id' => $data['storage_id'],
-                'medicine_id' => $medicineId,
-                'unit_id' => $detail['unit_id'],
-                'quantity' => $smallestUnitQuantity
-            ]);
-
-            ImportOrderDetail::create([
-                'import_order_id' => $importOrder->id,
-                'unit_id' => $detail['unit_id'],
-                'medicine_id' => $medicineId,
+                'supplier_id' => $data['supplier_id'], // Giữ nguyên là số nguyên
+                'price_paid' => $data['price_paid'],
+                'still_in_debt' => $data['still_in_debt'],
+                'status' => $data['status'],
+                'note' => $data['note'],
+                'total' => array_sum(array_column($data['details'], 'total')),
                 'date_added' => now(),
-                'quantity' => $detail['quantity'],
-                'import_price' => $detail['price_import'],
-                'total' => $detail['total'],
-                'medication_name' => isset($newMedicine) ? $newMedicine->name : $existingMedicine->name,
-                'expiration_date' => $detail['expiration_date'],
             ]);
-        }
 
-        DB::commit();
-        return redirect()->route('admin.importorder.index')->with('success', 'Đơn nhập kho đã được tạo thành công!');
-    } catch (\Exception $e) {
-        Log::error("Lỗi nhập kho: " . $e->getMessage());
-        DB::rollback();
-        dd($e->getMessage());
-        return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            // Tạo chi tiết đơn nhập kho
+            foreach ($data['details'] as $detail) {
+                if (!isset($detail['units']) || empty($detail['units'])) {
+                    throw new \Exception('Thiếu thông tin đơn vị cho thuốc: ' . json_encode($detail));
+                }
+
+                // Lấy đơn vị đầu tiên làm unit_id
+                $detail['unit_id'] = $detail['units'][0]['unit'];
+
+                // Gán giá trị mặc định cho quantity nếu không có
+                $detail['quantity'] = $detail['quantity'] ?? 1;
+
+                // Kiểm tra thuốc đã tồn tại
+                $existingMedicine = Medicine::where('medicine_code', $detail['medicine_code'])->first();
+
+                // Xử lý hình ảnh nếu có
+                if (isset($detail['image']) && $detail['image']) {
+                    $image = $detail['image'];
+                    $imagePath = $image->store('medicine', 'public');
+                    $detail['image'] = $imagePath;
+                } else {
+                    $detail['image'] = null;
+                }
+
+                if ($existingMedicine) {
+                    $medicineId = $existingMedicine->id;
+                    $detail['name'] = $existingMedicine->name . ' ' . now()->format('d/m/Y');
+                } else {
+                    $newMedicine = Medicine::create($detail);
+                    $medicineId = $newMedicine->id;
+                    $newMedicine->suppliers()->attach($data['supplier_id']);
+
+                    foreach ($detail['units'] as $unit) {
+                        UnitConversion::create([
+                            'medicine_id' => $medicineId,
+                            'unit_id' => $unit['unit'],
+                            'proportion' => $unit['quantity']
+                        ]);
+                    }
+                }
+
+                $conversion = UnitConversion::where('medicine_id', $medicineId)
+                    ->where('unit_id', $detail['unit_id'])
+                    ->first();
+
+                if ($conversion) {
+                    $smallestUnitQuantity = $detail['quantity'] * $conversion->proportion;
+                } else {
+                    throw new \Exception('Không tìm thấy tỷ lệ chuyển đổi cho thuốc này.');
+                }
+
+                Inventory::create([
+                    'storage_id' => $data['storage_id'],
+                    'medicine_id' => $medicineId,
+                    'unit_id' => $detail['unit_id'],
+                    'quantity' => $smallestUnitQuantity
+                ]);
+
+                ImportOrderDetail::create([
+                    'import_order_id' => $importOrder->id,
+                    'unit_id' => $detail['unit_id'],
+                    'medicine_id' => $medicineId,
+                    'date_added' => now(),
+                    'quantity' => $detail['quantity'],
+                    'import_price' => $detail['price_import'],
+                    'total' => $detail['total'],
+                    'medication_name' => isset($newMedicine) ? $newMedicine->name : $existingMedicine->name,
+                    'expiration_date' => $detail['expiration_date'],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.importorder.index')->with('success', 'Đơn nhập kho đã được tạo thành công!');
+        } catch (\Exception $e) {
+            Log::error("Lỗi nhập kho: " . $e->getMessage());
+            DB::rollback();
+            dd($e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
-}
 
 
 

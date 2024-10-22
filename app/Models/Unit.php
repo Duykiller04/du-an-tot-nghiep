@@ -18,9 +18,9 @@ class Unit extends Model
         return $this->hasMany(Medicine::class);
     }
     public function parent(){
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(Unit::class, 'parent_id');
     }
     public function children(){
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(Unit::class, 'parent_id');
     }
 }

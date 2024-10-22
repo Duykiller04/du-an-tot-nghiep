@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:10|min:10|unique:users,phone',
+            'phone' => 'required|string|regex:/^[0-9]{10}$/|unique:users,phone',
             'address' => 'nullable|string|max:255',
             'birth' => 'nullable|date_format:Y-m-d',
             'image' => 'image|max:2048',
@@ -43,9 +43,8 @@ class StoreUserRequest extends FormRequest
 
             'phone.required' => 'Số này bắt buộc phải được điền',
             'phone.string' => 'Số này phải là một chuỗi ký tự',
-            'phone.max' => 'Số này không được vượt quá 10 ký tự.',
-            'phone.min' => 'Số này tối thiểu 10 ký tự.',
             'phone.unique' => 'Số điện thoại đã tồn tại vui lòng nhập số khác',
+            'phone.regex' => 'Trường này phải là số điện thoại và nhập đủ 10 số ',
 
             'address.string' => 'địa chỉ phải là chuỗi ký tự hợp lệ.',
             'address.max' => 'địa chỉ không được vượt quá 255 ký tự.',
