@@ -56,6 +56,7 @@ class SettingController extends Controller
         // Validate dữ liệu từ form
         $validated = $request->validate([
             'expiration_notification_days' => 'required|integer|min:1',
+            'email' => 'required|email'
         ]);
 
         // Lấy thông tin cấu hình hiện tại
@@ -70,6 +71,7 @@ class SettingController extends Controller
         $settings->update([
             'notification_enabled' => $notification_enabled,
             'expiration_notification_days' => $validated['expiration_notification_days'],
+            'email'=> $validated['email'],
             'receive_email_notifications' => $receive_email_notifications,
             'temperature_warning' => $receive_temperature_warnings,
         ]);
