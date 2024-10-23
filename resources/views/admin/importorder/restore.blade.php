@@ -45,7 +45,7 @@
                                                                 <th>Nhà cung cấp</th>
                                                                 <th>Ngày nhập</th>
                                                                 <th>Tổng tiền</th>
-                                                                <th>Actions</th>
+                                                                <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -61,7 +61,7 @@
                                                                     <td>{{ $item->supplier->name }}</td>
                                                                     <td>{{ $item->date_added}}</td>
                                                                     <td>{{ $item->total }}</td>
-                                                                    <td>{{ $item->action }}</td>
+                                                                    <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

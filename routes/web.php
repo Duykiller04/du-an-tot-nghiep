@@ -123,7 +123,7 @@ Route::prefix('admin')
             // restore categories
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);
-
+            
             // restore disease
             Route::get('/diseases', [DiseaseController::class, 'getRestore'])->name('restore.diseases');
             Route::post('/diseases', [DiseaseController::class, 'restore']);
@@ -159,5 +159,9 @@ Route::prefix('admin')
 
             Route::get('/cutDoseOrders', [CutDoseOrderController::class, 'getRestore'])->name('restore.cutDoseOrders');
             Route::post('/cutDoseOrders', [CutDoseOrderController::class, 'restore']);
+
+            //prescriptons
+            Route::get('/prescriptions',[PrescriptionsController::class,'getRestore'])->name('restore.prescriptions');
+            Route::post('/prescriptions',[PrescriptionsController::class,'restore']);
         });
     });

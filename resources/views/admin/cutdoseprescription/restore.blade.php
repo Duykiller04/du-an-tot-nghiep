@@ -48,9 +48,7 @@
                                                                 <th>Age</th>
                                                                 <th>Phone_doctor</th>
                                                                 <th>Total</th>
-                                                                <th>Created at</th>
-                                                                <th>Updated at</th>
-                                                                <th>Action</th>
+                                                                <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -67,8 +65,7 @@
                                                                     <td>{{ date('m/d/Y', strtotime($item->age)) }}</td>
                                                                     <td>{{ $item->phone_doctor }}</td>
                                                                     <td>{{ $item->total }}</td>
-                                                                    <td>{{ $item->created_at }}</td>
-                                                                    <td>{{ $item->updated_at }}</td>
+                                                                    <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

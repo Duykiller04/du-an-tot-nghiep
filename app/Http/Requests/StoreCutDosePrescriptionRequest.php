@@ -28,7 +28,6 @@ class StoreCutDosePrescriptionRequest extends FormRequest
             'age' => 'required|integer',
             'phone_doctor' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
 
-
             'medicines' => 'array',
             'medicines.*' => 'array|required_array_keys:medicine_id,unit_id,quantity,current_price,dosage',
             'medicines.*.medicine_id' => 'required|exists:medicines,id',

@@ -3,7 +3,7 @@
 @extends('admin.layouts.trash')
 
 @section('title')
-    Danh sách kho đã xóa
+    Danh sách đơn thuốc thường đã xóa
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="storagesExample">
                                     <!-- start page title -->
-                                    <h4>Kho đã xóa</h4>
+                                    <h4>Đơn thuốc thường đã xóa</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -32,7 +32,7 @@
                                             @endif
 
                                             <thead class="table-light">
-                                                <form action="{{ route('admin.restore.storages') }}" method="POST">
+                                                <form action="{{ route('admin.restore.prescriptions') }}" method="POST">
                                                     @csrf
                                                     <table id="example"
                                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -41,8 +41,15 @@
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
                                                                 <th>ID</th>
-                                                                <th>Tên kho</th>
+                                                                <th>Tên khách hàng</th>
+                                                                <th>Giới tính</th>
+                                                                <th>Tuổi</th>
+                                                                <th>Điện thoại</th>
+                                                                <th>Loại bán</th>
                                                                 <th>Địa chỉ</th>
+                                                                <th>Email</th>
+                                                                <th>Cân nặng</th>
+                                                                <th>Tổng đơn</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -54,8 +61,15 @@
                                                                             value="{{ $item->id }}">
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->name }}</td>
-                                                                    <td>{{ $item->location }}</td>
+                                                                    <td>{{ $item->name_customer }}</td>
+                                                                    <td>{{ $item->gender }}</td>
+                                                                    <td>{{ $item->age }}</td>
+                                                                    <td>{{ $item->phone }}</td>
+                                                                    <td>{{ $item->type_sell }}</td>
+                                                                    <td>{{ $item->address }}</td>
+                                                                    <td>{{ $item->email }}</td>
+                                                                    <td>{{ $item->weight }}</td>
+                                                                    <td>{{ $item->total }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
