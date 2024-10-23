@@ -70,6 +70,7 @@
                                 style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th>ID</th> <!-- Thêm trường ID -->
                                         <th>Tên Kho</th>
                                         <th>Người kiểm tra</th>
                                         <th>Nhà cung cấp</th>
@@ -81,6 +82,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -131,6 +133,10 @@
                     }
                 },
                 columns: [{
+                        data: 'id',
+                        name: 'id'
+                    }, // Thêm cột ID
+                    {
                         data: 'storage.name',
                         name: 'storage.name'
                     },
@@ -163,7 +169,7 @@
                         title: 'Import Orders',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4] // Chọn các cột để xuất, loại bỏ cột `action`
+                            columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
                     },
                     {
@@ -171,7 +177,7 @@
                         title: 'Import Orders',
                         className: 'btn btn-info',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4] // Chọn các cột để xuất, loại bỏ cột `action`
+                            columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
                     },
                     {
@@ -179,7 +185,7 @@
                         title: 'Import Orders',
                         className: 'btn btn-danger',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4] // Chọn các cột để xuất, loại bỏ cột `action`
+                            columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
                     },
                     {
@@ -187,7 +193,7 @@
                         title: 'Import Orders',
                         className: 'btn btn-warning',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4] // Chọn các cột để xuất, loại bỏ cột `action`
+                            columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
                     }
                 ]
