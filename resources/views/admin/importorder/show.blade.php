@@ -25,65 +25,58 @@
         </div>
     </div>
 
+
+
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">Thông tin đơn hàng</h4>
         </div>
         <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="ps-0" scope="row">Tên kho:</th>
+                            <td class="text-muted">{{ $importOrder->storage->name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="ps-0" scope="row">Người kiểm kho:</th>
+                            <td class="text-muted">{{ $importOrder->user->name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ps-0" scope="row">Nhà cung cấp:</th>
+                            <td class="text-muted">{{ $importOrder->supplier->name }}</td>
+                        </tr>
 
-            <div class="mb-3">
-                <label for="user_id" class="form-label"><strong>Người dùng:</strong></label>
-                <input type="user_id" name="user_id" id="user_id" class="form-control"
-                    value="{{ $importOrder->user->name }}" readonly>
-            </div>
+                        <tr>
+                            <th class="ps-0" scope="row">Ngày nhập:</th>
+                            <td class="text-muted">{{$importOrder->date_added  }}</td>
+                        </tr>
+                        <tr>
+                            <th class="ps-0" scope="row">Tổng tiền:</th>
+                            <td class="text-muted">{{ number_format($importOrder->total, 2) }}</td>
+                        </tr>
 
-            <div class="mb-3">
-                <label for="storage_id" class="form-label"><strong>Kho:</strong></label>
-                <input type="storage_id" name="storage_id" id="storage_id" class="form-control"
-                    value="{{ $importOrder->storage->name }}" readonly>
-            </div>
 
-            <div class="mb-3">
-                <label for="supplier_id" class="form-label"><strong>Nhà cung cấp:</strong></label>
-                <input type="supplier_id" name="supplier_id" id="supplier_id" class="form-control"
-                    value="{{ $importOrder->supplier->name }}" readonly>
-            </div>
+                        <tr>
+                            <th class="ps-0" scope="row">Số tiền trả :</th>
+                            <td class="text-muted">{{ number_format($importOrder->price_paid, 2)}}</td>
+                        </tr>
 
-            <div class="mb-3">
-                <label for="total" class="form-label"><strong>Tổng:</strong></label>
-                <input type="total" name="total" id="total" class="form-control"
-                    value="{{ number_format($importOrder->total, 2) }}" readonly>
-            </div>
-
-            <div class="mb-3">
-                <label for="price_paid" class="form-label"><strong>Số tiền đã trả:</strong></label>
-                <input type="price_paid" name="price_paid" id="price_paid" class="form-control"
-                    value="{{ number_format($importOrder->price_paid, 2) }}" readonly>
-            </div>
-
-            <div class="mb-3">
-                <label for="still_in_debt" class="form-label"><strong>Còn nợ:</strong></label>
-                <input type="still_in_debt" name="still_in_debt" id="still_in_debt" class="form-control"
-                    value="{{ number_format($importOrder->still_in_debt, 2) }}" readonly>
-            </div>
-
-            <div class="mb-3">
-                <label for="date_added" class="form-label"><strong>Ngày thêm:</strong></label>
-                <input type="date_added" name="date_added" id="date_added" class="form-control"
-                    value="{{ $importOrder->date_added }}" readonly>
-            </div>
-
-            <div class="mb-3">
-                <label for="note" class="form-label"><strong>Ghi chú:</strong></label>
-                <input type="note" name="note" id="note" class="form-control" value="{{ $importOrder->note }}"
-                    readonly>
-            </div>
-
-            <div class="mb-3">
-                <label for="status" class="form-label"><strong>Trạng thái:</strong></label>
-                <input type="status" name="status" id="statu" class="form-control" value="{{ $importOrder->status }}"
-                    readonly>
-            </div>
+                        <tr>
+                            <th class="ps-0" scope="row">Còn nợ :</th>
+                            <td class="text-muted">{{number_format($importOrder->still_in_debt, 2)  }}</td>
+                        </tr>
+                        <tr>
+                            <th class="ps-0" scope="row">Ghi chú :</th>
+                            <td class="text-muted">{{$importOrder->note  }}</td>
+                        </tr>
+                        <tr>
+                            <th class="ps-0" scope="row">Trạng thái :</th>
+                            <td class="text-muted">{{ $importOrder->status  }}</td>
+                        </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -120,8 +113,14 @@
             </table>
         </div>
     </div>
-
-    <div class="text-end m-3">
-        <a href="{{ route('admin.importorder.index') }}" class="btn btn-primary">Quay lại</a>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header align-items-center d-flex gap-2">
+                    <a href="{{ route('admin.importorder.index') }}" class="btn btn-success">Quay lại</a>
+                </div><!-- end card header -->
+            </div>
+        </div>
+        <!--end col-->
     </div>
 @endsection
