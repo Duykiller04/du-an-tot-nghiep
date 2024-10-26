@@ -45,7 +45,7 @@ Auth::routes();
 
 Route::prefix('admin')
     ->as('admin.')
-    //->middleware('auth')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/', function () {
             return view("admin.dashboard");

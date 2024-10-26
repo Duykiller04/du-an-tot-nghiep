@@ -70,7 +70,7 @@
                         <li class="nav-item">
                             <a class="nav-link"
                                 href="{{ route('admin.restore.prescriptions') }}">
-                                Đơn thuốc
+                                Đơn thuốc thông thường
                             </a>
                         </li>
                         

@@ -14,6 +14,7 @@ class CutDoseOrderDetails extends Model
         'unit_id',
         'quantity',
         'dosage',
+        'status'
     ];
 
     public function medicine()
