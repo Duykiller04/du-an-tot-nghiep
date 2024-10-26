@@ -20,6 +20,7 @@ class Prescription extends Model
         'email',
         'weight',
         'gender',
+        'status'
     ];
     public function prescriptionDetails(){
         return $this->hasMany(PrescriptionDetail::class);

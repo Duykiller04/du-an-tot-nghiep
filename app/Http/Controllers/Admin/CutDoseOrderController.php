@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CutDoseOrderRequest;
+use App\Http\Requests\UpdateCutDoseOrderRequest;
 use App\Models\Customer;
 use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
@@ -32,11 +33,12 @@ class CutDoseOrderController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     return '
-                        <a href="' . route('admin.cutDoseOrders.show', $row->id) . '" class="btn btn-info">Show</a>
+                        <a href="' . route('admin.cutDoseOrders.show', $row->id) . '" class="btn btn-info">Xem</a>
+                        <a href="' . route('admin.cutDoseOrders.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
                         <form action="' . route('admin.cutDoseOrders.destroy', $row->id) . '" method="POST" style="display:inline;">
                             ' . csrf_field() . '
                             ' . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn chắc chắn chưa?\')">Xóa</button>
                         </form>
                     ';
                 })
@@ -57,10 +59,10 @@ class CutDoseOrderController extends Controller
         $units = Unit::query()->pluck('name', 'id');
 
         //khởi tạo biến để lưu các đơn vị của thuốc
-         $unitsSelectMedicine = [];
+        $unitsSelectMedicine = [];
 
         // dd($medicines);
-        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases','unitsSelectMedicine'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases', 'unitsSelectMedicine'));
     }
 
     /**
@@ -72,9 +74,7 @@ class CutDoseOrderController extends Controller
 
         try {
             // Kiểm tra xem khách hàng đã tồn tại hay chưa
-            $customer = Customer::where('email', $request->input('email'))
-                                ->orWhere('phone', $request->input('phone'))
-                                ->first();
+            $customer = Customer::where('phone', $request->input('phone'))->first();
 
             // Nếu khách hàng chưa tồn tại, tạo mới
             if (!$customer) {
@@ -85,7 +85,7 @@ class CutDoseOrderController extends Controller
                     'address' => $request->input('address'),
                     'weight' => $request->input('weight'),
                     'gender' => $request->input('gender'),
-                    'email' => $request->input('email'),
+                    'email' => '',
                 ]);
             }
 
@@ -146,23 +146,91 @@ class CutDoseOrderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $cutDoseOrder = CutDoseOrder::with('cutDoseOrderDetails.medicine', 'cutDoseOrderDetails.unit')->findOrFail($id);
+        $medicines = Medicine::query()->pluck('name', 'id');
+        $diseases = Disease::query()->pluck('disease_name', 'id');
+        $units = Unit::query()->pluck('name', 'id');
+
+        return view(self::PATH_VIEW . 'edit', compact('cutDoseOrder', 'medicines', 'units', 'diseases'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCutDoseOrderRequest $request, $id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            // Tìm đơn thuốc theo ID
+            $cutDoseOrder = CutDoseOrder::findOrFail($id);
+
+            // Chỉ cho phép cập nhật các thông tin khách hàng
+            $cutDoseOrder->customer_name = $request->input('customer_name');
+            $cutDoseOrder->age = $request->input('age');
+            $cutDoseOrder->phone = $request->input('phone');
+            $cutDoseOrder->address = $request->input('address');
+            $cutDoseOrder->weight = $request->input('weight');
+            $cutDoseOrder->gender = $request->input('gender');
+            
+            $cutDoseOrder->status = $request->has('status') ? 1 : 0;
+
+            // Lưu lại thông tin
+            $cutDoseOrder->save();
+
+            // Cập nhật thông tin chi tiết đơn thuốc
+            $medicines = $request->input('medicines');
+
+            // Kiểm tra nếu medicines không null và là một mảng
+            if (is_array($medicines)) {
+                foreach ($medicines as $medicine) {
+                    // Nếu có ID của chi tiết đơn thuốc trong request
+                    if (isset($medicine['id'])) {
+                        $detail = CutDoseOrderDetails::findOrFail($medicine['id']);
+                        // Không cập nhật các trường thuốc, đơn vị, số lượng, liều lượng
+                        // Bạn có thể thêm logic nếu cần
+                    }
+                }
+            }
+
+            // Commit transaction
+            DB::commit();
+
+            return redirect()->route('admin.cutDoseOrders.index')->with('success', 'Cập nhật thành công');
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+            return back()->with('error', 'Cập nhật không thành công: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            // Tìm đơn đặt hàng dựa trên ID
+            $cutDoseOrder = CutDoseOrder::findOrFail($id);
+
+            // Xóa mềm đơn đặt hàng
+            $cutDoseOrder->delete();
+
+            // Commit transaction
+            DB::commit();
+
+            // Trả về view thành công
+            return redirect()->route('admin.cutDoseOrders.index')->with('success', 'Xóa thành công');
+
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
 
     public function getRestore()

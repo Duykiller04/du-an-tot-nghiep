@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrescriptionRequest;
+use App\Http\Requests\UpdatePrescriptionRequest;
 use App\Models\CutDosePrescription;
 use App\Models\Disease;
 use App\Models\ImportOrder;
@@ -33,7 +34,8 @@ class PrescriptionsController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     return '
-                        <a href="' . route('admin.prescriptions.show', $row->id) . '" class="btn btn-info">Show</a>
+                        <a href="' . route('admin.prescriptions.show', $row->id) . '" class="btn btn-info">Xem</a>
+                        <a href="' . route('admin.prescriptions.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
                         <form action="' . route('admin.prescriptions.destroy', $row->id) . '" method="POST" style="display:inline;">
                             ' . csrf_field() . '
                             ' . method_field('DELETE') . '
@@ -126,16 +128,46 @@ class PrescriptionsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $prescription = Prescription::with('prescriptionDetails.medicine', 'prescriptionDetails.unit')->findOrFail($id);
+
+        // dd($prescription);
+        
+        $cutDosePrescription = CutDosePrescription::all(); // Lấy danh sách đơn thuốc mẫu
+        $medicines = Medicine::all()->pluck('name', 'id'); // Lấy danh sách thuốc
+        $units = Unit::all()->pluck('name', 'id'); // Lấy danh sách đơn vị
+        return view(self::PATH_VIEW . __FUNCTION__, compact('prescription', 'cutDosePrescription', 'medicines', 'units'));
     }
 
     /**
      * Update the specified resource in Prescription.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePrescriptionRequest $request, string $id)
     {
-        //
+        // dd($request->all());
+        DB::beginTransaction();
+
+        try {
+            $prescription = Prescription::findOrFail($id);
+            $prescription->update([
+                'age' => $request->age,
+                'type_sell' => $request->type_sell,
+                'name_customer' => $request->customer_name,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'email' => $request->email,
+                'weight' => $request->weight,
+                'gender' => $request->gender,
+                'status' => $request->has('status') ? 1 : 0,
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.prescriptions.index')->with('success', 'Cập nhật thành công');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Remove the specified resource from Prescription.
