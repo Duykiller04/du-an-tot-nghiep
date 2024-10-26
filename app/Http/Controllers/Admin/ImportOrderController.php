@@ -75,6 +75,7 @@ class ImportOrderController extends Controller
         $importOrders = ImportOrder::with(['user', 'storage', 'supplier'])
             ->latest('id')
             ->get();
+            // dd($importOrders);
 
         return view('admin.importorder.index', compact('importOrders'));
     }
@@ -239,11 +240,10 @@ class ImportOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        // Tìm kiếm bản ghi theo ID
-        $importOrder = ImportOrder::find($id);
-
+        // dd( $id);
+        $importOrder = ImportOrder::withTrashed()->find($id);
         if ($importOrder) {
             // Xóa tất cả các chi tiết liên quan trước
             DB::table('import_order_details')->where('import_order_id', $id)->delete();
