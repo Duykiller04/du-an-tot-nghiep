@@ -20,9 +20,13 @@ class Prescription extends Model
         'email',
         'weight',
         'gender',
-        'status'
+        'status',
+        'shift_id'
     ];
     public function prescriptionDetails(){
         return $this->hasMany(PrescriptionDetail::class);
+    }
+    public function shift(){
+        return $this->belongsTo(Shift::class);
     }
 }

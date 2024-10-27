@@ -11,6 +11,7 @@ use App\Models\ImportOrder;
 use App\Models\Medicine;
 use App\Models\Prescription;
 use App\Models\PrescriptionDetail;
+use App\Models\Shift;
 use App\Models\Unit;
 
 use Illuminate\Http\Request;
@@ -75,6 +76,9 @@ class PrescriptionsController extends Controller
 
         try {
             // Tạo một bản ghi mới trong bảng prescriptions
+            $activeShift = Shift::where('status', 'đang mở')->first();
+            $shiftId = $activeShift ? $activeShift->id : null;
+
             $prescription = Prescription::create([
                 'total' => $request->total_price, // Chắc chắn rằng total_price được gửi lên
                 'age' => $request->age,
@@ -85,6 +89,7 @@ class PrescriptionsController extends Controller
                 'email' => $request->email,
                 'weight' => $request->weight,
                 'gender' => $request->gender,
+                'shift_id' => $shiftId,
             ]);
 
             // Tạo các bản ghi mới trong bảng prescription_details

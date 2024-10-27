@@ -154,7 +154,11 @@
                         {
                             data: 'name'
                         },
-                        { data: 'image', orderable: false, searchable: false },
+                        {
+                            data: 'image',
+                            orderable: false,
+                            searchable: false
+                        },
                         {
                             data: 'price_import'
                         },
@@ -164,9 +168,13 @@
                         {
                             data: 'expiration_date'
                         },
-                        { data: 'suppliers', render: function (data, type, row) {
-                        return data.map(supplier => `<p>${supplier.name}</p>`).join('');
-                    }},
+                        {
+                            data: 'suppliers',
+                            render: function(data, type, row) {
+                                return data.map(supplier => `<p>${supplier.name}</p>`).join(
+                                    '');
+                            }
+                        },
                         {
                             data: 'inventory.quantity'
                         },
@@ -183,43 +191,68 @@
                         }
                     ],
                     dom: 'Bfrtip',
+                    language: {
+                        "sEmptyTable": "Không có dữ liệu trong bảng",
+                        "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                        "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                        "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
+                        "sLengthMenu": "Hiển thị _MENU_ mục",
+                        "sLoadingRecords": "Đang tải...",
+                        "sProcessing": "Đang xử lý...",
+                        "sSearch": "Tìm kiếm:",
+                        "sZeroRecords": "Không tìm thấy kết quả nào",
+                        "oPaginate": {
+                            "sFirst": "Đầu",
+                            "sLast": "Cuối",
+                            "sNext": "Kế tiếp",
+                            "sPrevious": "Trước"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Sắp xếp tăng dần",
+                            "sSortDescending": ": Sắp xếp giảm dần"
+                        }
+                    },
                     buttons: [{
                             extend: 'excel',
-                            text: 'Export Excel',
+                            text: 'Xuất Excel',
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !==
+                                    12; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
                         {
                             extend: 'csv',
-                            text: 'Export CSV',
+                            text: 'Xuất CSV',
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
+                                    return idx !==
+                                    12; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
                         {
                             extend: 'pdf',
-                            text: 'Export PDF',
+                            text: 'Xuất PDF',
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
+                                    return idx !==
+                                    12; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
                         {
                             extend: 'print',
-                            text: 'Print',
+                            text: 'In',
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 12; // Ví dụ: Nếu cột `action` là cột số 12
+                                    return idx !==
+                                    12; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         }

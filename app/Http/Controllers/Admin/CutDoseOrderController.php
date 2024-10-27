@@ -10,6 +10,7 @@ use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
 use App\Models\Disease;
 use App\Models\Medicine;
+use App\Models\Shift;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -85,12 +86,14 @@ class CutDoseOrderController extends Controller
                     'address' => $request->input('address'),
                     'weight' => $request->input('weight'),
                     'gender' => $request->input('gender'),
-                    'email' => '',
+                    'email' => $request->input('email') ?? null,
                 ]);
             }
 
             $customerId = $customer->id;
-
+            $activeShift = Shift::where('status', 'đang mở')->first();
+            $shiftId = $activeShift ? $activeShift->id : null;
+            
             // Lưu thông tin đơn đặt hàng
             $cutDoseOrder = CutDoseOrder::create([
                 'disease_id' => $request->input('disease_id'),  // Đảm bảo rằng trường này không phải là null
@@ -101,6 +104,7 @@ class CutDoseOrderController extends Controller
                 'customer_name' => $request->input('customer_name'),
                 'phone' => $request->input('phone'),
                 'address' => $request->input('address'),
+                'shift_id' => $shiftId,
             ]);
 
             // Lưu thông tin chi tiết đơn đặt hàng
