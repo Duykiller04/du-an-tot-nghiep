@@ -19,6 +19,7 @@ class CutDoseOrder extends Model
         'customer_name',
         'phone',
         'address',
+        'shift_id',
     ];
 
     public function disease()

@@ -66,7 +66,9 @@
                                             <input type="date" id="maxDate" class="form-control">
                                         </div>
                                     </div>
-                                    <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                                    <table id="example"
+                                        class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                                        style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th></th> <!-- Cột để click mở rộng -->
@@ -94,104 +96,143 @@
 @endsection
 
 @section('css')
-   <!-- DataTables CSS -->
+    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <!-- DataTables Responsive CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     <!-- DataTables Buttons CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
-
 @endsection
 
 @section('script-libs')
-   <!-- jQuery -->
-   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-   <!-- DataTables JS -->
-   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-   <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
-   <!-- DataTables Buttons JS -->
-   <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-   <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-   <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-   <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 @endsection
 
 @section('js')
-<script>
-    $(document).ready(function() {
-    var table = $('#example').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '{{ route('admin.catalogues.index') }}',
-        columns: [
-            {
-                className: 'details-control',
-                orderable: false,
-                data: null,
-                defaultContent: '<i class="bx bx-sort-down"></i>',
-                width: '20px'
-            },
-            { data: 'id', name: 'id' },
-            { data: 'name', name: 'name' },
-            { data: 'created_at', name: 'created_at' },
-            { data: 'updated_at', name: 'updated_at' },
-            { data: 'action', orderable: false, searchable: false }
-        ],
-        order: [[1, 'desc']],
-    });
-
-    $('#example tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row(tr);
-
-        if (row.child.isShown()) {
-            row.child.hide();
-            tr.removeClass('shown');
-        } else {
-            var rowData = row.data();
-            var categoryId = rowData.id;
-
-            $.ajax({
-                url: '{{ route('admin.catalogues.getChildren') }}',
-                method: 'GET',
-                data: { id: categoryId },
-                success: function(children) {
-                    // Nếu children là chuỗi JSON, hãy phân tích nó
-                    if (typeof children === 'string') {
-                        children = JSON.parse(children);
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('admin.catalogues.index') }}',
+                columns: [{
+                        className: 'details-control',
+                        orderable: false,
+                        data: null,
+                        defaultContent: '<i class="bx bx-sort-down"></i>',
+                        width: '20px'
+                    },
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'updated_at',
+                        name: 'updated_at'
+                    },
+                    {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false
                     }
-
-                    if (children.length > 0) {
-                        var html = '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
-                        children.forEach(function(child) {
-                            html += '<tr><td>' + child.id + '</td><td>' + child.name + '</td><td>' + child.created_at + '</td><td>' + child.updated_at + '</td>';
-                            html += '<td><a href="' + child.edit_url + '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
-                        });
-                        html += '</table>';
-                        row.child(html).show();
-                        tr.addClass('shown');
-                    } else {
-                        row.child('<div>Không có danh mục con</div>').show();
-                        tr.addClass('shown');
+                ],
+                order: [
+                    [1, 'desc']
+                ],
+                language: {
+                    "sEmptyTable": "Không có dữ liệu trong bảng",
+                    "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                    "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
+                    "sLengthMenu": "Hiển thị _MENU_ mục",
+                    "sLoadingRecords": "Đang tải...",
+                    "sProcessing": "Đang xử lý...",
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không tìm thấy kết quả nào",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sLast": "Cuối",
+                        "sNext": "Kế tiếp",
+                        "sPrevious": "Trước"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Sắp xếp tăng dần",
+                        "sSortDescending": ": Sắp xếp giảm dần"
                     }
-                },
-                error: function() {
-                    row.child('<div>Lỗi khi tải danh mục con.</div>').show();
-                    tr.addClass('shown');
                 }
             });
 
-        }
-    });
-});
+            $('#example tbody').on('click', 'td.details-control', function() {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
 
-</script>
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+                    var rowData = row.data();
+                    var categoryId = rowData.id;
 
+                    $.ajax({
+                        url: '{{ route('admin.catalogues.getChildren') }}',
+                        method: 'GET',
+                        data: {
+                            id: categoryId
+                        },
+                        success: function(children) {
+                            // Nếu children là chuỗi JSON, hãy phân tích nó
+                            if (typeof children === 'string') {
+                                children = JSON.parse(children);
+                            }
 
+                            if (children.length > 0) {
+                                var html =
+                                    '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
+                                children.forEach(function(child) {
+                                    html += '<tr><td>' + child.id + '</td><td>' + child
+                                        .name + '</td><td>' + child.created_at +
+                                        '</td><td>' + child.updated_at + '</td>';
+                                    html += '<td><a href="' + child.edit_url +
+                                        '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
+                                });
+                                html += '</table>';
+                                row.child(html).show();
+                                tr.addClass('shown');
+                            } else {
+                                row.child('<div>Không có danh mục con</div>').show();
+                                tr.addClass('shown');
+                            }
+                        },
+                        error: function() {
+                            row.child('<div>Lỗi khi tải danh mục con.</div>').show();
+                            tr.addClass('shown');
+                        }
+                    });
+
+                }
+            });
+        });
+    </script>
 @endsection

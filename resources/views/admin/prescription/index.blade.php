@@ -125,7 +125,28 @@ Danh sách đơn thuốc
                     { data: 'weight' },
                     { data: 'total' },
                     { data: 'action', orderable: false, searchable: false }
-                ]
+                ],
+                language: {
+                    "sEmptyTable": "Không có dữ liệu trong bảng",
+                    "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                    "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
+                    "sLengthMenu": "Hiển thị _MENU_ mục",
+                    "sLoadingRecords": "Đang tải...",
+                    "sProcessing": "Đang xử lý...",
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không tìm thấy kết quả nào",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sLast": "Cuối",
+                        "sNext": "Kế tiếp",
+                        "sPrevious": "Trước"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Sắp xếp tăng dần",
+                        "sSortDescending": ": Sắp xếp giảm dần"
+                    }
+                },
 
             });
         });
