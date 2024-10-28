@@ -58,13 +58,75 @@
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
                                     <a href="{{ route('admin.environments.export') }}" class="btn btn-primary">Xuất Excel</a>
-                                    <a href="{{ route('admin.environments.create') }}" class="btn btn-success add-btn"
-                                        id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm môi trường</a>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createEnvironment">Thêm mới môi trường</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                     <!-- Modal xác nhận đóng ca -->
+                    <div class="modal fade" id="createEnvironment" tabindex="-1" aria-labelledby="createEnvironment" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm mới môi trường</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                            {{-- <div class="modal-body">
+                                   
+                             </div> --}}
+                    <div class="modal-body">
+                        
+                        <form action="{{ route('admin.environments.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="real_temperature" value="{{ old('real_temperature') }}">
+                                @error('real_temperature')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường<span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="temperature" value="{{ $weatherData['main']['temp']}}" readonly>
+                            </div>
 
+                            <div class="mb-3">                              
+                                <label class="form-label" for="real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="real_humidity" name="real_humidity" value="{{ old('real_humidity') }}">
+                                @error('real_humidity')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết<span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="huminity" value="{{ $weatherData['main']['humidity'] }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="storage_id">Chọn kho</label>
+                                <select class="form-select" id="storage_id" name="storage_id">
+                                    @foreach($storages as $storage)
+                                        <option value="{{ $storage->id }}">{{ $storage->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('storage_id')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-success">Thêm</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if ($errors->any())
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var myModal = new bootstrap.Modal(document.getElementById('createEnvironment'));
+                    myModal.show();
+                });
+            </script>
+        @endif
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
@@ -87,9 +149,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($environments as $environment)
+                                            @foreach($environments as $index => $environment)
                                                 <tr>
-                                                    <td>{{ $environment->id }}</td>
+                                                    <td>{{ $index+1 }}</td>
                                                     <td>{{ $environment->time->format('H:i:s d-m-Y') }}</td>
                                                     <td>{{ $environment->temperature }}°C</td>
                                                     <td>{{ $environment->real_temperature }}°C</td>

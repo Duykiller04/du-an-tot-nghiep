@@ -9,6 +9,7 @@ use App\Services\WeatherService;
 use App\Exports\EnvironmentsExport;
 use App\Models\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EnvironmentController extends Controller
@@ -24,13 +25,14 @@ class EnvironmentController extends Controller
     {
        
         $environments = Environment::all();
+        $storage = Storage::all();
         $location = $this->getMachineLocation(); 
         $weatherData = $this->getWeatherData($location);
 
         return view('admin.environments.index', [
             'environments' => $environments,
             'weatherData' => $weatherData,
-            
+            'storages' => $storage
         ]);
     }
 
@@ -80,10 +82,12 @@ class EnvironmentController extends Controller
     {
         // Xác thực dữ liệu
         //dd($request->all());
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'real_temperature' => 'required|numeric|min:-50',
             'real_humidity' => 'required|numeric|between:10,100',
+            'storage_id' => 'required'
         ], [
+            'storage_id.required' => 'Bạn phải chọn kho.',
             'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
             'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
             'real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
@@ -91,7 +95,11 @@ class EnvironmentController extends Controller
             'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
             'real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
         ]);
-
+    
+        // Kiểm tra nếu có lỗi
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
         // // Gọi API để lấy dữ liệu thời tiết
         // $temperature = $this->weatherService->getTemperature($validated['latitude'], $validated['longitude']);
         // $humidity = $this->weatherService->getHumidity($validated['latitude'], $validated['longitude']);
@@ -102,8 +110,8 @@ class EnvironmentController extends Controller
             'time' => $currentTime,
             'temperature' => $request->temperature,
             'huminity' => $request->huminity,
-            'real_temperature' => $validated['real_temperature'],
-            'real_humidity' => $validated['real_humidity'],
+            'real_temperature' => $request->real_temperature,
+            'real_humidity' => $request->real_humidity,
         ]);
 
         return redirect()->route('admin.environments.index')->with('success', 'Môi trường đã được thêm thành công.');
