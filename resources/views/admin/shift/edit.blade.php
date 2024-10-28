@@ -185,31 +185,73 @@
         <!-- Danh sách hóa đơn của ca làm -->
         <div class="row mb-4">
             <div class="col-12">
+                <div class="card p-3">
                 <h5>Danh sách hóa đơn</h5>
-                @if($orders->isEmpty())
+                @if($orders->isEmpty() && $Prescription->isEmpty())
                     <div class="alert alert-warning">Không có hóa đơn nào trong ca làm này.</div>
                 @else
-                    <table class="table table-hover table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Mã hóa đơn</th>
-                                <th>Ngày tạo</th>
-                                <th>Tổng tiền</th>
-                                <th>Trạng thái</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($orders as $order)
-                                <tr>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                                    <td>{{ number_format($order->total_amount) }} VND</td>
-                                    <td>{{ ucfirst($order->status) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <ul class="nav nav-tabs" id="orderTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="normal-orders-tab" data-bs-toggle="tab" href="#normal-orders" role="tab" aria-controls="normal-orders" aria-selected="true">Đơn thuốc thông thường</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="special-orders-tab" data-bs-toggle="tab" href="#special-orders" role="tab" aria-controls="special-orders" aria-selected="false">Đơn thuốc cắt liều</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3" id="orderTabContent">
+                        <!-- Tab Đơn thuốc thông thường -->
+                        <div class="tab-pane fade show active" id="normal-orders" role="tabpanel" aria-labelledby="normal-orders-tab">
+                            <div class="card p-3 bg-light">
+                                <table class="table table-hover table-bordered border-dark">
+                                    <thead class="table-striped">
+                                        <tr>
+                                            <th>Mã hóa đơn</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($orders as $order)
+                                            <tr>
+                                                <td>{{ $order->id }}</td>
+                                                <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                                <td>{{ number_format($order->total) }} VND</td>
+                                                <td>{{ ucfirst($order->status) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Tab Đơn thuốc cắt liều -->
+                        <div class="tab-pane fade" id="special-orders" role="tabpanel" aria-labelledby="special-orders-tab">
+                            <div class="card p-3 bg-light">
+                                <table class="table table-hover table-bordered">
+                                    <thead class="table">
+                                        <tr>
+                                            <th>Mã hóa đơn</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($Prescription as $prescription)
+                                            <tr>
+                                                <td>{{ $prescription->id }}</td>
+                                                <td>{{ $prescription->created_at->format('d/m/Y H:i') }}</td>
+                                                <td>{{ number_format($prescription->total) }} VND</td>
+                                                <td>{{ ucfirst($prescription->status) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 @endif
+            </div>
             </div>
         </div>
 
@@ -223,6 +265,7 @@
                 checkbox.checked = this.checked;
             });
         });
+        
     </script>
     @endsection
 @endsection

@@ -122,7 +122,7 @@ class ShiftController extends Controller
 
     public function edit($id)
     {
-        $shift = Shift::with('shiftuser.user')->findOrFail($id);
+        $shift = Shift::with('shiftuser.user','orders', 'Prescription')->findOrFail($id);
 
         $statusOptions = ['kế hoạch', 'đang mở', 'tạm dừng', 'đã chốt', 'đã hủy'];
 
@@ -131,9 +131,11 @@ class ShiftController extends Controller
         // Lấy ID của những nhân viên trong ca làm hiện tại
         $checkedUsers = $shift->shiftuser->pluck('users_id')->toArray();
 
-        $orders = CutDoseOrder::all();
-        //dd($checkedUsers);
-        return view('admin.shift.edit', compact('shift', 'statusOptions', 'users', 'orders', 'checkedUsers'));
+        $orders = $shift->orders;
+        
+        $Prescription = $shift->Prescription;
+        //dd($Prescription);
+        return view('admin.shift.edit', compact('shift', 'statusOptions', 'users', 'orders', 'checkedUsers','Prescription'));
     }
 
 
