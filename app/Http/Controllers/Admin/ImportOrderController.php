@@ -136,6 +136,8 @@ class ImportOrderController extends Controller
                 // Gán giá trị mặc định cho quantity nếu không có
                 $detail['quantity'] = $detail['quantity'] ?? 1;
 
+                $detail['storage_id'] = $data['storage_id'];
+
                 // Kiểm tra thuốc đã tồn tại
                 $existingMedicine = Medicine::where('medicine_code', $detail['medicine_code'])->first();
 

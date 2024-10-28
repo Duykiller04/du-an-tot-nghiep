@@ -56,12 +56,12 @@
                                 style="width: 100%">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>STT</th>
                                         <th>Tên kho</th>
                                         <th>Địa chỉ</th>
                                         <th>Thời gian tạo</th>
-                                        <th>Thời gian cập nhật</th>
-                                        <th>Action</th>
+                                        <th>Tổng thuốc</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -118,7 +118,7 @@
                     }
                 },
                 columns: [{
-                        data: 'id'
+                        data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false
                     },
                     {
                         data: 'name'
@@ -129,9 +129,7 @@
                     {
                         data: 'created_at'
                     },
-                    {
-                        data: 'updated_at'
-                    },
+                    { data: 'medicines_count' },
                     {
                         data: 'action',
                         name: 'action',
