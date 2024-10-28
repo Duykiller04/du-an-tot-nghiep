@@ -177,6 +177,8 @@ class MedicalInstrumentController extends Controller
 
             $medicineData['image'] = $imagePath;
 
+            $medicineData['storage_id'] = $request->storage_id;
+
             $inventories = [];
 
             $units = $request->don_vi;
