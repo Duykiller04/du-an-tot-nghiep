@@ -18,13 +18,15 @@ class Shift extends Model
         'revenue_summary',
     ];
 
-    /**
-     * Quan hệ nhiều-nhiều với người dùng (users) thông qua bảng shift_users.
-     */
+ 
     
-    public function order()
+    public function orders()
     {
         return $this->hasMany(CutDoseOrder::class, 'shift_id');
+    }
+    public function Prescription()
+    {
+        return $this->hasMany(Prescription::class, 'shift_id');
     }
     public function shiftuser()
     {

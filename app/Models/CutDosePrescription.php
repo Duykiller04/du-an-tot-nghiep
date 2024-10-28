@@ -27,4 +27,5 @@ class CutDosePrescription extends Model
     {
         return $this->hasMany(CutDosePrescriptionDetail::class);
     }
+    
 }
