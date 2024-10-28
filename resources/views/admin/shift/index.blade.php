@@ -121,12 +121,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($shifts as $shift)
+                                            @foreach ($shifts as $index=> $shift)
                                                 <tr>
-                                                    <td>#{{ $shift->id }}</td>
+                                                    <td>{{ $index+1 }}</td>
                                                     <td>{{ $shift->shift_name }}</td>
-                                                    <td>{{ $shift->start_time }}</td>
-                                                    <td>{{ $shift->end_time }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($shift->start_time)->format('H:i:s d-m-Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($shift->end_time)->format('H:i:s d-m-Y') }}</td>
                                                     <td>
                                                         @foreach ($shift->users as $user)
                                                             {{ $user->name }}<br> <!-- Hiển thị tên nhân viên -->

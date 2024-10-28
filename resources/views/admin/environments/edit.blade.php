@@ -59,7 +59,7 @@
 
             <!-- Submit Button -->
             <div class="text-end mb-3">
-                <a href="{{route('admin.environments.index')}}"><button class="btn btn-primary w-sm">Quay lại</button></a>
+                <a class="btn btn-primary w-sm" href="{{route('admin.environments.index')}}">Quay lại</a>
                 <button type="submit" class="btn btn-success w-sm">Lưu thay đổi</button>
             </div>
         </form>
