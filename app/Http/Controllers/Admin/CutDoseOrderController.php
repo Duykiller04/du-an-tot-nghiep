@@ -29,6 +29,7 @@ class CutDoseOrderController extends Controller
             $data = CutDoseOrder::with('cutDoseOrderDetails')->get();
 
             return DataTables::of($data)
+                ->addIndexColumn()
                 ->addColumn('gender', function ($row) {
                     return $row->gender == 0 ? 'Nam' : 'Nữ';
                 })
@@ -42,6 +43,9 @@ class CutDoseOrderController extends Controller
                             <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn chắc chắn chưa?\')">Xóa</button>
                         </form>
                     ';
+                })
+                ->addColumn('total_price', function ($row) {
+                    return $row->total_price;
                 })
                 ->make(true);
         }
@@ -105,6 +109,7 @@ class CutDoseOrderController extends Controller
                 'phone' => $request->input('phone'),
                 'address' => $request->input('address'),
                 'shift_id' => $shiftId,
+                'total_price' => $request->input('total_price')
             ]);
 
             // Lưu thông tin chi tiết đơn đặt hàng
