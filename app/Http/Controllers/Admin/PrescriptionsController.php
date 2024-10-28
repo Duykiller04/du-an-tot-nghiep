@@ -30,6 +30,7 @@ class PrescriptionsController extends Controller
         if (request()->ajax()) {
             $data = Prescription::with('prescriptionDetails')->get();
             return DataTables::of($data)
+                ->addIndexColumn()
                 ->addColumn('gender', function ($row) {
                     return $row->gender == 0 ? 'Nam' : 'Nữ'; // Chuyển đổi giới tính
                 })
