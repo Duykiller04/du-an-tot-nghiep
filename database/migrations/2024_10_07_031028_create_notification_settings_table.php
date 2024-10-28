@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('notification_settings', function (Blueprint $table) {
             $table->id();
-            $table->boolean('notification_enabled')->default(true); // Mặc định là bật
-            $table->integer('expiration_notification_days')->default(30); // Số ngày trước khi thuốc hết hạn sẽ thông báo
-            $table->boolean('receive_email_notifications')->default(true); // Nhận email thông báo
-            $table->boolean('temperature_warning')->default(false); // Cảnh báo nhiệt độ bảo quản
+            $table->boolean('notification_enabled')->default(true); 
+            $table->integer('expiration_notification_days')->default(30); 
+            $table->boolean('receive_email_notifications')->default(true);
+            $table->text('email')->default('example@gmail.com'); 
+            $table->boolean('temperature_warning')->default(false);
             $table->timestamps();
         });
         

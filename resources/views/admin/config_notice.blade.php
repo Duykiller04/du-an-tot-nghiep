@@ -59,6 +59,14 @@
                                            value="{{ $settings->expiration_notification_days }}" required>
                                 </div>
                             </div>
+                            <!-- Số ngày trước khi hết hạn -->
+                            <div class="mb-3 row">
+                                <label for="email" class="col-sm-3 col-form-label">email nhận thông báo</label>
+                                <div class="col-sm-3">
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           value="{{ $settings->email }}" required>
+                                </div>
+                            </div>
 
                             <!-- Nhận email thông báo -->
                             <div class="mb-3 row">

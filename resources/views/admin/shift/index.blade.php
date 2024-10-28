@@ -62,13 +62,25 @@
                                     </div>
                                 </div>
                                 <!--end col-->
-                                <div class="col-xxl-4 col-sm-4">
-                                    <div>
-                                        <select class="form-control" name="status" id="status">
-                                            <option value="all" selected>Chọn Trạng Thái</option>
+                                {{-- <div class="col-xxl-4 col-sm-4">
+                                    <div >
+                                        <select class="form-select" name="status" id="status">
+                                            
+                                            <option value="all" selected>Chọn Trạng Thái Ca Làm</option>
                                             <option value="kế hoạch">Kế Hoạch</option>
                                             <option value="đang mở">Đang Mở</option>
                                             <option value="tạm dừng">Tạm Dừng</option>
+                                            <option value="đã chốt">Đã Chốt</option>
+                                            <option value="đã hủy">Đã Hủy</option>
+                                        </select>
+                                    </div>
+                                </div> --}}
+                                <div class="col-xxl-4 col-sm-4">
+                                    <div>
+                                        <select class="form-control" name="status" id="storage">
+                                            <option value="all" selected>Chọn Trạng Thái Ca Làm</option>
+                                            <option value="kế hoạch">Kế Hoạch</option>
+                                            <option value="đang mở">Đang Mở</option>
                                             <option value="đã chốt">Đã Chốt</option>
                                             <option value="đã hủy">Đã Hủy</option>
                                         </select>

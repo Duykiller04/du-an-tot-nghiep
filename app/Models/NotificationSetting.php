@@ -16,5 +16,6 @@ class NotificationSetting extends Model
         'expiration_notification_days',
         'receive_email_notifications',
         'temperature_warning',
+        'email'
     ];
 }
