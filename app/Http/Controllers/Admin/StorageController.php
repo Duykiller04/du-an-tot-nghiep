@@ -34,26 +34,25 @@ class StorageController extends Controller
             }
 
             return DataTables::of($query)
-                ->addIndexColumn() // Thêm số thứ tự
+                ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $viewUrl = route('admin.storage.show', $row->id);
-                    $editUrl = route('admin.storage.edit', $row->id);
-                    $deleteUrl = route('admin.storage.destroy', $row->id);
-
+                    $editUrl = route('admin.storage.update', $row->id);
                     return '
-                        <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
-                        <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
-                        <form action="' . $deleteUrl . '" method="post" style="display:inline;">
+                    <button class="btn btn-warning edit-btn" 
+                            data-id="' . $row->id . '" 
+                            data-name="' . $row->name . '" 
+                            data-location="' . $row->location . '">Sửa</button>
+                    <form action="' . route('admin.storage.destroy', $row->id) . '" method="post" style="display:inline;">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
-                        </form>
-                    ';
+                    </form>
+                ';
                 })
                 ->addColumn('created_at', function ($row) {
-                    return \Carbon\Carbon::parse($row->created_at)->format('d-m-Y'); // Định dạng ngày
+                    return \Carbon\Carbon::parse($row->created_at)->format('d-m-Y');
                 })
                 ->addColumn('medicine_count', function ($row) {
-                    return $row->medicines_count; // Sử dụng tên cột chính xác
+                    return $row->medicines_count;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -63,6 +62,7 @@ class StorageController extends Controller
         $data = Storage::query()->latest('id')->paginate(5);
         return view('admin.storage.index', compact('data'));
     }
+
 
 
     /**
