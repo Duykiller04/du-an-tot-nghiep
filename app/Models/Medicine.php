@@ -56,4 +56,7 @@ class Medicine extends Model
     public function inventory(){
         return $this->hasOne(Inventory::class);
     }
+    protected $casts = [
+        'expiration_date' => 'datetime',
+    ];
 }
