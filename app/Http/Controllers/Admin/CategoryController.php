@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Medicine;
 use App\Models\Product;
@@ -16,6 +18,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
+        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
         if (request()->ajax()) {
             $query = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
 
@@ -29,7 +32,7 @@ class CategoryController extends Controller
                     $deleteUrl = route('admin.catalogues.destroy', $row->id);
 
                     return '
-                        <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
+                        <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '" data-is-active="' . $row->is_active . '">Sửa</button>
                         <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
@@ -48,7 +51,7 @@ class CategoryController extends Controller
                 ->make(true);
         }
 
-        return view('admin.catalogue.index');
+        return view('admin.catalogue.index', compact('catalogues'));
     }
 
     /**
@@ -56,48 +59,24 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
-
-        // $categories = Category::all();
-
-        // foreach ($categories as $category) {
-        //     echo "Category: " . $category->name . "\n";
-        //     $ancestors = $category->ancestors();
-        //     if ($ancestors->isNotEmpty()) {
-        //         echo "Ancestors: " . implode(' -> ', $ancestors->pluck('name')->toArray()) . "\n";
-        //     } else {
-        //         echo "No ancestors\n";
-        //     }
-        // }
-        // return 0;
-        return view('admin.catalogue.add', compact('catalogues'));
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $validate = $request->validate([
-            'name' => 'required|string|max:100',
+        $parentId = $request->input('parent_idCreate') === '0' ? null : $request->input('parent_id');
+        $isActive = $request->input('is_activeCreate') === '1' ? 1 : 0;
 
-        ], [
-            'name.required' => 'Trường tên là bắt buộc.',
-            'name.string' => 'Trường tên phải là chuỗi.',
-            'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
-
-        ]);
-        $validate['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
-        $validate['is_active'] = $request->input('is_active') === '1' ? 1 : 0;
-
-
+        // Lưu vào cơ sở dữ liệu
         DB::table('categories')->insert([
-            'name' => $validate['name'],
-            'parent_id' => $validate['parent_id'],
-            'is_active' => $validate['is_active'], // giá trị mặc định
-            'created_at' => now(),
-            'updated_at' => now()
+            'name' => $request->input('nameCreate'),
+            'parent_id' => $parentId,
+            'is_active' => $isActive,
         ]);
+
         return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được thêm thành công');
     }
 
@@ -107,47 +86,28 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $catalogue = Category::findOrFail($id);
-        return view('admin.catalogue.show', compact('catalogue'));
+        //
     }
 
     public function edit(string $id)
     {
-
-        $catalogue = DB::table('categories')->where('id', $id)->first();
-        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->whereNot('id', $id)->get();
-        if (!$catalogue) {
-            return redirect()->route('admin.catalogues.index')->with('error', 'Danh mục không tồn tại');
-        }
-
-        return view('admin.catalogue.edit', ['catalogue' => $catalogue, 'catalogues' => $catalogues]);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, string $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:100',
-
-        ], [
-            'name.required' => 'Trường tên là bắt buộc.',
-            'name.string' => 'Trường tên phải là chuỗi.',
-            'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
-
-        ]);
-        $validatedData['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
-        $validatedData['is_active'] = $request->input('is_active') === '1' ? 1 : 0;
-
-
-
+        $parentId = $request->input('parent_idEdit') === '0' ? null : $request->input('parent_id');
+        $isActive = $request->input('is_activeEdit') === '1' ? 1 : 0;
+    
         DB::table('categories')->where('id', $id)->update([
-            'name' => $validatedData['name'],
-            'parent_id' => $validatedData['parent_id'],
-            'is_active' =>  $validatedData['is_active'],
-            'updated_at' => now()
+            'name' => $request->input('nameEdit'),
+            'parent_id' => $parentId,
+            'is_active' => $isActive,
         ]);
+    
         return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được sửa thành công');
     }
 
