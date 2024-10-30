@@ -33,11 +33,11 @@ class UpdateStorageRequest extends FormRequest
             'name.required' => 'Tên kho bắt buộc phải được điền',
             'name.string' => 'Tên kho phải là một chuỗi ký tự',
             'name.max' => 'Tên kho không được vượt quá 255 ký tự.',
-            'name.unique'=>'Tên kho này đã tồn tại',
+            'name.unique' => 'Tên kho này đã tồn tại',
 
-            'location.required' => 'Tên kho bắt buộc phải được điền',
-            'location.string' => 'Tên kho phải là một chuỗi ký tự',
-            'location.max' => 'Tên kho không được vượt quá 255 ký tự.',
+            'location.required' => 'Địa chỉ bắt buộc phải được điền',
+            'location.string' => 'Địa chỉ  phải là một chuỗi ký tự',
+            'location.max' => 'Địa chỉ  không được vượt quá 255 ký tự.',
         ];
     }
 }
