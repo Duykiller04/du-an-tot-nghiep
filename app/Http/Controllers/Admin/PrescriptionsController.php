@@ -34,6 +34,12 @@ class PrescriptionsController extends Controller
                 ->addColumn('gender', function ($row) {
                     return $row->gender == 0 ? 'Nam' : 'Nữ'; // Chuyển đổi giới tính
                 })
+                ->addColumn('total', function ($row) {
+                    return number_format($row->total) . ' VND';  // Format price
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
                 ->addColumn('action', function ($row) {
                     return '
                         <a href="' . route('admin.prescriptions.show', $row->id) . '" class="btn btn-info">Xem</a>

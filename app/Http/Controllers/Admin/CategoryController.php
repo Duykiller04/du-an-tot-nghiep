@@ -20,6 +20,7 @@ class CategoryController extends Controller
             $query = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
 
             return DataTables::of($query)
+                ->addIndexColumn()
                 ->addColumn('details-control', function () {
                     return '';
                 })
