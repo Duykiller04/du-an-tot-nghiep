@@ -92,7 +92,9 @@ class StorageController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $storage = Storage::with('medicines')->findOrFail($id);
+
+        return view('admin.storage.show', compact('storage'));
     }
 
     /**

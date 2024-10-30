@@ -25,8 +25,10 @@ class MedicineController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Medicine::query()->with(['suppliers', 'category', 'storage', 'inventory'])
-            ->where('type_product', 0);
+            $query = Medicine::query()
+                ->with(['suppliers', 'category', 'storage', 'inventory'])
+                ->where('type_product', 0);
+
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -41,26 +43,40 @@ class MedicineController extends Controller
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
-        return DataTables::of($query)
-            ->addColumn('category_name', function ($row) {
-                return $row->category->name ?? '';  // Lấy tên từ bảng category
-            })
-            ->addColumn('storage_location', function ($row) {
-                return $row->storage->location ?? '';  // Lấy vị trí từ bảng storage
-            })
-            ->addColumn('inventory_stock', function ($row) {
-                return $row->inventory->stock ?? '';  // Lấy số lượng từ bảng inventory
-            })
-            ->addColumn('image', function($row) {
-                $url = \Illuminate\Support\Facades\Storage::url($row->image);
-                return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
-            })
-            ->addColumn('action', function ($row) {
-                $viewUrl = route('admin.medicines.show', $row->id);
-                $editUrl = route('admin.medicines.edit', $row->id);
-                $deleteUrl = route('admin.medicines.destroy', $row->id);
 
-                return '
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('category_name', function ($row) {
+                    return $row->category->name ?? '';  // Lấy tên từ bảng category
+                })
+                ->addColumn('storage_location', function ($row) {
+                    return $row->storage->location ?? '';  // Lấy vị trí từ bảng storage
+                })
+                ->addColumn('inventory_stock', function ($row) {
+                    return $row->inventory->stock ?? '';  // Lấy số lượng từ bảng inventory
+                })
+                ->addColumn('expiration_date', function ($row) {
+                    return $row->expiration_date ? $row->expiration_date->format('d/m/Y') : '';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
+                ->addColumn('price_import', function ($row) {
+                    return number_format($row->price_import) . ' VND';  // Format price
+                })
+                ->addColumn('price_sale', function ($row) {
+                    return number_format($row->price_sale) . ' VND';  // Format price
+                })
+                ->addColumn('image', function ($row) {
+                    $url = \Illuminate\Support\Facades\Storage::url($row->image);
+                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
+                })
+                ->addColumn('action', function ($row) {
+                    $viewUrl = route('admin.medicines.show', $row->id);
+                    $editUrl = route('admin.medicines.edit', $row->id);
+                    $deleteUrl = route('admin.medicines.destroy', $row->id);
+
+                    return '
                 <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
                 <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
                 <form action="' . $deleteUrl . '" method="POST" style="display:inline;">
@@ -68,14 +84,15 @@ class MedicineController extends Controller
                     <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
                 </form>
             ';
-            })
-            ->rawColumns(['image', 'action'])
-            ->make(true);
+                })
+                ->rawColumns(['image', 'action'])
+                ->make(true);
         }
 
         $medicines = Medicine::with(['suppliers', 'category', 'storage', 'inventory'])->where('type_product', 0)->latest('id')->get();
         return view('admin.medicine.index', compact('medicines'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -142,8 +159,8 @@ class MedicineController extends Controller
             $inventories['unit_id'] = end($units); // ID đơn vị bé nhất
 
             Inventory::create($inventories);
-            
-            foreach ($units as $i => $unit){
+
+            foreach ($units as $i => $unit) {
                 UnitConversion::create([
                     'medicine_id' => $inventories['medicine_id'],
                     'unit_id' => $unit,
@@ -166,7 +183,9 @@ class MedicineController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(string $id)
+    {
+    }
 
     /**
      * Show the form for editing the specified resource.

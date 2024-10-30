@@ -67,16 +67,17 @@
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>STT</th>
+                                    <th>Mã dụng cụ</th>
                                     <th>Danh mục</th>
-                                    <th>Nhà cung cấp</th>
                                     <th>Tên dụng cụ</th>
-                                    <th>Ảnh</th>
+                                    <th>Ảnh dụng cụ</th>
                                     <th>Giá nhập</th>
                                     <th>Giá bán</th>
+                                    <th>Ngày hết hạn</th>
+                                    <th>Nhà cung cấp</th>
                                     <th>Số lượng</th>
                                     <th>Thời gian tạo</th>
-                                    <th>Thời gian cập cập nhập</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
@@ -133,17 +134,16 @@
                     }
                 },
                 columns: [{
-                        data: 'id'
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'medicine_code'
                     },
                     {
                         data: 'category.name',
                         name: 'category.name'
-                    },
-                    {
-                        data: 'suppliers',
-                        render: function(data, type, row) {
-                            return data.map(supplier => `<p>${supplier.name}</p>`).join('');
-                        }
                     },
                     {
                         data: 'name'
@@ -161,14 +161,20 @@
                         data: 'price_sale'
                     },
                     {
+                        data: 'expiration_date'
+                    },
+                    {
+                        data: 'suppliers',
+                        render: function(data, type, row) {
+                            return data.map(supplier => `<p>${supplier.name}</p>`).join('');
+                        }
+                    },
+                    {
                         data: 'inventory.quantity',
                         name: 'inventory.quantity'
                     },
                     {
                         data: 'created_at'
-                    },
-                    {
-                        data: 'updated_at'
                     },
                     {
                         data: 'action',
