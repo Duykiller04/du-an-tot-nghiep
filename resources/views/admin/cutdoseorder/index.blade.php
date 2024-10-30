@@ -56,6 +56,7 @@ Danh sách đơn thuốc cắt liều
                                 <th>Điện thoại</th>
                                 <th>Địa chỉ</th>
                                 <th>Cân nặng</th>
+                                <th>Ngày mua</th>
                                 <th>Tổng tiền</th>
                                 <th>Hành động</th>
                             </tr>
@@ -115,6 +116,7 @@ Danh sách đơn thuốc cắt liều
                     { data: 'phone' },
                     { data: 'address' },
                     { data: 'weight' },
+                    { data: 'created_at' },
                     { data: 'total_price' },
                     { data: 'action', orderable: false, searchable: false }
                 ],

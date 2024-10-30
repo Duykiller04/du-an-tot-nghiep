@@ -72,10 +72,8 @@
                                         <thead>
                                             <tr>
                                                 <th></th> <!-- Cột để click mở rộng -->
-                                                <th>ID</th>
+                                                <th>STT</th>
                                                 <th>Tên danh mục</th>
-                                                <th>Thời gian tạo</th>
-                                                <th>Thời gian cập nhật</th>
                                                 <th>Thao tác</th>
                                             </tr>
                                         </thead>
@@ -137,20 +135,13 @@
                         width: '20px'
                     },
                     {
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
                         name: 'name'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at'
                     },
                     {
                         data: 'action',

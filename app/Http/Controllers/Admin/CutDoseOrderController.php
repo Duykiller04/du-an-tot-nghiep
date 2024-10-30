@@ -33,6 +33,9 @@ class CutDoseOrderController extends Controller
                 ->addColumn('gender', function ($row) {
                     return $row->gender == 0 ? 'Nam' : 'Nữ';
                 })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
                 ->addColumn('action', function ($row) {
                     return '
                         <a href="' . route('admin.cutDoseOrders.show', $row->id) . '" class="btn btn-info">Xem</a>
@@ -45,7 +48,7 @@ class CutDoseOrderController extends Controller
                     ';
                 })
                 ->addColumn('total_price', function ($row) {
-                    return $row->total_price;
+                    return number_format($row->total_price) . ' VND';  // Format price
                 })
                 ->make(true);
         }

@@ -64,6 +64,7 @@ Danh sách đơn thuốc
                                 <th>Địa chỉ</th>
                                 <th>Email</th>
                                 <th>Cân nặng</th>
+                                <th>Ngày mua</th>
                                 <th>Tổng đơn hàng</th>
                                 <th>Hành động</th>
                             </tr>
@@ -123,6 +124,7 @@ Danh sách đơn thuốc
                     { data: 'address' },
                     { data: 'email' },
                     { data: 'weight' },
+                    { data: 'created_at' },
                     { data: 'total' },
                     { data: 'action', orderable: false, searchable: false }
                 ],
