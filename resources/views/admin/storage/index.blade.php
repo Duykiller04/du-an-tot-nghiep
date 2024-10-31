@@ -32,6 +32,102 @@
             </div>
         @endif
 
+        <!-- Modal thêm mới kho -->
+        <div class="modal fade" id="createStorageModal" tabindex="-1" aria-labelledby="createStorageLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createStorageLabel">Thêm mới kho</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('admin.storage.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!-- Tên kho -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên kho <span class="text-danger">*</span></label>
+                                <input type="text" name="nameCreate" id="name"
+                                    class="form-control @error('nameCreate') is-invalid @enderror"
+                                    value="{{ old('nameCreate') }}">
+                                <div class="invalid-feedback">
+                                    @error('nameCreate')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Địa chỉ -->
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                                <input type="text" name="locationCreate" id="location"
+                                    class="form-control @error('locationCreate') is-invalid @enderror"
+                                    value="{{ old('locationCreate') }}">
+                                <div class="invalid-feedback">
+                                    @error('locationCreate')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Modal footer with Save and Close buttons -->
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal sửa kho -->
+        <div class="modal fade" id="editStorageModal" tabindex="-1" aria-labelledby="editStorageModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editStorageModalLabel">Chỉnh sửa kho</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editStorageForm" method="POST" action="{{ route('admin.storage.update', '') }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_storage_id" name="id">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="edit-name" class="form-label">Tên kho <span class="text-danger">*</span></label>
+                                <input type="text" name="edit-name" id="edit-name"
+                                    class="form-control @error('edit-name') is-invalid @enderror"
+                                    value="{{ old('edit-name') }}">
+                                <div class="invalid-feedback">
+                                    @error('edit-name')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-location" class="form-label">Địa chỉ <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="edit-location" id="edit-location"
+                                    class="form-control @error('edit-location') is-invalid @enderror"
+                                    value="{{ old('edit-location') }}">
+                                <div class="invalid-feedback">
+                                    @error('edit-location')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -41,116 +137,6 @@
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#createStorageModal">Thêm mới kho</button>
                     </div>
-
-                    <!-- Modal thêm mới kho -->
-                    <div class="modal fade" id="createStorageModal" tabindex="-1" aria-labelledby="createStorageLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="createStorageLabel">Thêm mới kho</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{ route('admin.storage.store') }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <!-- Tên kho -->
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Tên kho <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" name="name" id="name"
-                                                class="form-control @error('name') is-invalid @enderror"
-                                                value="{{ old('name') }}">
-                                            <div class="invalid-feedback">
-                                                @error('name')
-                                                    {{ $message }}
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <!-- Địa chỉ -->
-                                        <div class="mb-3">
-                                            <label for="location" class="form-label">Địa chỉ <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" name="location" id="location"
-                                                class="form-control @error('location') is-invalid @enderror"
-                                                value="{{ old('location') }}">
-                                            <div class="invalid-feedback">
-                                                @error('location')
-                                                    {{ $message }}
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <!-- Modal footer with Save and Close buttons -->
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Lưu</button>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Đóng</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal sửa kho -->
-                    <div class="modal fade" id="editStorageModal" tabindex="-1" aria-labelledby="editStorageModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editStorageModalLabel">Chỉnh sửa kho</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <form id="editStorageForm" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" id="edit_storage_id" name="id">
-                                    <!-- Hidden input để lưu trữ ID kho -->
-
-
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="edit-name" class="form-label">Tên kho</label>
-                                            <input type="text" name="name" id="edit-name" class="form-control">
-                                            @error('name')
-                                                <div class="text-danger mt-2">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="edit-location" class="form-label">Địa chỉ</label>
-                                            <input type="text" name="location" id="edit-location" class="form-control">
-                                            @error('location')
-                                                <div class="text-danger mt-2">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Đóng</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    @if ($errors->any())
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var myModal = new bootstrap.Modal(document.getElementById('createStorageModal'));
-                                myModal.show();
-                            });
-                        </script>
-                    @endif
-
                     <div class="card-body">
                         <div class="card-body">
                             <div class="row mb-3">
@@ -315,7 +301,10 @@
             });
 
             // Hiện modal nếu có lỗi
-            @if ($errors->has('nameEdit'))
+            @if ($errors->has('edit-name'))
+                $('#editStorageModal').modal('show');
+            @endif
+            @if ($errors->has('edit-location'))
                 $('#editStorageModal').modal('show');
             @endif
             @if ($errors->has('nameCreate'))
