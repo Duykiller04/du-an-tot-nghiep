@@ -110,11 +110,11 @@
                             <div class="mb-3">
                                 <label for="" class="form-label">Danh mục cha</label>
                                 <select name="parent_idEdit" class="form-select">
-                                    <option value="0">Không</option>
-                                    {{-- @foreach ($catalogues as $item)
-                                        @php($indent = "")
-                                        @include('admin.catalogue.catalogue_edit_nested', ['catalog' => $item, 'catalogue' => $currentCatalogue])
-                                    @endforeach --}}
+                                    <option value="0" {{ old('parent_id') == 0 ? 'selected' : '' }}>Không</option>
+                                    @foreach ($catalogues as $item)
+                                        @php($indent = '')
+                                        @include('admin.catalogue.catalogue_nested', ['catalog' => $item])
+                                    @endforeach
                                 </select>
                                 @error('parent_idEdit')
                                     <div class="text-danger mt-2">{{ $message }}</div>
@@ -183,6 +183,7 @@
                                                 <th></th> <!-- Cột để click mở rộng -->
                                                 <th>STT</th>
                                                 <th>Tên danh mục</th>
+                                                <th>Ngày tạo</th>
                                                 <th>Thao tác</th>
                                             </tr>
                                         </thead>
@@ -249,7 +250,7 @@
                 $('#edit_category_id').val(data.id);
                 $('#edit_name').val(data.name);
                 $('select#edit_choices_status_input').val(data.is_active); // Đảm bảo đúng ID của modal sửa
-                $('select[name="parent_id"]').val(data.parent_id === null ? '0' : data.parent_id);
+                $('select[name="parent_idEdit"]').val(data.parent_id !== null ? data.parent_id : '0');
 
                 // Hiện modal sửa
                 $('#editCategoryModal').modal('show');
@@ -284,6 +285,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'action',
