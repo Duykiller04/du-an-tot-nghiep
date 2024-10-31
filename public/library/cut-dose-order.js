@@ -180,13 +180,13 @@ $(document).on("input", 'input[name$="[quantity]"]', function () {
 });
 
 function updatePrice($medicineRow) {
-    const selectedUnitId = $medicineRow.find('select[name$="[unit_id]"]').val() - 1;
+    const selectedUnitId = $medicineRow.find('select[name$="[unit_id]"]').prop("selectedIndex") - 1;
     const quantity = $medicineRow.find('input[name$="[quantity]"]').val();
 
     const priceInput = $medicineRow.find('input[name$="[current_price]"]');
     const newPrices = priceInput.data("new_prices");
 
-    const unitPrice = newPrices[selectedUnitId] || 1; // Kiểm tra giá trị của newPrices
+    const unitPrice = newPrices[selectedUnitId] || 0; // Kiểm tra giá trị của newPrices
     let price = unitPrice * quantity;
     price = parseFloat(price).toFixed(2); // Làm tròn đến 2 chữ số thập phân
 
