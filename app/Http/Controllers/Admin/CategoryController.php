@@ -20,12 +20,15 @@ class CategoryController extends Controller
     {
         $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
         if (request()->ajax()) {
-            $query = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
+            $query = Category::with('children')->orderBy('id', 'desc')->get();
 
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('details-control', function () {
                     return '';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalogues.edit', $row->id);
@@ -67,11 +70,11 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $parentId = $request->input('parent_idCreate') === '0' ? null : $request->input('parent_id');
+        $parentId = $request->input('parent_idCreate') === '0' ? null : $request->input('parent_idCreate');
         $isActive = $request->input('is_activeCreate') === '1' ? 1 : 0;
 
         // Lưu vào cơ sở dữ liệu
-        DB::table('categories')->insert([
+        Category::create([
             'name' => $request->input('nameCreate'),
             'parent_id' => $parentId,
             'is_active' => $isActive,
@@ -101,13 +104,13 @@ class CategoryController extends Controller
     {
         $parentId = $request->input('parent_idEdit') === '0' ? null : $request->input('parent_id');
         $isActive = $request->input('is_activeEdit') === '1' ? 1 : 0;
-    
-        DB::table('categories')->where('id', $id)->update([
-            'name' => $request->input('nameEdit'),
-            'parent_id' => $parentId,
-            'is_active' => $isActive,
-        ]);
-    
+
+        $category = Category::find($id);
+        $category->name = $request->input('nameEdit');
+        $category->parent_id = $parentId;
+        $category->is_active = $isActive;
+        $category->save();
+
         return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được sửa thành công');
     }
 
