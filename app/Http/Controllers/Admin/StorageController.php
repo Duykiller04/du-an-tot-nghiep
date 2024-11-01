@@ -79,13 +79,20 @@ class StorageController extends Controller
     public function store(StoreStorageRequest $request)
     {
         try {
-            $data = $request->all();
+            // Gán thủ công các giá trị từ request với tên trường đúng trong DB
+            $data = [
+                'name' => $request->input('nameCreate'), // Lấy từ form 'nameCreate' và gán vào trường 'name'
+                'location' => $request->input('locationCreate') // Lấy từ form 'locationCreate' và gán vào trường 'location'
+            ];
+
             Storage::create($data);
+
             return redirect()->route('admin.storage.index')->with('success', 'Thêm Thành công');
         } catch (\Exception $exception) {
             return back()->with('error', $exception->getMessage());
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -105,6 +112,8 @@ class StorageController extends Controller
         return view('admin.storage.edit', compact('storage'));
     }
 
+
+
     /**
      * Update the specified resource in storage.
      */
@@ -113,7 +122,10 @@ class StorageController extends Controller
         try {
             $model = Storage::query()->findOrFail($id);
 
-            $data = $request->all();
+            $data = [
+                'name' => $request->input('edit-name'), // Gán đúng tên trong DB
+                'location' => $request->input('edit-location'), // Gán đúng tên trong DB
+            ];
             $model->update($data);
 
             return back()->with('success', 'Sửa Thành công');
@@ -121,7 +133,6 @@ class StorageController extends Controller
             return back()->with('error', $exception->getMessage());
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */

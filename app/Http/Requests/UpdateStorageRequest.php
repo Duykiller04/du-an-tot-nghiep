@@ -22,22 +22,22 @@ class UpdateStorageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:storages,name,' . $this->route('storage'),
-            'location' => 'required|string|max:255',
+            'edit-name' => 'required|string|max:255|unique:storages,name,' . $this->route('storage'),
+            'edit-location' => 'required|string|max:255',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Tên kho bắt buộc phải được điền',
-            'name.string' => 'Tên kho phải là một chuỗi ký tự',
-            'name.max' => 'Tên kho không được vượt quá 255 ký tự.',
-            'name.unique' => 'Tên kho này đã tồn tại',
+            'edit-name.required' => 'Tên kho bắt buộc phải được điền',
+            'edit-name.string' => 'Tên kho phải là một chuỗi ký tự',
+            'edit-name.max' => 'Tên kho không được vượt quá 255 ký tự.',
+            'edit-name.unique' => 'Tên kho này đã tồn tại',
 
-            'location.required' => 'Địa chỉ bắt buộc phải được điền',
-            'location.string' => 'Địa chỉ  phải là một chuỗi ký tự',
-            'location.max' => 'Địa chỉ  không được vượt quá 255 ký tự.',
+            'edit-location.required' => 'Địa chỉ bắt buộc phải được điền',
+            'edit-location.string' => 'Địa chỉ  phải là một chuỗi ký tự',
+            'edit-location.max' => 'Địa chỉ  không được vượt quá 255 ký tự.',
         ];
     }
 }
