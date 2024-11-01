@@ -50,21 +50,7 @@
                     <div class="collapse menu-dropdown" id="sidebarMultilevel">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#sidebarCatalogue" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarCatalogue" data-key="t-level-1.2"> Danh mục
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarCatalogue">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.catalogues.create') }}" class="nav-link" data-key="t-level-2.1">
-                                                Thêm mới </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.catalogues.index') }}" class="nav-link" data-key="t-level-2.1">
-                                                Danh sách </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a href="{{route('admin.catalogues.index')}}" class="nav-link" data-key="t-level-1.1">Danh mục</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#Unit" class="nav-link" data-bs-toggle="collapse" role="button"
@@ -206,21 +192,7 @@
                     <div class="collapse menu-dropdown" id="sidebarMultilevel3">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#storage" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="storage" data-key="t-level-1.2"> Kho thuốc
-                                </a>
-                                <div class="collapse menu-dropdown" id="storage">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.storage.create') }}" class="nav-link" data-key="t-level-2.1">
-                                                Thêm mới </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.storage.index') }}" class="nav-link" data-key="t-level-2.1">
-                                                Danh sách </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a href="{{route('admin.storage.index')}}" class="nav-link" data-key="t-level-1.1">Kho thuốc</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#importorder" class="nav-link" data-bs-toggle="collapse" role="button"
