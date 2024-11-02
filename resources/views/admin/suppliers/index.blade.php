@@ -98,7 +98,7 @@
                         <h5 class="modal-title" id="editSupplierModalLabel">Cập nhật nhà cung cấp</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="POST" id="editForm">
+                    <form action="" method="" id="editForm">
                         @csrf
                         @method('PUT')
                         <input type="hidden" id="edit_supplier_id" name="supplier_id" value="{{ old('supplier_id') }}">
