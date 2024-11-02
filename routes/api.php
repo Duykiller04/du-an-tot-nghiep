@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\API\CutDoseOrderController;
 use App\Http\Controllers\API\UnitMedicineController;
 use App\Http\Controllers\API\PrescriptionsController;
+use App\Http\Controllers\API\Unitcontroller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::get('cut-dose-order/{medicineId}', [CutDoseOrderController::class, 'getUn
 // Route::get('get-price/{medicineId}', [UnitMedicineController::class, 'getPrice']);
 
 Route::get('admin/catalogues/getChildren', [CategoryController::class, 'getChildren'])->name('admin.catalogues.getChildren');
+Route::get('admin/units/getChildren', [Unitcontroller::class, 'getChildren'])->name('admin.units.getChildren');
 
 Route::get('get-prescription-details', [PrescriptionsController::class, 'getPrescriptionDetails']);
 

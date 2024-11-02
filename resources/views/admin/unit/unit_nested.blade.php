@@ -1,6 +1,4 @@
-<option {{ old('parent_id') == $unit->id ? 'selected' : '' }} value="{{ $unit->id }}">
-    {{$indent}}{{ $unit->name }}
-</option>
+<option {{old('parent_id') == $unit->id ? 'selected' : '' }} value="{{ $unit->id }}"> {{$indent}}{{ $unit->name }}</option>
 
 @if ($unit->children)
     @php($indent .= '- ')

@@ -22,15 +22,17 @@ class StoreUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:units,name',
+           'nameCreate' => 'required|string|max:100',
+           'parent_idCreate' => 'nullable|integer',
         ];
     }
     public function messages()
     {
         return [
-            'name.required' => 'Tên đơn vị là bắt buộc.',
-            'name.unique' => 'Tên đơn vị đã tồn tại.',
-            'name.max' => 'Tên đơn vị không được vượt quá 255 ký tự.',
+            'nameCreate.required' => 'Trường tên là bắt buộc.',
+            'nameCreate.string' => 'Trường tên phải là chuỗi.',
+            'nameCreate.max' => 'Trường tên không được vượt quá 255 ký tự.',
+            'parent_idCreate.integer' => 'Parent ID phải là một số nguyên.',
         ];
     }
 }
