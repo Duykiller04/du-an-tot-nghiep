@@ -16,6 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
+        // sleep(35);
         if (request()->ajax()) {
             $query = Customer::query();
             // Lọc theo ngày tháng nếu có
@@ -35,12 +36,12 @@ class CustomerController extends Controller
             return DataTables::of($query)
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.customers.show', $row->id);
-                    $editUrl = route('admin.customers.edit', $row->id);
+
                     $deleteUrl = route('admin.customers.destroy', $row->id);
 
                     return '
                 <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
-                <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
+                <button type="button" class="btn btn-warning btn-edit" data-id="' . $row->id . '" data-name="' . $row->name . '" data-phone="' . $row->phone . '" data-address="' . $row->address . '" data-email="' . $row->email . '" data-age="' . $row->age . '" data-weight="' . $row->weight . '">Sửa</button>
                 <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
                 ' . csrf_field() . method_field('DELETE') . '
                 <button type="submit" class="btn  btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
@@ -66,9 +67,21 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        $data = $request->validated();
-        Customer::query()->create($data);
-        return redirect()->route('admin.customers.index');
+        try{
+            $data = [
+                'name' => $request->input('nameCreate'),
+                'phone' => $request->input('phoneCreate'),
+                'address' => $request->input('addressCreate'),
+                'email' => $request->input('emailCreate'),
+                'age' => $request->input('ageCreate'),
+                'weight' => $request->input('weightCreate'),
+            ];
+            // dd($data);
+            Customer::query()->create($data);
+            return redirect()->route('admin.customers.index')->with('success', 'Thêm mới thành công');
+        } catch (\Exception $exception) {
+            return back()->with('error', $exception->getMessage());
+        }
     }
 
     /**
@@ -92,10 +105,25 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, string $id)
     {
-        $customer = Customer::findOrFail($id);
-        $customer->update($request->all());
-        return redirect()->route('admin.customers.index');
-    }
+        try{   
+            $customer = Customer::findOrFail($id);
+
+            $data = [
+            'name' => $request->input('nameEdit'),
+            'phone' => $request->input('phoneEdit'),
+            'address' => $request->input('addressEdit'),
+            'email' => $request->input('emailEdit'),
+            'age' => $request->input('ageEdit'),
+            'weight' => $request->input('weightEdit'),
+            
+            ];
+            $customer->update($data);
+            // dd( $customer);
+            return back()->with('success', 'Sửa Thành công');
+        }catch (\Exception $exception) {
+            return back()->with('error', $exception->getMessage());
+        }
+    } 
 
     /**
      * Remove the specified resource from storage.
