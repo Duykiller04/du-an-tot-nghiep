@@ -23,82 +23,212 @@
         </div>
         <!-- end page title -->
 
-        <div class="row">
-            <div class="col-lg-12">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-
-                <div class="card" id="diseaseList">
-                    <div class="card-header border-bottom-dashed">
-                        <div class="row g-4 align-items-center">
-                            <div class="col-sm">
-                                <div>
-                                    <h5 class="card-title mb-0">Danh sách nhà cung cấp</h5>
-                                </div>
+        <!-- Create supplier Modal -->
+        <div class="modal fade" id="createSupplierModal" tabindex="-1" aria-labelledby="createSupplierModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createSupplierModalLabel">Thêm mới nhà cung cấp</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.suppliers.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="tax_code" class="form-label">Mã số thuế (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="tax_code" name="tax_code"
+                                    value="{{ old('tax_code') }}">
+                                @error('tax_code')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
-                            <div class="col-sm-auto">
-                                <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route('admin.suppliers.create') }}" type="button"
-                                        class="btn btn-success add-btn">
-                                        <i class="ri-add-line align-bottom me-1"></i> Thêm mới
-                                    </a>
-                                </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên nhà cung cấp (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="{{ old('name') }}">
+                                @error('name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email (<span class="text-danger">*</span>)</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="{{ old('email') }}">
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Số điện thoại (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="phone" name="phone"
+                                    value="{{ old('phone') }}">
+                                @error('phone')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Địa chỉ (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="address" name="address"
+                                    value="{{ old('address') }}">
+                                @error('address')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit supplier Modal -->
+        <div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editSupplierModalLabel">Cập nhật nhà cung cấp</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <form action="" method="" id="editForm">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_supplier_id" name="supplier_id" value="{{ old('supplier_id') }}">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="tax_code" class="form-label">Mã số thuế (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="tax_code_edit" name="tax_code_edit" value="{{ old('tax_code_edit') }}">
+                                @error('tax_code_edit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên nhà cung cấp (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="name_edit" name="name_edit" value="{{ old('name_edit') }}">
+                                @error('name_edit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="email" class="form-control" id="email_edit" name="email_edit" value="{{ old('email_edit') }}">
+                                @error('email_edit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Số điện thoại (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="phone_edit" name="phone_edit" value="{{ old('phone_edit') }}">
+                                @error('phone_edit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Địa chỉ (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" id="address_edit" name="address_edit" value="{{ old('address_edit') }}">
+                                @error('address_edit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <label for="start-date">Ngày bắt đầu:</label>
-                                        <input type="date" id="start-date" class="form-control" />
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="end-date">Ngày kết thúc:</label>
-                                        <div class="d-flex">
-                                            <input type="date" id="end-date" class="form-control me-2" />
-                                            <button id="filter-btn" class="btn btn-primary">Lọc</button>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
 
-                                        </div>
-                                    </div>
-                                </div>
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
 
-                                <table id="supplierDataTable"
-                                    class="table table-bordered dt-responsive nowrap table-striped align-middle"
-                                    style="width: 100%;" aria-describedby="buttons-datatables_info">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Mã số thuế</th>
-                                            <th>Tên nhà cung cấp</th>
-                                            <th>Email</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Thời gian tạo</th>
-                                            <th>Thời gian cập cập nhập</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
+            <div class="card" id="diseaseList">
+                <div class="card-header border-bottom-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-sm">
+                            <div>
+                                <h5 class="card-title mb-0">Danh sách nhà cung cấp</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
+                                        class="ri-delete-bin-2-line"></i></button>
+                                <button class="btn btn-primary mb-3" id="createSupplierBtn">Thêm mới nhà cung cấp</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="buttons-datatables_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label for="start-date">Ngày bắt đầu:</label>
+                                    <input type="date" id="start-date" class="form-control" />
+                                </div>
+                                <div class="col-6">
+                                    <label for="end-date">Ngày kết thúc:</label>
+                                    <div class="d-flex">
+                                        <input type="date" id="end-date" class="form-control me-2" />
+                                        <button id="filter-btn" class="btn btn-primary">Lọc</button>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table id="supplierDataTable"
+                                class="table table-bordered dt-responsive nowrap table-striped align-middle"
+                                style="width: 100%;" aria-describedby="buttons-datatables_info">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Mã số thuế</th>
+                                        <th>Tên nhà cung cấp</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Thời gian tạo</th>
+                                        <th>Thời gian cập cập nhập</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!--end col-->
         </div>
-        <!--end row-->
+        <!--end col-->
+    </div>
+    <!--end row-->
 
     </div>
     <!-- container-fluid -->
@@ -135,6 +265,69 @@
     <script>
         $(document).ready(function() {
             $(document).ready(function() {
+                // edit validation
+                @if ($errors->has('tax_code_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('name_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('email_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('phone_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('address_edit'))
+                    $('#editSupplierModal').modal('show');
+                @endif
+                //create validation
+                @if ($errors->has('tax_code'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('name'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('email'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('phone'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('address'))
+                    $('#createSupplierModal').modal('show');
+                @endif
+
+                //show create modal
+                $('#createSupplierBtn').on('click', function() {
+                    $('#createSupplierModal').modal('show'); // Show the modal
+                });
+
+                // show edit modal
+                $('#supplierDataTable tbody').on('click', '.btn-warning', function() {
+                    var supplierId = $(this).data('id');
+                    var taxCode = $(this).data('tax_code');
+                    var name = $(this).data('name');
+                    var email = $(this).data('email');
+                    var phone = $(this).data('phone');
+                    var address = $(this).data('address');
+                    console.log(supplierId);
+                    
+                    // Điền dữ liệu vào các trường của modal sửa
+                    $('#edit_supplier_id').val(supplierId);
+                    $('#tax_code_edit').val(taxCode);
+                    $('#name_edit').val(name);
+                    $('#email_edit').val(email);
+                    $('#phone_edit').val(phone);
+                    $('#address_edit').val(address);
+
+
+                    // Hiện modal sửa
+                    $('#editSupplierModal').modal('show');
+                });
+
+                $('#editSupplierModal').on('show.bs.modal', function() {
+                    var id = $('#edit_supplier_id').val() ?? '';
+
+                    $('#editForm').attr({
+                        'action': '{{ route('admin.suppliers.update', ':id') }}'.replace(
+                            ':id', id),
+                        'method': 'POST'
+                    });
+
+                });
                 var table = $('#supplierDataTable').DataTable({
                     processing: true,
                     serverSide: true,

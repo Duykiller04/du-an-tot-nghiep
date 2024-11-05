@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUnitRequest;
+use App\Http\Requests\UpdateUnitRequest;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,8 +15,9 @@ class UnitController extends Controller
 {
     public function index()
     {
+        $units = Unit::query()->with('children')->orderByDesc('id')->whereNull('parent_id')->get();
         if (request()->ajax()) {
-            $query = Unit::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
+            $query = Unit::with('children')->orderBy('id', 'desc')->get();
 
             return DataTables::of($query)
                 ->addColumn('action', function ($row) {
@@ -22,7 +25,7 @@ class UnitController extends Controller
                     $deleteUrl = route('admin.units.destroy', $row->id);
 
                     return '
-                        <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
+                        <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '">Sửa</button>
                         <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
                             ' . csrf_field() . method_field('DELETE') . '
                             <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
@@ -41,60 +44,40 @@ class UnitController extends Controller
                 ->make(true);
         }
 
-        return view('admin.unit.index');
+        return view('admin.unit.index', compact('units'));
     }
 
     public function create()
     {
-        // Nếu bạn có cần lấy dữ liệu để chọn đơn vị cha hay không
-        $units = Unit::orderBy('id','desc')->whereNull('parent_id')->get();
-
-        return view('admin.unit.add', compact('units'));
+        //
     }
 
-    public function store(Request $request)
+    public function store(StoreUnitRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:100',
-        ], [
-            'name.required' => 'Trường tên là bắt buộc.',
-            'name.string' => 'Trường tên phải là chuỗi.',
-            'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
+        $parentId = $request->input('parent_idCreate') === 0 ? null : $request->input('parent_idCreate');
+
+        Unit::create([
+            'name' => $request->nameCreate,
+            'parent_id' => $parentId
         ]);
-
-        $validatedData['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
-
-        Unit::create($validatedData);
 
         return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được thêm thành công');
     }
 
     public function edit(string $id)
     {
-        $unit = Unit::find($id);
-        $units = Unit::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->whereNot('id', $id)->get();
-        if (!$unit) {
-            return redirect()->route('admin.units.index')->with('error', 'Đơn vị không tồn tại');
-        }
-
-
-        return view('admin.unit.edit', compact('unit', 'units'));
+       //
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateUnitRequest $request, string $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:100',
-        ], [
-            'name.required' => 'Trường tên là bắt buộc.',
-            'name.string' => 'Trường tên phải là chuỗi.',
-            'name.max' => 'Trường tên không được vượt quá 100 ký tự.',
-        ]);
-
-        $validatedData['parent_id'] = $request->input('parent_id') === '0' ? null : $request->input('parent_id');
+        $parenId = $request->input('parent_idEdit') === 0 ? null : $request->input('parent_idEdit');
 
         $unit = Unit::findOrFail($id);
-        $unit->update($validatedData);
+        $unit->update([
+            'name' => $request->nameEdit,
+            'parent_id' => $parenId
+        ]);
 
         return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được sửa thành công');
     }

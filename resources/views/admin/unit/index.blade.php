@@ -28,7 +28,91 @@
                 {{ session('success') }}
             </div>
         @endif
-
+        <!-- Create unut Modal -->
+        <div class="modal fade" id="createUnitModal" tabindex="-1" aria-labelledby="createUnitModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createCategoryModalLabel">Thêm mới đơn vị</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.units.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="project-title-input">Tên đơn vị</label>
+                                <input type="text" name="nameCreate" class="form-control" id="project-title-input"
+                                    placeholder="Nhập tên đơn vị" value="{{ old('name') }}">
+                                @error('nameCreate')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Đơn vị cha</label>
+                                <select name="parent_idCreate" class="form-select">
+                                    <option value="" {{ old('parent_id') == 0 ? 'selected' : '' }}>Không</option>
+                                    @foreach ($units as $item)
+                                        @php($indent = '')
+                                        @include('admin.unit.unit_nested', ['unit' => $item])
+                                    @endforeach
+                                </select>
+                                @error('parent_idCreate')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Edit unit Modal -->
+        <div class="modal fade" id="editUnitModal" tabindex="-1" aria-labelledby="editUnitModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoryModalLabel">Sửa đơn vị</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="" method="" enctype="multipart/form-data" id="editForm">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_unit_id" name="unit_id">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_name">Tên đơn vị</label>
+                                <input type="text" name="nameEdit" class="form-control" id="edit_name"
+                                    placeholder="Nhập tên danh mục">
+                                @error('nameEdit')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Đơn vị cha</label>
+                                <select name="parent_idEdit" class="form-select" id="">
+                                    <option value="0" {{ old('parent_id') == 0 ? 'selected' : '' }}>Không</option>
+                                    @foreach ($units as $item)
+                                        @php($indent = '')
+                                        @include('admin.unit.unit_nested', ['unit' => $item])
+                                    @endforeach
+                                </select>
+                                @error('parent_idEdit')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card" id="unitList">
@@ -43,8 +127,7 @@
                                 <div class="d-flex flex-wrap align-items-start gap-2">
                                     <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
                                             class="ri-delete-bin-2-line"></i></button>
-                                    <a href="{{ route('admin.units.create') }}" class="btn btn-success add-btn"
-                                        id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm đơn vị</a>
+                                    <button class="btn btn-primary mb-3" id="createUnitBtn">Thêm đơn vị</button>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +152,6 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th></th> <!-- Cột để click mở rộng -->
                                                 <th>ID</th>
                                                 <th>Tên đơn vị</th>
                                                 <th>Thời gian tạo</th>
@@ -123,17 +205,44 @@
 @section('js')
     <script>
         $(document).ready(function() {
+            @if ($errors->has('nameEdit'))
+                $('#editUnitModal').modal('show');
+            @endif
+            @if ($errors->has('nameCreate'))
+                $('#createUnitModal').modal('show');
+            @endif
+            $('#createUnitBtn').on('click', function() {
+                $('#createUnitModal').modal('show'); // Show the modal
+            });
+          
+            $('#example tbody').on('click', '.btn-warning', function() {
+                var row = $(this).closest('tr');
+                var data = $('#example').DataTable().row(row).data();
+                console.log(data);
+                
+                // Điền dữ liệu vào các trường của modal sửa
+                $('#edit_unit_id').val(data.id);
+                $('#edit_name').val(data.name);
+                $('select[name="parent_idEdit"]').val(data.parent_id !== null ? data.parent_id : '0');
+
+                // Hiện modal sửa
+                $('#editUnitModal').modal('show');
+            });
+
+            $('#editUnitModal').on('show.bs.modal', function() {
+                var id = $('#edit_unit_id').val() ?? '';
+
+                $('#editForm').attr({
+                    'action': '{{ route('admin.units.update', ':id') }}'.replace(':id', id),
+                    'method': 'POST'
+                });
+
+            });
             var table = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('admin.units.index') }}',
-                columns: [{
-                        className: 'details-control',
-                        orderable: false,
-                        data: null,
-                        defaultContent: '<i class="bx bx-sort-down"></i>',
-                        width: '20px'
-                    },
+                columns: [
                     {
                         data: 'id',
                         name: 'id'
@@ -228,62 +337,53 @@
                     }
                 ]
             });
-
             $('#example tbody').on('click', 'td.details-control', function() {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
 
                 if (row.child.isShown()) {
-                    // Nếu đang mở, đóng lại
                     row.child.hide();
                     tr.removeClass('shown');
                 } else {
-                    // Nếu đang đóng, mở rộng để hiển thị các đơn vị con
                     var rowData = row.data();
-                    var children = rowData.children;
+                    var unitId = rowData.id;
 
-                    // Phân tích chuỗi JSON thành đối tượng JavaScript nếu cần
-                    if (typeof children === 'string') {
-                        try {
-                            children = JSON.parse(children);
-                        } catch (e) {
-                            console.error('Error parsing children JSON:', e);
-                            children = [];
-                        }
-                    }
+                    $.ajax({
+                        url: '{{ route('admin.units.getChildren') }}',
+                        method: 'GET',
+                        data: {
+                            id: unitId
+                        },
+                        success: function(children) {
+                            // Nếu children là chuỗi JSON, hãy phân tích nó
+                            if (typeof children === 'string') {
+                                children = JSON.parse(children);
+                            }
 
-                    // Kiểm tra xem children có phải là mảng không
-                    if (Array.isArray(children)) {
-                        if (children.length > 0) {
-                            var html =
-                                '<table class="table"><tr><th></th><th>ID</th><th>Tên đơn vị con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
-                            children.forEach(function(child) {
-                                html += '<tr><td></td><td>' + child.id + '</td><td>' + child.name +
-                                    '</td><td>' + child.created_at + '</td><td>' + child
-                                    .updated_at + '</td>';
-                                html += '<td><a href="' + child.edit_url +
-                                    '" class="btn btn-sm btn-warning">Sửa</a>';
-                                html += '<form action="' + child.delete_url +
-                                    '" method="post" style="display:inline;" class="ms-2">' +
-                                    '<input type="hidden" name="_token" value="' + $(
-                                        'meta[name="csrf-token"]').attr('content') + '">' +
-                                    '<input type="hidden" name="_method" value="DELETE">' +
-                                    '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>' +
-                                    '</form></td></tr>';
-                            });
-                            html += '</table>';
-                            row.child(html).show();
-                            tr.addClass('shown');
-                        } else {
-                            // Nếu danh mục con là mảng nhưng không có phần tử
-                            row.child('<div>Không có đơn vị con</div>').show();
+                            if (children.length > 0) {
+                                var html =
+                                    '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
+                                children.forEach(function(child) {
+                                    html += '<tr><td>' + child.id + '</td><td>' + child
+                                        .name + '</td><td>' + child.created_at +
+                                        '</td><td>' + child.updated_at + '</td>';
+                                    html += '<td><a href="' + child.edit_url +
+                                        '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
+                                });
+                                html += '</table>';
+                                row.child(html).show();
+                                tr.addClass('shown');
+                            } else {
+                                row.child('<div>Không có danh mục con</div>').show();
+                                tr.addClass('shown');
+                            }
+                        },
+                        error: function() {
+                            row.child('<div>Lỗi khi tải danh mục con.</div>').show();
                             tr.addClass('shown');
                         }
-                    } else {
-                        // Nếu children không phải là mảng
-                        row.child('<div>Không có đơn vị con</div>').show();
-                        tr.addClass('shown');
-                    }
+                    });
+
                 }
             });
         });
