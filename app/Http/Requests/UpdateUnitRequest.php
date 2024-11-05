@@ -24,20 +24,19 @@ class UpdateUnitRequest extends FormRequest
     {
         return [
 
-            'name' => [
+            'nameEdit' => [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('units')->ignore($this->unit->id)
+                'max:255',   
                 ],
         ];
     }
     public function messages()
     {
         return [
-            'name.required' => 'Tên đơn vị là bắt buộc.',
-            'name.unique' => 'Tên đơn vị đã tồn tại.',
-            'name.max' => 'Tên đơn vị không được vượt quá 255 ký tự.',
+            'nameEdit.required' => 'Tên đơn vị là bắt buộc.',
+            'nameEdit.unique' => 'Tên đơn vị đã tồn tại.',
+            'nameEdit.max' => 'Tên đơn vị không được vượt quá 255 ký tự.',
         ];
     }
 }

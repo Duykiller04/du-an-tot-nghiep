@@ -66,7 +66,7 @@ Route::prefix('admin')
                 Route::get('/add', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::put('/update/{id}', 'update')->name('update');
+                Route::put('/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
         Route::controller(ShiftController::class)

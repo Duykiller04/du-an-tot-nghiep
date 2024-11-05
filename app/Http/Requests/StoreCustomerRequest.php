@@ -22,44 +22,45 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
-            'address' => ['required', 'string','max:255'], 
-            'email' => ['required', 'email','max:255'],
-            'age' => ['required', 'numeric', 'min:0', 'max:150'],
-            'weight' => ['required', 'numeric', 'min:0', 'max:200'],
+            'nameCreate' => ['required', 'string', 'max:255'],
+            'phoneCreate' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
+            'addressCreate' => ['required', 'string','max:255'], 
+            'emailCreate' => ['required', 'email','max:255','unique:customers,email'],
+            'ageCreate' => ['required', 'numeric', 'min:0', 'max:150'],
+            'weightCreate' => ['required', 'numeric', 'min:0', 'max:200'],
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Trường tên là bắt buộc.',
-            'name.string' => 'Tên phải là một chuỗi ký tự.',
-            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+            'nameCreate.required' => 'Trường tên là bắt buộc.',
+            'nameCreate.string' => 'Tên phải là một chuỗi ký tự.',
+            'nameCreate.max' => 'Tên không được vượt quá 255 ký tự.',
 
-            'phone.required' => 'Trường số điện thoại là bắt buộc.',
-            'phone.regex' => 'Số điện thoại không đúng định dạng.',
+            'phoneCreate.required' => 'Trường số điện thoại là bắt buộc.',
+            'phoneCreate.regex' => 'Số điện thoại không đúng định dạng.',
 
-            'address.required' => 'Trường địa chỉ là bắt buộc.',
-            'address.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
-            'address.string' => 'Địa chỉ phải là một chuỗi ký tự.',
+            'addressCreate.required' => 'Trường địa chỉ là bắt buộc.',
+            'addressCreate.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+            'addressCreate.string' => 'Địa chỉ phải là một chuỗi ký tự.',
 
-            'email.required' => 'Trường email là bắt buộc.',
-            'email.email' => 'Trường email không đúng đinh dạng.',
-            'email.max' => 'email không được vượt quá 255 ký tự.',
+            'emailCreate.required' => 'Trường email là bắt buộc.',
+            'emailCreate.email' => 'Trường email không đúng đinh dạng.',
+            'emailCreate.max' => 'Email không được vượt quá 255 ký tự.',
+            'emailCreate.unique' => 'Email đã tồn tại.',
 
-            'age.required' => 'Trường tuổi là bắt buộc.',
-            'age.integer' => 'Tuổi phải là một số nguyên.',
-            'age.max' => 'Tuổi không được vượt quá 150 tuổi.',
-            'age.min' => 'Tuổi phải là số lớn hơn hoặc bằng 1.',
-            'age.numeric' => 'Tuổi phải là một số.',
+            'ageCreate.required' => 'Trường tuổi là bắt buộc.',
+            'ageCreate.integer' => 'Tuổi phải là một số nguyên.',
+            'ageCreate.max' => 'Tuổi không được vượt quá 150 tuổi.',
+            'ageCreate.min' => 'Tuổi phải là số lớn hơn hoặc bằng 1.',
+            'ageCreate.numeric' => 'Tuổi phải là một số.',
 
-            'weight.required' => 'Trường cân nặng là bắt buộc.',
-            'weight.numeric' => 'Cân nặng phải là một số.',
-            'weight.max' => 'Cân nặng không được vượt quá 200kg.',
-            'weight.min' => 'Cân nặng là số lớn hơn hoặc bằng 1.',
-            'weight.integer' => 'Cân nặng phải là một số nguyên.',
+            'weightCreate.required' => 'Trường cân nặng là bắt buộc.',
+            'weightCreate.numeric' => 'Cân nặng phải là một số.',
+            'weightCreate.max' => 'Cân nặng không được vượt quá 200kg.',
+            'weightCreate.min' => 'Cân nặng là số lớn hơn hoặc bằng 1.',
+            'weightCreate.integer' => 'Cân nặng phải là một số nguyên.',
         ];
     }
 }
