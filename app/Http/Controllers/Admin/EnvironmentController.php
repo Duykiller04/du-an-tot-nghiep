@@ -126,11 +126,14 @@ class EnvironmentController extends Controller
 
     public function update(Request $request, $id)
     {
+        //dd($request);
         // Xác thực dữ liệu
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'real_temperature' => 'required|numeric|min:-50',
             'real_humidity' => 'required|numeric|between:10,100',
+            'storage_id' => 'required'
         ], [
+            'storage_id.required' => 'Bạn phải chọn kho.',
             'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
             'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
             'real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
@@ -139,11 +142,13 @@ class EnvironmentController extends Controller
             'real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
         ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
         $environment = Environment::findOrFail($id);
         $environment->update([
-
-            'real_temperature' => $validated['real_temperature'],
-            'real_humidity' => $validated['real_humidity'],
+            'real_temperature' => $request->real_temperature,
+            'real_humidity' => $request->real_humidity,
         ]);
 
         return redirect()->route('admin.environments.index')->with('success', 'Môi trường đã được cập nhật thành công.');

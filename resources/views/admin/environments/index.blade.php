@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </div>
-                     <!-- Modal xác nhận đóng ca -->
+                     
                     <div class="modal fade" id="createEnvironment" tabindex="-1" aria-labelledby="createEnvironment" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -127,6 +127,59 @@
                 });
             </script>
         @endif
+        <!-- Modal Sửa Môi Trường -->
+                    <div class="modal fade" id="editEnvironment" tabindex="-1" aria-labelledby="editEnvironment" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chỉnh sửa môi trường</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="POST" id="editEnvironmentForm">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="mb-3">
+                                            <label class="form-label" for="edit_real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control" id="edit_real_temperature" name="real_temperature">
+                                            @error('real_temperature')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="edit_real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control" id="edit_real_humidity" name="real_humidity">
+                                            @error('real_humidity')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="edit_storage_id">Chọn kho</label>
+                                            <select class="form-select" id="edit_storage_id" name="storage_id">
+                                                @foreach($storages as $storage)
+                                                    <option value="{{ $storage->id }}">{{ $storage->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('storage_id')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- @if ($errors->any())
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var myModal = new bootstrap.Modal(document.getElementById('editEnvironment'));
+                            myModal.show();
+                        });
+                    </script>
+                    @endif --}}
+
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
@@ -158,7 +211,15 @@
                                                     <td>{{ $environment->huminity }}%</td>
                                                     <td>{{ $environment->real_humidity }}%</td>
                                                     <td>
-                                                        <a href="{{ route('admin.environments.edit', $environment->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+                                                        <button type="button" class="btn btn-warning btn-sm editEnvironmentBtn" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#editEnvironment"
+                                                        data-id="{{ $environment->id }}"
+                                                        data-real_temperature="{{ $environment->real_temperature }}"
+                                                        data-real_humidity="{{ $environment->real_humidity }}"
+                                                        data-storage_id="{{ $environment->storage_id }}">
+                                                        Sửa
+                                                        </button>
                                                         <form action="{{ route('admin.environments.destroy', $environment->id) }}" method="POST" class="d-inline-block">
                                                             @csrf
                                                             @method('DELETE')
@@ -238,6 +299,31 @@
                         "sSortDescending": ": Sắp xếp giảm dần"
                     }
                 },
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lấy các nút sửa môi trường
+            const editButtons = document.querySelectorAll('.editEnvironmentBtn');
+            
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Lấy thông tin từ các thuộc tính data- của nút
+                    const id = button.getAttribute('data-id');
+                    const realTemperature = button.getAttribute('data-real_temperature');
+                    const realHumidity = button.getAttribute('data-real_humidity');
+                    const storageId = button.getAttribute('data-storage_id');
+                    
+                    // Đặt giá trị cho các trường input trong modal
+                    document.getElementById('edit_real_temperature').value = realTemperature;
+                    document.getElementById('edit_real_humidity').value = realHumidity;
+                    document.getElementById('edit_storage_id').value = storageId;
+                    
+                    // Cập nhật URL form action trong modal
+                    const form = document.getElementById('editEnvironmentForm');
+                    form.action = `/admin/environments/${id}`;
+                });
             });
         });
     </script>
