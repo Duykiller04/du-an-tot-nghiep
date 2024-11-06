@@ -20,6 +20,13 @@ class UnitController extends Controller
             $query = Unit::with('children')->orderBy('id', 'desc')->get();
 
             return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('created_at', function ($row) {
+                return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+            })
+            ->addColumn('updated_at', function ($row) {
+                return $row->updated_at ? $row->updated_at->format('d/m/Y') : '';
+            })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.units.edit', $row->id);
                     $deleteUrl = route('admin.units.destroy', $row->id);

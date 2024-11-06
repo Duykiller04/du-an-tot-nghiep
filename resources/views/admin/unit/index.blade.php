@@ -244,8 +244,9 @@
                 ajax: '{{ route('admin.units.index') }}',
                 columns: [
                     {
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
