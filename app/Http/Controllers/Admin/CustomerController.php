@@ -20,33 +20,33 @@ class CustomerController extends Controller
         if (request()->ajax()) {
             $query = Customer::query();
             // Lọc theo ngày tháng nếu có
-             if (request()->has('startDate') && request()->has('endDate')) {
+            if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
                 $endDate = request()->get('endDate');
-                
+
                 // Kiểm tra định dạng ngày và lọc
                 if ($startDate && $endDate) {
                     // Convert to datetime to include the full day
                     $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
                     $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
-                    
+
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
             return DataTables::of($query)
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.customers.show', $row->id);
-
+                    
                     $deleteUrl = route('admin.customers.destroy', $row->id);
 
                     return '
-                <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
-                <button type="button" class="btn btn-warning btn-edit" data-id="' . $row->id . '" data-name="' . $row->name . '" data-phone="' . $row->phone . '" data-address="' . $row->address . '" data-email="' . $row->email . '" data-age="' . $row->age . '" data-weight="' . $row->weight . '">Sửa</button>
-                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
+            <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
+            <button type="button" class="btn btn-warning btn-edit" data-id="' . $row->id . '">Sửa</button>
+            <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                 ' . csrf_field() . method_field('DELETE') . '
-                <button type="submit" class="btn  btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
-                </form>
-                ';
+                <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+            </form>
+        ';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -67,7 +67,7 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        try{
+        try {
             $data = [
                 'name' => $request->input('nameCreate'),
                 'phone' => $request->input('phoneCreate'),
@@ -87,8 +87,9 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer) {
-        return view('admin.customer.show',compact('customer'));
+    public function show(Customer $customer)
+    {
+        return view('admin.customer.show', compact('customer'));
     }
 
     /**
@@ -105,25 +106,25 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, string $id)
     {
-        try{   
+        try {
             $customer = Customer::findOrFail($id);
 
             $data = [
-            'name' => $request->input('nameEdit'),
-            'phone' => $request->input('phoneEdit'),
-            'address' => $request->input('addressEdit'),
-            'email' => $request->input('emailEdit'),
-            'age' => $request->input('ageEdit'),
-            'weight' => $request->input('weightEdit'),
-            
+                'name' => $request->input('nameEdit'),
+                'phone' => $request->input('phoneEdit'),
+                'address' => $request->input('addressEdit'),
+                'email' => $request->input('emailEdit'),
+                'age' => $request->input('ageEdit'),
+                'weight' => $request->input('weightEdit'),
+
             ];
             $customer->update($data);
             // dd( $customer);
             return back()->with('success', 'Sửa Thành công');
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             return back()->with('error', $exception->getMessage());
         }
-    } 
+    }
 
     /**
      * Remove the specified resource from storage.

@@ -66,9 +66,9 @@ class ImportOrderController extends Controller
 
                     return '
                 <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
-                <form action="' . $deleteUrl . '" method="POST" style="display:inline;">
+                <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                     ' . csrf_field() . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                    <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                 </form>
                 ';
                 })
@@ -79,7 +79,7 @@ class ImportOrderController extends Controller
         $importOrders = ImportOrder::with(['user', 'storage', 'supplier'])
             ->latest('id')
             ->get();
-            // dd($importOrders);
+        // dd($importOrders);
 
         return view('admin.importorder.index', compact('importOrders'));
     }

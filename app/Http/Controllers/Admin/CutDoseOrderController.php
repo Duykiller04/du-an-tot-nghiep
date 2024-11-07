@@ -37,13 +37,13 @@ class CutDoseOrderController extends Controller
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
+                    $deleteUrl = route('admin.cutDoseOrders.destroy', $row->id);
                     return '
                         <a href="' . route('admin.cutDoseOrders.show', $row->id) . '" class="btn btn-info">Xem</a>
                         <a href="' . route('admin.cutDoseOrders.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
-                        <form action="' . route('admin.cutDoseOrders.destroy', $row->id) . '" method="POST" style="display:inline;">
-                            ' . csrf_field() . '
-                            ' . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn chắc chắn chưa?\')">Xóa</button>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                         </form>
                     ';
                 })
@@ -100,7 +100,7 @@ class CutDoseOrderController extends Controller
             $customerId = $customer->id;
             $activeShift = Shift::where('status', 'đang mở')->first();
             $shiftId = $activeShift ? $activeShift->id : null;
-            
+
             // Lưu thông tin đơn đặt hàng
             $cutDoseOrder = CutDoseOrder::create([
                 'disease_id' => $request->input('disease_id'),  // Đảm bảo rằng trường này không phải là null
@@ -131,7 +131,6 @@ class CutDoseOrderController extends Controller
 
             // Trả về view thành công
             return redirect()->route('admin.cutDoseOrders.index')->with('success', 'Thêm thành công');
-
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
@@ -185,7 +184,7 @@ class CutDoseOrderController extends Controller
             $cutDoseOrder->address = $request->input('address');
             $cutDoseOrder->weight = $request->input('weight');
             $cutDoseOrder->gender = $request->input('gender');
-            
+
             $cutDoseOrder->status = $request->has('status') ? 1 : 0;
 
             // Lưu lại thông tin
@@ -237,7 +236,6 @@ class CutDoseOrderController extends Controller
 
             // Trả về view thành công
             return redirect()->route('admin.cutDoseOrders.index')->with('success', 'Xóa thành công');
-
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();

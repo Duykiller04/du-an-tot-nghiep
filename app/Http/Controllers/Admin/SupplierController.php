@@ -43,9 +43,9 @@ class SupplierController extends Controller
                     return '
                 <a href="' . $viewUrl . '" class="btn btn btn-primary">Xem</a>
                 <button class="btn btn-warning edit-btn" data-id="' . $row->id . '"  data-tax_code="' . $row->tax_code . '"   data-name="' . $row->name . '" data-email="' . $row->email . '" data-phone="' . $row->phone . '" data-address="' . $row->address . '">Sửa</button>
-                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
-                ' . csrf_field() . method_field('DELETE') . '
-                <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                    ' . csrf_field() . method_field('DELETE') . '
+                    <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                 </form>
                 ';
                 })
