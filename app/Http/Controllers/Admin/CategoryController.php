@@ -36,9 +36,9 @@ class CategoryController extends Controller
 
                     return '
                         <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '" data-is-active="' . $row->is_active . '">Sửa</button>
-                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                         </form>
                     ';
                 })

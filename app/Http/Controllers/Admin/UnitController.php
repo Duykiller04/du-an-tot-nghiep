@@ -33,9 +33,9 @@ class UnitController extends Controller
 
                     return '
                         <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '">Sửa</button>
-                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                             ' . csrf_field() . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                         </form>
                     ';
                 })

@@ -50,9 +50,9 @@ class UserController extends Controller
                     return '
             <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
             <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
-            <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
-            ' . csrf_field() . method_field('DELETE') . '
-            <button type="submit" class="btn  btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+            <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                ' . csrf_field() . method_field('DELETE') . '
+                <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
             </form>
             ';
                 })

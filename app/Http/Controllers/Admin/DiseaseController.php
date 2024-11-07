@@ -23,7 +23,7 @@ class DiseaseController extends Controller
         if (request()->ajax()) {
             $query = Disease::query();
             // Lọc theo ngày tháng nếu có
-             if (request()->has('startDate') && request()->has('endDate')) {
+            if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
                 $endDate = request()->get('endDate');
 
@@ -37,9 +37,9 @@ class DiseaseController extends Controller
                 }
             }
             return DataTables::of($query)
-                ->addColumn('image', function($row) {
+                ->addColumn('image', function ($row) {
                     $url = Storage::url($row->feature_img);
-                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.diseases.edit', $row->id);
@@ -47,9 +47,9 @@ class DiseaseController extends Controller
 
                     return '
                 <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
-                <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
-                ' . csrf_field() . method_field('DELETE') . '
-                <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                    ' . csrf_field() . method_field('DELETE') . '
+                    <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                 </form>
                 ';
                 })

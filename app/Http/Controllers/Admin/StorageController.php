@@ -36,15 +36,15 @@ class StorageController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.storage.update', $row->id);
+                    $deleteUrl = route('admin.storage.destroy', $row->id);
                     return '
                     <button class="btn btn-warning edit-btn" 
                             data-id="' . $row->id . '" 
                             data-name="' . $row->name . '" 
                             data-location="' . $row->location . '">Sửa</button>
-                    <form action="' . route('admin.storage.destroy', $row->id) . '" method="post" style="display:inline;">
+                    <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                         ' . csrf_field() . method_field('DELETE') . '
-                        <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                        <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                     </form>
                 ';
                 })

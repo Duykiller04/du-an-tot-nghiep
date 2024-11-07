@@ -151,6 +151,25 @@ Danh sách đơn thuốc
                 },
 
             });
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('.delete-form');
+                Swal.fire({
+                    title: "Bạn có chắc muốn xóa không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa!",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
         });
     </script>
 @endsection
