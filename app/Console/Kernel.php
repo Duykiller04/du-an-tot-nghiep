@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new \App\Jobs\CheckExpirationNotifications())->dailyAt('15:40');
+        $schedule->job(new \App\Jobs\CheckExpirationNotifications())->dailyAt('21:07');
     }
 
     /**
