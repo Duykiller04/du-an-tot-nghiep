@@ -20,6 +20,7 @@ class CutDoseOrder extends Model
         'phone',
         'address',
         'shift_id',
+        'total_price',
     ];
 
     public function disease()

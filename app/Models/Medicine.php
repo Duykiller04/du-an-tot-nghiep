@@ -12,6 +12,7 @@ class Medicine extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'category_id',
+        'storage_id',
         'medicine_code',
         'name',
         'image',
@@ -56,8 +57,14 @@ class Medicine extends Model
     public function inventory(){
         return $this->hasOne(Inventory::class);
     }
+
     public function expirationNotifications()
     {
         return $this->hasMany(ExpirationNotification::class);
     }
+
+    protected $casts = [
+        'expiration_date' => 'datetime',
+    ];
+
 }

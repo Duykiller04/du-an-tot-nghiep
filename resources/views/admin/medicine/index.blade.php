@@ -73,7 +73,7 @@
                                     style="width: 100%;" aria-describedby="buttons-datatables_info">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>STT</th>
                                             <th>Mã thuốc</th>
                                             <th>Danh mục</th>
                                             <th>Tên thuốc</th>
@@ -84,7 +84,6 @@
                                             <th>Nhà cung cấp</th>
                                             <th>Số lượng</th>
                                             <th>Thời gian tạo</th>
-                                            <th>Thời gian cập cập nhập</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -143,7 +142,7 @@
                         }
                     },
                     columns: [{
-                            data: 'id'
+                            data: 'DT_RowIndex', orderable: false, searchable: false
                         },
                         {
                             data: 'medicine_code'
@@ -180,9 +179,6 @@
                         },
                         {
                             data: 'created_at'
-                        },
-                        {
-                            data: 'updated_at'
                         },
                         {
                             data: 'action',

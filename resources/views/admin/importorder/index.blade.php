@@ -70,13 +70,13 @@
                                 style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>ID</th> <!-- Thêm trường ID -->
+                                        <th>STT</th>
                                         <th>Tên Kho</th>
                                         <th>Người kiểm tra</th>
                                         <th>Nhà cung cấp</th>
                                         <th>Ngày nhập</th>
                                         <th>Tổng tiền</th>
-                                        <th>Actions</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -133,9 +133,10 @@
                     }
                 },
                 columns: [{
-                        data: 'id',
-                        name: 'id'
-                    }, // Thêm cột ID
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
                     {
                         data: 'storage.name',
                         name: 'storage.name'

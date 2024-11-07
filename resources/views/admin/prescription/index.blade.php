@@ -55,7 +55,7 @@ Danh sách đơn thuốc
                     <table id="prescriptionsTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Tên khách hàng</th>
                                 <th>Giới tính</th>
                                 <th>Tuổi</th>
@@ -64,6 +64,7 @@ Danh sách đơn thuốc
                                 <th>Địa chỉ</th>
                                 <th>Email</th>
                                 <th>Cân nặng</th>
+                                <th>Ngày mua</th>
                                 <th>Tổng đơn hàng</th>
                                 <th>Hành động</th>
                             </tr>
@@ -114,7 +115,7 @@ Danh sách đơn thuốc
                 serverSide: true,
                 ajax: '{{ route('admin.prescriptions.index') }}',
                 columns: [
-                    { data: 'id' },
+                    { data: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'name_customer' },
                     { data: 'gender' },
                     { data: 'age' },
@@ -123,6 +124,7 @@ Danh sách đơn thuốc
                     { data: 'address' },
                     { data: 'email' },
                     { data: 'weight' },
+                    { data: 'created_at' },
                     { data: 'total' },
                     { data: 'action', orderable: false, searchable: false }
                 ],

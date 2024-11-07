@@ -26,15 +26,116 @@
             </div>
         </div>
         <!-- end page title -->
+        @if (session('success'))
+            <div class="alert alert-success mb-3">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Modal thêm mới kho -->
+        <div class="modal fade" id="createStorageModal" tabindex="-1" aria-labelledby="createStorageLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createStorageLabel">Thêm mới kho</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('admin.storage.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!-- Tên kho -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên kho <span class="text-danger">*</span></label>
+                                <input type="text" name="nameCreate" id="name"
+                                    class="form-control @error('nameCreate') is-invalid @enderror"
+                                    value="{{ old('nameCreate') }}">
+                                <div class="invalid-feedback">
+                                    @error('nameCreate')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Địa chỉ -->
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                                <input type="text" name="locationCreate" id="location"
+                                    class="form-control @error('locationCreate') is-invalid @enderror"
+                                    value="{{ old('locationCreate') }}">
+                                <div class="invalid-feedback">
+                                    @error('locationCreate')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Modal footer with Save and Close buttons -->
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal sửa kho -->
+        <div class="modal fade" id="editStorageModal" tabindex="-1" aria-labelledby="editStorageModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editStorageModalLabel">Chỉnh sửa kho</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editStorageForm" method="POST" action="{{ route('admin.storage.update', '') }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_storage_id" name="id">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="edit-name" class="form-label">Tên kho <span class="text-danger">*</span></label>
+                                <input type="text" name="edit-name" id="edit-name"
+                                    class="form-control @error('edit-name') is-invalid @enderror"
+                                    value="{{ old('edit-name') }}">
+                                <div class="invalid-feedback">
+                                    @error('edit-name')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-location" class="form-label">Địa chỉ <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="edit-location" id="edit-location"
+                                    class="form-control @error('edit-location') is-invalid @enderror"
+                                    value="{{ old('edit-location') }}">
+                                <div class="invalid-feedback">
+                                    @error('edit-location')
+                                        {{ $message }}
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5 class="card-title mb-0">
-                            Danh sách kho
-                        </h5>
-                        <a href="{{ route('admin.storage.create') }}" class="btn btn-success mb-3">Thêm mới</a>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Danh sách kho</h5>
+                        <!-- Button to trigger modal -->
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#createStorageModal">Thêm mới kho</button>
                     </div>
                     <div class="card-body">
                         <div class="card-body">
@@ -56,12 +157,12 @@
                                 style="width: 100%">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>STT</th>
                                         <th>Tên kho</th>
                                         <th>Địa chỉ</th>
                                         <th>Thời gian tạo</th>
-                                        <th>Thời gian cập nhật</th>
-                                        <th>Action</th>
+                                        <th>Tổng thuốc</th>
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -107,18 +208,21 @@
 @section('js')
     <script>
         $(document).ready(function() {
+            // Khởi tạo DataTable
             var table = $('#storageDataTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
                     url: '{{ route('admin.storage.index') }}',
                     data: function(d) {
-                        d.startDate = $('#start-date').val(); // Sửa từ minDate thành start-date
-                        d.endDate = $('#end-date').val(); // Sửa từ maxDate thành end-date
+                        d.startDate = $('#start-date').val(); // Lấy giá trị từ trường ngày bắt đầu
+                        d.endDate = $('#end-date').val(); // Lấy giá trị từ trường ngày kết thúc
                     }
                 },
                 columns: [{
-                        data: 'id'
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name'
@@ -130,16 +234,44 @@
                         data: 'created_at'
                     },
                     {
-                        data: 'updated_at'
+                        data: 'medicines_count'
                     },
                     {
                         data: 'action',
-                        name: 'action',
                         orderable: false,
                         searchable: false
                     }
                 ],
-                dom: 'Bfrtip',
+                dom: 'Bfrtip', // Hiển thị nút xuất
+                buttons: [{
+                        extend: 'excel',
+                        text: 'Xuất Excel',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)' // Không xuất cột cuối
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'Xuất CSV',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)' // Không xuất cột cuối
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'Xuất PDF',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)' // Không xuất cột cuối
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'In',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)' // Không xuất cột cuối
+                        }
+                    }
+                ],
                 language: {
                     "sEmptyTable": "Không có dữ liệu trong bảng",
                     "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
@@ -160,41 +292,55 @@
                         "sSortAscending": ": Sắp xếp tăng dần",
                         "sSortDescending": ": Sắp xếp giảm dần"
                     }
-                },
-                buttons: [{
-                        extend: 'excel',
-                        text: 'Xuất Excel',
-                        exportOptions: {
-                            columns: ':visible:not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'Xuất CSV',
-                        exportOptions: {
-                            columns: ':visible:not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        text: 'Xuất PDF',
-                        exportOptions: {
-                            columns: ':visible:not(:last-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: 'In',
-                        exportOptions: {
-                            columns: ':visible:not(:last-child)'
-                        }
-                    }
-                ]
-
+                }
             });
 
+            // Xử lý sự kiện khi nút lọc được nhấn
             $('#filter-btn').click(function() {
                 table.draw();
+            });
+
+            // Hiện modal nếu có lỗi
+            @if ($errors->has('edit-name'))
+                $('#editStorageModal').modal('show');
+            @endif
+            @if ($errors->has('edit-location'))
+                $('#editStorageModal').modal('show');
+            @endif
+            @if ($errors->has('nameCreate'))
+                $('#createStorageModal').modal('show');
+            @endif
+
+            // Hiện modal tạo mới
+            $('#createStorageBtn').on('click', function() {
+                $('#createStorageModal').modal('show');
+            });
+
+            // Xử lý sự kiện khi nhấn nút sửa
+            $('#storageDataTable tbody').on('click', '.btn-warning', function() {
+                var row = $(this).closest('tr');
+                var data = table.row(row).data();
+
+                // Điền dữ liệu vào các trường của modal sửa
+                $('#edit_storage_id').val(data.id);
+                $('#edit-name').val(data.name);
+                $('#edit-location').val(data.location);
+
+                // Cập nhật URL cho form sửa
+                $('#editStorageForm').attr('action', '{{ route('admin.storage.update', ':id') }}'.replace(
+                    ':id', data.id));
+
+                // Hiện modal sửa
+                $('#editStorageModal').modal('show');
+            });
+
+            // Cập nhật URL cho form sửa khi modal hiện
+            $('#editStorageModal').on('show.bs.modal', function() {
+                var id = $('#edit_storage_id').val() ?? '';
+                $('#editStorageForm').attr({
+                    'action': '{{ route('admin.storage.update', ':id') }}'.replace(':id', id),
+                    'method': 'POST'
+                });
             });
         });
     </script>

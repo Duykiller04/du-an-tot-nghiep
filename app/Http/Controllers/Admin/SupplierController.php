@@ -21,7 +21,7 @@ class SupplierController extends Controller
         if (request()->ajax()) {
             $query = Supplier::query();
             // Lọc theo ngày tháng nếu có
-             if (request()->has('startDate') && request()->has('endDate')) {
+            if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
                 $endDate = request()->get('endDate');
 
@@ -42,7 +42,7 @@ class SupplierController extends Controller
 
                     return '
                 <a href="' . $viewUrl . '" class="btn btn btn-primary">Xem</a>
-                <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
+                <button class="btn btn-warning edit-btn" data-id="' . $row->id . '"  data-tax_code="' . $row->tax_code . '"   data-name="' . $row->name . '" data-email="' . $row->email . '" data-phone="' . $row->phone . '" data-address="' . $row->address . '">Sửa</button>
                 <form action="' . $deleteUrl  . '" method="post" style="display:inline;">
                 ' . csrf_field() . method_field('DELETE') . '
                 <button type="submit" class="btn btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
@@ -60,7 +60,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return view(self::PATH_VIEW . __FUNCTION__);
+        //
     }
 
     /**
@@ -89,7 +89,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        return view(self::PATH_VIEW . __FUNCTION__, compact('supplier'));
+        //
     }
 
     /**
@@ -98,7 +98,13 @@ class SupplierController extends Controller
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
         try {
-            $supplier->update($request->all());
+            $supplier->update([
+                'tax_code'   => $request->tax_code_edit,
+                'name'   => $request->name_edit,
+                'email'  => $request->email_edit,
+                'phone'   => $request->phone_edit,
+                'address' => $request->address_edit,
+            ]);
             return back()->with('success', 'Thành công');
         } catch (\Exception $exception) {
             return back()->with('error' . $exception->getMessage());

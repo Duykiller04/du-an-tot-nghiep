@@ -47,6 +47,7 @@ class ImportOrderController extends Controller
             }
 
             return DataTables::of($query)
+                ->addIndexColumn()
                 ->addColumn('user_name', function ($row) {
                     return $row->user->name ?? '';  // Lấy tên từ bảng user
                 })
@@ -55,6 +56,9 @@ class ImportOrderController extends Controller
                 })
                 ->addColumn('supplier_name', function ($row) {
                     return $row->supplier->name ?? '';  // Lấy tên từ bảng supplier
+                })
+                ->addColumn('total', function ($row) {
+                    return number_format($row->total) . ' VND';  // Format price
                 })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.importorder.show', $row->id);
@@ -135,6 +139,8 @@ class ImportOrderController extends Controller
 
                 // Gán giá trị mặc định cho quantity nếu không có
                 $detail['quantity'] = $detail['quantity'] ?? 1;
+
+                $detail['storage_id'] = $data['storage_id'];
 
                 // Kiểm tra thuốc đã tồn tại
                 $existingMedicine = Medicine::where('medicine_code', $detail['medicine_code'])->first();
