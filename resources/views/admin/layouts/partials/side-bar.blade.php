@@ -338,7 +338,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
-                        <i class="ri-notification-3-fill"></i> <span data-key="t-pages">Cấu hình thông báo</span>
+                        <i class="ri-notification-3-fill"></i> <span data-key="t-pages">Cấu hình</span>
                     </a>
                 </li>
                 <li class="nav-item">

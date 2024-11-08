@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->job(new \App\Jobs\CheckExpirationNotifications())->dailyAt('21:07');
         $schedule->job(new \App\Jobs\SendExpirationNotificationsEmail)->dailyAt('10:43');
+        $schedule->command('shift:close-expired')->everyMinute();
+        $schedule->command('shift:open-scheduled')->everyMinute();
     }
 
     /**

@@ -71,7 +71,7 @@ class ShiftController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation rules
+        
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'start_time' => 'required|date|after_or_equal:today',
@@ -94,10 +94,30 @@ class ShiftController extends Controller
             'details.*.user_id.exists' => 'Người dùng không tồn tại.',
         ]);
 
-        // Check for validation errors
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
+                ->withInput();
+        }
+
+        $startTime = Carbon::parse($request->start_time);
+        $endTime = Carbon::parse($request->end_time);
+
+        $overlappingShifts = Shift::whereIn('status', ['kế hoạch', 'đang mở'])
+            ->whereDate('start_time', $startTime->toDateString()) // Chỉ kiểm tra trong cùng ngày
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->whereBetween('start_time', [$startTime, $endTime])
+                    ->orWhereBetween('end_time', [$startTime, $endTime])
+                    ->orWhere(function ($query) use ($startTime, $endTime) {
+                        $query->where('start_time', '<=', $startTime)
+                            ->where('end_time', '>=', $endTime);
+                    });
+            })
+            ->count();
+
+        if ($overlappingShifts > 0) {
+            return redirect()->back()
+                ->withErrors(['start_time' => 'Thời gian của ca làm bị trùng lặp với ca đã tồn tại.'])
                 ->withInput();
         }
 
@@ -105,7 +125,7 @@ class ShiftController extends Controller
             'shift_name' => $request->title,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
-            'status' => 'Kế hoạch',
+            'status' => 'kế hoạch',
             'revenue_summary' => 0,
         ]);
 
@@ -120,9 +140,10 @@ class ShiftController extends Controller
     }
 
 
+
     public function edit($id)
     {
-        $shift = Shift::with('shiftuser.user','orders', 'Prescription')->findOrFail($id);
+        $shift = Shift::with('shiftuser.user', 'orders', 'Prescription')->findOrFail($id);
 
         $statusOptions = ['kế hoạch', 'đang mở', 'tạm dừng', 'đã chốt', 'đã hủy'];
 
@@ -132,10 +153,10 @@ class ShiftController extends Controller
         $checkedUsers = $shift->shiftuser->pluck('users_id')->toArray();
 
         $orders = $shift->orders;
-        
+
         $Prescription = $shift->Prescription;
         //dd($Prescription);
-        return view('admin.shift.edit', compact('shift', 'statusOptions', 'users', 'orders', 'checkedUsers','Prescription'));
+        return view('admin.shift.edit', compact('shift', 'statusOptions', 'users', 'orders', 'checkedUsers', 'Prescription'));
     }
 
 
