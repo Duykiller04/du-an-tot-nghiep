@@ -19,7 +19,7 @@ class Storage extends Model
         return $this->hasMany(InventoryAudit::class, 'storage_id', 'id');
     }
 
-    public function medicine()
+    public function medicines()
     {
         return $this->hasMany(Medicine::class);
     }
@@ -27,5 +27,9 @@ class Storage extends Model
     public function unit()
     {
         return $this->hasMany(Unit::class);
+    }
+    public function inventory()
+    {
+        return $this->hasMany(Inventory::class);
     }
 }

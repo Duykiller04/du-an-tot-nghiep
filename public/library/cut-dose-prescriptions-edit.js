@@ -153,8 +153,7 @@ $(document).on("input", 'input[name$="[quantity]"]', function () {
 });
 
 function updatePrice($medicineRow) {
-    var selectedUnitId =
-        $medicineRow.find('select[name$="[unit_id]"]').val() - 1;
+    var selectedUnitId = $medicineRow.find('select[name$="[unit_id]"]').prop("selectedIndex") - 1;
 
     var quantity = $medicineRow.find('input[name$="[quantity]"]').val();
 
@@ -162,7 +161,7 @@ function updatePrice($medicineRow) {
     var priceInput = $medicineRow.find('input[name$="[current_price]"]');
     var new_prices = priceInput.data("new_prices");
 
-    var gia_ban = new_prices[selectedUnitId] || 1; // Kiểm tra giá trị của new_prices
+    var gia_ban = new_prices[selectedUnitId] || 0; // Kiểm tra giá trị của new_prices
     console.log(new_prices);
 
     if (gia_ban === 0) {

@@ -49,13 +49,15 @@ Danh sách đơn thuốc cắt liều
                     <table id="cutDoseOrdersTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Tên khách hàng</th>
                                 <th>Giới tính</th>
                                 <th>Tuổi</th>
                                 <th>Điện thoại</th>
                                 <th>Địa chỉ</th>
                                 <th>Cân nặng</th>
+                                <th>Ngày mua</th>
+                                <th>Tổng tiền</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -107,13 +109,15 @@ Danh sách đơn thuốc cắt liều
                     }
                 },
                 columns: [
-                    { data: 'id' },
+                    { data: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'customer_name' },
                     { data: 'gender' },
                     { data: 'age' },
                     { data: 'phone' },
                     { data: 'address' },
                     { data: 'weight' },
+                    { data: 'created_at' },
+                    { data: 'total_price' },
                     { data: 'action', orderable: false, searchable: false }
                 ],
                 language: {

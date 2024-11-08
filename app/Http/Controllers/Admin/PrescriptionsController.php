@@ -30,8 +30,15 @@ class PrescriptionsController extends Controller
         if (request()->ajax()) {
             $data = Prescription::with('prescriptionDetails')->get();
             return DataTables::of($data)
+                ->addIndexColumn()
                 ->addColumn('gender', function ($row) {
                     return $row->gender == 0 ? 'Nam' : 'Nữ'; // Chuyển đổi giới tính
+                })
+                ->addColumn('total', function ($row) {
+                    return number_format($row->total) . ' VND';  // Format price
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
                     return '

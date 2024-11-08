@@ -31,6 +31,116 @@
             </div>
         @endif
 
+        <!-- Create Category Modal -->
+        <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createCategoryModalLabel">Thêm mới danh mục</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.catalogues.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="project-title-input">Tên danh mục</label>
+                                <input type="text" name="nameCreate" class="form-control" id="project-title-input"
+                                    placeholder="Nhập tên danh mục" value="{{ old('name') }}">
+                                @error('nameCreate')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Danh mục cha</label>
+                                <select name="parent_idCreate" class="form-select">
+                                    <option value="0" {{ old('parent_id') == 0 ? 'selected' : '' }}>Không</option>
+                                    @foreach ($catalogues as $item)
+                                        @php($indent = '')
+                                        @include('admin.catalogue.catalogue_nested', ['catalog' => $item])
+                                    @endforeach
+                                </select>
+                                @error('parent_idCreate')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Trạng thái</label>
+                                <select name="is_activeCreate" class="form-select" data-choices data-choices-search-false
+                                    id="">
+                                    <option value="1" selected>Hoạt động</option>
+                                    <option value="0">Bản nháp</option>
+                                </select>
+                                @error('is_activeCreate')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Category Modal -->
+        <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoryModalLabel">Sửa danh mục</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="" method="POST" enctype="multipart/form-data" id="editForm">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_category_id" name="category_id">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_name">Tên danh mục</label>
+                                <input type="text" name="nameEdit" class="form-control" id="edit_name"
+                                    placeholder="Nhập tên danh mục">
+                                @error('nameEdit')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Danh mục cha</label>
+                                <select name="parent_idEdit" class="form-select">
+                                    <option value="0" {{ old('parent_id') == 0 ? 'selected' : '' }}>Không</option>
+                                    @foreach ($catalogues as $item)
+                                        @php($indent = '')
+                                        @include('admin.catalogue.catalogue_nested', ['catalog' => $item])
+                                    @endforeach
+                                </select>
+                                @error('parent_idEdit')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_choices_status_input" class="form-label">Trạng thái</label>
+                                <select name="is_activeEdit" class="form-select" data-choices data-choices-search-false
+                                    id="edit_choices_status_input">
+                                    <option value="1">Hoạt động</option>
+                                    <option value="0">Bản nháp</option>
+                                </select>
+                                @error('is_activeEdit')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card" id="customerList">
@@ -45,8 +155,7 @@
                                 <div class="d-flex flex-wrap align-items-start gap-2">
                                     <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
                                             class="ri-delete-bin-2-line"></i></button>
-                                    <a href="{{ route('admin.catalogues.create') }}" class="btn btn-success add-btn"
-                                        id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm danh mục</a>
+                                    <button class="btn btn-primary mb-3" id="createCategoryBtn">Thêm mới danh mục</button>
                                 </div>
                             </div>
                         </div>
@@ -72,10 +181,9 @@
                                         <thead>
                                             <tr>
                                                 <th></th> <!-- Cột để click mở rộng -->
-                                                <th>ID</th>
+                                                <th>STT</th>
                                                 <th>Tên danh mục</th>
-                                                <th>Thời gian tạo</th>
-                                                <th>Thời gian cập nhật</th>
+                                                <th>Ngày tạo</th>
                                                 <th>Thao tác</th>
                                             </tr>
                                         </thead>
@@ -125,6 +233,39 @@
 @section('js')
     <script>
         $(document).ready(function() {
+            @if ($errors->has('nameEdit'))
+                $('#editCategoryModal').modal('show');
+            @endif
+            @if ($errors->has('nameCreate'))
+                $('#createCategoryModal').modal('show');
+            @endif
+            $('#createCategoryBtn').on('click', function() {
+                $('#createCategoryModal').modal('show'); // Show the modal
+            });
+            $('#example tbody').on('click', '.btn-warning', function() {
+                var row = $(this).closest('tr');
+                var data = $('#example').DataTable().row(row).data();
+
+                // Điền dữ liệu vào các trường của modal sửa
+                $('#edit_category_id').val(data.id);
+                $('#edit_name').val(data.name);
+                $('select#edit_choices_status_input').val(data.is_active); // Đảm bảo đúng ID của modal sửa
+                $('select[name="parent_idEdit"]').val(data.parent_id !== null ? data.parent_id : '0');
+
+                // Hiện modal sửa
+                $('#editCategoryModal').modal('show');
+            });
+
+            $('#editCategoryModal').on('show.bs.modal', function() {
+                var id = $('#edit_category_id').val() ?? '';
+
+                $('#editForm').attr({
+                    'action': '{{ route('admin.catalogues.update', ':id') }}'.replace(':id', id),
+                    'method': 'POST'
+                });
+
+            });
+
             var table = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
@@ -137,8 +278,9 @@
                         width: '20px'
                     },
                     {
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'name',
@@ -147,10 +289,6 @@
                     {
                         data: 'created_at',
                         name: 'created_at'
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at'
                     },
                     {
                         data: 'action',

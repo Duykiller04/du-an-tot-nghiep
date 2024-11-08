@@ -25,7 +25,8 @@ class MedicalInstrumentController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Medicine::query()->with(['suppliers', 'category', 'storage', 'inventory'])
+            $query = Medicine::query()
+                ->with(['suppliers', 'category', 'storage', 'inventory'])
                 ->where('type_product', 1);
 
             // Lọc theo ngày tháng nếu có
@@ -43,9 +44,31 @@ class MedicalInstrumentController extends Controller
             }
 
             return DataTables::of($query)
-                ->addColumn('image', function($row) {
+                ->addIndexColumn()
+                ->addColumn('category_name', function ($row) {
+                    return $row->category->name ?? '';  // Lấy tên từ bảng category
+                })
+                ->addColumn('storage_location', function ($row) {
+                    return $row->storage->location ?? '';  // Lấy vị trí từ bảng storage
+                })
+                ->addColumn('inventory_stock', function ($row) {
+                    return $row->inventory->stock ?? '';  // Lấy số lượng từ bảng inventory
+                })
+                ->addColumn('expiration_date', function ($row) {
+                    return $row->expiration_date ? $row->expiration_date->format('d/m/Y') : '';
+                })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
+                ->addColumn('price_import', function ($row) {
+                    return number_format($row->price_import) . ' VND';  // Format price
+                })
+                ->addColumn('price_sale', function ($row) {
+                    return number_format($row->price_sale) . ' VND';  // Format price
+                })
+                ->addColumn('image', function ($row) {
                     $url = \Illuminate\Support\Facades\Storage::url($row->image);
-                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.medicalInstruments.edit', $row->id);
@@ -176,6 +199,8 @@ class MedicalInstrumentController extends Controller
             $medicineData['type_product'] = 1;
 
             $medicineData['image'] = $imagePath;
+
+            $medicineData['storage_id'] = $request->storage_id;
 
             $inventories = [];
 
