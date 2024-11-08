@@ -310,3 +310,11 @@
         </div>
     </div>
 </header>
+<script>
+    document.getElementById('page-header-notifications-dropdown').addEventListener('click', function() {
+    const badgeElement = document.querySelector('.topbar-badge');
+    if (badgeElement) {
+        badgeElement.style.display = 'none';
+    }
+});
+</script>
