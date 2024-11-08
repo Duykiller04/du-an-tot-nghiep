@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -40,7 +41,7 @@ class UserController extends Controller
             return DataTables::of($query)
                 ->addColumn('image', function ($row) {
                     $url = Storage::url($row->image);
-                    return '<img src="'.asset($url).'" alt="image" width="50" height="50">';
+                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
                 })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.users.show', $row->id);  // Sửa đường dẫn
@@ -56,7 +57,7 @@ class UserController extends Controller
             </form>
             ';
                 })
-                ->rawColumns(['image','action'])
+                ->rawColumns(['image', 'action'])
                 ->make(true);
         }
         return view(self::PATH_VIEW . __FUNCTION__);
@@ -116,8 +117,8 @@ class UserController extends Controller
         try {
             $model = User::findOrFail($id);
 
-            // Lấy toàn bộ dữ liệu trừ 'image'
-            $data = $request->except('image');
+            // Lấy toàn bộ dữ liệu trừ 'image' và các trường mật khẩu
+            $data = $request->except(['image', 'old_password', 'new_password', 'confirm_password']);
 
             // Lấy ảnh hiện tại của người dùng
             $currentImgThumb = $model->image;
@@ -129,6 +130,23 @@ class UserController extends Controller
             } else {
                 // Không thay đổi ảnh thì giữ ảnh cũ
                 $data['image'] = $currentImgThumb;
+            }
+
+            // Kiểm tra và cập nhật mật khẩu nếu có nhập mật khẩu cũ, mới, và xác nhận mật khẩu
+            if ($request->filled('old_password') || $request->filled('new_password') || $request->filled('confirm_password')) {
+                // Kiểm tra mật khẩu cũ
+                if (!Hash::check($request->old_password, $model->password)) {
+                    return back()->withErrors(['old_password' => 'Mật khẩu cũ không chính xác.']);
+                }
+
+                // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+                $request->validate([
+                    'new_password' => 'required|min:8',
+                    'confirm_password' => 'same:new_password',
+                ]);
+
+                // Cập nhật mật khẩu mới
+                $data['password'] = Hash::make($request->new_password);
             }
 
             // Cập nhật dữ liệu người dùng
