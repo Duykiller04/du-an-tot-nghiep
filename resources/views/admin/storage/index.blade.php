@@ -90,7 +90,7 @@
                         <h5 class="modal-title" id="editStorageModalLabel">Chỉnh sửa kho</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="editStorageForm" method="POST" action="{{ route('admin.storage.update', '') }}">
+                    <form id="editStorageForm" method="" action="">
                         @csrf
                         @method('PUT')
                         <input type="hidden" id="edit_storage_id" name="id">
