@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttendaceController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CutDoseOrderController;
 use App\Http\Controllers\Admin\CutDosePrescriptionController;
@@ -118,6 +119,12 @@ Route::prefix('admin')
         Route::resource('importorder', ImportOrderController::class);
 
         Route::resource('prescriptions', PrescriptionsController::class);
+
+        Route::get('attendace', [AttendaceController::class, 'index'])->name('attendace.index');
+
+        Route::post('checkin', [AttendaceController::class, 'checkin'])->name('attendace.checkin');
+        
+        Route::post('checkout', [AttendaceController::class, 'checkout'])->name('attendace.checkout');
 
         Route::prefix('restore')->group(function () {
             // restore categories

@@ -122,7 +122,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form action="" method="POST" enctype="multipart/form-data" id="editForm">
+                            <form action="" method="" enctype="multipart/form-data" id="editForm">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" id="edit_customer_id" name="customer_id">
