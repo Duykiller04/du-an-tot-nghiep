@@ -144,10 +144,10 @@
                                                                     class="btn btn-info">
                                                                     Xem & Điều chỉnh ca</a></li>
                                                             <li>
-                                                                <form action="{{ route('admin.shifts.destroy', $shift->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa ca làm việc này?');">
+                                                                <form action="{{ route('admin.shifts.destroy', $shift->id) }}" method="post" style="display:inline;" class="delete-form">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                                    <button type="button" class="btn btn-danger btn-delete" data-id="{{$shift->id}}">Xóa</button>
                                                                 </form>
                                                             </li>      
                                                         </ul>
@@ -225,6 +225,25 @@
                         "sSortDescending": ": Sắp xếp giảm dần"
                     }
                 },
+            });
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('.delete-form');
+                Swal.fire({
+                    title: "Bạn có chắc muốn xóa không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa!",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>

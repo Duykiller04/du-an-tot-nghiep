@@ -32,46 +32,41 @@
                     <div class="card-header align-items-center d-flex">
                         <h4 class="card-title mb-0 flex-grow-1">Cập nhật người dùng</h4>
                     </div><!-- end card header -->
-
+    
                     <div class="card-body row">
                         <div class="col-6">
                             <div class="form-group mb-3">
                                 <label for="name">Tên người dùng<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                    value="{{ old('name', $user->name) }}">
-
+                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}">
                                 @error('name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
+    
                             <div class="form-group mb-3">
                                 <label for="phone">Điện thoại<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="phone" name="phone"
-                                    value="{{ old('phone', $user->phone) }}">
+                                <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
                                 @error('phone')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
+    
                             <div class="form-group mb-3">
                                 <label for="address">Địa chỉ</label>
-                                <input type="text" class="form-control   " id="address" name="address"
-                                    value="{{ old('address', $user->address) }}">
+                                <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $user->address) }}">
                                 @error('address')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
+    
                             <div class="form-group mb-3">
                                 <label for="birth">Ngày sinh</label>
-                                <input type="date" class="form-control " id="birth" name="birth"
-                                    value="{{ old('birth', $user->birth) }}">
+                                <input type="date" class="form-control" id="birth" name="birth" value="{{ old('birth', $user->birth) }}">
                                 @error('birth')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
+    
                             <div class="form-group mb-3">
                                 <label for="image">Ảnh</label>
                                 <input type="file" class="form-control" id="image" name="image">
@@ -81,30 +76,48 @@
                                 @enderror
                             </div>
                         </div>
-
+    
                         <div class="col-6">
                             <div class="form-group mb-3">
                                 <label for="description">Mô tả</label>
                                 <textarea class="form-control" id="description" name="description">{{ old('description', $user->description) }}</textarea>
                             </div>
-
+    
                             <div class="form-group mb-3">
                                 <label for="email">Email<span class="text-danger">*</span></label>
-                                <input type="email" class="form-control " id="email" name="email"
-                                    value="{{ old('email', $user->email) }}">
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}">
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
+    
+                            <!-- Các ô nhập mật khẩu -->
                             <div class="form-group mb-3">
-                                <label for="password">Mật khẩu<span class="text-danger">*</span></label>
-                                <input type="password" class="form-control " id="password" name="password"
-                                    value=", $user->password" disabled>
+                                <label for="old_password">Mật khẩu cũ</label>
+                                <input type="password" class="form-control" id="old_password" name="old_password">
+                                @error('old_password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
-
+    
                             <div class="form-group mb-3">
-                                <label for="password" class="form-label">Vai trò<span class="text-danger">*</span></label>
+                                <label for="new_password">Mật khẩu mới</label>
+                                <input type="password" class="form-control" id="new_password" name="new_password">
+                                @error('new_password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+    
+                            <div class="form-group mb-3">
+                                <label for="confirm_password">Nhập lại mật khẩu mới</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                                @error('confirm_password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+    
+                            <div class="form-group mb-3">
+                                <label for="type" class="form-label">Vai trò<span class="text-danger">*</span></label>
                                 <select name="type" id="type" class="form-select">
                                     <option value="admin" {{ $user->type == 'admin' ? 'selected' : '' }}>Admin</option>
                                     <option value="staff" {{ $user->type == 'staff' ? 'selected' : '' }}>Staff</option>
@@ -115,8 +128,7 @@
                 </div>
             </div>
         </div>
-        <!--end col-->
-        </div>
+    
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -128,9 +140,9 @@
                     </div>
                 </div>
             </div>
-            <!--end col-->
         </div>
     </form>
+    
 @endsection
 
 @section('style-libs')

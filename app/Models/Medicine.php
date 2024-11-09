@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpParser\Node\Expr\FuncCall;
 
 class Medicine extends Model
 {
@@ -56,7 +57,14 @@ class Medicine extends Model
     public function inventory(){
         return $this->hasOne(Inventory::class);
     }
+
+    public function expirationNotifications()
+    {
+        return $this->hasMany(ExpirationNotification::class);
+    }
+
     protected $casts = [
         'expiration_date' => 'datetime',
     ];
+
 }

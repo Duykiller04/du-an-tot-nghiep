@@ -20,15 +20,22 @@ class UnitController extends Controller
             $query = Unit::with('children')->orderBy('id', 'desc')->get();
 
             return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('created_at', function ($row) {
+                return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+            })
+            ->addColumn('updated_at', function ($row) {
+                return $row->updated_at ? $row->updated_at->format('d/m/Y') : '';
+            })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.units.edit', $row->id);
                     $deleteUrl = route('admin.units.destroy', $row->id);
 
                     return '
                         <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '">Sửa</button>
-                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="ms-2">
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                             ' . csrf_field() . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">Xóa</button>
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                         </form>
                     ';
                 })

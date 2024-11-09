@@ -41,13 +41,14 @@ class PrescriptionsController extends Controller
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
+                    $deleteUrl = route('admin.prescriptions.destroy',$row->id);
                     return '
                         <a href="' . route('admin.prescriptions.show', $row->id) . '" class="btn btn-info">Xem</a>
                         <a href="' . route('admin.prescriptions.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
-                        <form action="' . route('admin.prescriptions.destroy', $row->id) . '" method="POST" style="display:inline;">
-                            ' . csrf_field() . '
-                            ' . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-danger" onclick="return confirm(\'Bạn có muốn xóa không ?\')">Xóa</button>
+                        
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
                         </form>
                     ';
                 })
