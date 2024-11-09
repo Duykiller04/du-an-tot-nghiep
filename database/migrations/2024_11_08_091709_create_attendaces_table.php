@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shift_users', function (Blueprint $table) {
-            $table->id(); 
+        Schema::create('attendaces', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained('users'); 
-            $table->foreignId('shift_id')->constrained('shifts'); 
+            $table->foreignId('shift_id')->constrained('shifts');
+            $table->string('img_check_in');
+            $table->string('img_check_out')->nullable();
+            $table->datetime('time_out')->nullable();
+            $table->string('reasons')->nullable();
+            $table->softDeletes();
             $table->timestamps();
-            $table->softDeletes(); 
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shift_users');
+        Schema::dropIfExists('attendaces');
     }
 };

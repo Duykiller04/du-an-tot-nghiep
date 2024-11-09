@@ -308,6 +308,12 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('admin.attendace.index') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-clipboard-fill"></i> <span data-key="t-dashboards">Điểm danh</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="ri-notification-3-fill"></i> <span data-key="t-pages">Cấu hình</span>

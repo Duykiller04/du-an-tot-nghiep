@@ -16,7 +16,7 @@ return new class extends Migration
             $table->boolean('notification_enabled')->default(true); 
             $table->integer('expiration_notification_days')->default(30); 
             $table->boolean('receive_email_notifications')->default(true);
-            $table->string('email')->default('example@gmail.com'); 
+            $table->text('email'); 
             $table->boolean('temperature_warning')->default(false);
             $table->timestamps();
         });
