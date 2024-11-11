@@ -220,10 +220,11 @@
                                                         data-storage_id="{{ $environment->storage_id }}">
                                                         Sửa
                                                         </button>
-                                                        <form action="{{ route('admin.environments.destroy', $environment->id) }}" method="POST" class="d-inline-block">
+
+                                                        <form action="{{ route('admin.environments.destroy', $environment->id) }}" method="POST" style="display:inline;" class="delete-form d-inline-block">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa')">Xóa</button>
+                                                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$environment->id}}">Xóa</button>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -323,6 +324,26 @@
                     // Cập nhật URL form action trong modal
                     const form = document.getElementById('editEnvironmentForm');
                     form.action = `/admin/environments/${id}`;
+                });
+            });
+
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('.delete-form');
+                Swal.fire({
+                    title: "Bạn có chắc muốn xóa không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa!",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
             });
         });

@@ -118,10 +118,10 @@
                                                                     Chi tiết</a></li>
                                                             
                                                             <li>
-                                                                <form action="{{route('admin.inventoryaudit.destroy',$audit->id)}}" method="POST">
+                                                                <form action="{{route('admin.inventoryaudit.destroy',$audit->id)}}" method="POST" style="display:inline;" class="delete-form">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <Button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa')">Xóa</Button>
+                                                                    <button type="button" class="btn btn-danger btn-delete" data-id="{{$audit->id}}">Xóa</button>
                                                                 </form>
                                                                 
                                                             </li>
@@ -207,6 +207,26 @@
                     }
                 },
                 // Thêm các cấu hình khác nếu cần
+            });
+
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('.delete-form');
+                Swal.fire({
+                    title: "Bạn có chắc muốn xóa không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa!",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>

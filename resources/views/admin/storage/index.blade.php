@@ -90,7 +90,7 @@
                         <h5 class="modal-title" id="editStorageModalLabel">Chỉnh sửa kho</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="editStorageForm" method="POST" action="{{ route('admin.storage.update', '') }}">
+                    <form id="editStorageForm" method="" action="">
                         @csrf
                         @method('PUT')
                         <input type="hidden" id="edit_storage_id" name="id">
@@ -340,6 +340,26 @@
                 $('#editStorageForm').attr({
                     'action': '{{ route('admin.storage.update', ':id') }}'.replace(':id', id),
                     'method': 'POST'
+                });
+            });
+
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('.delete-form');
+                Swal.fire({
+                    title: "Bạn có chắc muốn xóa không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa!",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
             });
         });

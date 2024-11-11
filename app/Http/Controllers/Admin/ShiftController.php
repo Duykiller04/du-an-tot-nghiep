@@ -131,7 +131,7 @@ class ShiftController extends Controller
 
         foreach ($request->details as $detail) {
             ShiftUser::create([
-                'users_id' => $detail['user_id'],
+                'user_id' => $detail['user_id'],
                 'shift_id' => $shift->id,
             ]);
         }
@@ -150,7 +150,7 @@ class ShiftController extends Controller
         $users = User::all();
 
         // Lấy ID của những nhân viên trong ca làm hiện tại
-        $checkedUsers = $shift->shiftuser->pluck('users_id')->toArray();
+        $checkedUsers = $shift->shiftuser->pluck('user_id')->toArray();
 
         $orders = $shift->orders;
 
@@ -258,7 +258,7 @@ class ShiftController extends Controller
 
 
         foreach ($request->input('details') as $detail) {
-            $shift->shiftuser()->create(['users_id' => $detail['user_id']]);
+            $shift->shiftuser()->create(['user_id' => $detail['user_id']]);
         }
 
 

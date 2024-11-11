@@ -34,6 +34,9 @@ class Shift extends Model
     }
     public function users()
     {
-        return $this->belongsToMany(User::class, 'shift_users', 'shift_id', 'users_id');
+        return $this->belongsToMany(User::class, 'shift_users', 'shift_id', 'user_id');
+    }
+    public function attendace(){
+        return $this->hasOne(Attendace::class);
     }
 }

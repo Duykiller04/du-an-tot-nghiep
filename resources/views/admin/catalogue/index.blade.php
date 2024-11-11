@@ -94,7 +94,7 @@
                         <h5 class="modal-title" id="editCategoryModalLabel">Sửa danh mục</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="POST" enctype="multipart/form-data" id="editForm">
+                    <form action="" method="" enctype="multipart/form-data" id="editForm">
                         @csrf
                         @method('PUT')
                         <input type="hidden" id="edit_category_id" name="category_id">
@@ -370,6 +370,26 @@
                     });
 
                 }
+            });
+
+            $(document).on('click', '.btn-delete', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('.delete-form');
+                Swal.fire({
+                    title: "Bạn có chắc muốn xóa không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Xóa!",
+                    cancelButtonText: "Hủy",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>
