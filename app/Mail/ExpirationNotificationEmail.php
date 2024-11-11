@@ -42,7 +42,7 @@ class ExpirationNotificationEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.expiration_notification', 
+            view: 'mail.expiration_notification', 
             with: [
                 'medicines' => $this->medicines, 
             ],
