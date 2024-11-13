@@ -98,7 +98,7 @@ class EnvironmentController extends Controller
     
         // Kiểm tra nếu có lỗi
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput()->with('turnonmodeladd', 'turnonmodel');
         }
         // // Gọi API để lấy dữ liệu thời tiết
         // $temperature = $this->weatherService->getTemperature($validated['latitude'], $validated['longitude']);
@@ -143,7 +143,7 @@ class EnvironmentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput()->with('turnonmodeledit', 'turnonmodel');
         }
         $environment = Environment::findOrFail($id);
         $environment->update([

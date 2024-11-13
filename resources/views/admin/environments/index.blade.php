@@ -171,14 +171,14 @@
                             </div>
                         </div>
                     </div>
-                    {{-- @if ($errors->any())
+                    @if ($errors->any())
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
                             var myModal = new bootstrap.Modal(document.getElementById('editEnvironment'));
                             myModal.show();
                         });
                     </script>
-                    @endif --}}
+                    @endif
 
                     <div class="row">
                         <div class="col-lg-12">

@@ -154,9 +154,9 @@ class ShiftController extends Controller
 
         $orders = $shift->orders;
 
-        $Prescription = $shift->Prescription;
+        $prescriptions = $shift->Prescription;
         //dd($Prescription);
-        return view('admin.shift.edit', compact('shift', 'statusOptions', 'users', 'orders', 'checkedUsers', 'Prescription'));
+        return view('admin.shift.edit', compact('shift', 'statusOptions', 'users', 'orders', 'checkedUsers', 'prescriptions'));
     }
 
 

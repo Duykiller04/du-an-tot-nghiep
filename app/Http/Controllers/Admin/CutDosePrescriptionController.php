@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCutDosePrescriptionRequest;
 use App\Models\CutDosePrescription;
@@ -9,6 +10,7 @@ use App\Models\CutDosePrescriptionDetail;
 use App\Models\Disease;
 use App\Models\Inventory;
 use App\Models\Medicine;
+use App\Models\Shift;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,6 +67,15 @@ class CutDosePrescriptionController extends Controller
                 'phone_doctor' => $request->phone_doctor,
                 'total' => $total,
             ]);
+            $activeShift = Shift::where('status', 'đang mở')->first();
+            $shiftId = $activeShift ? $activeShift->id : null;
+            if ($shiftId) {
+                $shift = Shift::find($shiftId);
+                $shift->revenue_summary += $request->input('total');
+                $shift->save();
+                broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
+                // event(new TransactionCreated($cutDoseOrder));
+            }
             foreach ($request->medicines as $medicine) {
                 CutDosePrescriptionDetail::query()->create([
                     'medicine_id' => $medicine['medicine_id'],

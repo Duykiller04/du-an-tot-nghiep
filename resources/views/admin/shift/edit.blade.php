@@ -108,7 +108,10 @@
                 </div>
             </div>
         </div>
-        
+        <script>
+            let shiftId = {{ $shift->id }};
+        </script>
+        @vite('resources/js/updateRevenue.js')
         <!-- Form chỉnh sửa ca làm -->
         <div class="row">
             <div class="col-lg-12">
@@ -117,11 +120,10 @@
                         <h2 class="mb-4">Tổng doanh thu ca</h2>
                         <div class="d-flex justify-content-center align-items-center gap-4">
                             <div class="d-flex align-items-center">
-                                {{-- <i class="ri-thermometer-line me-2 text-warning" style="font-size: 24px;"></i> --}}
-                                <span class="text-success" style="font-size: 24px; font-weight: bold;">{{ number_format($shift->revenue_summary) }} VND</span>
+                                <span id="total-revenue" class="text-success" style="font-size: 24px; font-weight: bold;">{{ number_format($shift->revenue_summary) }} VND</span>
                             </div>
-                           
                         </div>
+                        
                     </div>
                     <div class="card-body">
                         <form action="{{ route('admin.shifts.update', $shift->id) }}" method="POST">
@@ -187,7 +189,7 @@
             <div class="col-12">
                 <div class="card p-3">
                 <h5>Danh sách hóa đơn</h5>
-                @if($orders->isEmpty() && $Prescription->isEmpty())
+                @if($orders->isEmpty() && $prescriptions->isEmpty())
                     <div class="alert alert-warning">Không có hóa đơn nào trong ca làm này.</div>
                 @else
                     <ul class="nav nav-tabs" id="orderTab" role="tablist">
@@ -216,7 +218,7 @@
                                             <tr>
                                                 <td>{{ $order->id }}</td>
                                                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                                                <td>{{ number_format($order->total) }} VND</td>
+                                                <td>{{ number_format($order->total_price) }} VND</td>
                                                 <td>{{ ucfirst($order->status) }}</td>
                                             </tr>
                                         @endforeach
@@ -224,6 +226,7 @@
                                 </table>
                             </div>
                         </div>
+
                         <!-- Tab Đơn thuốc cắt liều -->
                         <div class="tab-pane fade" id="special-orders" role="tabpanel" aria-labelledby="special-orders-tab">
                             <div class="card p-3 bg-light">
@@ -237,7 +240,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($Prescription as $prescription)
+                                        @foreach ($prescriptions as $prescription)
                                             <tr>
                                                 <td>{{ $prescription->id }}</td>
                                                 <td>{{ $prescription->created_at->format('d/m/Y H:i') }}</td>
@@ -249,6 +252,7 @@
                                 </table>
                             </div>
                         </div>
+
                     </div>
                 @endif
             </div>
@@ -266,6 +270,55 @@
             });
         });
         
-    </script>
-    @endsection
+    // Function to update the order list and total revenue
+    // function updateOrdersAndRevenue() {
+    //     $.ajax({
+    //         url: '{{ route('admin.shifts.getOrders', $shift->id) }}', // Route to get updated orders
+    //         method: 'GET',
+    //         success: function(response) {
+    //             // Update orders table
+    //             $('#normal-orders tbody').empty();
+    //             $('#special-orders tbody').empty();
+
+    //             // Normal Orders
+    //             response.orders.forEach(order => {
+    //                 $('#normal-orders tbody').append(`
+    //                     <tr>
+    //                         <td>${order.id}</td>
+    //                         <td>${new Date(order.created_at).toLocaleString()}</td>
+    //                         <td>${new Intl.NumberFormat().format(order.total)} VND</td>
+    //                         <td>${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</td>
+    //                     </tr>
+    //                 `);
+    //             });
+
+    //             // Special Orders
+    //             response.prescriptions.forEach(prescription => {
+    //                 $('#special-orders tbody').append(`
+    //                     <tr>
+    //                         <td>${prescription.id}</td>
+    //                         <td>${new Date(prescription.created_at).toLocaleString()}</td>
+    //                         <td>${new Intl.NumberFormat().format(prescription.total)} VND</td>
+    //                         <td>${prescription.status.charAt(0).toUpperCase() + prescription.status.slice(1)}</td>
+    //                     </tr>
+    //                 `);
+    //             });
+
+    //             // Update total revenue
+    //             $('#total-revenue').text(`${new Intl.NumberFormat().format(response.totalRevenue)} VND`);
+    //         },
+    //         error: function(error) {
+    //             console.log('Error fetching updated orders:', error);
+    //         }
+    //     });
+    // }
+
+    // // Initial call to update the data
+    // setInterval(updateOrdersAndRevenue, 5000); // Update every 5 seconds
+
+    // // Manually trigger on page load
+    // updateOrdersAndRevenue();
+</script>
+@endsection
+
 @endsection

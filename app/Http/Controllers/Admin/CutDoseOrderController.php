@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\RevenueUpdated;
+use App\Events\TransactionCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CutDoseOrderRequest;
 use App\Http\Requests\UpdateCutDoseOrderRequest;
@@ -114,6 +116,15 @@ class CutDoseOrderController extends Controller
                 'shift_id' => $shiftId,
                 'total_price' => $request->input('total_price')
             ]);
+            // Cập nhật doanh thu cho ca làm việc
+            if ($shiftId) {
+                $shift = Shift::find($shiftId);
+                $shift->revenue_summary += $request->input('total_price');
+                $shift->save();
+                broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
+                // event(new TransactionCreated($cutDoseOrder));
+            }
+
 
             // Lưu thông tin chi tiết đơn đặt hàng
             foreach ($request->input('medicines') as $medicine) {
