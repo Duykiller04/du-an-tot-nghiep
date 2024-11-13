@@ -77,6 +77,7 @@ Route::prefix('admin')
                 Route::get('/add', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::get('/getOrders/{id}', 'getorder')->name('getOrders');
                 Route::put('shifts/{shift}/status/{status}','updateStatus')->name('updateStatus');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
