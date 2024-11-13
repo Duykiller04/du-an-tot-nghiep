@@ -260,10 +260,11 @@
                                     @endforeach
                         
                                     <div class="my-3 text-center view-all">
-                                        <button type="button" class="btn btn-soft-success waves-effect waves-light">
+                                        <a href="{{ route('admin.notifications.index') }}" class="btn btn-soft-success waves-effect waves-light">
                                             Xem tất cả thông báo <i class="ri-arrow-right-line align-middle"></i>
-                                        </button>
+                                        </a>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
