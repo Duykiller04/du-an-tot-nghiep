@@ -56,7 +56,8 @@ class SettingController extends Controller
         // Validate dữ liệu từ form
         $validated = $request->validate([
             'expiration_notification_days' => 'required|integer|min:1',
-            'email' => 'required|email'
+            'email' => 'required|email',
+            'close_after_minutes' => 'nullable|integer|min:1'
         ]);
 
         // Lấy thông tin cấu hình hiện tại
@@ -66,6 +67,8 @@ class SettingController extends Controller
         $notification_enabled = $request->input('notification_enabled') === 'on' ? true : false;
         $receive_email_notifications = $request->input('receive_email_notifications') === '1' ? true : false;
         $receive_temperature_warnings = $request->input('receive_temperature_warnings') === '1' ? true : false;
+        $auto_open_shift = $request->input('auto_open_shift') === '1';
+        $auto_close_shift = $request->input('auto_close_shift') === '1';
 
         // Cập nhật dữ liệu
         $settings->update([
@@ -74,6 +77,9 @@ class SettingController extends Controller
             'email'=> $validated['email'],
             'receive_email_notifications' => $receive_email_notifications,
             'temperature_warning' => $receive_temperature_warnings,
+            'auto_open_shift' => $auto_open_shift,
+            'auto_close_shift' => $auto_close_shift,
+            'close_after_minutes' => $validated['close_after_minutes'],
         ]);
 
         // Điều hướng lại trang cấu hình với thông báo thành công

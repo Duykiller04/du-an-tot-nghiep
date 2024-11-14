@@ -182,7 +182,7 @@
                         <i class='bx bx-bell fs-22'></i>
                         <span
                             class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ $notifications->count() }}<span
-                                class="visually-hidden">unread messages</span></span>
+                                class="visually-hidden">Tin nhắn chưa đọc</span></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                         aria-labelledby="page-header-notifications-dropdown">
@@ -224,8 +224,8 @@
                             </div>
 
                         </div>
-
                         <div class="tab-content position-relative" id="notificationItemsTabContent">
+                            <!-- Tab "Tất cả" -->
                             <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
                                     @foreach($notifications as $notification)
@@ -264,7 +264,39 @@
                                             Xem tất cả thông báo <i class="ri-arrow-right-line align-middle"></i>
                                         </a>
                                     </div>
-                                    
+                                </div>
+                            </div>
+                        
+                            <!-- Tab "Cửa sổ" -->
+                            <div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel">
+                                <div data-simplebar style="max-height: 300px;" class="pe-2">
+                                    @foreach($commonNotifications as $commonNotification)
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <div class="avatar-xs me-3 flex-shrink-0">
+                                                    <span class="avatar-title bg-warning-subtle text-warning rounded-circle fs-16">
+                                                        <i class="bx bx-info-circle"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mt-0 mb-2 lh-base">
+                                                        {{ $commonNotification->message }}
+                                                    </h6>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> 
+                                                            Đã tạo vào: {{ \Carbon\Carbon::parse($commonNotification->created_at)->format('H:i d-m-Y') }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                        
+                                    <div class="my-3 text-center view-all">
+                                        <a href="" class="btn btn-soft-success waves-effect waves-light">
+                                            Xem tất cả thông báo chung <i class="ri-arrow-right-line align-middle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

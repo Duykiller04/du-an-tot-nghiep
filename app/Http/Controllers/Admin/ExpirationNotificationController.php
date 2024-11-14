@@ -19,8 +19,8 @@ class ExpirationNotificationController extends Controller
         $notificationIds = $request->input('notification_ids');
         if ($notificationIds) {
             ExpirationNotification::whereIn('id', $notificationIds)->delete();
-            return redirect()->route('notifications.index')->with('success', 'Đã xóa các thông báo được chọn.');
+            return redirect()->route('admin.notifications.index')->with('success', 'Đã xóa các thông báo được chọn.');
         }
-        return redirect()->route('notifications.index')->with('error', 'Vui lòng chọn ít nhất một thông báo.');
+        return redirect()->route('admin.notifications.index')->with('error', 'Vui lòng chọn ít nhất một thông báo.');
     }
 }
