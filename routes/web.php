@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DiseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
+use App\Http\Controllers\Admin\ExpirationNotificationController;
 use App\Http\Controllers\Admin\InventoryAuditController;
 use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
@@ -78,7 +79,7 @@ Route::prefix('admin')
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::get('/getOrders/{id}', 'getorder')->name('getOrders');
-                Route::put('shifts/{shift}/status/{status}','updateStatus')->name('updateStatus');
+                Route::put('shifts/{shift}/status/{status}', 'updateStatus')->name('updateStatus');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
@@ -93,6 +94,13 @@ Route::prefix('admin')
                 Route::get('/detail/{id}', 'show')->name('show');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
                 Route::get('/download-template', 'downloadTemplate')->name('downloadTemplate');
+            });
+
+        Route::controller(ExpirationNotificationController::class)
+            ->prefix('notifications')->as('notifications.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
             });
 
         Route::resource('diseases', DiseaseController::class);
@@ -124,14 +132,14 @@ Route::prefix('admin')
         Route::get('attendace', [AttendaceController::class, 'index'])->name('attendace.index');
 
         Route::post('checkin', [AttendaceController::class, 'checkin'])->name('attendace.checkin');
-        
+
         Route::post('checkout', [AttendaceController::class, 'checkout'])->name('attendace.checkout');
 
         Route::prefix('restore')->group(function () {
             // restore categories
             Route::get('/categories', [CategoryController::class, 'getRestore'])->name('restore.categories');
             Route::post('/categories', [CategoryController::class, 'restore']);
-            
+
             // restore disease
             Route::get('/diseases', [DiseaseController::class, 'getRestore'])->name('restore.diseases');
             Route::post('/diseases', [DiseaseController::class, 'restore']);
@@ -152,9 +160,9 @@ Route::prefix('admin')
             Route::get('/medicines', [MedicineController::class, 'getRestore'])->name('restore.medicines');
             Route::post('/medicines', [MedicineController::class, 'restore']);
 
-             // restore medicalInstruments
-             Route::get('/medicalInstruments', [MedicalInstrumentController::class, 'getRestore'])->name('restore.medicalInstruments');
-             Route::post('/medicalInstruments', [MedicalInstrumentController::class, 'restore']);
+            // restore medicalInstruments
+            Route::get('/medicalInstruments', [MedicalInstrumentController::class, 'getRestore'])->name('restore.medicalInstruments');
+            Route::post('/medicalInstruments', [MedicalInstrumentController::class, 'restore']);
 
             Route::get('/storages', [StorageController::class, 'getRestore'])->name('restore.storages');
             Route::post('/storages', [StorageController::class, 'restore']);
@@ -169,7 +177,7 @@ Route::prefix('admin')
             Route::post('/cutDoseOrders', [CutDoseOrderController::class, 'restore']);
 
             //prescriptons
-            Route::get('/prescriptions',[PrescriptionsController::class,'getRestore'])->name('restore.prescriptions');
-            Route::post('/prescriptions',[PrescriptionsController::class,'restore']);
+            Route::get('/prescriptions', [PrescriptionsController::class, 'getRestore'])->name('restore.prescriptions');
+            Route::post('/prescriptions', [PrescriptionsController::class, 'restore']);
         });
     });
