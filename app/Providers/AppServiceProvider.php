@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-        ////////
+
         $notifications = ExpirationNotification::with('medicine')
         ->orderBy('notified_at', 'desc')
         ->get();
