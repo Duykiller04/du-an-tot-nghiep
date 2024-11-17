@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Medicine;
+use App\Models\Storage;
 use App\Models\Supplier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -68,6 +69,28 @@ class DashboardController extends Controller
             return response()->json($supplierPercentages);
         }
     }
+    public function getStorage()
+{
+    // Thống kê tổng số lượng thuốc trong tất cả các kho
+    $totalMedicinesCount = Medicine::sum('quantity');  // Thay 'quantity' bằng tên trường trong bảng 'Medicine' chứa số lượng thuốc
+
+    // Lấy thông tin kho và số lượng thuốc trong mỗi kho
+    $storages = Storage::withCount('medicines')->get()->map(function ($storage) {
+        return [
+            'storage_name' => $storage->name,  // Tên kho
+            'medicines_count' => $storage->medicines_count,  // Số lượng thuốc trong kho
+        ];
+    });
+    dd(11);
+    // Trả về kết quả dưới dạng JSON
+    return response()->json([
+        'total_medicines_count' => $totalMedicinesCount, // Tổng số lượng thuốc trong tất cả các kho
+        'storages' => $storages  // Thông tin từng kho và số lượng thuốc trong kho
+    ]);
+}
+    
+    
+
     /**
      * Store a newly created resource in storage.
      */
