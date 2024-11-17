@@ -85,7 +85,7 @@
                             <input type="hidden" name="captured_image" id="captured_image_checkout">
                             <input type="hidden" name="shift_id" id="shift_id_checkout">
                             <div id="reasonField" class="mt-3" style="display: none;">
-                                <label for="reasons" class="form-label">Lý do check out lần 2 (nếu có)</label>
+                                <label for="reasons" class="form-label">Lý do check out lần 2 <span class="text-danger">(*)</span></label>
                                 <input type="text" name="reasons" id="reasons" class="form-control">
                             </div>
                         </div>

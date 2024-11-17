@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cut_dose_orders', function (Blueprint $table) {
-            $table->double('total_price')->nullable();
+            $table->double('total_price');
         });
     }
 
