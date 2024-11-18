@@ -42,3 +42,4 @@ Route::get('/dashboard/storages', [DashboardController::class, 'getStorage'])->n
 
 
 
+Route::get('dashboard/recent-orders', [DashboardController::class, 'recentOrders'])->name('dashboard.recent.order');

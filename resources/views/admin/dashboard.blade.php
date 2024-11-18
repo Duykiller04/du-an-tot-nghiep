@@ -714,139 +714,19 @@
 
                             <div class="card-body">
                                 <div class="table-responsive table-card">
-                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0 text-center">
                                         <thead class="text-muted table-light">
                                             <tr>
-                                                <th scope="col">ID đơn hàng</th>
+                                                <th scope="col">STT</th>
                                                 <th scope="col">Khách hàng</th>
-                                                <th scope="col">Thuốc</th>
+                                                <th scope="col">Bệnh</th>
                                                 <th scope="col">Tổng tiền</th>
                                                 <th scope="col">Người kê đơn</th>
-                                                <th scope="col">PT thanh toán</th>
-                                                <th scope="col">Đánh giá</th>
+                                                <th scope="col">Ca làm</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2112</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Alex Smith</div>
-                                                    </div>
-                                                </td>
-                                                <td>Clothes</td>
-                                                <td>
-                                                    <span class="text-success">$109.00</span>
-                                                </td>
-                                                <td>Zoetic Fashion</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">5.0<span class="text-muted fs-11 ms-1">(61 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2111</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-2.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Jansh Brown</div>
-                                                    </div>
-                                                </td>
-                                                <td>Kitchen Storage</td>
-                                                <td>
-                                                    <span class="text-success">$149.00</span>
-                                                </td>
-                                                <td>Micro Design</td>
-                                                <td>
-                                                    <span class="badge bg-warning-subtle text-warning">Pending</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.5<span class="text-muted fs-11 ms-1">(61 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2109</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-3.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Ayaan Bowen</div>
-                                                    </div>
-                                                </td>
-                                                <td>Bike Accessories</td>
-                                                <td>
-                                                    <span class="text-success">$215.00</span>
-                                                </td>
-                                                <td>Nesta Technologies</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.9<span class="text-muted fs-11 ms-1">(89 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2108</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-4.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Prezy Mark</div>
-                                                    </div>
-                                                </td>
-                                                <td>Furniture</td>
-                                                <td>
-                                                    <span class="text-success">$199.00</span>
-                                                </td>
-                                                <td>Syntyce Solutions</td>
-                                                <td>
-                                                    <span class="badge bg-danger-subtle text-danger">Unpaid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.3<span class="text-muted fs-11 ms-1">(47 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2107</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-6.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Vihan Hudda</div>
-                                                    </div>
-                                                </td>
-                                                <td>Bags and Wallets</td>
-                                                <td>
-                                                    <span class="text-success">$330.00</span>
-                                                </td>
-                                                <td>iTest Factory</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.7<span class="text-muted fs-11 ms-1">(161 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
+                                        <tbody id="recentOrders">
+                                          
                                         </tbody><!-- end tbody -->
                                     </table><!-- end table -->
                                 </div>
@@ -1355,7 +1235,23 @@
     <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('library/dashboard-supplier.js') }}"></script>
-    
+    <script src="{{ asset('library/order.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            var url = "{{route('dashboard-customers') }}"; 
+            $.ajax({
+                url: "{{ route('dashboard-customers') }}",
+                method: 'GET',
+                success: function(response) {
+                    $('#totalCustomers').text(response.totalCustomers);  
+                    console.log(response.totalCustomers);   
+                },
+                error: function() {
+                    alert('Lỗi khi lấy dữ liệu');
+                }
+            });
+        });
+    </script>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 

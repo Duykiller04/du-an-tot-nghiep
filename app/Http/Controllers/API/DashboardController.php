@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CutDoseOrder;
 use App\Models\Medicine;
 use App\Models\Storage;
 use App\Models\Supplier;
@@ -88,46 +89,23 @@ class DashboardController extends Controller
         'storages' => $storages  // Thông tin từng kho và số lượng thuốc trong kho
     ]);
 }
-    
-    
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function recentOrders(){
+        $recentOrders = CutDoseOrder::with(
+            [
+                'shift.users' => function ($query) {
+                    $query->where('type', 'staff');
+                },
+               'cutDoseOrderDetails.medicine',
+                'cutDoseOrderDetails.unit',
+                'disease',
+                'customer'
+                ])
+        ->where('created_at', '>=', now()->subDays(3))
+        ->orderByDesc('created_at')
+        ->limit(5)
+        ->get();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+       return response()->json($recentOrders);
     }
 }
