@@ -229,7 +229,7 @@
                     },
                     {
                         data: 'location'
-                    },
+                    },  
                     {
                         data: 'created_at'
                     },

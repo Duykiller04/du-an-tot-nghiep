@@ -35,6 +35,10 @@ class SupplierController extends Controller
                 }
             }
             return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.suppliers.show', $row->id);
                     $editUrl = route('admin.suppliers.edit', $row->id);

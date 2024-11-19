@@ -58,9 +58,13 @@ class StorageController extends Controller
                 ->make(true);
         }
 
+        $totalMedicines = Storage::with('medicines')->get()->sum(function ($storage) {
+            return $storage->medicines->sum('quantity');
+        });
+
         // Nếu không phải yêu cầu AJAX, trả về view
         $data = Storage::query()->latest('id')->paginate(5);
-        return view('admin.storage.index', compact('data'));
+        return view('admin.storage.index', compact('data','totalMedicines'));
     }
 
 
