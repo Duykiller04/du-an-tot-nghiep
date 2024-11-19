@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\NotificationLog;
 use Illuminate\Console\Command;
 use App\Models\Shift;
+use App\Models\NotificationSetting;
 use Carbon\Carbon;
 
 class OpenScheduledShifts extends Command
@@ -20,6 +22,14 @@ class OpenScheduledShifts extends Command
     {
         $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
+        $settings = NotificationSetting::first();
+        
+        if (!$settings || !$settings->auto_open_shift) {
+            $this->info("Tự động mở ca đang bị tắt trong cấu hình.");
+            return;
+        }
+
+        // Lấy các ca có trạng thái là "kế hoạch" và thời gian bắt đầu nhỏ hơn hoặc bằng hiện tại
         $shifts = Shift::where('status', 'kế hoạch')
             ->where('start_time', '<=', $currentDateTime)
             ->get();
@@ -58,10 +68,13 @@ class OpenScheduledShifts extends Command
                 continue;
             }
 
-            
+            // Mở ca và lưu trạng thái
             $shift->status = 'đang mở';
             $shift->save();
-
+            NotificationLog::create([
+                'message' => "Ca làm {$shift->shift_name} đã được mở.",
+                'id_thing' => $shift->id,
+            ]);
             $this->info("Ca ID {$shift->id} đã được mở thành công.");
         }
     }

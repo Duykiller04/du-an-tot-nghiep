@@ -855,6 +855,46 @@
                     </div> <!-- .col-->
                 </div> <!-- end row-->
 
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-height-100">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Thông kê thuốc theo kho</h4>
+                                <div class="flex-shrink-0">
+                                    <div class="dropdown card-header-dropdown">
+                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <span class="text-muted">Báo cáo<i
+                                                    class="mdi mdi-chevron-down ms-1"></i></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="{{ route('admin.catalogues.index') }}">Xem
+                                                chi tiết</a>
+                                            <a class="dropdown-item" href="#">Tải xuống</a>
+                                            <a class="dropdown-item" href="#">Export</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card header -->
+
+                            <div class="card-body">
+                                <canvas id="myPieChart" width="400" height="400"></canvas>
+
+                                <div>
+                                    <h4>Tổng số lượng thuốc trong tất cả các kho:</h4>
+                                    <p id="totalMedicinesCount"></p>
+                                </div>
+                                
+                                <!-- Hiển thị danh sách kho -->
+                                <div id="storagesList">
+                                    <!-- Danh sách kho sẽ được điền qua JavaScript -->
+                                </div>
+                            </div>
+                        </div> <!-- .card-->
+                    </div> <!-- .col-->
+                </div> 
+
             </div> <!-- end .h-100-->
 
         </div> <!-- end col -->
@@ -1315,26 +1355,11 @@
     <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('library/dashboard-supplier.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            var url = "{{route('dashboard-customers') }}"; 
-            $.ajax({
-                url: "{{ route('dashboard-customers') }}",
-                method: 'GET',
-                success: function(response) {
-                    $('#totalCustomers').text(response.totalCustomers);  
-                    console.log(response.totalCustomers);   
-                },
-                error: function() {
-                    alert('Lỗi khi lấy dữ liệu');
-                }
-            });
-        });
-    </script>
+    
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     $(document).ready(function() {
         // Gửi yêu cầu AJAX để lấy dữ liệu danh mục thuốc
@@ -1393,5 +1418,35 @@
                 }
             });
         });
+
+        $(document).ready(function() {
+            var url = "{{route('dashboard-customers') }}"; 
+            $.ajax({
+                url: "{{ route('dashboard-customers') }}",
+                method: 'GET',
+                success: function(response) {
+                    $('#totalCustomers').text(response.totalCustomers);  
+                    // console.log(response.totalCustomers);   
+                },
+                error: function() {
+                    alert('Lỗi khi lấy dữ liệu');
+                }
+            });
+        });
+
+
+        fetch('/dashboard/storages')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);  // Kiểm tra dữ liệu trả về
+        document.getElementById('totalMedicinesCount').innerText = data.total_medicines_count;
+        data.storages.forEach(storage => {
+            console.log(storage.storage_name, storage.medicines_count);  // Kiểm tra thông tin từng kho
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);  // Kiểm tra lỗi nếu có
+    });
+
     </script>
 @endsection

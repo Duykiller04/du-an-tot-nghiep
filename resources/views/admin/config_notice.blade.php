@@ -101,6 +101,43 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-header border-0">
+                                <h5 class="card-title mb-0">Thiết lập ca làm</h5>
+                            </div>
+                            <!-- Bật mở ca tự động -->
+                            <div class="mb-3 row">
+                                <label for="auto_open_shift" class="col-sm-3 col-form-label">Mở ca tự động</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" id="hidden_auto_open_shift" name="auto_open_shift" value="0">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="auto_open_shift" name="auto_open_shift"
+                                            value="1" {{ $settings->auto_open_shift ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="auto_open_shift">{{ $settings->auto_open_shift ? 'Có' : 'Không' }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bật đóng ca tự động -->
+                            <div class="mb-3 row">
+                                <label for="auto_close_shift" class="col-sm-3 col-form-label">Đóng ca tự động</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" id="hidden_auto_close_shift" name="auto_close_shift" value="0">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="auto_close_shift" name="auto_close_shift"
+                                            value="1" {{ $settings->auto_close_shift ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="auto_close_shift">{{ $settings->auto_close_shift ? 'Có' : 'Không' }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Số phút sau khi đóng ca -->
+                            <div class="mb-3 row">
+                                <label for="close_after_minutes" class="col-sm-3 col-form-label">Đóng ca sau bao nhiêu phút</label>
+                                <div class="col-sm-3">
+                                    <input type="number" class="form-control" id="close_after_minutes" name="close_after_minutes" 
+                                        value="{{ $settings->close_after_minutes }}" >
+                                </div>
+                            </div>
 
                             <!-- Nút Lưu -->
                             <div class="mb-3 row">
