@@ -320,6 +320,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('admin.export.form') }}" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="ri-file-excel-2-fill"></i><span data-key="t-pages">Xuất Excel </span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.restore.categories') }}">
                         <i class="bx bxs-trash-alt"></i> <span data-key="t-apps">Thùng rác</span>
 
