@@ -99,7 +99,7 @@ class MedicalInstrumentController extends Controller
         $categories = Category::query()->get();
         $storages = Storage::query()->get();
         $suppliers = Supplier::query()->get();
-        return view('admin.medicalInstrument.create', compact('categories','storages','donvis','suppliers'));
+        return view('admin.medicalInstrument.create', compact('categories', 'storages', 'donvis', 'suppliers'));
     }
 
     /**
@@ -222,7 +222,7 @@ class MedicalInstrumentController extends Controller
 
             Inventory::create($inventories);
 
-            foreach ($units as $i => $unit){
+            foreach ($units as $i => $unit) {
                 UnitConversion::create([
                     'medicine_id' => $inventories['medicine_id'],
                     'unit_id' => $unit,
@@ -255,16 +255,79 @@ class MedicalInstrumentController extends Controller
      */
     public function edit(string $id)
     {
-        $medicine = Medicine::findOrFail($id);//trả về 404
-        return view('admin.medicine.edit',compact('medicine'));
+        $medicalInstrument = Medicine::with(['suppliers', 'storage', 'category', 'unitConversions.unit'])->findOrFail($id);
+        $categories = Category::all();
+        $storages = Storage::all();
+        $suppliers = Supplier::all();
+        $donvis = Unit::all();
+        return view('admin.medicalInstrument.edit', compact('medicalInstrument', 'categories', 'storages', 'suppliers', 'donvis'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreProductRequest $request, string $id)
     {
-        //
+        $medicine = Medicine::findOrFail($id);
+
+        $priceImport = $request->input('medicine.price_import');
+        $priceSale = $request->input('medicine.price_sale');
+
+        if ($priceSale < $priceImport) {
+            return redirect()->back()->withErrors([
+                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+            ])->withInput();
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Kiểm tra và cập nhật hình ảnh nếu có
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('medicalInstruments', 'public');
+                $medicine->image = $imagePath;
+            }
+
+            // Cập nhật thông tin thuốc
+            $medicineData = $request->input('medicine');
+            $medicine->update($medicineData);
+
+            // Cập nhật thông tin kho và số lượng
+            $storageId = $request->storage_id;
+            $units = $request->don_vi;
+            $quantities = $request->so_luong;
+
+            $inventories = Inventory::where('medicine_id', $medicine->id)
+                ->where('storage_id', $storageId)
+                ->first();
+
+            // Cập nhật số lượng tổng theo đơn vị bé nhất
+            $inventories->quantity = array_product($quantities);
+            $inventories->unit_id = end($units); // ID đơn vị bé nhất
+            $inventories->save();
+
+            // Cập nhật đơn vị quy đổi
+            UnitConversion::where('medicine_id', $medicine->id)->delete();
+            foreach ($units as $i => $unit) {
+                UnitConversion::create([
+                    'medicine_id' => $medicine->id,
+                    'unit_id' => $unit,
+                    'proportion' => $quantities[$i]
+                ]);
+            }
+
+            // Cập nhật nhà cung cấp
+            $medicine->suppliers()->sync($request->supplier_id);
+
+            DB::commit();
+
+            return redirect()->route('admin.medicalInstruments.index')->with('success', 'Cập nhật thành công');
+        } catch (\Exception $exception) {
+            DB::rollback();
+            dd($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
+        }
     }
 
     /**
@@ -272,8 +335,8 @@ class MedicalInstrumentController extends Controller
      */
     public function destroy(Medicine $medicalInstrument)
     {
-       $medicalInstrument->delete();
-       return back()->with('success', 'Xóa dụng cụ thành công');
+        $medicalInstrument->delete();
+        return back()->with('success', 'Xóa dụng cụ thành công');
     }
     public function getRestore()
     {
