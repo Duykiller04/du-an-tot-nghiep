@@ -40,7 +40,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>ID</th>
+                                                                <th>Mã kho</th>
                                                                 <th>Tên kho</th>
                                                                 <th>Địa chỉ</th>
                                                                 <th>Ngày xóa</th>
