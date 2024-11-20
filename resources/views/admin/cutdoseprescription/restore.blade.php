@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="diseasesExample">
                                     <!-- start page title -->
-                                    <h4>đơn thuốc cắt liều</h4>
+                                    <h4>Đơn thuốc mẫu đã xóa</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -41,13 +41,13 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>ID</th>
-                                                                <th>Disease_id</th>
-                                                                <th>Name_hospital</th>
-                                                                <th>Name_doctor</th>
-                                                                <th>Age</th>
-                                                                <th>Phone_doctor</th>
-                                                                <th>Total</th>
+                                                                <th>Mã đơn thuốc mẫu</th>
+                                                                <th>Bệnh</th>
+                                                                <th>Tên bệnh viện</th>
+                                                                <th>Tên bác sĩ</th>
+                                                                <th>Tuổi</th>
+                                                                <th>Số điện thoại</th>
+                                                                <th>Tổng tiền</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>

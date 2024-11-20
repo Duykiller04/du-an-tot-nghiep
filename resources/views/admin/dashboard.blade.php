@@ -737,10 +737,10 @@
 
 
                 <div class="row">
-                    <div class="col-xl-12">
+                    <div class="col-xl-4">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Thông kê thuốc theo kho</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Thống kê thuốc, dụng cụ theo kho</h4>
                                 <div class="flex-shrink-0">
                                     <div class="dropdown card-header-dropdown">
                                         <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
@@ -759,25 +759,25 @@
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <canvas id="myPieChart" width="400" height="400"></canvas>
-
+                                <div class="w-100" style="height: 300px;">
+                                    <canvas id="myPieChart" style="width: 100%; height: 100%;"></canvas>
+                                </div>
+                            
                                 <div>
-                                    <h4>Tổng số lượng thuốc trong tất cả các kho:</h4>
-                                    <p id="totalMedicinesCount"></p>
+                                    <h4>Tổng số lượng thuốc trong tất cả các kho:  <strong id="totalMedicinesCount"></strong></h4>
+                                    
                                 </div>
                                 
-                                <!-- Hiển thị danh sách kho -->
-                                <div id="storagesList">
-                                    <!-- Danh sách kho sẽ được điền qua JavaScript -->
-                                </div>
+
                             </div>
-                        </div> <!-- .card-->
-                    </div> <!-- .col-->
+                            
+                        </div>
+                    </div> 
                 </div> 
 
-            </div> <!-- end .h-100-->
+            </div> 
 
-        </div> <!-- end col -->
+        </div> 
 
         <div class="col-auto layout-rightside-col">
             <div class="overlay"></div>
@@ -1244,7 +1244,7 @@
                 method: 'GET',
                 success: function(response) {
                     $('#totalCustomers').text(response.totalCustomers);  
-                    console.log(response.totalCustomers);   
+                    // console.log(response.totalCustomers);   
                 },
                 error: function() {
                     alert('Lỗi khi lấy dữ liệu');
@@ -1256,6 +1256,7 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     $(document).ready(function() {
         // Gửi yêu cầu AJAX để lấy dữ liệu danh mục thuốc
@@ -1331,18 +1332,61 @@
         });
 
 
-        fetch('/dashboard/storages')
-    .then(response => response.json())
+  // Gọi API để lấy dữ liệu
+fetch('api/dashboard/storages')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Lỗi khi gọi API');
+        }
+        return response.json();
+    })
     .then(data => {
-        console.log(data);  // Kiểm tra dữ liệu trả về
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        // Hiển thị tổng số lượng thuốc
         document.getElementById('totalMedicinesCount').innerText = data.total_medicines_count;
-        data.storages.forEach(storage => {
-            console.log(storage.storage_name, storage.medicines_count);  // Kiểm tra thông tin từng kho
+
+        // Lấy dữ liệu cho biểu đồ
+        const labels = data.storages.map(storage => storage.storage_name);
+        const medicinesData = data.storages.map(storage => storage.medicines_count);
+
+        // Vẽ biểu đồ tròn
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: medicinesData,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw} thuốc`;
+                            }
+                        }
+                    }
+                }
+            }
         });
     })
     .catch(error => {
-        console.error('Error:', error);  // Kiểm tra lỗi nếu có
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi khi tải dữ liệu.');
     });
+
+
 
     </script>
 @endsection

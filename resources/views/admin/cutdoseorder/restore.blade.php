@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="storagesExample">
                                     <!-- start page title -->
-                                    <h4>thuốc cắt liều đã xóa</h4>
+                                    <h4>Thuốc cắt liều đã xóa</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -40,12 +40,16 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>ID</th>
-                                                                <th>Disease_id</th>
-                                                                <th>weight</th>
-                                                                <th>age_min</th>
-                                                                <th>age_max</th>
-                                                                <th>gender</th>
+                                                                <th>Mã thuốc cắt liều</th>
+                                                                <th>Tên bệnh</th>
+                                                                <th>Tên khách hàng</th>
+                                                                <th>Giới tính</th>
+                                                                <th>Tuổi</th>
+                                                                <th>Điện thoại</th>
+                                                                <th>Địa chỉ</th>
+                                                                <th>Cân nặng</th>
+                                                                <th>Ngày mua</th>
+                                                                <th>Tổng tiền</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -57,11 +61,14 @@
                                                                             value="{{ $item->id }}">
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->disease->disease_name}}</td>
-                                                                    <td>{{ $item->weight }}</td>
-                                                                    <td>{{ $item->age_min}}</td>
-                                                                    <td>{{ $item->age_max }}</td>
+                                                                    <td>{{ $item->disease->disease_name }}</td>
+                                                                    <td>{{ $item->customer_name }}</td>
                                                                     <td>{{ $item->gender }}</td>
+                                                                    <td>{{ $item->age }}</td>
+                                                                    <td>{{ $item->phone }}</td>
+                                                                    <td>{{ $item->address }}</td>
+                                                                    <td>{{ $item->weight }}</td>
+                                                                    <td>{{ $item->total_price }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
