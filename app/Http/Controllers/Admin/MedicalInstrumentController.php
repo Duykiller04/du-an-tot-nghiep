@@ -341,7 +341,7 @@ class MedicalInstrumentController extends Controller
     public function getRestore()
     {
         $data = Medicine::onlyTrashed()->where('type_product', 1)->get();
-        return view('admin.medicine.restore', compact('data'));
+        return view('admin.medicalInstrument.restore', compact('data'));
     }
     public function restore(Request $request)
     {

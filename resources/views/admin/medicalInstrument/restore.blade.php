@@ -3,7 +3,7 @@
 @extends('admin.layouts.trash')
 
 @section('title')
-    Danh sách thuốc đã xóa
+    Danh sách dụng cụ đã xóa
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="diseasesExample">
                                     <!-- start page title -->
-                                    <h4>Thuốc đã xóa</h4>
+                                    <h4>Dụng cụ đã xóa</h4>
                                 <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -40,10 +40,9 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Mã Thuốc</th>
-                                                                <th>Danh mục thuốc</th>
-                                                                <th>Mã thuốc</th>
-                                                                <th>Tên thuốc</th>
+                                                                <th>Mã dụng cụ</th>
+                                                                <th>Danh mục dụng cụ</th>
+                                                                <th>Tên dụng cụ</th>
                                                                 <th>Giá nhập</th>
                                                                 <th>Giá bán</th>
                                                                 <th>Ngày xóa</th>
