@@ -10,6 +10,7 @@ use App\Models\Medicine;
 use App\Models\Storage;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -115,7 +116,7 @@ class InventoryAuditController extends Controller
 
             // Tạo phiếu kiểm kho
             $inventoryAudit = InventoryAudit::create([
-                'user_id' => Auth::user()->id,
+                'user_id' => FacadesAuth::user()->id,
                 'title' => $request->input('title'),
                 'storage_id' => $request->input('storage_id'),
                 'check_date' => $request->input('check_date'),
