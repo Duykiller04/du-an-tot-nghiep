@@ -293,7 +293,7 @@
                                     @endforeach
                         
                                     <div class="my-3 text-center view-all">
-                                        <a href="" class="btn btn-soft-success waves-effect waves-light">
+                                        <a href="{{ route('admin.notification_log.index') }}" class="btn btn-soft-success waves-effect waves-light">
                                             Xem tất cả thông báo chung <i class="ri-arrow-right-line align-middle"></i>
                                         </a>
                                     </div>

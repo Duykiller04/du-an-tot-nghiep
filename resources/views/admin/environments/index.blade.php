@@ -192,7 +192,7 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>STT</th>
                                                 <th>Thời gian</th>
                                                 <th>Nhiệt độ môi trường</th>
                                                 <th>Nhiệt độ trong kho</th>

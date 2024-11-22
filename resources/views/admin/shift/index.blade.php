@@ -110,7 +110,7 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>STT</th>
                                                 <th>Tên ca</th>
                                                 <th>Bắt đầu</th>
                                                 <th>Kết thúc</th>
