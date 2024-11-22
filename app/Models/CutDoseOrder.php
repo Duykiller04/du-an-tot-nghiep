@@ -27,6 +27,10 @@ class CutDoseOrder extends Model
     {
         return $this->belongsTo(Disease::class);
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
     public function cutDoseOrderDetails()
     {
         return $this->hasMany(CutDoseOrderDetails::class);

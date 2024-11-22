@@ -77,7 +77,6 @@ class MedicineController extends Controller
                     $deleteUrl = route('admin.medicines.destroy', $row->id);
 
                     return '
-                <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
                 <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
                 <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                     ' . csrf_field() . method_field('DELETE') . '
@@ -192,16 +191,79 @@ class MedicineController extends Controller
      */
     public function edit(string $id)
     {
-        $medicine = Medicine::findOrFail($id); //trả về 404
-        return view('admin.medicine.edit', compact('medicine'));
+        $medicine = Medicine::with(['suppliers', 'storage', 'category', 'unitConversions.unit'])->findOrFail($id);
+        $categories = Category::all();
+        $storages = Storage::all();
+        $suppliers = Supplier::all();
+        $donvis = Unit::all();
+        return view('admin.medicine.edit', compact('medicine', 'categories', 'storages', 'suppliers', 'donvis'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreProductRequest $request, string $id)
     {
-        //
+        $medicine = Medicine::findOrFail($id);
+
+        $priceImport = $request->input('medicine.price_import');
+        $priceSale = $request->input('medicine.price_sale');
+
+        if ($priceSale < $priceImport) {
+            return redirect()->back()->withErrors([
+                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+            ])->withInput();
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Kiểm tra và cập nhật hình ảnh nếu có
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('medicines', 'public');
+                $medicine->image = $imagePath;
+            }
+
+            // Cập nhật thông tin thuốc
+            $medicineData = $request->input('medicine');
+            $medicine->update($medicineData);
+
+            // Cập nhật thông tin kho và số lượng
+            $storageId = $request->storage_id;
+            $units = $request->don_vi;
+            $quantities = $request->so_luong;
+
+            $inventories = Inventory::where('medicine_id', $medicine->id)
+                ->where('storage_id', $storageId)
+                ->first();
+
+            // Cập nhật số lượng tổng theo đơn vị bé nhất
+            $inventories->quantity = array_product($quantities);
+            $inventories->unit_id = end($units); // ID đơn vị bé nhất
+            $inventories->save();
+
+            // Cập nhật đơn vị quy đổi
+            UnitConversion::where('medicine_id', $medicine->id)->delete();
+            foreach ($units as $i => $unit) {
+                UnitConversion::create([
+                    'medicine_id' => $medicine->id,
+                    'unit_id' => $unit,
+                    'proportion' => $quantities[$i]
+                ]);
+            }
+
+            // Cập nhật nhà cung cấp
+            $medicine->suppliers()->sync($request->supplier_id);
+
+            DB::commit();
+
+            return redirect()->route('admin.medicines.index')->with('success', 'Cập nhật thành công');
+        } catch (\Exception $exception) {
+            DB::rollback();
+            dd($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
+        }
     }
 
     /**

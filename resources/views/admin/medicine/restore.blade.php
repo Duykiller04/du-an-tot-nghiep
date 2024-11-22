@@ -40,7 +40,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>ID Thuốc</th>
+                                                                <th>Mã Thuốc</th>
                                                                 <th>Danh mục thuốc</th>
                                                                 <th>Mã thuốc</th>
                                                                 <th>Tên thuốc</th>
@@ -56,7 +56,6 @@
                                                                         <input type="checkbox" name="ids[]"
                                                                             value="{{ $item->id }}">
                                                                     </td>
-                                                                    <td>{{ $item->id }}</td>
                                                                     <td>{{ $item->category->name }}</td>
                                                                     <td>{{ $item->medicine_code }}</td>
                                                                     <td>{{ $item->name }}</td>

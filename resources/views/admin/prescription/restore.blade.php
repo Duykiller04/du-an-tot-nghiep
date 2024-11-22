@@ -40,7 +40,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>ID</th>
+                                                                <th>Mã đơn thuốc thông thường</th>
                                                                 <th>Tên khách hàng</th>
                                                                 <th>Giới tính</th>
                                                                 <th>Tuổi</th>

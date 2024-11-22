@@ -205,14 +205,13 @@
                                 style="width: 100%;" aria-describedby="buttons-datatables_info">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>STT</th>
                                         <th>Mã số thuế</th>
                                         <th>Tên nhà cung cấp</th>
                                         <th>Email</th>
                                         <th>Số điện thoại</th>
                                         <th>Địa chỉ</th>
                                         <th>Thời gian tạo</th>
-                                        <th>Thời gian cập cập nhập</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -339,9 +338,11 @@
                             d.endDate = $('#end-date').val();
                         }
                     },
-                    columns: [{
-                            data: 'id'
-                        },
+                    columns: [ {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
                         {
                             data: 'tax_code'
                         },
@@ -359,9 +360,6 @@
                         },
                         {
                             data: 'created_at'
-                        },
-                        {
-                            data: 'updated_at'
                         },
                         {
                             data: 'action',

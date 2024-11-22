@@ -63,6 +63,11 @@ class Medicine extends Model
         return $this->hasMany(ExpirationNotification::class);
     }
 
+    public function unitConversions()
+    {
+        return $this->hasMany(UnitConversion::class);
+    }
+
     protected $casts = [
         'expiration_date' => 'datetime',
     ];
