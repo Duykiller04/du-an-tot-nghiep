@@ -177,58 +177,57 @@
 
                 <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
-                        id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
-                        data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                        id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
                         <span
-                            class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ $notifications->count() }}<span
-                                class="visually-hidden">Tin nhắn chưa đọc</span></span>
+                            class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ $allNotificationsCount }}
+                            <span class="visually-hidden">Tin nhắn chưa đọc</span>
+                        </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                         aria-labelledby="page-header-notifications-dropdown">
-
                         <div class="dropdown-head bg-primary bg-pattern rounded-top">
                             <div class="p-3">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <h6 class="m-0 fs-16 fw-semibold text-white"> Thông báo </h6>
+                                        <h6 class="m-0 fs-16 fw-semibold text-white">Thông báo</h6>
                                     </div>
                                     <div class="col-auto dropdown-tabs">
-                                        <span class="badge bg-light-subtle text-body fs-13"> {{ $notifications->count() }} tin mới</span>
+                                        <span class="badge bg-light-subtle text-body fs-13"> {{ $allNotificationsCount }} tin mới</span>
                                     </div>
                                 </div>
                             </div>
-
+                
                             <div class="px-2 pt-2">
                                 <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true"
                                     id="notificationItemsTab" role="tablist">
                                     <li class="nav-item waves-effect waves-light">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab"
-                                            role="tab" aria-selected="true">
-                                            Tất cả ({{ $notifications->count() }})
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab"
+                                            aria-selected="true">
+                                            Tất cả ({{ $allNotificationsCount }})
                                         </a>
                                     </li>
                                     <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab"
                                             aria-selected="false">
-                                            Tin nhắn
+                                            Tin nhắn ({{ $expirationNotifications->count() }})
                                         </a>
                                     </li>
                                     <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab"
                                             aria-selected="false">
-                                            Cửa sổ
+                                            Cửa sổ ({{ $commonNotifications->count() }})
                                         </a>
                                     </li>
                                 </ul>
                             </div>
-
                         </div>
                         <div class="tab-content position-relative" id="notificationItemsTabContent">
                             <!-- Tab "Tất cả" -->
                             <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
-                                    @foreach($notifications as $notification)
+                                    @foreach($expirationNotifications as $notification)
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
                                                 <div class="avatar-xs me-3 flex-shrink-0">
@@ -243,22 +242,67 @@
                                                         </h6>
                                                     </a>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                        <span><i class="mdi mdi-clock-outline"></i> 
-                                                            Hết hạn vào: {{  \Carbon\Carbon::parse($notification->medicine->expiration_date)->format('H:i d-m-Y') }}
+                                                        <span><i class="mdi mdi-clock-outline"></i>
+                                                            Hết hạn vào: {{ \Carbon\Carbon::parse($notification->medicine->expiration_date)->format('H:i d-m-Y') }}
                                                         </span>
                                                     </p>
-                                                </div>
-                                                <div class="px-2 fs-15">
-                                                    <div class="form-check notification-check">
-                                                        <input class="form-check-input" type="checkbox" value=""
-                                                            id="all-notification-check{{ $notification->id }}">
-                                                        <label class="form-check-label" for="all-notification-check{{ $notification->id }}"></label>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
-                        
+                
+                                    @foreach($commonNotifications as $commonNotification)
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <div class="avatar-xs me-3 flex-shrink-0">
+                                                    <span class="avatar-title bg-warning-subtle text-warning rounded-circle fs-16">
+                                                        <i class="bx bx-info-circle"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mt-0 mb-2 lh-base">
+                                                        {{ $commonNotification->message }}
+                                                    </h6>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i>
+                                                            Đã tạo vào: {{ \Carbon\Carbon::parse($commonNotification->created_at)->format('H:i d-m-Y') }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                
+                                    
+                                </div>
+                            </div>
+                
+                            <!-- Tab "Tin nhắn" -->
+                            <div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel">
+                                <div data-simplebar style="max-height: 300px;" class="pe-2">
+                                    @foreach($expirationNotifications as $notification)
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <div class="avatar-xs me-3 flex-shrink-0">
+                                                    <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
+                                                        <i class="bx bx-badge-check"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <a href="#!" class="stretched-link">
+                                                        <h6 class="mt-0 mb-2 lh-base">
+                                                            Thuốc <b>{{ $notification->medicine->name }}</b> sắp hết hạn!
+                                                        </h6>
+                                                    </a>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i>
+                                                            Hết hạn vào: {{ \Carbon\Carbon::parse($notification->medicine->expiration_date)->format('H:i d-m-Y') }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                     <div class="my-3 text-center view-all">
                                         <a href="{{ route('admin.notifications.index') }}" class="btn btn-soft-success waves-effect waves-light">
                                             Xem tất cả thông báo <i class="ri-arrow-right-line align-middle"></i>
@@ -266,7 +310,7 @@
                                     </div>
                                 </div>
                             </div>
-                        
+                
                             <!-- Tab "Cửa sổ" -->
                             <div class="tab-pane fade py-2 ps-2" id="alerts-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
@@ -283,7 +327,7 @@
                                                         {{ $commonNotification->message }}
                                                     </h6>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                        <span><i class="mdi mdi-clock-outline"></i> 
+                                                        <span><i class="mdi mdi-clock-outline"></i>
                                                             Đã tạo vào: {{ \Carbon\Carbon::parse($commonNotification->created_at)->format('H:i d-m-Y') }}
                                                         </span>
                                                     </p>
@@ -291,17 +335,17 @@
                                             </div>
                                         </div>
                                     @endforeach
-                        
                                     <div class="my-3 text-center view-all">
                                         <a href="{{ route('admin.notification_log.index') }}" class="btn btn-soft-success waves-effect waves-light">
-                                            Xem tất cả thông báo chung <i class="ri-arrow-right-line align-middle"></i>
+                                            Xem tất cả thông báo <i class="ri-arrow-right-line align-middle"></i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+                    </div>
                 </div>
+                
 
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
