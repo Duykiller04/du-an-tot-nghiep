@@ -17,4 +17,9 @@ class UnitConversion extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    public function medicine()
+    {
+        return $this->belongsTo(Medicine::class);
+    }
 }

@@ -3,7 +3,7 @@
 @extends('admin.layouts.trash')
 
 @section('title')
-    Danh sách đơn thuốc cắt liều đã xóa
+    Danh sách dụng cụ đã xóa
 @endsection
 
 @section('content')
@@ -11,29 +11,28 @@
         <div class="col-lg-12">
             <div class="card">
 
-
+  
                 <div class="card-body">
                     <div class="tab-content text-muted">
                         <div class="tab-pane active" id="diseases" role="tabpanel">
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="diseasesExample">
                                     <!-- start page title -->
-                                    <h4>Đơn thuốc mẫu đã xóa</h4>
-                                    <!-- end page title -->
+                                    <h4>Dụng cụ đã xóa</h4>
+                                <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
 
-
-
-                                            @if (session('success'))
-                                                <div class="alert alert-success mb-3">
-                                                    {{ session('success') }}
-                                                </div>
-                                            @endif
-
+                                                
+                                        
+                                                @if (session('success'))
+                                                    <div class="alert alert-success mb-3">
+                                                        {{ session('success') }}
+                                                    </div>
+                                                @endif
+                                        
                                             <thead class="table-light">
-                                                <form action="{{ route('admin.restore.cutDosePrescriptions') }}"
-                                                    method="POST">
+                                                <form action="{{ route('admin.restore.medicines') }}" method="POST">
                                                     @csrf
                                                     <table id="example"
                                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -41,13 +40,11 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Mã đơn thuốc mẫu</th>
-                                                                <th>Bệnh</th>
-                                                                <th>Tên bệnh viện</th>
-                                                                <th>Tên bác sĩ</th>
-                                                                <th>Tuổi</th>
-                                                                <th>Số điện thoại</th>
-                                                                <th>Tổng tiền</th>
+                                                                <th>Mã dụng cụ</th>
+                                                                <th>Danh mục dụng cụ</th>
+                                                                <th>Tên dụng cụ</th>
+                                                                <th>Giá nhập</th>
+                                                                <th>Giá bán</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -58,13 +55,11 @@
                                                                         <input type="checkbox" name="ids[]"
                                                                             value="{{ $item->id }}">
                                                                     </td>
-                                                                    <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->disease->disease_name }}</td>
-                                                                    <td>{{ $item->name_hospital }}</td>
-                                                                    <td>{{ $item->name_doctor }}</td>
-                                                                    <td>{{ date('m/d/Y', strtotime($item->age)) }}</td>
-                                                                    <td>{{ $item->phone_doctor }}</td>
-                                                                    <td>{{ $item->total }}</td>
+                                                                    <td>{{ $item->category->name }}</td>
+                                                                    <td>{{ $item->medicine_code }}</td>
+                                                                    <td>{{ $item->name }}</td>
+                                                                    <td>{{ $item->price_import }}</td>
+                                                                    <td>{{ $item->price_sale }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
@@ -117,7 +112,7 @@
 @endsection
 
 @section('js')
-    </script>
+</script>
     <script>
         document.getElementById('select-all').addEventListener('click', function() {
             var checkboxes = document.querySelectorAll('input[name="ids[]"]');

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\InventoryAuditController;
 use App\Http\Controllers\Admin\ImportOrderController;
 use App\Http\Controllers\Admin\MedicalInstrumentController;
 use App\Http\Controllers\Admin\MedicineController;
+use App\Http\Controllers\Admin\NotificationLogController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ShiftController;
 use App\Http\Controllers\Admin\StorageController;
@@ -103,6 +104,13 @@ Route::prefix('admin')
                 Route::get('/', 'index')->name('index');
                 Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
             });
+        Route::controller(NotificationLogController::class)
+            ->prefix('notification_log')->as('notification_log.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
+            });
+
 
         Route::resource('diseases', DiseaseController::class);
 

@@ -80,13 +80,13 @@
                                                     </div>
                                                     <div class="carousel-inner text-center text-white-50 pb-5">
                                                         <div class="carousel-item">
-                                                            <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                            <p class="fs-15 fst-italic">" Hệ thống quản lý thuốc này giúp tối ưu hóa quy trình lưu trữ và kiểm kê, đảm bảo không xảy ra thiếu sót trong việc cung ứng thuốc cho khách hàng. "</p>
                                                         </div>
                                                         <div class="carousel-item">
-                                                            <p class="fs-15 fst-italic">" The theme is really great with an amazing customer support."</p>
+                                                            <p class="fs-15 fst-italic">" Với giao diện thân thiện và tính năng đầy đủ, web quản lý thuốc hỗ trợ cả người dùng mới làm quen cũng có thể dễ dàng vận hành mà không cần nhiều hướng dẫn."</p>
                                                         </div>
                                                         <div class="carousel-item active">
-                                                            <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                            <p class="fs-15 fst-italic">" Giải pháp công nghệ tiên tiến này không chỉ cải thiện hiệu quả quản lý mà còn tăng cường độ chính xác và giảm thiểu sai sót trong hoạt động quản lý thuốc hàng ngày. "</p>
                                                         </div>
                                                     </div>
                                                 </div>

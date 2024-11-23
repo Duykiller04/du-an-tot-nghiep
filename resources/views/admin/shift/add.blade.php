@@ -54,8 +54,7 @@
                                 @error('end_time')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
-                            </div>
-
+                            </div>                 
                             <div id="details-container">
                                 @for ($i = 0; $i < max(count(old('details', [1])), session('detail_count', 1)); $i++)
                                     <div class="row mb-3 detail-row">

@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="storagesExample">
                                     <!-- start page title -->
-                                    <h4>nhập kho thuốc đã xóa</h4>
+                                    <h4>Nhập kho thuốc đã xóa</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">

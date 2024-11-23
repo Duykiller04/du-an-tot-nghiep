@@ -47,6 +47,7 @@
                     </div>
                 @elseif ($shift->status == 'đang mở')
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#closeShiftModal">Đóng ca</button>
+                    
                 @elseif ($shift->status == 'đã hủy')
                     <form action="{{ route('admin.shifts.updateStatus', ['shift' => $shift->id, 'status' => 'kế hoạch']) }}" method="POST">
                         @csrf
