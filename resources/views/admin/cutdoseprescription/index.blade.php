@@ -44,8 +44,7 @@
                                 <th>Tuổi</th>
                                 <th>Số điện thoại</th>
                                 <th>Tổng tiền</th>
-                                <th>Created at</th>
-                                <th>Updated at</th>
+                                <th>Ngày thêm</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -60,20 +59,19 @@
                                     <td>{{ date('m/d/Y', strtotime($item->age)) }}</td>
                                     <td>{{ $item->phone_doctor }}</td>
                                     <td>{{ $item->total }}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->updated_at }}</td>
+                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('admin.cutDosePrescriptions.show', $item) }}"
-                                                class="btn btn-warning mb-3">Show</a>
+                                                class="btn btn-warning mb-3">Xem</a>
                                             <a href="{{ route('admin.cutDosePrescriptions.edit', $item) }}"
-                                                class="btn btn-info mb-3">Edit</a>
+                                                class="btn btn-info mb-3">Sửa</a>
                                             <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                    class="btn btn-danger mb-3">DELETE
+                                                    class="btn btn-danger mb-3">Xóa
                                                 </button>
                                             </form>
                                         </div>
