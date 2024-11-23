@@ -23,16 +23,18 @@ class InventoryAuditController extends Controller
     public function index(Request $request)
     {
         $storages = Storage::all();
-       
+
         // Truy vấn phiếu kiểm kho
         $query = InventoryAudit::query();
 
-        // Lọc theo ngày kiểm kho
         if ($request->has('date') && !empty($request->date)) {
-            $dateRange = explode('to', $request->date);
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dateRange[0]))->startOfDay();
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dateRange[1]))->endOfDay();
-            $query->whereBetween('check_date', [$startDate, $endDate]);
+            try {
+                // Định dạng ngày mặc định của input type="date" là Y-m-d
+                $filterDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->date)->startOfDay();
+                $query->whereDate('check_date', $filterDate);
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors(['date' => 'Ngày không hợp lệ.']);
+            }
         }
 
         // Lọc theo kho lưu trữ
@@ -73,37 +75,37 @@ class InventoryAuditController extends Controller
             'details.*.actual_quantity' => 'required|integer|min:0',
             'details.*.difference' => 'required|integer|min:0',
             'details.*.remarks' => 'nullable|string',
-        ],[
+        ], [
             'title.required' => 'Tiêu đề là bắt buộc.',
             'title.string' => 'Tiêu đề phải là chuỗi ký tự.',
             'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
-            
+
             'storage_id.required' => 'Kho là bắt buộc.',
             'storage_id.exists' => 'Kho không hợp lệ.',
-            
+
             'check_date.required' => 'Ngày kiểm tra là bắt buộc.',
             'check_date.date' => 'Ngày kiểm tra không hợp lệ (phải là ngày).',
-            
+
             'check_by.required' => 'Người kiểm tra là bắt buộc.',
             'check_by.string' => 'Người kiểm tra phải là chuỗi ký tự.',
             'check_by.max' => 'Người kiểm tra không được vượt quá 255 ký tự.',
-            
-            
+
+
             'details.*.medicine_id.required' => 'Mã thuốc là bắt buộc.',
             'details.*.medicine_id.exists' => 'Mã thuốc không hợp lệ.',
-            
+
             'details.*.expected_quantity.required' => 'Số lượng dự kiến là bắt buộc.',
             'details.*.expected_quantity.integer' => 'Số lượng dự kiến phải là số nguyên.',
             'details.*.expected_quantity.min' => 'Số lượng dự kiến phải lớn hơn hoặc bằng 0.',
-            
+
             'details.*.actual_quantity.required' => 'Số lượng thực tế là bắt buộc.',
             'details.*.actual_quantity.integer' => 'Số lượng thực tế phải là số nguyên.',
             'details.*.actual_quantity.min' => 'Số lượng thực tế phải lớn hơn hoặc bằng 0.',
-            
+
             'details.*.difference.required' => 'Chênh lệch là bắt buộc.',
             'details.*.difference.integer' => 'Chênh lệch phải là số nguyên.',
             'details.*.difference.min' => 'Chênh lệch phải lớn hơn hoặc bằng 0.',
-            
+
             'details.*.remarks.string' => 'Ghi chú phải là chuỗi ký tự.',
         ]);
 
@@ -153,7 +155,7 @@ class InventoryAuditController extends Controller
     {
         // Tìm phiếu kiểm theo ID
         $inventoryAudit = InventoryAudit::findOrFail($id);
-        
+
         // Lấy tất cả các chi tiết kiểm tra liên quan đến phiếu kiểm
         $auditDetails = $inventoryAudit->details()->with('medicine')->get(); // 'details' là quan hệ đã định nghĩa trong model InventoryAudit
         //dd($auditDetails->all());
@@ -186,7 +188,7 @@ class InventoryAuditController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    { 
+    {
         $inventoryAudit = InventoryAudit::findOrFail($id);
 
         DB::transaction(function () use ($inventoryAudit) {

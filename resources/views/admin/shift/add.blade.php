@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Tạo phiếu kiểm kho
+    Thêm mới ca làm 
 @endsection
 
 @section('content')
@@ -77,7 +77,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-lg-1 d-flex align-items-end">
+                                        <div class="col-lg-1 d-flex align-items-center">
                                             <button type="button" class="btn btn-danger btn-remove-detail">Xóa</button>
                                         </div>
                                     </div>

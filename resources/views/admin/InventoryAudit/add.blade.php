@@ -150,7 +150,7 @@
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="col-lg-1 d-flex align-items-end">
+                                        <div class="col-lg-1 d-flex align-items-center">
                                             <button type="button" class="btn btn-danger btn-remove-detail">Xóa</button>
                                         </div>
                                     </div>

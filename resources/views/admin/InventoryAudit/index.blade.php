@@ -53,9 +53,8 @@
                             <div class="row g-3">
                                 <div class="col-xxl-3 col-sm-6">
                                     <div>
-                                        <input type="text" class="form-control" name="date" data-provider="flatpickr"
-                                            data-date-format="d-m-Y" data-range-date="true" id="demo-datepicker"
-                                            placeholder="Chọn Ngày">
+                                        <input type="date" class="form-control" name="date" id="date-picker"
+                                            value="{{ request('date') }}" placeholder="Chọn Ngày">
                                     </div>
                                 </div>
                                 <!--end col-->
@@ -103,13 +102,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($inventoryAudits as $audit)
+                                            @foreach ($inventoryAudits as $index=>$audit)
                                                 <tr>
-                                                    <td>#{{ $audit->id }}</td>
+                                                    <td>#{{ $index+1 }}</td>
                                                     <td>{{ $audit->title }}</td>
                                                     <td>{{ $audit->storage->location }}</td>
                                                     <td>{{ $audit->checked_by }}</td>
-                                                    <td>{{ $audit->check_date }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($audit->check_date)->format('d-m-Y') }}</td>
                                                     <td>{{ $audit->remarks }}</td>
                                                     <td>
                                                         <ul class="list-unstyled d-flex gap-2">

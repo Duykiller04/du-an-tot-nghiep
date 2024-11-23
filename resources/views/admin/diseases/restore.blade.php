@@ -47,6 +47,13 @@
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
+                                                        @php
+                                                            $dangerLevels = [
+                                                                'low' => 'Thấp',
+                                                                'medium' => 'Trung bình',
+                                                                'high' => 'Cao',
+                                                            ];
+                                                        @endphp
                                                         <tbody>
                                                             @foreach ($data as $item)
                                                                 <tr>
@@ -59,8 +66,8 @@
                                                                     <td>
                                                                         <img src="{{ Storage::url($item->feature_img) }}" alt="">
                                                                     </td>
-                                                                    <td>{{ $item->danger_level }}</td>
-                                                                    <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
+                                                                    <td>{{ $dangerLevels[$item->danger_level] ?? 'Không xác định' }}</td>
+                                                                    <td>{{ $item->verify_date->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
