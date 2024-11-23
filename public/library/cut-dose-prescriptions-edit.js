@@ -144,8 +144,41 @@ $(document).on("change", 'select[name$="[medicine_id]"]', function () {
 });
 // Khi thay đổi đơn vị
 $(document).on("change", 'select[name$="[unit_id]"]', function () {
-    updatePrice($(this).closest(".medicine-row"));
+    const $medicineRow = $(this).closest(".medicine-row");
+
+    // Kiểm tra xem new_prices đã có dữ liệu chưa
+    const priceInput = $medicineRow.find('input[name$="[current_price]"]');
+    const new_prices = priceInput.data("new_prices");
+
+    if (!new_prices) {
+        // Nếu chưa có new_prices, thực hiện gọi API để lấy lại
+        const medicineId = $medicineRow
+            .find('select[name$="[medicine_id]"]')
+            .val();
+
+        if (medicineId) {
+            $.ajax({
+                url: `/api/get-units/${medicineId}`,
+                method: "GET",
+                success: function (response) {
+                    // Cập nhật lại new_prices và largest_price
+                    priceInput.data("new_prices", response.newPrices);
+                    largest_price = response.price_sale;
+
+                    // Cập nhật giá dựa trên đơn vị vừa chọn
+                    updatePrice($medicineRow);
+                },
+                error: function (xhr) {
+                    console.error("Error fetching new prices:", xhr.responseText);
+                },
+            });
+        }
+    } else {
+        // Nếu đã có new_prices, chỉ cần tính toán lại giá
+        updatePrice($medicineRow);
+    }
 });
+
 
 // Khi thay đổi số lượng
 $(document).on("input", 'input[name$="[quantity]"]', function () {
@@ -154,15 +187,18 @@ $(document).on("input", 'input[name$="[quantity]"]', function () {
 
 function updatePrice($medicineRow) {
     var selectedUnitId = $medicineRow.find('select[name$="[unit_id]"]').prop("selectedIndex") - 1;
+console.log(selectedUnitId);
 
     var quantity = $medicineRow.find('input[name$="[quantity]"]').val();
 
     // Lấy new_prices từ data của priceInput
     var priceInput = $medicineRow.find('input[name$="[current_price]"]');
     var new_prices = priceInput.data("new_prices");
+    console.log(new_prices);
+    
 
     var gia_ban = new_prices[selectedUnitId] || 0; // Kiểm tra giá trị của new_prices
-    console.log(new_prices);
+    // console.log(new_prices);
 
     if (gia_ban === 0) {
         var gia_ban = largest_price;
