@@ -8,8 +8,8 @@
     <div class="col-lg-6">
         <div class="p-lg-5 p-4">
             <div>
-                <h5 class="text-primary">Welcome Back !</h5>
-                <p class="text-muted">Sign in to continue to Velzon.</p>
+                <h5 class="text-primary">Chào mừng bạn đã trở lại!</h5>
+                <p class="text-muted">Đăng nhập vào web quản lý thuốc.</p>
             </div>
 
             <div class="mt-4">
@@ -17,7 +17,7 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label for="email" class="col-form-label">{{ __('Email Address') }}</label>
+                        <label for="email" class="col-form-label">Địa chỉ email</label>
                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                             name="email" value="{{ old('email') }}" autocomplete="email" autofocus
                             placeholder="Enter Email">
@@ -34,13 +34,13 @@
 
                             @if (Route::has('password.request'))
                                 <a class="btn btn-link text-muted" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
+                                    Lấy lại mật khẩu?
                                 </a>
                             @endif
 
 
                         </div>
-                        <label class="form-label" for="password-input">Password</label>
+                        <label class="form-label" for="password-input">Mật khẩu</label>
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
                             name="password" autocomplete="current-password" placeholder="Enter Password">
 
@@ -56,12 +56,12 @@
                             {{ old('remember') ? 'checked' : '' }}>
 
                         <label class="form-check-label" for="remember">
-                            {{ __('Remember Me') }}
+                            Nhớ đăng nhập
                         </label>
                     </div>
 
                     <div class="mt-4">
-                        <button class="btn btn-success w-100" type="submit">{{ __('Login') }}</button>
+                        <button class="btn btn-success w-100" type="submit">Đăng nhập</button>
                     </div>
 
                     {{-- <div class="mt-4 text-center">
@@ -84,12 +84,9 @@
                 </form>
             </div>
 
-
-            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-
             <div class="mt-5 text-center">
-                <p class="mb-0">Don't have an account ? <a href="{{ route('register') }}"
-                        class="fw-semibold text-primary text-decoration-underline">{{ __('Register') }}</a> </p>
+                <p class="mb-0">Bạn chưa có tài khoản? <a href="{{ route('register') }}"
+                        class="fw-semibold text-primary text-decoration-underline">Đăng ký</a> </p>
             </div>
         </div>
     </div>

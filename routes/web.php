@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DiseaseController;
 use App\Http\Controllers\Admin\EnvironmentController;
+use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\Admin\ExpirationNotificationController;
 use App\Http\Controllers\Admin\InventoryAuditController;
 use App\Http\Controllers\Admin\ImportOrderController;
@@ -188,4 +189,6 @@ Route::prefix('admin')
             Route::get('/prescriptions', [PrescriptionsController::class, 'getRestore'])->name('restore.prescriptions');
             Route::post('/prescriptions', [PrescriptionsController::class, 'restore']);
         });
+        Route::get('export', [ExportController::class, 'showExportForm'])->name('export.form');
+        Route::post('export', [ExportController::class, 'export'])->name('export');
     });

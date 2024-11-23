@@ -25,10 +25,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
+
         ///////////
         $expirationNotifications = ExpirationNotification::with('medicine')
             ->orderBy('notified_at', 'desc')
             ->get();
+
         $commonNotifications = NotificationLog::latest()->get();
         $allNotificationsCount = $expirationNotifications->count() + $commonNotifications->count();
         View::share([

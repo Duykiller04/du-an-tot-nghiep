@@ -714,139 +714,19 @@
 
                             <div class="card-body">
                                 <div class="table-responsive table-card">
-                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0 text-center">
                                         <thead class="text-muted table-light">
                                             <tr>
-                                                <th scope="col">ID đơn hàng</th>
+                                                <th scope="col">STT</th>
                                                 <th scope="col">Khách hàng</th>
-                                                <th scope="col">Thuốc</th>
+                                                <th scope="col">Bệnh</th>
                                                 <th scope="col">Tổng tiền</th>
                                                 <th scope="col">Người kê đơn</th>
-                                                <th scope="col">PT thanh toán</th>
-                                                <th scope="col">Đánh giá</th>
+                                                <th scope="col">Ca làm</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2112</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Alex Smith</div>
-                                                    </div>
-                                                </td>
-                                                <td>Clothes</td>
-                                                <td>
-                                                    <span class="text-success">$109.00</span>
-                                                </td>
-                                                <td>Zoetic Fashion</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">5.0<span class="text-muted fs-11 ms-1">(61 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2111</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-2.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Jansh Brown</div>
-                                                    </div>
-                                                </td>
-                                                <td>Kitchen Storage</td>
-                                                <td>
-                                                    <span class="text-success">$149.00</span>
-                                                </td>
-                                                <td>Micro Design</td>
-                                                <td>
-                                                    <span class="badge bg-warning-subtle text-warning">Pending</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.5<span class="text-muted fs-11 ms-1">(61 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2109</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-3.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Ayaan Bowen</div>
-                                                    </div>
-                                                </td>
-                                                <td>Bike Accessories</td>
-                                                <td>
-                                                    <span class="text-success">$215.00</span>
-                                                </td>
-                                                <td>Nesta Technologies</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.9<span class="text-muted fs-11 ms-1">(89 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2108</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-4.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Prezy Mark</div>
-                                                    </div>
-                                                </td>
-                                                <td>Furniture</td>
-                                                <td>
-                                                    <span class="text-success">$199.00</span>
-                                                </td>
-                                                <td>Syntyce Solutions</td>
-                                                <td>
-                                                    <span class="badge bg-danger-subtle text-danger">Unpaid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.3<span class="text-muted fs-11 ms-1">(47 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2107</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ asset('administrator/assets/images/users/avatar-6.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Vihan Hudda</div>
-                                                    </div>
-                                                </td>
-                                                <td>Bags and Wallets</td>
-                                                <td>
-                                                    <span class="text-success">$330.00</span>
-                                                </td>
-                                                <td>iTest Factory</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.7<span class="text-muted fs-11 ms-1">(161 votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
+                                        <tbody id="recentOrders">
+                                          
                                         </tbody><!-- end tbody -->
                                     </table><!-- end table -->
                                 </div>
@@ -855,9 +735,49 @@
                     </div> <!-- .col-->
                 </div> <!-- end row-->
 
-            </div> <!-- end .h-100-->
 
-        </div> <!-- end col -->
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card card-height-100">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Thống kê thuốc, dụng cụ theo kho</h4>
+                                <div class="flex-shrink-0">
+                                    <div class="dropdown card-header-dropdown">
+                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <span class="text-muted">Báo cáo<i
+                                                    class="mdi mdi-chevron-down ms-1"></i></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="{{ route('admin.catalogues.index') }}">Xem
+                                                chi tiết</a>
+                                            <a class="dropdown-item" href="#">Tải xuống</a>
+                                            <a class="dropdown-item" href="#">Export</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card header -->
+
+                            <div class="card-body">
+                                <div class="w-100" style="height: 300px;">
+                                    <canvas id="myPieChart" style="width: 100%; height: 100%;"></canvas>
+                                </div>
+                            
+                                <div>
+                                    <h4>Tổng số lượng thuốc trong tất cả các kho:  <strong id="totalMedicinesCount"></strong></h4>
+                                    
+                                </div>
+                                
+
+                            </div>
+                            
+                        </div>
+                    </div> 
+                </div> 
+
+            </div> 
+
+        </div> 
 
         <div class="col-auto layout-rightside-col">
             <div class="overlay"></div>
@@ -1315,6 +1235,7 @@
     <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('library/dashboard-supplier.js') }}"></script>
+    <script src="{{ asset('library/order.js') }}"></script>
     <script>
         $(document).ready(function() {
             var url = "{{route('dashboard-customers') }}"; 
@@ -1323,7 +1244,7 @@
                 method: 'GET',
                 success: function(response) {
                     $('#totalCustomers').text(response.totalCustomers);  
-                    console.log(response.totalCustomers);   
+                    // console.log(response.totalCustomers);   
                 },
                 error: function() {
                     alert('Lỗi khi lấy dữ liệu');
@@ -1334,7 +1255,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     $(document).ready(function() {
         // Gửi yêu cầu AJAX để lấy dữ liệu danh mục thuốc
@@ -1393,5 +1315,78 @@
                 }
             });
         });
+
+        $(document).ready(function() {
+            var url = "{{route('dashboard-customers') }}"; 
+            $.ajax({
+                url: "{{ route('dashboard-customers') }}",
+                method: 'GET',
+                success: function(response) {
+                    $('#totalCustomers').text(response.totalCustomers);  
+                    // console.log(response.totalCustomers);   
+                },
+                error: function() {
+                    alert('Lỗi khi lấy dữ liệu');
+                }
+            });
+        });
+
+
+  // Gọi API để lấy dữ liệu
+fetch('api/dashboard/storages')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Lỗi khi gọi API');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        // Hiển thị tổng số lượng thuốc
+        document.getElementById('totalMedicinesCount').innerText = data.total_medicines_count;
+
+        // Lấy dữ liệu cho biểu đồ
+        const labels = data.storages.map(storage => storage.storage_name);
+        const medicinesData = data.storages.map(storage => storage.medicines_count);
+
+        // Vẽ biểu đồ tròn
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: medicinesData,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw} thuốc`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi khi tải dữ liệu.');
+    });
+
+
+
     </script>
 @endsection

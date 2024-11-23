@@ -37,3 +37,9 @@ Route::get('get-prescription-details', [PrescriptionsController::class, 'getPres
 Route::get('/dashboard-customers', [DashboardController::class, 'getTotalCustomers'])->name('dashboard-customers');
 Route::get('/dashboard-categories', [DashboardController::class, 'getTotalCategory'])->name('dashboard-categories');
 Route::get('dashboard/suppliers', [DashboardController::class, 'getSupplier'])->name('dashboard.suppliers');
+// routes/web.php
+Route::get('/dashboard/storages', [DashboardController::class, 'getStorage'])->name('dashboard.storages');
+
+
+
+Route::get('dashboard/recent-orders', [DashboardController::class, 'recentOrders'])->name('dashboard.recent.order');
