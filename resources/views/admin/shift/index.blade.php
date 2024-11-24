@@ -137,7 +137,7 @@
                                                             {{ ucfirst($shift->status) }}
                                                         </span>
                                                     </td>
-                                                    <td>{{ $shift->revenue_summary ?? 'N/A' }}</td>
+                                                    <td>{{ number_format($shift->revenue_summary ?? 0) }} VND</td>
                                                     <td>
                                                         <ul class="list-unstyled d-flex gap-2">
                                                             <li><a href="{{ route('admin.shifts.edit', $shift->id) }}"

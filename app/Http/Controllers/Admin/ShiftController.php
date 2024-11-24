@@ -243,7 +243,7 @@ class ShiftController extends Controller
 
         $shift = Shift::findOrFail($id);
         if (!in_array($shift->status, ['kế hoạch', 'đã hủy'])) {
-            return back()->with('error', 'Chỉ có thể cập nhật ca làm ở trạng thái "kế hoạch" hoặc "đã hủy".');
+            return back()->with('error', 'Chỉ có thể cập nhật ca làm ở trạng thái kế hoạch hoặc đã hủy.');
         }
 
         $shift->shift_name = $request->input('shift_name');
@@ -281,7 +281,7 @@ class ShiftController extends Controller
 
 
         if ($shift->status !== 'kế hoạch' && $shift->status !== 'đã hủy') {
-            return redirect()->route('admin.shifts.index')->with('error', 'Chỉ có thể xóa ca làm việc ở trạng thái "kế hoạch" hoặc "đã hủy".');
+            return redirect()->route('admin.shifts.index')->with('error', 'Chỉ có thể xóa ca làm việc ở trạng thái kế hoạch hoặc đã hủy.');
         }
 
 

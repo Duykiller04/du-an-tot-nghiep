@@ -86,7 +86,7 @@
                     <!-- Card cho Ảnh đại diện -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ảnh đại diện</h5>
+                            <h5 class="card-title mb-0">Ảnh bệnh</h5>
                         </div>
                         <div class="card-body">
                             <input type="file" class="form-control" id="feature_img" name="feature_img"
@@ -109,11 +109,18 @@
             </div>
 
             <!-- Nút Lưu bệnh -->
-            <div class="text-end mb-3">
-                <a href="{{route('admin.diseases.index')}}"><button type="button" class="btn btn-primary w-sm">Quay lại</button></a>
-                <button type="submit" class="btn btn-success w-sm">Cập nhật bệnh</button>
-                
-            </div>
+           
+                <div class="card">
+                    <div class="card-body">
+                            <div class="text-end mb-3">
+                                <a href="{{ route('admin.diseases.index') }}">
+                                    <button type="button" class="btn btn-primary w-sm">Quay lại</button>
+                                </a>
+                                <button type="submit" class="btn btn-success w-sm">Cập nhật bệnh</button>
+                            </div>
+                    </div>
+                </div>
+                      
         </form>
     </div>
 @endsection

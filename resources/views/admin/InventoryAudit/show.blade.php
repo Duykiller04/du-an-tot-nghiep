@@ -111,7 +111,7 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled mb-0 vstack gap-3">
-                            <li>ID Phiếu Kiểm: {{ $inventoryAudit->id }}</li>
+                            {{-- <li>ID Phiếu Kiểm: {{ $inventoryAudit->id }}</li> --}}
                             <li><i class="ri-calendar-line me-2 align-middle text-muted fs-16"></i>{{ \Carbon\Carbon::parse($inventoryAudit->created_at)->format('d/m/Y') }}</li>
                             <li><i class="ri-user-line me-2 align-middle text-muted fs-16"></i>{{ $inventoryAudit->checked_by }}</li>
                         </ul>
