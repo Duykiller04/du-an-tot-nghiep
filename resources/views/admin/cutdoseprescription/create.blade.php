@@ -11,12 +11,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Thêm đơn thuốc</h4>
+                    <h4 class="mb-sm-0">Thêm đơn thuốc mẫu</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Đơn thuốc</a></li>
-                            <li class="breadcrumb-item active">Thêm đơn thuốc</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Đơn thuốc mẫu</a></li>
+                            <li class="breadcrumb-item active">Thêm đơn thuốc mẫu</li>
                         </ol>
                     </div>
                 </div>

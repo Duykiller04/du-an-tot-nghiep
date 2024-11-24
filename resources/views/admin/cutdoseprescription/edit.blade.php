@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Cập nhật đơn thuốc cắt liều
+    Cập nhật đơn thuốc mẫu
 @endsection
 
 @section('content')
@@ -15,8 +15,8 @@
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Đơn thuốc</a></li>
-                            <li class="breadcrumb-item active">Cập nhật đơn thuốc</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Đơn thuốc mẫu</a></li>
+                            <li class="breadcrumb-item active">Cập nhật đơn thuốc mẫu</li>
                         </ol>
                     </div>
                 </div>
