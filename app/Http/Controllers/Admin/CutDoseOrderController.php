@@ -28,7 +28,19 @@ class CutDoseOrderController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = CutDoseOrder::with('cutDoseOrderDetails')->get();
+            $data = CutDoseOrder::with('cutDoseOrderDetails');
+
+            if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+                
+                if ($startDate && $endDate) {
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+    
+                    $data->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
 
             return DataTables::of($data)
                 ->addIndexColumn()

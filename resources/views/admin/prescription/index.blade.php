@@ -52,6 +52,42 @@ Danh sách đơn thuốc
                 </div>
 
                 <div class="card-body">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Lọc
+                        </button>
+    
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Lọc</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-4">
+                                            <label for="start-date">Ngày tạo từ:</label>
+                                            <input type="date" id="start-date" class="form-control">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="end-date">Ngày tạo đến:</label>
+                                            <input type="date" id="end-date" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <button type="button" class="btn btn-primary"
+                                            id="filter-btn" data-bs-dismiss="modal">Lọc</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     <table id="prescriptionsTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
@@ -113,7 +149,13 @@ Danh sách đơn thuốc
             $('#prescriptionsTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('admin.prescriptions.index') }}',
+                ajax:{
+                    url: '{{ route('admin.prescriptions.index') }}',
+                    data: function(d) {
+                        d.startDate = $('#start-date').val();
+                        d.endDate = $('#end-date').val();
+                    }
+                },
                 columns: [
                     { data: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'name_customer' },
@@ -151,6 +193,11 @@ Danh sách đơn thuốc
                 },
 
             });
+
+            $('#filter-btn').click(function() {
+                    table.draw();
+                });
+                
             $(document).on('click', '.btn-delete', function(e) {
                 e.preventDefault();
 

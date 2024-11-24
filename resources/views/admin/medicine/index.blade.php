@@ -75,12 +75,12 @@
                                         <tr>
                                             <th>STT</th>
                                             <th>Mã thuốc</th>
-                                            <th>Danh mục</th>
                                             <th>Tên thuốc</th>
                                             <th>Ảnh thuốc</th>
                                             <th>Giá nhập</th>
                                             <th>Giá bán</th>
                                             <th>Ngày hết hạn</th>
+                                            <th>Danh mục</th>
                                             <th>Nhà cung cấp</th>
                                             <th>Số lượng</th>
                                             <th>Thời gian tạo</th>
@@ -104,29 +104,30 @@
 @endsection
 
 @section('style-libs')
-    <!--datatable css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-    <!--datatable responsive css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 @endsection
 
 @section('script-libs')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <!--datatable js-->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.6.0/jspdf.umd.min.js"></script>
+
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script>
         $(document).ready(function() {
             $(document).ready(function() {
@@ -142,13 +143,12 @@
                         }
                     },
                     columns: [{
-                            data: 'DT_RowIndex', orderable: false, searchable: false
+                            data: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
                         },
                         {
                             data: 'medicine_code'
-                        },
-                        {
-                            data: 'category.name'
                         },
                         {
                             data: 'name'
@@ -166,6 +166,9 @@
                         },
                         {
                             data: 'expiration_date'
+                        },
+                        {
+                            data: 'category.name'
                         },
                         {
                             data: 'suppliers',
@@ -215,7 +218,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 8
+                                        11; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
@@ -226,7 +229,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
+                                        11; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
@@ -237,7 +240,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
+                                        11; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
@@ -248,7 +251,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
+                                        11; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         }

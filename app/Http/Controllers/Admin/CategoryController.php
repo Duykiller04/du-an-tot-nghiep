@@ -20,7 +20,19 @@ class CategoryController extends Controller
     {
         $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
         if (request()->ajax()) {
-            $query = Category::with('children')->orderBy('id', 'desc')->get();
+            $query = Category::with('children')->orderBy('id', 'desc');
+
+            if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+                
+                if ($startDate && $endDate) {
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+    
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
 
             return DataTables::of($query)
                 ->addIndexColumn()
@@ -121,15 +133,11 @@ class CategoryController extends Controller
     {
         $catalogue = Category::findOrFail($id);
 
-        // Cập nhật danh mục con cấp đầu
         Category::where('parent_id', $catalogue->id)->update(['parent_id' => null]);
 
-        // Chuyển các sản phẩm của danh mục bị xóa sang danh mục có id là 1
-        //Medicine::where('catalogue_id', $catalogue->id)->update(['catalogue_id' => 1]);
+        $catalogue->delete();
 
-
-        DB::table('categories')->where('id', $id)->delete();
-        return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được xóa thành công (Những loại thuốc đã xóa sẽ được chuyển qua danh mục: Không xác định)');
+        return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được xóa thành công');
     }
     public function getRestore()
     {
@@ -138,7 +146,6 @@ class CategoryController extends Controller
     }
     public function restore(Request $request)
     {
-        // dd($request->all());
         try {
             $categoryIds = $request->input('ids');
             if ($categoryIds) {

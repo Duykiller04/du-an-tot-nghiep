@@ -34,7 +34,7 @@
         <!-- Create Category Modal -->
         <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="createCategoryModalLabel">Thêm mới danh mục</h5>
@@ -44,7 +44,7 @@
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="project-title-input">Tên danh mục</label>
+                                <label class="form-label" for="project-title-input">Tên danh mục <span class="text-danger">(*)</span></label>
                                 <input type="text" name="nameCreate" class="form-control" id="project-title-input"
                                     placeholder="Nhập tên danh mục" value="{{ old('name') }}">
                                 @error('nameCreate')
@@ -65,7 +65,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="" class="form-label">Trạng thái</label>
+                                <label for="" class="form-label">Trạng thái <span class="text-danger">(*)</span></label>
                                 <select name="is_activeCreate" class="form-select" data-choices data-choices-search-false
                                     id="">
                                     <option value="1" selected>Hoạt động</option>
@@ -87,8 +87,8 @@
 
         <!-- Edit Category Modal -->
         <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
+            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editCategoryModalLabel">Sửa danh mục</h5>
@@ -100,7 +100,7 @@
                         <input type="hidden" id="edit_category_id" name="category_id">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="edit_name">Tên danh mục</label>
+                                <label class="form-label" for="edit_name">Tên danh mục <span class="text-danger">(*)</span></label>
                                 <input type="text" name="nameEdit" class="form-control" id="edit_name"
                                     placeholder="Nhập tên danh mục">
                                 @error('nameEdit')
@@ -121,7 +121,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="edit_choices_status_input" class="form-label">Trạng thái</label>
+                                <label for="edit_choices_status_input" class="form-label">Trạng thái <span class="text-danger">(*)</span></label>
                                 <select name="is_activeEdit" class="form-select" data-choices data-choices-search-false
                                     id="edit_choices_status_input">
                                     <option value="1">Hoạt động</option>
@@ -165,15 +165,41 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="mb-4 me-3">
-                                            <label for="minDate">Ngày tạo từ:</label>
-                                            <input type="date" id="minDate" class="form-control">
+                                    <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
+                                        Lọc
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Lọc</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-4">
+                                                        <label for="start-date">Ngày tạo từ:</label>
+                                                        <input type="date" id="start-date" class="form-control">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="end-date">Ngày tạo đến:</label>
+                                                        <input type="date" id="end-date" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="button" class="btn btn-primary"
+                                                        id="filter-btn" data-bs-dismiss="modal">Lọc</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="mb-4 ms-3">
-                                            <label for="maxDate">Ngày tạo đến:</label>
-                                            <input type="date" id="maxDate" class="form-control">
-                                        </div>
+                                    </div>
                                     </div>
                                     <table id="example"
                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -269,7 +295,13 @@
             var table = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('admin.catalogues.index') }}',
+                ajax:{
+                    url: '{{ route('admin.catalogues.index') }}',
+                    data: function(d) {
+                        d.startDate = $('#start-date').val();
+                        d.endDate = $('#end-date').val();
+                    }
+                }, 
                 columns: [{
                         className: 'details-control',
                         orderable: false,
@@ -321,6 +353,10 @@
                     }
                 }
             });
+
+            $('#filter-btn').click(function() {
+                    table.draw();
+                });
 
             $('#example tbody').on('click', 'td.details-control', function() {
                 var tr = $(this).closest('tr');
@@ -394,3 +430,4 @@
         });
     </script>
 @endsection
+

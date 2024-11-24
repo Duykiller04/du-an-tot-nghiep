@@ -288,11 +288,15 @@
             </div>
     </div>
 
-    <!-- Nút Lưu bệnh -->
-    <div class="text-end mb-3">
-        <a href="{{ route('admin.cutDoseOrders.index') }}"><button type="button" class="btn btn-primary w-sm">Quay
-                lại</button></a>
-        <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
+    <div class="col-lg-12 custom-spacing ">
+        <div class="card">
+            <div class="text-end m-3">
+                <a href="{{ route('admin.cutDoseOrders.index') }}">
+                    <button type="button" class="btn btn-primary w-sm">Quay lại</button>
+                </a>
+                <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
+            </div>
+        </div>
     </div>
     </form>
     </div>

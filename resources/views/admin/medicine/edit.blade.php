@@ -43,7 +43,7 @@
                         <div class="card-body">
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Mã dụng cụ <span
+                                <label class="form-label" for="name">Mã thuốc <span
                                         class="text-danger">(*)</span></label>
                                 <input type="text"
                                     class="form-control @error('medicine.medicine_code') is-invalid @enderror"
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Tên dụng cụ <span
+                                <label class="form-label" for="name">Tên thuốc <span
                                         class="text-danger">(*)</span></label>
                                 <input type="text" class="form-control @error('medicine.name') is-invalid @enderror"
                                     id="name" name="medicine[name]" value="{{ $medicine->name }}">
@@ -316,7 +316,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Danh mục dụng cụ <span class="text-danger">(*)</span></h5>
+                            <h5 class="card-title mb-0">Danh mục thuốc <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <select class="form-select @error('medicine.category_id') is-invalid @enderror"
@@ -356,15 +356,15 @@
                         </div>
                     </div>
 
-                    <!-- Card cho Ảnh dụng cụ -->
+                    <!-- Card cho Ảnh thuốc -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ảnh dụng cụ</h5>
+                            <h5 class="card-title mb-0">Ảnh thuốc</h5>
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-center mb-2">
                                 @if ($medicine->image)
-                                    <img src="{{ asset('storage/' . $medicine->image) }}" alt="Ảnh dụng cụ"
+                                    <img src="{{ asset('storage/' . $medicine->image) }}" alt="Ảnh thuốc"
                                         width="200" class="img-fluid">
                                 @else
                                     <p class="text-center">Chưa có ảnh</p>
@@ -433,12 +433,15 @@
                 </div>
             </div>
 
-            <!-- Nút Lưu bệnh -->
-            <div class="text-end mb-3">
-                <a href="{{ route('admin.medicines.index') }}"><button type="button"
-                        class="btn btn-primary w-sm">Quay
-                        lại</button></a>
-                <button type="submit" class="btn btn-success w-sm">Sửa</button>
+            <div class="col-lg-12 custom-spacing ">
+                <div class="card">
+                    <div class="text-end m-3">
+                        <a href="{{ route('admin.medicines.index') }}">
+                            <button type="button" class="btn btn-primary w-sm">Quay lại</button>
+                        </a>
+                        <button type="submit" class="btn btn-success w-sm">Sửa</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

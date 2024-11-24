@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
-    data-sidebar-image="none" data-preloader="disable">
+    data-sidebar-image="none" data-preloader="enable">
 
 <head>
 
@@ -28,13 +28,13 @@
 
 
     <!--preloader-->
-    {{-- <div id="preloader">
+    <div id="preloader">
         <div id="status">
             <div class="spinner-border text-primary avatar-sm" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
