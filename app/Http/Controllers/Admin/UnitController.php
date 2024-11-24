@@ -17,38 +17,51 @@ class UnitController extends Controller
     {
         $units = Unit::query()->with('children')->orderByDesc('id')->whereNull('parent_id')->get();
         if (request()->ajax()) {
-            $query = Unit::with('children')->orderBy('id', 'desc')->get();
+            $query = Unit::query()->with('children')->orderBy('id', 'desc');
+        // Lọc theo ngày tháng nếu có
+        if (request()->has('startDate') && request()->has('endDate')) {
+            $startDate = request()->get('startDate');
+            $endDate = request()->get('endDate');
 
+            // Kiểm tra định dạng ngày và lọc
+            if ($startDate && $endDate) {
+                // Convert to datetime to include the full day
+                $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+        }
             return DataTables::of($query)
             ->addIndexColumn()
+            ->addColumn('details-control', function () {
+                return '';
+            })
             ->addColumn('created_at', function ($row) {
                 return $row->created_at ? $row->created_at->format('d/m/Y') : '';
-            })
-            ->addColumn('updated_at', function ($row) {
-                return $row->updated_at ? $row->updated_at->format('d/m/Y') : '';
-            })
-                ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.units.edit', $row->id);
-                    $deleteUrl = route('admin.units.destroy', $row->id);
+            })          
+            ->addColumn('action', function ($row) {
+                $editUrl = route('admin.units.edit', $row->id);
+                $deleteUrl = route('admin.units.destroy', $row->id);
 
-                    return '
-                        <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '">Sửa</button>
-                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                            ' . csrf_field() . method_field('DELETE') . '
-                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-                        </form>
-                    ';
-                })
-                ->addColumn('children', function($row) {
+                return '
+                    <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '">Sửa</button>
+                    <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                    </form>
+                ';
+            })
+            ->addColumn('children', function($row) {
                     $children = $row->children;
                     foreach ($children as $child) {
                         $child->edit_url = route('admin.units.edit', $child->id);
                         $child->delete_url = route('admin.units.destroy', $child->id);
                     }
                     return $children;  // Trả về danh mục con để xử lý trong JavaScript
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+            })
+            ->rawColumns(['action'])
+            ->make(true);
         }
 
         return view('admin.unit.index', compact('units'));

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCutDosePrescriptionRequest;
+use App\Http\Requests\UpdateCutDosePresciptionRequest;
 use App\Models\CutDosePrescription;
 use App\Models\CutDosePrescriptionDetail;
 use App\Models\Disease;
@@ -124,11 +125,9 @@ class CutDosePrescriptionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CutDosePrescription $cutDosePrescription)
+    public function update(UpdateCutDosePresciptionRequest $request, CutDosePrescription $cutDosePrescription)
     {
         try {
-            // dd($request->all());
-
             DB::beginTransaction();
             $data = $request->except('medicines');
             $cutDosePrescription->update($data);

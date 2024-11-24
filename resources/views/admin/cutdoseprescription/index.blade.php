@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách đơn thuốt mẫu
+    Danh sách đơn thuốc mẫu
 @endsection
 
 @section('content')
@@ -37,43 +37,44 @@
 
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Bệnh</th>
                                 <th>Tên bệnh viện</th>
                                 <th>Tên bác sĩ</th>
                                 <th>Tuổi</th>
                                 <th>Số điện thoại</th>
                                 <th>Tổng tiền</th>
-                                <th>Created at</th>
-                                <th>Updated at</th>
-                                <th>Action</th>
+                                <th>Ngày thêm</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
 
                         <tbody>
+                            @php
+                                $stt = 1;
+                            @endphp
                             @foreach ($data as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $stt++ }}</td>
                                     <td>{{ $item->disease->disease_name }}</td>
                                     <td>{{ $item->name_hospital }}</td>
                                     <td>{{ $item->name_doctor }}</td>
-                                    <td>{{ date('m/d/Y', strtotime($item->age)) }}</td>
+                                    <td>{{ $item->age }}</td>
                                     <td>{{ $item->phone_doctor }}</td>
-                                    <td>{{ $item->total }}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->updated_at }}</td>
+                                    <td>{{ number_format($item->total) }} VNĐ</td>
+                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('admin.cutDosePrescriptions.show', $item) }}"
-                                                class="btn btn-warning mb-3">Show</a>
+                                                class="btn btn-warning mb-3">Xem</a>
                                             <a href="{{ route('admin.cutDosePrescriptions.edit', $item) }}"
-                                                class="btn btn-info mb-3">Edit</a>
+                                                class="btn btn-info mb-3">Sửa</a>
                                             <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}"
-                                                method="post">
+                                                method="post"  id="delete-form-{{ $item->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                    class="btn btn-danger mb-3">DELETE
+                                                <button onclick="confirmDelete({{ $item->id }})" type="button"
+                                                    class="btn btn-danger mb-3 btn-delete">Xóa
                                                 </button>
                                             </form>
                                         </div>
@@ -112,11 +113,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         new DataTable("#example", {
             order: [
-                [0, 'desc']
+                [0, 'asc']
             ],
             language: {
                 "sEmptyTable": "Không có dữ liệu trong bảng",
@@ -140,5 +142,27 @@
                 }
             },
         });
+        function confirmDelete(id) {
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa không??',
+        text: "Hành động này không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.getElementById(`delete-form-${id}`);
+            if (form) {
+                form.submit();
+            } else {
+                console.error(`Không tìm thấy form với ID: delete-form-${id}`);
+            }
+        }
+    });
+}
+
     </script>
 @endsection
