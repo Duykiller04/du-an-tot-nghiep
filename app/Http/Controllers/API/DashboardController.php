@@ -119,7 +119,7 @@ class DashboardController extends Controller
                 'disease',
                 'customer'
                 ])
-        ->where('created_at', '>=', now()->subDays(3))
+        ->where('created_at', '>=', now()->subDays(7))
         ->orderByDesc('created_at')
         ->limit(5)
         ->get();

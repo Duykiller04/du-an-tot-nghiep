@@ -396,7 +396,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
@@ -406,7 +406,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
@@ -416,7 +416,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
@@ -426,7 +426,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         }
