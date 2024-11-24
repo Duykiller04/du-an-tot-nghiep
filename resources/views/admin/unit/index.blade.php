@@ -41,7 +41,8 @@
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="project-title-input">Tên đơn vị</label>
+                                <label class="form-label" for="project-title-input">Tên đơn vị (<span
+                                    class="text-danger">*</span>)</label>
                                 <input type="text" name="nameCreate" class="form-control" id="project-title-input"
                                     placeholder="Nhập tên đơn vị" value="{{ old('name') }}">
                                 @error('nameCreate')
@@ -84,9 +85,10 @@
                         <input type="hidden" id="edit_unit_id" name="unit_id">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="edit_name">Tên đơn vị</label>
+                                <label class="form-label" for="edit_name">Tên đơn vị (<span
+                                    class="text-danger">*</span>)</label>
                                 <input type="text" name="nameEdit" class="form-control" id="edit_name"
-                                    placeholder="Nhập tên danh mục">
+                                    placeholder="Nhập tên đơn vị">
                                 @error('nameEdit')
                                     <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
@@ -137,14 +139,18 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="mb-4 me-3">
-                                            <label for="minDate">Ngày tạo từ:</label>
-                                            <input type="date" id="minDate" class="form-control">
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <label for="start-date">Ngày bắt đầu:</label>
+                                            <input type="date" id="start-date" class="form-control" />
                                         </div>
-                                        <div class="mb-4 ms-3">
-                                            <label for="maxDate">Ngày tạo đến:</label>
-                                            <input type="date" id="maxDate" class="form-control">
+                                        <div class="col-6">
+                                            <label for="end-date">Ngày kết thúc:</label>
+                                            <div class="d-flex">
+                                                <input type="date" id="end-date" class="form-control me-2" />
+                                                <button id="filter-btn" class="btn btn-primary">Lọc</button>
+        
+                                            </div>
                                         </div>
                                     </div>
                                     <table id="example"
@@ -152,6 +158,7 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th></th> <!-- Cột để click mở rộng -->
                                                 <th>STT</th>
                                                 <th>Tên đơn vị</th>
                                                 <th>Thời gian tạo</th>
@@ -240,8 +247,21 @@
             var table = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('admin.units.index') }}',
+                ajax:{
+                    url: '{{ route('admin.units.index') }}',
+                    data: function(d) {
+                        d.startDate = $('#start-date').val();
+                        d.endDate = $('#end-date').val();
+                    }
+                }, 
                 columns: [
+                    {
+                        className: 'details-control',
+                        orderable: false,
+                        data: null,
+                        defaultContent: '<i class="bx bx-sort-down"></i>',
+                        width: '20px'
+                    },
                     {
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -291,7 +311,7 @@
                         text: 'Sao chép',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 5; // Ẩn cột "Thao tác"
+                                return idx !== 4; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -300,7 +320,7 @@
                         text: 'Xuất CSV',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 5; // Ẩn cột "Thao tác"
+                                return idx !== 4; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -309,7 +329,7 @@
                         text: 'Xuất Excel',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 5; // Ẩn cột "Thao tác"
+                                return idx !== 4; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -318,7 +338,7 @@
                         text: 'Xuất PDF',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 5; // Ẩn cột "Thao tác"
+                                return idx !== 4; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -327,16 +347,20 @@
                         text: 'In',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 5; // Ẩn cột "Thao tác"
+                                return idx !== 4; // Ẩn cột "Thao tác"
                             }
                         }
                     }
                 ]
             });
+            $('#filter-btn').click(function() {
+                    table.draw();
+                });
             $('#example tbody').on('click', 'td.details-control', function() {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
-
+                
+                
                 if (row.child.isShown()) {
                     row.child.hide();
                     tr.removeClass('shown');
@@ -350,7 +374,7 @@
                         data: {
                             id: unitId
                         },
-                        success: function(children) {
+                        success: function(children) {   
                             // Nếu children là chuỗi JSON, hãy phân tích nó
                             if (typeof children === 'string') {
                                 children = JSON.parse(children);
@@ -358,24 +382,22 @@
 
                             if (children.length > 0) {
                                 var html =
-                                    '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
+                                    '<table class="table"><tr><th>STT</th><th>Tên đơn vị con</th></tr>';
                                 children.forEach(function(child) {
                                     html += '<tr><td>' + child.id + '</td><td>' + child
-                                        .name + '</td><td>' + child.created_at +
-                                        '</td><td>' + child.updated_at + '</td>';
-                                    html += '<td><a href="' + child.edit_url +
-                                        '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
+                                        .name + '</td>';
+                                   
                                 });
                                 html += '</table>';
                                 row.child(html).show();
                                 tr.addClass('shown');
                             } else {
-                                row.child('<div>Không có danh mục con</div>').show();
+                                row.child('<div>Không có đơn vị con</div>').show();
                                 tr.addClass('shown');
                             }
                         },
                         error: function() {
-                            row.child('<div>Lỗi khi tải danh mục con.</div>').show();
+                            row.child('<div>Lỗi khi tải đơn vị con.</div>').show();
                             tr.addClass('shown');
                         }
                     });
