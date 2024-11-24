@@ -102,10 +102,15 @@
             </div>
 
             <!-- Nút Lưu bệnh -->
-            <div class="text-end mb-3">
-                <a href="{{route('admin.diseases.index')}}"><button type="button" class="btn btn-primary w-sm">Quay lại</button></a>
-                <button type="submit" class="btn btn-success w-sm">Lưu bệnh</button>
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-end mb-3">
+                        <a href="{{route('admin.diseases.index')}}"><button type="button" class="btn btn-primary w-sm">Quay lại</button></a>
+                        <button type="submit" class="btn btn-success w-sm">Lưu bệnh</button>
+                    </div>
+                </div>
             </div>
+            
         </form>
     </div>
 @endsection

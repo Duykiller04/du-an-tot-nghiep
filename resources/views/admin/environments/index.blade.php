@@ -192,7 +192,7 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>STT</th>
                                                 <th>Thời gian</th>
                                                 <th>Nhiệt độ môi trường</th>
                                                 <th>Nhiệt độ trong kho</th>
@@ -211,7 +211,7 @@
                                                     <td>{{ $environment->huminity }}%</td>
                                                     <td>{{ $environment->real_humidity }}%</td>
                                                     <td>
-                                                        <button type="button" class="btn btn-warning btn-sm editEnvironmentBtn" 
+                                                        <button type="button" class="btn btn-warning btn-md editEnvironmentBtn" 
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#editEnvironment"
                                                         data-id="{{ $environment->id }}"
@@ -224,7 +224,7 @@
                                                         <form action="{{ route('admin.environments.destroy', $environment->id) }}" method="POST" style="display:inline;" class="delete-form d-inline-block">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$environment->id}}">Xóa</button>
+                                                            <button type="button" class="btn btn-danger btn-md btn-delete" data-id="{{$environment->id}}">Xóa</button>
                                                         </form>
                                                     </td>
                                                 </tr>

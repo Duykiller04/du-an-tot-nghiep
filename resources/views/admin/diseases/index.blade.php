@@ -67,7 +67,7 @@
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>STT</th>
                                     <th>Tên bệnh</th>
                                     <th>Ảnh</th>
                                     <th>Ngày ghi nhận</th>

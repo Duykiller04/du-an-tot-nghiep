@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Tạo phiếu kiểm kho
+    Thêm mới ca làm 
 @endsection
 
 @section('content')
@@ -54,8 +54,7 @@
                                 @error('end_time')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
-                            </div>
-
+                            </div>                 
                             <div id="details-container">
                                 @for ($i = 0; $i < max(count(old('details', [1])), session('detail_count', 1)); $i++)
                                     <div class="row mb-3 detail-row">
@@ -78,7 +77,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-lg-1 d-flex align-items-end">
+                                        <div class="col-lg-1 d-flex align-items-center">
                                             <button type="button" class="btn btn-danger btn-remove-detail">Xóa</button>
                                         </div>
                                     </div>
