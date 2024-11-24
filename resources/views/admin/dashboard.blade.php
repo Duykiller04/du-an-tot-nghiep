@@ -763,8 +763,8 @@
                                     <canvas id="myPieChart" style="width: 100%; height: 100%;"></canvas>
                                 </div>
                             
-                                <div>
-                                    <h4>Tổng số lượng thuốc trong tất cả các kho:  <strong id="totalMedicinesCount"></strong></h4>
+                                <div class="d-flex gap-1">
+                                    <p>Tổng số lượng thuốc trong tất cả các kho:  <p id="totalMedicinesCount"></p></p>
                                     
                                 </div>
                                 

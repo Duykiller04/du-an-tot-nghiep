@@ -277,7 +277,7 @@ class ImportOrderController extends Controller
         try {
             $importorderIds = $request->input('ids');
             if ($importorderIds) {
-                Storage::onlyTrashed()->whereIn('id', $importorderIds)->restore();
+                ImportOrder::onlyTrashed()->whereIn('id', $importorderIds)->restore();
                 return back()->with('success', 'Khôi phục bản ghi thành công.');
             } else {
                 return back()->with('error', 'Không bản ghi nào cần khôi phục.');
@@ -287,4 +287,5 @@ class ImportOrderController extends Controller
             return back()->with('error', 'Khôi phục bản ghi thất bại.');
         }
     }
+    
 }

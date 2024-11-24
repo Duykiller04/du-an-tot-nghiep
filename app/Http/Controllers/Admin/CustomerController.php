@@ -34,14 +34,21 @@ class CustomerController extends Controller
                 }
             }
             return DataTables::of($query)
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
+                ->addIndexColumn()
+                ->addColumn('updated_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.customers.show', $row->id);
-                    
+                    // $editUrl = route('admin.customers.edit', $row->id);
                     $deleteUrl = route('admin.customers.destroy', $row->id);
 
                     return '
             <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
-            <button type="button" class="btn btn-warning btn-edit" data-id="' . $row->id . '">Sửa</button>
+            <button class="btn btn-warning edit-btn" data-id="' . $row->id . '"  data-name="' . $row->name . '"   data-phone="' . $row->phone . '" data-address="' . $row->address . '" data-email="' . $row->email . '" data-age="' . $row->age . '" data-weight="' . $row->weight . '">Sửa</button>
             <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                 ' . csrf_field() . method_field('DELETE') . '
                 <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
@@ -132,6 +139,6 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $customer->delete();
-        return back()->with('success', 'Xóa thuốc thành công.');
+        return back()->with('success', 'Xóa khách hàng thành công.');
     }
 }

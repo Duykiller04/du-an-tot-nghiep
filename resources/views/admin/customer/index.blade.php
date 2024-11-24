@@ -38,7 +38,7 @@
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="createCustomerModal">Thêm mới danh mục</h5>
+                                <h5 class="modal-title" id="createCustomerModal">Thêm mới khách hàng</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -48,7 +48,8 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="nameCreate">Tên khách hàng</label>
+                                            <label class="form-label" for="nameCreate">Tên khách hàng(<span
+                                                    class="text-danger">*</span>)</label>
                                             <input type="text" name="nameCreate" class="form-control" id="nameCreate"
                                                 placeholder="Nhập tên khách hàng" value="{{ old('nameCreate') }}">
                                             @error('nameCreate')
@@ -56,7 +57,8 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="phoneCreate">Số điện thoại</label>
+                                            <label class="form-label" for="phoneCreate">Số điện thoại(<span
+                                                    class="text-danger">*</span>)</label>
                                             <input type="text" name="phoneCreate" class="form-control" id="phoneCreate"
                                                 placeholder="Nhập số điện thoại" value="{{ old('phoneCreate') }}">
                                             @error('phoneCreate')
@@ -67,7 +69,8 @@
 
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="addressCreate">Địa chỉ</label>
+                                            <label class="form-label" for="addressCreate">Địa chỉ(<span
+                                                    class="text-danger">*</span>)</label>
                                             <input type="text" name="addressCreate" class="form-control"
                                                 id="addressCreate" placeholder="Nhập địa chỉ khách hàng"
                                                 value="{{ old('addressCreate') }}">
@@ -76,7 +79,8 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="emailCreate">Email</label>
+                                            <label class="form-label" for="emailCreate">Email(<span
+                                                    class="text-danger">*</span>)</label>
                                             <input type="text" name="emailCreate" class="form-control" id="emailCreate"
                                                 placeholder="Nhập email khách hàng" value="{{ old('emailCreate') }}">
                                             @error('emailCreate')
@@ -87,7 +91,8 @@
 
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="ageCreate">Tuổi</label>
+                                            <label class="form-label" for="ageCreate">Tuổi(<span
+                                                    class="text-danger">*</span>)</label>
                                             <input type="number" name="ageCreate" class="form-control" id="ageCreate"
                                                 placeholder="Nhập tuổi khách hàng" value="{{ old('ageCreate') }}">
                                             @error('ageCreate')
@@ -95,7 +100,8 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="weightCreate">Cân nặng</label>
+                                            <label class="form-label" for="weightCreate">Cân nặng(<span
+                                                    class="text-danger">*</span>)</label>
                                             <input type="number" name="weightCreate" class="form-control" id="weightCreate"
                                                 placeholder="Nhập cân nặng khách hàng" value="{{ old('weightCreate') }}">
                                             @error('weightCreate')
@@ -105,10 +111,12 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Đóng</button>
                                     <button type="submit" class="btn btn-primary">Thêm mới</button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -118,7 +126,7 @@
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editCustomerModalLabel">Sửa danh mục</h5>
+                                <h5 class="modal-title" id="editCustomerModalLabel">Sửa khách hàng</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -131,7 +139,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="edit_name">Tên khách hàng</label>
                                             <input type="text" name="nameEdit" class="form-control" id="edit_name"
-                                                placeholder="Nhập tên khách hàng">
+                                                placeholder="Nhập tên khách hàng" value="{{ old('nameEdit', $message['nameEdit'] ?? '') }}">
                                             @error('nameEdit')
                                                 <div class="text-danger mt-2">{{ $message }}</div>
                                             @enderror
@@ -139,7 +147,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="edit_phone">Số điện thoại</label>
                                             <input type="text" name="phoneEdit" class="form-control" id="edit_phone"
-                                                placeholder="Nhập số điện thoại">
+                                                placeholder="Nhập số điện thoại" value="{{ old('phoneEdit') }}">
                                             @error('phoneEdit')
                                                 <div class="text-danger mt-2">{{ $message }}</div>
                                             @enderror
@@ -150,7 +158,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="edit_address">Địa chỉ</label>
                                             <input type="text" name="addressEdit" class="form-control"
-                                                id="edit_address" placeholder="Nhập địa chỉ khách hàng">
+                                                id="edit_address" placeholder="Nhập địa chỉ khách hàng" value="{{ old('addressEdit') }}">
                                             @error('addressEdit')
                                                 <div class="text-danger mt-2">{{ $message }}</div>
                                             @enderror
@@ -158,7 +166,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="edit_email">Email</label>
                                             <input type="text" name="emailEdit" class="form-control" id="edit_email"
-                                                placeholder="Nhập email khách hàng">
+                                                placeholder="Nhập email khách hàng" value="{{ old('emailEdit') }}">
                                             @error('emailEdit')
                                                 <div class="text-danger mt-2">{{ $message }}</div>
                                             @enderror
@@ -169,7 +177,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="edit_age">Tuổi</label>
                                             <input type="number" name="ageEdit" class="form-control" id="edit_age"
-                                                placeholder="Nhập tuổi khách hàng">
+                                                placeholder="Nhập tuổi khách hàng"  value="{{ old('ageEdit') }}">
                                             @error('ageEdit')
                                                 <div class="text-danger mt-2">{{ $message }}</div>
                                             @enderror
@@ -177,7 +185,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="edit_weight">Cân nặng</label>
                                             <input type="number" name="weightEdit" class="form-control"
-                                                id="edit_weight" placeholder="Nhập cân nặng khách hàng">
+                                                id="edit_weight" placeholder="Nhập cân nặng khách hàng" value="{{ old('weightEdit') }}">
                                             @error('weightEdit')
                                                 <div class="text-danger mt-2">{{ $message }}</div>
                                             @enderror
@@ -240,7 +248,7 @@
                                     style="width: 100%;" aria-describedby="buttons-datatables_info">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>STT</th>
                                             <th>Tên khách hàng</th>
                                             <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
@@ -301,197 +309,386 @@
 
     <script>
         $(document).ready(function() {
+            $(document).ready(function() {
+                // edit validation
+                @if ($errors->has('tax_code_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('name_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('email_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('phone_edit'))
+                    $('#editSupplierModal').modal('show');
+                @elseif ($errors->has('address_edit'))
+                    $('#editSupplierModal').modal('show');
+                @endif
+                //create validation
+                @if ($errors->has('tax_code'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('name'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('email'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('phone'))
+                    $('#createSupplierModal').modal('show');
+                @elseif ($errors->has('address'))
+                    $('#createSupplierModal').modal('show');
+                @endif
 
-            var table = $('#example').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route('admin.customers.index') }}',
-                    data: function(d) {
-                        d.startDate = $('#start-date').val();
-                        d.endDate = $('#end-date').val();
-                    }
-                },
-                columns: [{
-                        data: 'id'
-                    },
-                    {
-                        data: 'name'
-                    },
-                    {
-                        data: 'phone'
-                    },
-                    {
-                        data: 'address'
-                    },
-                    {
-                        data: 'email'
-                    },
-                    {
-                        data: 'age'
-                    },
-                    {
-                        data: 'weight'
-                    },
-                    {
-                        data: 'created_at'
-                    },
-                    {
-                        data: 'updated_at'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                dom: 'Bfrtip',
-                language: {
-                    "sEmptyTable": "Không có dữ liệu trong bảng",
-                    "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
-                    "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-                    "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
-                    "sLengthMenu": "Hiển thị _MENU_ mục",
-                    "sLoadingRecords": "Đang tải...",
-                    "sProcessing": "Đang xử lý...",
-                    "sSearch": "Tìm kiếm:",
-                    "sZeroRecords": "Không tìm thấy kết quả nào",
-                    "oPaginate": {
-                        "sFirst": "Đầu",
-                        "sLast": "Cuối",
-                        "sNext": "Kế tiếp",
-                        "sPrevious": "Trước"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Sắp xếp tăng dần",
-                        "sSortDescending": ": Sắp xếp giảm dần"
-                    }
-                },
-                buttons: [{
-                        extend: 'excel',
-                        text: 'Xuất Excel',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
-                            }
+                //show create modal
+                $('#createSupplierBtn').on('click', function() {
+                    $('#createSupplierModal').modal('show'); // Show the modal
+                });
+
+                // show edit modal
+                $('#supplierDataTable tbody').on('click', '.btn-warning', function() {
+                    var supplierId = $(this).data('id');
+                    var taxCode = $(this).data('tax_code');
+                    var name = $(this).data('name');
+                    var email = $(this).data('email');
+                    var phone = $(this).data('phone');
+                    var address = $(this).data('address');
+                    console.log(supplierId);
+
+                    // Điền dữ liệu vào các trường của modal sửa
+                    $('#edit_supplier_id').val(supplierId);
+                    $('#tax_code_edit').val(taxCode);
+                    $('#name_edit').val(name);
+                    $('#email_edit').val(email);
+                    $('#phone_edit').val(phone);
+                    $('#address_edit').val(address);
+
+
+                    // Hiện modal sửa
+                    $('#editSupplierModal').modal('show');
+                });
+
+                $('#editSupplierModal').on('show.bs.modal', function() {
+                    var id = $('#edit_supplier_id').val() ?? '';
+
+                    $('#editForm').attr({
+                        'action': '{{ route('admin.suppliers.update', ':id') }}'.replace(
+                            ':id', id),
+                        'method': 'POST'
+                    });
+
+                });
+                var table = $('#supplierDataTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+
+                    ajax: {
+                        url: '{{ route('admin.suppliers.index') }}',
+                        data: function(d) {
+                            d.startDate = $('#start-date').val();
+                            d.endDate = $('#end-date').val();
                         }
                     },
-                    {
-                        extend: 'csv',
-                        text: 'Xuất CSV',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
-                            }
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'tax_code'
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'email'
+                        },
+                        {
+                            data: 'phone'
+                        },
+                        {
+                            data: 'address'
+                        },
+                        {
+                            data: 'created_at'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    dom: 'Bfrtip',
+                    language: {
+                        "sEmptyTable": "Không có dữ liệu trong bảng",
+                        "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                        "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                        "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
+                        "sLengthMenu": "Hiển thị _MENU_ mục",
+                        "sLoadingRecords": "Đang tải...",
+                        "sProcessing": "Đang xử lý...",
+                        "sSearch": "Tìm kiếm:",
+                        "sZeroRecords": "Không tìm thấy kết quả nào",
+                        "oPaginate": {
+                            "sFirst": "Đầu",
+                            "sLast": "Cuối",
+                            "sNext": "Kế tiếp",
+                            "sPrevious": "Trước"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Sắp xếp tăng dần",
+                            "sSortDescending": ": Sắp xếp giảm dần"
                         }
                     },
-                    {
-                        extend: 'pdf',
-                        text: 'Xuất PDF',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
+                    buttons: [{
+                            extend: 'excel',
+                            text: 'Xuất Excel',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                                }
                             }
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'Xuất CSV',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                                }
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: 'Xuất PDF',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                                }
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            text: 'In',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
+                                }
+                            }
+                        }
+                    ]
+
+                });
+
+                $('#filter-btn').click(function() {
+                    table.draw();
+                });
+            });
+
+            $(document).ready(function() {
+                @if ($errors->has('nameCreate'))
+                    $('#createCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('phoneCreate'))
+                    $('#createCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('addressCreate'))
+                    $('#createCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('emailCreate'))
+                    $('#createCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('ageCreate'))
+                    $('#createCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('weightCreate'))
+                    $('#createCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('nameEdit'))
+                    $('#editCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('phoneEdit'))
+                    $('#editCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('addressEdit'))
+                    $('#editCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('emailEdit'))
+                    $('#editCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('ageEdit'))
+                    $('#editCustomerModal').modal('show');
+                @endif
+                @if ($errors->has('weightEdit'))
+                    $('#editCustomerModal').modal('show');
+                @endif
+
+
+                $('#createCustomerBtn').on('click', function() {
+                    $('#createCustomerModal').modal('show');
+                });
+
+                $('#example tbody').on('click', '.btn-warning', function() {
+                    // Lấy dữ liệu từ các thuộc tính data-* của nút được click
+                    var customerId = $(this).data('id');
+                    var name = $(this).data('name');
+                    var phone = $(this).data('phone');
+                    var address = $(this).data('address');
+                    var email = $(this).data('email');
+                    var age = $(this).data('age');
+                    var weight = $(this).data('weight');
+
+                    // Điền dữ liệu vào các trường trong modal
+                    $('#edit_customer_id').val(customerId);
+                    $('#edit_name').val(name);
+                    $('#edit_phone').val(phone);
+                    $('#edit_address').val(address);
+                    $('#edit_email').val(email);
+                    $('#edit_age').val(age);
+                    $('#edit_weight').val(weight);
+
+                    // Hiển thị modal sửa
+                    $('#editCustomerModal').modal('show');
+                });
+
+                $('#editCustomerModal').on('show.bs.modal', function() {
+                    var id = $('#edit_customer_id').val() ?? '';
+
+                    $('#editForm').attr({
+                        'action': '{{ route('admin.customers.update', ':id') }}'.replace(
+                            ':id', id),
+                        'method': 'POST'
+                    });
+
+                });
+
+                var table = $('#example').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{{ route('admin.customers.index') }}',
+                        data: function(d) {
+                            d.startDate = $('#start-date').val();
+                            d.endDate = $('#end-date').val();
                         }
                     },
-                    {
-                        extend: 'print',
-                        text: 'In',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !==
-                                    12; // Ví dụ: Nếu cột `action` là cột số 12
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'phone'
+                        },
+                        {
+                            data: 'address'
+                        },
+                        {
+                            data: 'email'
+                        },
+                        {
+                            data: 'age'
+                        },
+                        {
+                            data: 'weight'
+                        },
+                        {
+                            data: 'created_at'
+                        },
+                        {
+                            data: 'updated_at'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    dom: 'Bfrtip',
+                    language: {
+                        "sEmptyTable": "Không có dữ liệu trong bảng",
+                        "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                        "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                        "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
+                        "sLengthMenu": "Hiển thị _MENU_ mục",
+                        "sLoadingRecords": "Đang tải...",
+                        "sProcessing": "Đang xử lý...",
+                        "sSearch": "Tìm kiếm:",
+                        "sZeroRecords": "Không tìm thấy kết quả nào",
+                        "oPaginate": {
+                            "sFirst": "Đầu",
+                            "sLast": "Cuối",
+                            "sNext": "Kế tiếp",
+                            "sPrevious": "Trước"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Sắp xếp tăng dần",
+                            "sSortDescending": ": Sắp xếp giảm dần"
+                        }
+                    },
+                    buttons: [{
+                            extend: 'excel',
+                            text: 'Xuất Excel',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !==
+                                        12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'Xuất CSV',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !==
+                                        12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: 'Xuất PDF',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !==
+                                        12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            text: 'In',
+                            exportOptions: {
+                                columns: function(idx, data, node) {
+                                    // Loại bỏ cột `action` khi xuất
+                                    return idx !==
+                                        12; // Ví dụ: Nếu cột `action` là cột số 12
+                                }
                             }
                         }
-                    }
-                ]
+                    ]
 
-            });
-            // table.on('xhr', function(e, settings, json) {
-            //     console.log("Dữ liệu nhận được:", json); // Hiển thị dữ liệu sau khi tải
-            // });
-            $('#filter-btn').click(function() {
-                table.draw();
-            });
-
-
-            @if ($errors->has('nameCreate'))
-                $('#createCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('phoneCreate'))
-                $('#createCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('addressCreate'))
-                $('#createCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('emailCreate'))
-                $('#createCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('ageCreate'))
-                $('#createCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('weightCreate'))
-                $('#createCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('nameEdit'))
-                $('#editCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('phoneEdit'))
-                $('#editCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('addressEdit'))
-                $('#editCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('emailEdit'))
-                $('#editCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('ageEdit'))
-                $('#editCustomerModal').modal('show');
-            @endif
-            @if ($errors->has('weightEdit'))
-                $('#editCustomerModal').modal('show');
-            @endif
-
-
-            $('#createCustomerBtn').on('click', function() {
-                $('#createCustomerModal').modal('show');
-            });
-
-            $('#example tbody').on('click', '.btn-edit', function() {
-                // console.log("Button clicked");
-                var row = $(this);
-                // console.log(row);
-                var data = $('#example').DataTable().row(row).data();
-                // console.log(data);
-                $('#edit_customer_id').val(data.id);
-                $('#edit_name').val(data.name);
-                $('#edit_phone').val(data.phone);
-                $('#edit_address').val(data.address);
-                $('#edit_email').val(data.email);
-                $('#edit_age').val(data.age);
-                $('#edit_weight').val(data.weight);
-
-                $('#editCustomerModal').modal('show');
-
-            });
-
-            $('#editCustomerModal').on('show.bs.modal', function() {
-                var id = $('#edit_customer_id').val() ?? '';
-
-                $('#editForm').attr({
-                    'action': '{{ route('admin.customers.update', ':id') }}'.replace(':id', id),
-                    'method': 'POST'
+                });
+                // table.on('xhr', function(e, settings, json) {
+                //     console.log("Dữ liệu nhận được:", json); // Hiển thị dữ liệu sau khi tải
+                // });
+                $('#filter-btn').click(function() {
+                    table.draw();
                 });
 
             });
+
+
+
+
 
             $(document).on('click', '.btn-delete', function(e) {
                 e.preventDefault();

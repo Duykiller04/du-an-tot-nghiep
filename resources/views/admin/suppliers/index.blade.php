@@ -14,7 +14,7 @@
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Danh sách loại bệnh</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Nhà cung cấp</a></li>
                             <li class="breadcrumb-item active">Danh sách</li>
                         </ol>
                     </div>
@@ -396,7 +396,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
                                 }
                             }
                         },
@@ -406,7 +406,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
                                 }
                             }
                         },
@@ -416,7 +416,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
                                 }
                             }
                         },
@@ -426,7 +426,7 @@
                             exportOptions: {
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
-                                    return idx !== 8; // Ví dụ: Nếu cột `action` là cột số 8
+                                    return idx !== 7; // Ví dụ: Nếu cột `action` là cột số 7
                                 }
                             }
                         }
