@@ -21,8 +21,9 @@
     </div>
 
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
             <h4 class="card-title">Thông tin đơn thuốc</h4>
+            <a href="{{ route('admin.prescriptions.index') }}" class="btn btn-primary">Quay lại</a>
         </div>
         <div class="card-body">
             <div class="mb-3">
@@ -108,9 +109,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <div class="text-end m-3">
-        <a href="{{ route('admin.prescriptions.index') }}" class="btn btn-primary">Quay lại</a>
     </div>
 @endsection

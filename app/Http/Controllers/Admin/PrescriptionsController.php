@@ -28,7 +28,20 @@ class PrescriptionsController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = Prescription::with('prescriptionDetails')->get();
+            $data = Prescription::with('prescriptionDetails');
+
+            if (request()->has('startDate') && request()->has('endDate')) {
+                $startDate = request()->get('startDate');
+                $endDate = request()->get('endDate');
+                
+                if ($startDate && $endDate) {
+                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+    
+                    $data->whereBetween('created_at', [$startDate, $endDate]);
+                }
+            }
+
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('gender', function ($row) {

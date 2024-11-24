@@ -69,12 +69,12 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Mã dụng cụ</th>
-                                    <th>Danh mục</th>
                                     <th>Tên dụng cụ</th>
                                     <th>Ảnh dụng cụ</th>
                                     <th>Giá nhập</th>
                                     <th>Giá bán</th>
                                     <th>Ngày hết hạn</th>
+                                    <th>Danh mục</th>
                                     <th>Nhà cung cấp</th>
                                     <th>Số lượng</th>
                                     <th>Thời gian tạo</th>
@@ -142,10 +142,6 @@
                         data: 'medicine_code'
                     },
                     {
-                        data: 'category.name',
-                        name: 'category.name'
-                    },
-                    {
                         data: 'name'
                     },
                     {
@@ -162,6 +158,10 @@
                     },
                     {
                         data: 'expiration_date'
+                    },
+                    {
+                        data: 'category.name',
+                        name: 'category.name'
                     },
                     {
                         data: 'suppliers',
@@ -209,7 +209,7 @@
                         text: 'Sao chép',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 10; // Ẩn cột "Action"
+                                return idx !== 11; // Ẩn cột "Action"
                             }
                         }
                     },
@@ -218,7 +218,7 @@
                         text: 'Xuất CSV',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 10; // Ẩn cột "Action"
+                                return idx !== 11; // Ẩn cột "Action"
                             }
                         }
                     },
@@ -227,7 +227,7 @@
                         text: 'Xuất Excel',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 10; // Ẩn cột "Action"
+                                return idx !== 11; // Ẩn cột "Action"
                             }
                         }
                     },
@@ -236,7 +236,7 @@
                         text: 'Xuất PDF',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 10; // Ẩn cột "Action"
+                                return idx !== 11; // Ẩn cột "Action"
                             }
                         }
                     },
@@ -245,7 +245,7 @@
                         text: 'In',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 10; // Ẩn cột "Thao tác"
+                                return idx !== 11; // Ẩn cột "Thao tác"
                             }
                         }
                     }
