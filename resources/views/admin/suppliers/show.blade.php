@@ -32,35 +32,34 @@
                 <div class="card-body">
                     <div class="live-preview">
                         <div class="live-preview">
-                            <div class="row gy-4">
-                                <div class="col-6">
-                                    <div>
-                                        <label for="tax_code" class="form-label">Tax code</label>
-                                        <input type="text" class="form-control" id="tax_code" name="tax_code"
-                                            value="{{ $supplier->tax_code }}" disabled>
-                                    </div>
-                                    <div class="mt-3">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                            value="{{ $supplier->name }}" disabled>
-                                    </div>
-                                    <div class="mt-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                            value="{{ $supplier->email }}" disabled>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div>
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone"
-                                            value="{{ $supplier->phone }}" disabled>
-                                    </div>
-                                    <div class="mt-3">
-                                        <label for="address" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="address" name="address"
-                                            value="{{ $supplier->address }}" disabled>
-                                    </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Mã số thuế:</th>
+                                                    <td class="text-muted">{{ $supplier->tax_code }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Tên nhà cung cấp:</th>
+                                                    <td class="text-muted">{{ $supplier->name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Email:</th>
+                                                    <td class="text-muted">{{ $supplier->email }}</td>
+                                                </tr>
+                    
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Số điện thoại:</th>
+                                                    <td class="text-muted">{{ $supplier->phone }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Địa chỉ:</th>
+                                                    <td class="text-muted">{{ $supplier->address }}</td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

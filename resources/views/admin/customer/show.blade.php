@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-Chi tiết User
+Chi tiết Customer
 @endsection
 
 @section('content')
@@ -11,12 +11,12 @@ Chi tiết User
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Chi tiết Customer</h4>
+                <h4 class="mb-sm-0">Chi tiết khách hàng</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Customer</a></li>
-                        <li class="breadcrumb-item active">Chi tiết Customer</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">khách hàng</a></li>
+                        <li class="breadcrumb-item active">Chi tiết khách hàng</li>
                     </ol>
                 </div>
             </div>
@@ -30,24 +30,24 @@ Chi tiết User
                     <table class="table table-borderless mb-0">
                         <tbody>
                             <tr>
-                                <th class="ps-0" scope="row">Full Name:</th>
+                                <th class="ps-0" scope="row">Tên khách hàng:</th>
                                 <td class="text-muted">{{ $customer->name }}</td>
                             </tr>
                             <tr>
-                                <th class="ps-0" scope="row">Phone:</th>
+                                <th class="ps-0" scope="row">Số điện thoại:</th>
                                 <td class="text-muted">{{ $customer->phone }}</td>
                             </tr>
                             <tr>
-                                <th class="ps-0" scope="row">Address:</th>
+                                <th class="ps-0" scope="row">Địa chỉ:</th>
                                 <td class="text-muted">{{ $customer->address }}</td>
                             </tr>
 
                             <tr>
-                                <th class="ps-0" scope="row">Age:</th>
+                                <th class="ps-0" scope="row">Tuổi:</th>
                                 <td class="text-muted">{{ $customer->age }}</td>
                             </tr>
                             <tr>
-                                <th class="ps-0" scope="row">weight:</th>
+                                <th class="ps-0" scope="row">Cân nặng:</th>
                                 <td class="text-muted">{{ $customer->weight }}</td>
                             </tr>
                     </tbody>
