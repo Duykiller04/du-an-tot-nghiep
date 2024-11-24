@@ -113,8 +113,8 @@
                                         <label for="password" class="form-label">Vai trò <span
                                                 class="text-danger">*</span></label>
                                         <select name="type" id="" class="form-select">
-                                            <option value="admin" selected>Admin</option>
-                                            <option value="staff">Staff</option>
+                                            <option value="admin" selected>Quản trị viên</option>
+                                            <option value="staff">Nhân viên</option>
                                         </select>
                                     </div>
                                 </div>

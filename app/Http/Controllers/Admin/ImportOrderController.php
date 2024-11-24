@@ -258,11 +258,11 @@ class ImportOrderController extends Controller
             $importOrder->delete();
 
             // Đưa người dùng trở lại trang danh sách với thông báo thành công
-            return redirect()->route('admin.importorder.index')->with('success', 'Đơn hàng đã được xóa thành công.');
+            return redirect()->route('admin.importorder.index')->with('success', 'Phiếu nhập thuốc đã được xóa thành công.');
         }
 
         // Nếu không tìm thấy bản ghi, quay lại với thông báo lỗi
-        return redirect()->route('admin.importorder.index')->with('error', 'Đơn hàng không tồn tại.');
+        return redirect()->route('admin.importorder.index')->with('error', 'Phiếu nhập thuốc không tồn tại.');
     }
 
 

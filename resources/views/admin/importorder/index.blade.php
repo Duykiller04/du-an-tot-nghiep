@@ -189,7 +189,7 @@
                 buttons: [{
                         extend: 'excelHtml5',
                         title: 'Import Orders',
-                        className: 'btn btn-success',
+                        className: 'btn btn-deepskyblue', // Thêm màu xanh nước biển cho nút Excel
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
@@ -197,7 +197,7 @@
                     {
                         extend: 'csvHtml5',
                         title: 'Import Orders',
-                        className: 'btn btn-info',
+                        className: 'btn btn-deepskyblue', // Thêm màu xanh nước biển cho nút CSV
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
@@ -205,7 +205,7 @@
                     {
                         extend: 'pdfHtml5',
                         title: 'Import Orders',
-                        className: 'btn btn-danger',
+                        className: 'btn btn-deepskyblue', // Thêm màu xanh nước biển cho nút PDF
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
@@ -213,12 +213,13 @@
                     {
                         extend: 'print',
                         title: 'Import Orders',
-                        className: 'btn btn-warning',
+                        className: 'btn btn-deepskyblue', // Thêm màu xanh nước biển cho nút Print
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5] // Xuất luôn cột ID
                         }
                     }
                 ]
+
             });
 
             // Khi thay đổi giá trị trong các trường ngày, vẽ lại bảng

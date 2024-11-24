@@ -38,10 +38,15 @@ class UserController extends Controller
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
+
             return DataTables::of($query)
                 ->addColumn('image', function ($row) {
                     $url = Storage::url($row->image);
                     return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
+                })
+                ->addColumn('created_at', function ($row) {
+                    // Kiểm tra nếu có deleted_at, nếu không thì trả về null hoặc dấu -
+                    return $row->created_at ? \Carbon\Carbon::parse($row->created_at)->format('d/m/Y') : '-';
                 })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.users.show', $row->id);  // Sửa đường dẫn
@@ -49,13 +54,13 @@ class UserController extends Controller
                     $deleteUrl = route('admin.users.destroy', $row->id);  // Sửa đường dẫn
 
                     return '
-            <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
-            <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
-            <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                ' . csrf_field() . method_field('DELETE') . '
-                <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-            </form>
-            ';
+                    <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
+                    <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
+                    <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                    </form>
+                    ';
                 })
                 ->rawColumns(['image', 'action'])
                 ->make(true);

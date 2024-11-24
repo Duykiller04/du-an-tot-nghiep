@@ -55,13 +55,12 @@
                             style="width: 100%">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>STT</th>
                                     <th>Tên</th>
                                     <th>Ảnh</th>
                                     <th>Email</th>
                                     <th>Vai trò</th>
                                     <th>Ngày tạo</th>
-                                    <th>Ngày cập nhật</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -137,19 +136,16 @@
                         data: 'type',
                         render: function(data, type, row) {
                             if (data === 'admin') {
-                                return '<span class="badge bg-primary">Administrator</span>';
+                                return '<span class="badge bg-primary">Quản trị viên</span>';
                             } else if (data === 'staff') {
-                                return '<span class="badge bg-success">Staff Member</span>';
+                                return '<span class="badge bg-success">Nhân Viên</span>';
                             } else {
-                                return '<span class="badge bg-secondary">Unknown</span>';
+                                return '<span class="badge bg-secondary">Không có</span>';
                             }
                         }
                     },
                     {
                         data: 'created_at'
-                    },
-                    {
-                        data: 'updated_at'
                     },
                     {
                         data: 'action',
