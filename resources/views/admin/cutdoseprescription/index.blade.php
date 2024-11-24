@@ -70,10 +70,10 @@
                                             <a href="{{ route('admin.cutDosePrescriptions.edit', $item) }}"
                                                 class="btn btn-info mb-3">Sửa</a>
                                             <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}"
-                                                method="post">
+                                                method="post"  id="delete-form-{{ $item->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button onclick="return confirm('Chắc chắn không?')" type="submit"
+                                                <button onclick="confirmDelete({{ $item->id }})" type="button"
                                                     class="btn btn-danger mb-3 btn-delete">Xóa
                                                 </button>
                                             </form>
@@ -113,11 +113,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         new DataTable("#example", {
             order: [
-                [0, 'desc']
+                [0, 'asc']
             ],
             language: {
                 "sEmptyTable": "Không có dữ liệu trong bảng",
@@ -141,5 +142,27 @@
                 }
             },
         });
+        function confirmDelete(id) {
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa không??',
+        text: "Hành động này không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.getElementById(`delete-form-${id}`);
+            if (form) {
+                form.submit();
+            } else {
+                console.error(`Không tìm thấy form với ID: delete-form-${id}`);
+            }
+        }
+    });
+}
+
     </script>
 @endsection
