@@ -142,188 +142,258 @@
                             @endphp
 
                             @foreach ($detailsOld as $i => $detail)
-                            <div class="mb-3 border p-3 rounded detail-row" data-detail-index="{{ $i }}" style="background-color: #7c76761f">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <button class="btn btn-success btn-sm" type="button" data-bs-toggle="collapse"
+                                <div class="mb-3 border p-3 rounded detail-row" data-detail-index="{{ $i }}"
+                                    style="background-color: #7c76761f">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button class="btn btn-success btn-sm" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseDetails{{ $i }}" aria-expanded="false"
                                             aria-controls="collapseDetails{{ $i }}">
-                                        <p class="mt-1 mb-0">Chi tiết thuốc</p>
-                                    </button>
-                                    <button type="button" class="btn btn-danger remove-detail" data-detail-index="{{ $i }}">Xóa chi tiết</button>
-                                </div>
-                                <div class="collapse mt-2" id="collapseDetails{{ $i }}">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="details[{{ $i }}][type_product]" class="form-label">Loại sản phẩm:</label>
-                                            <select name="details[{{ $i }}][type_product]" class="form-select">
-                                                <option value="0" {{ old("details.$i.type_product") == '0' ? 'selected' : '' }}>Thuốc</option>
-                                                <option value="1" {{ old("details.$i.type_product") == '1' ? 'selected' : '' }}>Dụng cụ</option>
-                                            </select>
-                                            @error("details.$i.type_product")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][name]" class="form-label">Tên thuốc:</label>
-                                            <input type="text" name="details[{{ $i }}][name]" class="form-control" value="{{ old("details.$i.name") }}">
-                                            @error("details.$i.name")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][category_id]" class="form-label">Danh mục thuốc:</label>
-                                            <select name="details[{{ $i }}][category_id]" class="form-select">
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}" {{ old("details.$i.category_id") == $category->id ? 'selected' : '' }}>
-                                                        {{ $category->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error("details.$i.category_id")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][medicine_code]" class="form-label">Mã thuốc:</label>
-                                            <input type="text" name="details[{{ $i }}][medicine_code]" class="form-control" value="{{ old("details.$i.medicine_code") }}">
-                                            @error("details.$i.medicine_code")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <div class="m-2">
-                                                <label class="form-label">Đơn vị:</label>
-                                                <div class="mb-3 units" data-detail-index="{{ $i }}">
-                                                    @foreach ($detail['units'] as $unitIndex => $unit)
-                                                        <div class="row productNew mt-3 unit-row" data-unit-index="{{ $unitIndex }}">
-                                                            <div class="row mb-3 form-item mt-3">
-                                                                <div class="col-5">
-                                                                    <label class="form-label" for="details[{{ $i }}][units][{{ $unitIndex }}][quantity]">Số lượng</label>
-                                                                    <input type="number" class="form-control" name="details[{{ $i }}][units][{{ $unitIndex }}][quantity]"
-                                                                           value="{{ old("details.$i.units.$unitIndex.quantity", $unit['quantity']) }}" oninput="calculateDetailTotal({{ $i }})" data-unit-factor="1">
-                                                                    @error("details.$i.units.$unitIndex.quantity")
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                    @enderror
-                                                                </div>
-                                                                <div class="col-5">
-                                                                    <label for="">Đơn vị</label>
-                                                                    <select name="details[{{ $i }}][units][{{ $unitIndex }}][unit]" class="form-control unit-selector">
-                                                                        <option value="">Chọn đơn vị</option>
-                                                                        @foreach ($units as $donvi)
-                                                                            <option value="{{ $donvi->id }}" {{ old("details.$i.units.$unitIndex.unit", $unit['unit']) == $donvi->id ? 'selected' : '' }} data-unit-factor="{{ $donvi->factor }}">{{ $donvi->name }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    @error("details.$i.units.$unitIndex.unit")
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                    @enderror
-                                                                </div>
-                                                                <div class="col-2 d-flex align-items-end">
-                                                                    @if ($unitIndex !== 0)
-                                                                        <button type="button" class="btn btn-danger remove-unit" data-unit-index="{{ $unitIndex }}" style="font-size: 0.8rem; padding: 0.5rem 0.8rem;">Xóa</button>
-                                                                    @endif
+                                            <p class="mt-1 mb-0">Chi tiết thuốc</p>
+                                        </button>
+                                        <button type="button" class="btn btn-danger remove-detail"
+                                            data-detail-index="{{ $i }}">Xóa chi tiết</button>
+                                    </div>
+                                    <div class="collapse mt-2" id="collapseDetails{{ $i }}">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="details[{{ $i }}][type_product]"
+                                                    class="form-label">Loại sản phẩm:</label>
+                                                <select name="details[{{ $i }}][type_product]"
+                                                    class="form-select">
+                                                    <option value="0"
+                                                        {{ old("details.$i.type_product") == '0' ? 'selected' : '' }}>Thuốc
+                                                    </option>
+                                                    <option value="1"
+                                                        {{ old("details.$i.type_product") == '1' ? 'selected' : '' }}>Dụng
+                                                        cụ</option>
+                                                </select>
+                                                @error("details.$i.type_product")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][name]" class="form-label">Tên
+                                                    thuốc:</label>
+                                                <input type="text" name="details[{{ $i }}][name]"
+                                                    class="form-control" value="{{ old("details.$i.name") }}">
+                                                @error("details.$i.name")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][category_id]"
+                                                    class="form-label">Danh mục thuốc:</label>
+                                                <select name="details[{{ $i }}][category_id]"
+                                                    class="form-select">
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}"
+                                                            {{ old("details.$i.category_id") == $category->id ? 'selected' : '' }}>
+                                                            {{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error("details.$i.category_id")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][medicine_code]"
+                                                    class="form-label">Mã thuốc:</label>
+                                                <input type="text" name="details[{{ $i }}][medicine_code]"
+                                                    class="form-control" value="{{ old("details.$i.medicine_code") }}">
+                                                @error("details.$i.medicine_code")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <div class="m-2">
+                                                    <label class="form-label">Đơn vị:</label>
+                                                    <div class="mb-3 units" data-detail-index="{{ $i }}">
+                                                        @foreach ($detail['units'] as $unitIndex => $unit)
+                                                            <div class="row productNew mt-3 unit-row"
+                                                                data-unit-index="{{ $unitIndex }}">
+                                                                <div class="row mb-3 form-item mt-3">
+                                                                    <div class="col-5">
+                                                                        <label class="form-label"
+                                                                            for="details[{{ $i }}][units][{{ $unitIndex }}][quantity]">Số
+                                                                            lượng</label>
+                                                                        <input type="number" class="form-control"
+                                                                            name="details[{{ $i }}][units][{{ $unitIndex }}][quantity]"
+                                                                            value="{{ old("details.$i.units.$unitIndex.quantity", $unit['quantity']) }}"
+                                                                            oninput="calculateDetailTotal({{ $i }})"
+                                                                            data-unit-factor="1">
+                                                                        @error("details.$i.units.$unitIndex.quantity")
+                                                                            <div class="text-danger">{{ $message }}</div>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <div class="col-5">
+                                                                        <label for="">Đơn vị</label>
+                                                                        <select
+                                                                            name="details[{{ $i }}][units][{{ $unitIndex }}][unit]"
+                                                                            class="form-control unit-selector">
+                                                                            <option value="">Chọn đơn vị</option>
+                                                                            @foreach ($units as $donvi)
+                                                                                <option value="{{ $donvi->id }}"
+                                                                                    {{ old("details.$i.units.$unitIndex.unit", $unit['unit']) == $donvi->id ? 'selected' : '' }}
+                                                                                    data-unit-factor="{{ $donvi->factor }}">
+                                                                                    {{ $donvi->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error("details.$i.units.$unitIndex.unit")
+                                                                            <div class="text-danger">{{ $message }}</div>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <div class="col-2 d-flex align-items-end">
+                                                                        @if ($unitIndex !== 0)
+                                                                            <button type="button"
+                                                                                class="btn btn-danger remove-unit"
+                                                                                data-unit-index="{{ $unitIndex }}"
+                                                                                style="font-size: 0.8rem; padding: 0.5rem 0.8rem;">Xóa</button>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-primary add-unit"
+                                                            data-detail-index="{{ $i }}">Thêm đơn vị</button>
+                                                    </div>
                                                 </div>
-                                                <div class="d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-primary add-unit" data-detail-index="{{ $i }}">Thêm đơn vị</button>
+
+                                                <label for="details[{{ $i }}][price_import]"
+                                                    class="form-label">Giá nhập:</label>
+                                                <input type="number" name="details[{{ $i }}][price_import]"
+                                                    class="form-control" step="0.01"
+                                                    value="{{ old("details.$i.price_import") }}"
+                                                    oninput="calculateDetailTotal({{ $i }})">
+                                                @error("details.$i.price_import")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][price_sale]"
+                                                    class="form-label">Giá bán:</label>
+                                                <input type="number" name="details[{{ $i }}][price_sale]"
+                                                    class="form-control" step="0.01"
+                                                    value="{{ old("details.$i.price_sale") }}">
+                                                @error("details.$i.price_sale")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][total]"
+                                                    class="form-label">Tổng:</label>
+                                                <input type="number" name="details[{{ $i }}][total]"
+                                                    class="form-control" readonly value="{{ old("details.$i.total") }}">
+                                                <div class="text-danger" id="total-error-{{ $i }}"></div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <label for="details[{{ $i }}][registration_number]"
+                                                    class="form-label">Số đăng ký:</label>
+                                                <input type="text"
+                                                    name="details[{{ $i }}][registration_number]"
+                                                    class="form-control"
+                                                    value="{{ old("details.$i.registration_number") }}">
+                                                @error("details.$i.registration_number")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][origin]" class="form-label">Xuất
+                                                    xứ:</label>
+                                                <input type="text" name="details[{{ $i }}][origin]"
+                                                    class="form-control" value="{{ old("details.$i.origin") }}">
+                                                @error("details.$i.origin")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][packaging_specification]"
+                                                    class="form-label">Quy cách đóng gói:</label>
+                                                <input type="text"
+                                                    name="details[{{ $i }}][packaging_specification]"
+                                                    class="form-control"
+                                                    value="{{ old("details.$i.packaging_specification") }}">
+                                                @error("details.$i.packaging_specification")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <div class="product-info">
+                                                    <label for="details[{{ $i }}][active_ingredient]"
+                                                        class="form-label">Hoạt chất:</label>
+                                                    <input type="text"
+                                                        name="details[{{ $i }}][active_ingredient]"
+                                                        class="form-control"
+                                                        value="{{ old("details.$i.active_ingredient") }}">
+                                                    @error("details.$i.active_ingredient")
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
-                                            </div>
-                            
-                                            <label for="details[{{ $i }}][price_import]" class="form-label">Giá nhập:</label>
-                                            <input type="number" name="details[{{ $i }}][price_import]" class="form-control" step="0.01"
-                                                   value="{{ old("details.$i.price_import") }}" oninput="calculateDetailTotal({{ $i }})">
-                                            @error("details.$i.price_import")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][price_sale]" class="form-label">Giá bán:</label>
-                                            <input type="number" name="details[{{ $i }}][price_sale]" class="form-control" step="0.01"
-                                                   value="{{ old("details.$i.price_sale") }}">
-                                            @error("details.$i.price_sale")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][total]" class="form-label">Tổng:</label>
-                                            <input type="number" name="details[{{ $i }}][total]" class="form-control" readonly value="{{ old("details.$i.total") }}">
-                                            <div class="text-danger" id="total-error-{{ $i }}"></div>
-                                        </div>
-                            
-                                        <div class="col-6">
-                                            <label for="details[{{ $i }}][registration_number]" class="form-label">Số đăng ký:</label>
-                                            <input type="text" name="details[{{ $i }}][registration_number]" class="form-control" value="{{ old("details.$i.registration_number") }}">
-                                            @error("details.$i.registration_number")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][origin]" class="form-label">Xuất xứ:</label>
-                                            <input type="text" name="details[{{ $i }}][origin]" class="form-control" value="{{ old("details.$i.origin") }}">
-                                            @error("details.$i.origin")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][packaging_specification]" class="form-label">Quy cách đóng gói:</label>
-                                            <input type="text" name="details[{{ $i }}][packaging_specification]" class="form-control" value="{{ old("details.$i.packaging_specification") }}">
-                                            @error("details.$i.packaging_specification")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <div class="product-info">
-                                                <label for="details[{{ $i }}][active_ingredient]" class="form-label">Hoạt chất:</label>
-                                                <input type="text" name="details[{{ $i }}][active_ingredient]" class="form-control" value="{{ old("details.$i.active_ingredient") }}">
-                                                @error("details.$i.active_ingredient")
-                                                <div class="text-danger">{{ $message }}</div>
+
+                                                <div class="product-info">
+                                                    <label for="details[{{ $i }}][concentration]"
+                                                        class="form-label">Hàm lượng:</label>
+                                                    <input type="text"
+                                                        name="details[{{ $i }}][concentration]"
+                                                        class="form-control"
+                                                        value="{{ old("details.$i.concentration") }}">
+                                                    @error("details.$i.concentration")
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="product-info">
+                                                    <label for="details[{{ $i }}][dosage]"
+                                                        class="form-label">Liều lượng:</label>
+                                                    <input type="text" name="details[{{ $i }}][dosage]"
+                                                        class="form-control" value="{{ old("details.$i.dosage") }}">
+                                                    @error("details.$i.dosage")
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="product-info">
+                                                    <label for="details[{{ $i }}][administration_route]"
+                                                        class="form-label">Đường dùng:</label>
+                                                    <input type="text"
+                                                        name="details[{{ $i }}][administration_route]"
+                                                        class="form-control"
+                                                        value="{{ old("details.$i.administration_route") }}">
+                                                    @error("details.$i.administration_route")
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <label for="details[{{ $i }}][temperature]"
+                                                    class="form-label">Nhiệt độ bảo quản:</label>
+                                                <input type="number" name="details[{{ $i }}][temperature]"
+                                                    class="form-control" value="{{ old("details.$i.temperature") }}">
+                                                @error("details.$i.temperature")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][moisture]"
+                                                    class="form-label">Độ ẩm bảo quản:</label>
+                                                <input type="number" name="details[{{ $i }}][moisture]"
+                                                    class="form-control" value="{{ old("details.$i.moisture") }}">
+                                                @error("details.$i.moisture")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][expiration_date]"
+                                                    class="form-label">Ngày hết hạn:</label>
+                                                <input type="date"
+                                                    name="details[{{ $i }}][expiration_date]"
+                                                    class="form-control"
+                                                    value="{{ old("details.$i.expiration_date") }}">
+                                                @error("details.$i.expiration_date")
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+
+                                                <label for="details[{{ $i }}][image]" class="form-label">Hình
+                                                    ảnh:</label>
+                                                <input type="file" name="details[{{ $i }}][image]"
+                                                    class="form-control">
+                                                @error("details.$i.image")
+                                                    <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                            
-                                            <div class="product-info">
-                                                <label for="details[{{ $i }}][concentration]" class="form-label">Hàm lượng:</label>
-                                                <input type="text" name="details[{{ $i }}][concentration]" class="form-control" value="{{ old("details.$i.concentration") }}">
-                                                @error("details.$i.concentration")
-                                                <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            
-                                            <div class="product-info">
-                                                <label for="details[{{ $i }}][dosage]" class="form-label">Liều lượng:</label>
-                                                <input type="text" name="details[{{ $i }}][dosage]" class="form-control" value="{{ old("details.$i.dosage") }}">
-                                                @error("details.$i.dosage")
-                                                <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            
-                                            <div class="product-info">
-                                                <label for="details[{{ $i }}][administration_route]" class="form-label">Đường dùng:</label>
-                                                <input type="text" name="details[{{ $i }}][administration_route]" class="form-control" value="{{ old("details.$i.administration_route") }}">
-                                                @error("details.$i.administration_route")
-                                                <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            
-                                            <label for="details[{{ $i }}][temperature]" class="form-label">Nhiệt độ bảo quản:</label>
-                                            <input type="number" name="details[{{ $i }}][temperature]" class="form-control" value="{{ old("details.$i.temperature") }}">
-                                            @error("details.$i.temperature")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][moisture]" class="form-label">Độ ẩm bảo quản:</label>
-                                            <input type="number" name="details[{{ $i }}][moisture]" class="form-control" value="{{ old("details.$i.moisture") }}">
-                                            @error("details.$i.moisture")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][expiration_date]" class="form-label">Ngày hết hạn:</label>
-                                            <input type="date" name="details[{{ $i }}][expiration_date]" class="form-control" value="{{ old("details.$i.expiration_date") }}">
-                                            @error("details.$i.expiration_date")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                            
-                                            <label for="details[{{ $i }}][image]" class="form-label">Hình ảnh:</label>
-                                            <input type="file" name="details[{{ $i }}][image]" class="form-control">
-                                            @error("details.$i.image")
-                                            <div class="text-danger">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            
                             @endforeach
                         </div>
                         <!-- Nút để thêm chi tiết thuốc -->
@@ -413,7 +483,7 @@
                     </div>`;
             }
 
-            
+
             document.getElementById('add-detail').addEventListener('click', function() {
                 detailCounter++;
                 const newDetail = `
@@ -428,53 +498,67 @@
                         <div class="collapse mt-2" id="collapseDetails${detailCounter}">
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="details[${detailCounter}][type_product]" class="form-label">Loại sản phẩm:</label>
-                                    <select name="details[${detailCounter}][type_product]" class="form-select" onchange="toggleInputs(${detailCounter})">
-                                        <option value="0">Thuốc</option>
-                                        <option value="1">Dụng cụ</option>
-                                    </select>
-    
-                                    <label for="details[${detailCounter}][name]" class="form-label">Tên thuốc:</label>
-                                    <input type="text" name="details[${detailCounter}][name]" class="form-control">
-    
-                                    <label for="details[${detailCounter}][category_id]" class="form-label">Danh mục thuốc:</label>
-                                    <select name="details[${detailCounter}][category_id]" class="form-select">
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-    
-                                    <label for="details[${detailCounter}][medicine_code]" class="form-label">Mã thuốc:</label>
-                                    <input type="text" name="details[${detailCounter}][medicine_code]" class="form-control">
-                                    <div class="text-danger" id="medicine-code-error-${detailCounter}"></div>
-    
-                                    <div class="m-2">
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][type_product]" class="form-label">Loại sản phẩm:</label>
+                                        <select name="details[${detailCounter}][type_product]" class="form-select" onchange="toggleInputs(${detailCounter})">
+                                            <option value="0">Thuốc</option>
+                                            <option value="1">Dụng cụ</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="details[${detailCounter}][name]" class="form-label">Tên thuốc:</label>
+                                        <input type="text" name="details[${detailCounter}][name]" class="form-control">
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][category_id]" class="form-label">Danh mục thuốc:</label>
+                                        <select name="details[${detailCounter}][category_id]" class="form-select">
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][medicine_code]" class="form-label">Mã thuốc:</label>
+                                        <input type="text" name="details[${detailCounter}][medicine_code]" class="form-control">
+                                        <div class="text-danger" id="medicine-code-error-${detailCounter}"></div>
+                                    </div>
+
+                                    <div class="m-3">
                                         <label class="form-label">Đơn vị:</label>
-                                        <div class="mb-3 units" data-detail-index="${detailCounter}">
-                                            ${createUnitInput(detailCounter, 0)}
-                                        </div>
-                                        <div class="d-flex justify-content-end">
+                                        <div class="d-flex justify-content-end mb-2">
                                             <button type="button" class="btn btn-primary add-unit" data-detail-index="${detailCounter}">Thêm đơn vị</button>
                                         </div>
+                                        <div class="units" data-detail-index="${detailCounter}">
+                                            ${createUnitInput(detailCounter, 0)}
+                                        </div>
                                     </div>
-    
-                                    <label for="details[${detailCounter}][price_import]" class="form-label">Giá nhập:</label>
-                                    <div class="input-group mb-3">
-                                        <input type="number" name="details[${detailCounter}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal(${detailCounter})" placeholder="Nhập giá nhập">
-                                        <span class="input-group-text">VND</span>
+                                     
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][price_import]" class="form-label">Giá nhập:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="details[${detailCounter}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal(${detailCounter})" placeholder="Nhập giá nhập">
+                                            <span class="input-group-text">VND</span>
+                                        </div>
+                                        <div class="text-danger" id="import-price-error-${detailCounter}"></div>
                                     </div>
-                                    <div class="text-danger" id="import-price-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][price_sale]" class="form-label">Giá bán:</label>
-                                    <input type="number" name="details[${detailCounter}][price_sale]" class="form-control price-sale" step="0.01">
-                                    <div class="text-danger" id="price-sale-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][total]" class="form-label">Tổng:</label>
-                                    <div class="input-group mb-3">
-                                        <input type="number" name="details[${detailCounter}][total]" class="form-control total" placeholder="Tổng số tiền" readonly>
-                                        <span class="input-group-text">VND</span>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][price_sale]" class="form-label">Giá bán:</label>
+                                        <input type="number" name="details[${detailCounter}][price_sale]" class="form-control price-sale" step="0.01">
+                                        <div class="text-danger" id="price-sale-error-${detailCounter}"></div>
                                     </div>
-                                    <div class="text-danger" id="total-error-${detailCounter}"></div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][total]" class="form-label">Tổng:</label>
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="details[${detailCounter}][total]" class="form-control total" placeholder="Tổng số tiền" readonly>
+                                            <span class="input-group-text">VND</span>
+                                        </div>
+                                        <div class="text-danger" id="total-error-${detailCounter}"></div>
+                                    </div>
                                 </div>
     
                                 <div class="col-6">
@@ -580,42 +664,58 @@
         });
     </script>
 
-
-
     <script>
         function toggleInputs(detailIndex) {
             const typeProductSelect = document.querySelector(`select[name="details[${detailIndex}][type_product]"]`);
-            const productInfoElements = document.querySelectorAll(`#additionalInputs .product-info`);
+            if (!typeProductSelect) {
+                console.error('Không tìm thấy typeProductSelect');
+                return;
+            }
+
+            const productInfoElements = document.querySelectorAll(`.product-info`);
+            if (!productInfoElements) {
+                console.error('Không tìm thấy productInfoElements');
+                return;
+            }
 
             if (typeProductSelect.value === '0') { // Khi chọn "Thuốc"
                 productInfoElements.forEach(info => {
-                    info.style.display = 'block'; // Hiện thị tất cả các input và label
+                    info.style.display = 'block';
                 });
             } else if (typeProductSelect.value === '1') { // Khi chọn "Dụng cụ"
                 productInfoElements.forEach(info => {
-                    info.style.display = 'none'; // Ẩn tất cả các input và label
+                    info.style.display = 'none';
                 });
             } else {
                 productInfoElements.forEach(info => {
-                    info.style.display = 'none'; // Ẩn nếu không chọn loại
+                    info.style.display = 'none';
                 });
             }
         }
+
         document.addEventListener('DOMContentLoaded', function() {
+            let detailCounter = 0; // Gán giá trị mặc định nếu cần
             const typeProductSelect = document.querySelector(
-                `select[name="details[${detailCounter}][type_product]"]`);
-            toggleInputs(detailCounter); // Gọi hàm để khởi tạo trạng thái
+                `select[name="details[${detailCounter}][type_product]"]`
+            );
+            if (typeProductSelect) {
+                toggleInputs(detailCounter); // Gọi hàm để khởi tạo trạng thái
+            } else {
+                console.error('Không tìm thấy select cho type_product');
+            }
         });
     </script>
 
     <script>
         $(document).ready(function() {
             $("#supplier").select2({
-                allowClear: true,
-                dropdownAutoWidth: true
+                dropdownAutoWidth: true, // Tự động điều chỉnh chiều rộng dropdown
+                allowClear: false // Tắt chức năng xóa lựa chọn
             });
+
             $('.js-example-basic-single').select2({
-                dropdownAutoWidth: true
+                dropdownAutoWidth: true,
+                allowClear: false // Tắt chức năng xóa lựa chọn
             });
         });
     </script>

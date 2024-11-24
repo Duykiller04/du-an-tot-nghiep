@@ -72,8 +72,8 @@
 
                             <!-- Modal footer with Save and Close buttons -->
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Lưu</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -120,8 +120,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </div>
                     </form>
                 </div>
@@ -229,7 +229,7 @@
                     },
                     {
                         data: 'location'
-                    },  
+                    },
                     {
                         data: 'created_at'
                     },
@@ -361,6 +361,15 @@
                         form.submit();
                     }
                 });
+            });
+
+            // Kiểm tra và đóng modal khi có lỗi validate
+            $('#editStorageForm').on('submit', function(e) {
+                var form = $(this);
+                if (!form[0].checkValidity()) {
+                    e.preventDefault(); // Ngừng submit nếu có lỗi
+                    $('#editStorageModal').modal('hide'); // Đóng modal ngay khi bắt lỗi validate
+                }
             });
         });
     </script>
