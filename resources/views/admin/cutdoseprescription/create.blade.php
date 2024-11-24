@@ -72,7 +72,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="age">Tuổi (<span class="text-danger">*</span>)</label>
-                                <input type="number" class="form-control" id="age" name="age"
+                                <input type="number" class="form-control  @error('age') is-invalid @enderror" id="age" name="age"
                                     value="{{ old('age') }}">
                                 @error('age')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
@@ -141,17 +141,17 @@
                                 </button>
                             </div>
                         </div>
+                        <!-- Nút Lưu bệnh -->
+                        <div class="text-end mb-3 me-2">
+                            <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button" class="btn btn-primary w-sm">Quay
+                                    lại</button></a>
+                            <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
+                        </div>
                     </div>
                 </div>
             </div>
     </div>
-
-    <!-- Nút Lưu bệnh -->
-    <div class="text-end mb-3">
-        <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button" class="btn btn-primary w-sm">Quay
-                lại</button></a>
-        <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
-    </div>
+    
     </form>
     </div>
 @endsection

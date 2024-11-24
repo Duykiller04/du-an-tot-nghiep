@@ -152,10 +152,9 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>STT</th>
                                                 <th>Tên đơn vị</th>
                                                 <th>Thời gian tạo</th>
-                                                <th>Thời gian cập nhật</th>
                                                 <th>Thao tác</th>
                                             </tr>
                                         </thead>
@@ -255,10 +254,6 @@
                     {
                         data: 'created_at',
                         name: 'created_at'
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at'
                     },
                     {
                         data: 'action',

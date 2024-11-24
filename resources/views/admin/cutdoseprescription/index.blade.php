@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách đơn thuốt mẫu
+    Danh sách đơn thuốc mẫu
 @endsection
 
 @section('content')
@@ -37,7 +37,7 @@
 
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Bệnh</th>
                                 <th>Tên bệnh viện</th>
                                 <th>Tên bác sĩ</th>
@@ -45,20 +45,23 @@
                                 <th>Số điện thoại</th>
                                 <th>Tổng tiền</th>
                                 <th>Ngày thêm</th>
-                                <th>Action</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
 
                         <tbody>
+                            @php
+                                $stt = 1;
+                            @endphp
                             @foreach ($data as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $stt++ }}</td>
                                     <td>{{ $item->disease->disease_name }}</td>
                                     <td>{{ $item->name_hospital }}</td>
                                     <td>{{ $item->name_doctor }}</td>
-                                    <td>{{ date('m/d/Y', strtotime($item->age)) }}</td>
+                                    <td>{{ $item->age }}</td>
                                     <td>{{ $item->phone_doctor }}</td>
-                                    <td>{{ $item->total }}</td>
+                                    <td>{{ number_format($item->total) }} VNĐ</td>
                                     <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
@@ -71,7 +74,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button onclick="return confirm('Chắc chắn không?')" type="submit"
-                                                    class="btn btn-danger mb-3">Xóa
+                                                    class="btn btn-danger mb-3 btn-delete">Xóa
                                                 </button>
                                             </form>
                                         </div>
