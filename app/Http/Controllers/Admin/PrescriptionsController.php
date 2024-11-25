@@ -127,7 +127,8 @@ class PrescriptionsController extends Controller
             }
             if ($shiftId) {
                 $shift = Shift::find($shiftId);
-                $shift->revenue_summary += $request->input('total');
+        
+                $shift->revenue_summary += $request->input('total_price');
                 $shift->save();
                 broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
                 // event(new TransactionCreated($cutDoseOrder));

@@ -195,10 +195,10 @@
                 @else
                     <ul class="nav nav-tabs" id="orderTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="normal-orders-tab" data-bs-toggle="tab" href="#normal-orders" role="tab" aria-controls="normal-orders" aria-selected="true">Đơn thuốc thông thường</a>
+                            <a class="nav-link active" id="normal-orders-tab" data-bs-toggle="tab" href="#normal-orders" role="tab" aria-controls="normal-orders" aria-selected="true">Đơn thuốc cắt liều</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="special-orders-tab" data-bs-toggle="tab" href="#special-orders" role="tab" aria-controls="special-orders" aria-selected="false">Đơn thuốc cắt liều</a>
+                            <a class="nav-link" id="special-orders-tab" data-bs-toggle="tab" href="#special-orders" role="tab" aria-controls="special-orders" aria-selected="false">Đơn thuốc thông thường</a>
                         </li>
                     </ul>
                     <div class="tab-content mt-3" id="orderTabContent">
