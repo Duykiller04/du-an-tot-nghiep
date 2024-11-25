@@ -498,8 +498,8 @@
                         <div class="collapse mt-2" id="collapseDetails${detailCounter}">
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="mt-3">
-                                        <label for="details[${detailCounter}][type_product]" class="form-label">Loại sản phẩm:</label>
+                                    <div class="mb-3">
+                                        <label for="details[${detailCounter}][type_product]" class="form-label">Loại sản phẩm:<span class="text-danger">*</span></label>
                                         <select name="details[${detailCounter}][type_product]" class="form-select" onchange="toggleInputs(${detailCounter})">
                                             <option value="0">Thuốc</option>
                                             <option value="1">Dụng cụ</option>
@@ -507,12 +507,12 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="details[${detailCounter}][name]" class="form-label">Tên thuốc:</label>
+                                        <label for="details[${detailCounter}][name]" class="form-label">Tên thuốc:<span class="text-danger">*</span></label>
                                         <input type="text" name="details[${detailCounter}][name]" class="form-control">
                                     </div>
 
                                     <div class="mt-3">
-                                        <label for="details[${detailCounter}][category_id]" class="form-label">Danh mục thuốc:</label>
+                                        <label for="details[${detailCounter}][category_id]" class="form-label">Danh mục thuốc:<span class="text-danger">*</span></label>
                                         <select name="details[${detailCounter}][category_id]" class="form-select">
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -521,13 +521,13 @@
                                     </div>
 
                                     <div class="mt-3">
-                                        <label for="details[${detailCounter}][medicine_code]" class="form-label">Mã thuốc:</label>
+                                        <label for="details[${detailCounter}][medicine_code]" class="form-label">Mã thuốc:<span class="text-danger">*</span></label>
                                         <input type="text" name="details[${detailCounter}][medicine_code]" class="form-control">
                                         <div class="text-danger" id="medicine-code-error-${detailCounter}"></div>
                                     </div>
 
-                                    <div class="m-3">
-                                        <label class="form-label">Đơn vị:</label>
+                                    <div class="mb-3">
+                                        <label class="form-label">Đơn vị:<span class="text-danger">*</span></label>
                                         <div class="d-flex justify-content-end mb-2">
                                             <button type="button" class="btn btn-primary add-unit" data-detail-index="${detailCounter}">Thêm đơn vị</button>
                                         </div>
@@ -537,7 +537,7 @@
                                     </div>
                                      
                                     <div class="mt-3">
-                                        <label for="details[${detailCounter}][price_import]" class="form-label">Giá nhập:</label>
+                                        <label for="details[${detailCounter}][price_import]" class="form-label">Giá nhập:<span class="text-danger">*</span></label>
                                         <div class="input-group mb-3">
                                             <input type="number" name="details[${detailCounter}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal(${detailCounter})" placeholder="Nhập giá nhập">
                                             <span class="input-group-text">VND</span>
@@ -546,73 +546,87 @@
                                     </div>
 
                                     <div class="mt-3">
-                                        <label for="details[${detailCounter}][price_sale]" class="form-label">Giá bán:</label>
+                                        <label for="details[${detailCounter}][price_sale]" class="form-label">Giá bán:<span class="text-danger">*</span></label>
                                         <input type="number" name="details[${detailCounter}][price_sale]" class="form-control price-sale" step="0.01">
                                         <div class="text-danger" id="price-sale-error-${detailCounter}"></div>
                                     </div>
 
                                     <div class="mt-3">
-                                        <label for="details[${detailCounter}][total]" class="form-label">Tổng:</label>
+                                        <label for="details[${detailCounter}][total]" class="form-label">Tổng:<span class="text-danger">*</span></label>
                                         <div class="input-group mb-3">
                                             <input type="number" name="details[${detailCounter}][total]" class="form-control total" placeholder="Tổng số tiền" readonly>
                                             <span class="input-group-text">VND</span>
                                         </div>
                                         <div class="text-danger" id="total-error-${detailCounter}"></div>
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="details[${detailCounter}][registration_number]" class="form-label">Số đăng ký:<span class="text-danger">*</span></label>
+                                        <input type="text" name="details[${detailCounter}][registration_number]" class="form-control">
+                                        <div class="text-danger" id="registration-number-error-${detailCounter}"></div>
+                                    </div>
                                 </div>
     
                                 <div class="col-6">
-                                    <label for="details[${detailCounter}][registration_number]" class="form-label">Số đăng ký:</label>
-                                    <input type="text" name="details[${detailCounter}][registration_number]" class="form-control">
-                                    <div class="text-danger" id="registration-number-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][origin]" class="form-label">Xuất xứ:</label>
-                                    <input type="text" name="details[${detailCounter}][origin]" class="form-control">
-                                    <div class="text-danger" id="origin-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][packaging_specification]" class="form-label">Quy cách đóng gói:</label>
-                                    <input type="text" name="details[${detailCounter}][packaging_specification]" class="form-control">
-                                    <div class="text-danger" id="packaging-specification-error-${detailCounter}"></div>
-    
-                                    <div class="product-info">
+                                    <div class="mb-3">
+                                        <label for="details[${detailCounter}][origin]" class="form-label">Xuất xứ:<span class="text-danger">*</span></label>
+                                        <input type="text" name="details[${detailCounter}][origin]" class="form-control">
+                                        <div class="text-danger" id="origin-error-${detailCounter}"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="details[${detailCounter}][packaging_specification]" class="form-label">Quy cách đóng gói:<span class="text-danger">*</span></label>
+                                        <input type="text" name="details[${detailCounter}][packaging_specification]" class="form-control">
+                                        <div class="text-danger" id="packaging-specification-error-${detailCounter}"></div>
+                                    </div>
+
+                                    <div class="product-info mt-3">
                                         <label for="details[${detailCounter}][active_ingredient]" class="form-label">Hoạt chất:</label>
                                         <input type="text" name="details[${detailCounter}][active_ingredient]" class="form-control">
                                         <div class="text-danger" id="active-ingredient-error-${detailCounter}"></div>
                                     </div>
     
-                                    <div class="product-info">
+                                    <div class="product-info  mt-3">
                                         <label for="details[${detailCounter}][concentration]" class="form-label">Hàm lượng:</label>
                                         <input type="text" name="details[${detailCounter}][concentration]" class="form-control">
                                         <div class="text-danger" id="concentration-error-${detailCounter}"></div>
                                     </div>
     
-                                    <div class="product-info">
+                                    <div class="product-info mt-3">
                                         <label for="details[${detailCounter}][dosage]" class="form-label">Liều lượng:</label>
                                         <input type="text" name="details[${detailCounter}][dosage]" class="form-control">
                                         <div class="text-danger" id="dosage-error-${detailCounter}"></div>
                                     </div>
     
-                                    <div class="product-info">
+                                    <div class="product-info mt-3">
                                         <label for="details[${detailCounter}][administration_route]" class="form-label">Đường dùng:</label>
                                         <input type="text" name="details[${detailCounter}][administration_route]" class="form-control">
                                         <div class="text-danger" id="administration-route-error-${detailCounter}"></div>
                                     </div>
-    
-                                    <label for="details[${detailCounter}][temperature]" class="form-label">Nhiệt độ bảo quản:</label>
-                                    <input type="number" name="details[${detailCounter}][temperature]" class="form-control">
-                                    <div class="text-danger" id="temperature-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][moisture]" class="form-label">Độ ẩm bảo quản:</label>
-                                    <input type="number" name="details[${detailCounter}][moisture]" class="form-control">
-                                    <div class="text-danger" id="moisture-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][expiration_date]" class="form-label">Ngày hết hạn:</label>
-                                    <input type="date" name="details[${detailCounter}][expiration_date]" class="form-control">
-                                    <div class="text-danger" id="expiration-date-error-${detailCounter}"></div>
-    
-                                    <label for="details[${detailCounter}][image]" class="form-label">Hình ảnh:</label>
-                                    <input type="file" name="details[${detailCounter}][image]" class="form-control">
-                                    <div class="text-danger" id="image-error-${detailCounter}"></div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][temperature]" class="form-label">Nhiệt độ bảo quản:</label>
+                                        <input type="number" name="details[${detailCounter}][temperature]" class="form-control">
+                                        <div class="text-danger" id="temperature-error-${detailCounter}"></div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][moisture]" class="form-label">Độ ẩm bảo quản:</label>
+                                        <input type="number" name="details[${detailCounter}][moisture]" class="form-control">
+                                        <div class="text-danger" id="moisture-error-${detailCounter}"></div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][expiration_date]" class="form-label">Ngày hết hạn:<span class="text-danger">*</span></label>
+                                        <input type="date" name="details[${detailCounter}][expiration_date]" class="form-control">
+                                        <div class="text-danger" id="expiration-date-error-${detailCounter}"></div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="details[${detailCounter}][image]" class="form-label">Hình ảnh:<span class="text-danger">*</span></label>
+                                        <input type="file" name="details[${detailCounter}][image]" class="form-control">
+                                        <div class="text-danger" id="image-error-${detailCounter}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
