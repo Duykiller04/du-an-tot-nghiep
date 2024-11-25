@@ -151,10 +151,14 @@
                                             <input type="text" name="medicines[{{ $index }}][dosage]"
                                                 class="form-control" value="{{ $item->dosage }}">
                                         </div>
-
+                                        @php
+                                            $count = count($cutDosePrescription->cutDosePrescriptionDetails);
+                                        @endphp
+                                        @if ($count > 1)
                                         <div class="col-md-1  d-flex align-items-end">
                                             <button type="button" class="btn btn-danger delete-medicine" data-id="{{ $item->id }}">Xóa</button>
                                         </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
