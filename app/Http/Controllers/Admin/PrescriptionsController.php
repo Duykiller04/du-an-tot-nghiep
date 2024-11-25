@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrescriptionRequest;
 use App\Http\Requests\UpdatePrescriptionRequest;
@@ -124,7 +125,13 @@ class PrescriptionsController extends Controller
                     'dosage' => $medicine['dosage'],
                 ]);
             }
-
+            if ($shiftId) {
+                $shift = Shift::find($shiftId);
+                $shift->revenue_summary += $request->input('total');
+                $shift->save();
+                broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
+                // event(new TransactionCreated($cutDoseOrder));
+            }
             // Cam kết giao dịch
             DB::commit();
 
