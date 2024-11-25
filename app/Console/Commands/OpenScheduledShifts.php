@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Models\Shift;
 use App\Models\NotificationSetting;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class OpenScheduledShifts extends Command
 {
@@ -21,12 +22,13 @@ class OpenScheduledShifts extends Command
     public function handle()
     {
         $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
-        $currentDate = $currentDateTime->toDateString(); 
+        $currentDate = $currentDateTime->toDateString();
 
         $settings = NotificationSetting::first();
 
         if (!$settings || !$settings->auto_open_shift) {
             $this->info("Tự động mở ca đang bị tắt trong cấu hình.");
+            Log::info("Tự động mở ca đang bị tắt trong cấu hình");
             return;
         }
 
@@ -34,25 +36,27 @@ class OpenScheduledShifts extends Command
         $existingOpenShift = Shift::where('status', 'đang mở')->exists();
         if ($existingOpenShift) {
             $this->info("Đã có ca làm đang mở, không thể mở thêm ca.");
+            Log::info("Đã có ca làm đang mở, không thể mở thêm ca.");
             return;
         }
 
-        // Lấy ca sớm nhất phù hợp (trong ngày hiện tại)
         $shift = Shift::where('status', 'kế hoạch')
-            ->whereDate('start_time', '=', $currentDate)              
-            ->where('start_time', '>=', $currentDateTime->subHour()) 
-            ->where('start_time', '<=', $currentDateTime)            
-            ->orderBy('start_time')                                 
-            ->lockForUpdate()                                       
+            ->whereDate('start_time', '=', $currentDate) 
+            ->where('start_time', '=', $currentDateTime) 
+            ->where('start_time', '>=', $currentDateTime->copy()->subHour()) // Thời gian hiện tại <= 1 giờ sau thời gian bắt đầu
+            ->orderBy('start_time') 
+            ->lockForUpdate() 
             ->first();
 
         if (!$shift) {
             $this->info("Không có ca nào phù hợp để mở trong ngày hôm nay.");
+            Log::info("Không có ca nào phù hợp để mở trong ngày hôm nay.");
             return;
         }
 
         if ($shift->users()->count() < 1) {
             $this->info("Ca ID {$shift->id} không có nhân viên nào, không thể mở ca.");
+            Log::info("Ca không có nhân viên nào, không thể mở ca.");
             return;
         }
 
@@ -61,6 +65,7 @@ class OpenScheduledShifts extends Command
 
         if ($endTime <= $startTime) {
             $this->info("Ca ID {$shift->id} có thời gian kết thúc không hợp lệ.");
+            Log::info("Ca có thời gian kết thúc không hợp lệ.");
             return;
         }
 
@@ -74,5 +79,6 @@ class OpenScheduledShifts extends Command
             'id_thing' => $shift->id,
         ]);
         $this->info("Ca ID {$shift->id} đã được mở thành công.");
+        Log::info("Ca đã được mở thành công.");
     }
 }

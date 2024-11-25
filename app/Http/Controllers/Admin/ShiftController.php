@@ -147,7 +147,7 @@ class ShiftController extends Controller
 
         $statusOptions = ['kế hoạch', 'đang mở', 'tạm dừng', 'đã chốt', 'đã hủy'];
 
-        $users = User::all();
+        $users = User::where('type', 'staff')->get();
 
         // Lấy ID của những nhân viên trong ca làm hiện tại
         $checkedUsers = $shift->shiftuser->pluck('user_id')->toArray();
