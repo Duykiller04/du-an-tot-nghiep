@@ -43,7 +43,7 @@ class MedicineController extends Controller
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
-
+            
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('category_name', function ($row) {
