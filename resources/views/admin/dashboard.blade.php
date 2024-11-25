@@ -675,7 +675,7 @@
                     <div class="col-xl-4">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Thông kê danh mục thuốc</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Thông kê có bao nhiêu thuốc thuốc 1 danh mục</h4>
                                 <div class="flex-shrink-0">
                                     <div class="dropdown card-header-dropdown">
                                         <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
@@ -1253,9 +1253,7 @@
         });
     </script>
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     $(document).ready(function() {
