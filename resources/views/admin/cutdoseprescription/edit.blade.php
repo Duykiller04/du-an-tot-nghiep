@@ -46,8 +46,7 @@
                                 <select name="disease_id" id="disease_id" class="form-select select2">
                                     <option value="">Chọn bệnh</option>
                                     @foreach ($diseases as $id => $name)
-                                        <option value="{{ $id }}"
-                                            @if ($cutDosePrescription->id == $id) selected @endif>{{ $name }}</option>
+                                        <option value="{{ $id }}" @if ($cutDosePrescription->disease_id == $id) selected @endif>{{ $name }}</option>
                                     @endforeach
                                 </select>
                                 @error('disease_id')

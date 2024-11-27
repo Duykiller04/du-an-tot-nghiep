@@ -45,7 +45,7 @@
                                 <select name="disease_id" id="disease_id" class="form-select select2">
                                     <option value="">Chọn bệnh</option>
                                     @foreach ($diseases as $id => $name)
-                                        <option value="{{ $id }}">{{ $name }}</option>
+                                        <option value="{{ $id }}" {{ old('disease_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
                                 @error('disease_id')
@@ -105,7 +105,7 @@
                                         <select name="medicines[0][medicine_id]" class="form-select select2">
                                             <option value="">Chọn thuốc</option>
                                             @foreach ($medicines as $id => $name)
-                                                <option value="{{ $id }}">{{ $name }}</option>
+                                                <option value="{{ $id }}" {{ old('medicines.0.medicine_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -119,17 +119,17 @@
 
                                     <div class="col-md-2">
                                         <label for="quantity" class="form-label">Số lượng</label>
-                                        <input type="number" name="medicines[0][quantity]" class="form-control">
+                                        <input type="number" name="medicines[0][quantity]" value="{{ old('medicines.0.quantity') }}" class="form-control">
                                     </div>
 
                                     <div class="col-md-2">
                                         <label for="current_price" class="form-label">Giá</label>
-                                        <input type="number" name="medicines[0][current_price]" class="form-control">
+                                        <input type="number" name="medicines[0][current_price]" value="{{ old('medicines.0.current_price') }}" class="form-control">
                                     </div>
 
                                     <div class="col-md-2">
                                         <label for="dosage" class="form-label">Liều lượng</label>
-                                        <input type="text" name="medicines[0][dosage]" class="form-control">
+                                        <input type="text" name="medicines[0][dosage]" value="{{ old('medicines.0.dosage') }}" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -176,5 +176,6 @@
     <script>
         const medicines = @json($medicines);
         const units = @json($units);
+        const oldData = @json(old('medicines', []));
     </script>
 @endsection
