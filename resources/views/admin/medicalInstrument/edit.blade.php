@@ -29,8 +29,8 @@
             <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
         @endif
 
-        <form id="create-disease-form" method="POST" action="{{ route('admin.medicalInstruments.update', $medicalInstrument->id) }}"
-            enctype="multipart/form-data">
+        <form id="create-disease-form" method="POST"
+            action="{{ route('admin.medicalInstruments.update', $medicalInstrument->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">
@@ -109,9 +109,53 @@
                             <div class="d-flex justify-content-end">
                                 <button id="addProductNew" type="button" class="btn btn-primary">Thêm đơn vị</button>
                             </div>
-                            
+
+                            <div class="unit-conversion-list">
+                                <div class="mb-3">
+                                    <div class="row productNew mt-3">
+                                        <div class="row form-item">
+                                            @error('so_luong.*')
+                                                <span class="mb-3 alert alert-danger">{{ $message }}</span>
+                                            @enderror
+                                            @error('don_vi.*')
+                                                <span class="mb-3 alert alert-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                            @foreach ($medicalInstrument->unitConversions as $index => $unitConversion)
+                                                <div class="row unit-conversion-row" data-index="{{ $index }}">
+                                                    <div class="col-5 mt-3">
+                                                        <label class="form-label" for="name">Số lượng <span
+                                                                class="text-danger">(*)</span></label>
+                                                        <input type="number" class="form-control" name="so_luong[]"
+                                                            value="{{ old('so_luong.' . $index, $unitConversion->proportion) }}">
+                                                    </div>
+
+                                                    <div class="col-5 mt-3">
+                                                        <label for="">Đơn vị <span
+                                                                class="text-danger">(*)</span></label>
+                                                        <select name="don_vi[]" class="form-control">
+                                                            <option value="">Chọn đơn vị</option>
+                                                            <option value="{{ $unitConversion->unit->id }}"
+                                                                @if (old('don_vi.' . $index, $unitConversion->unit_id) == $unitConversion->unit->id) selected @endif>
+                                                                {{ $unitConversion->unit->name }}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-2 mt-3">
+                                                        <button class="btn btn-danger" type="button"
+                                                            style="margin-top: 25px"
+                                                            onclick="deleteUnit(this)">Xóa</button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="mb-3">
-                                <label class="form-label" for="packaging_specification">Quy cách đóng gói <span class="text-danger">(*)</span></label>
+                                <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="text"
                                     class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
                                     id="packaging_specification" name="medicine[packaging_specification]"
@@ -120,46 +164,28 @@
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
-                            
-                            <div class="mb-3">
-                                <div class="row productNew mt-3">
-                                    <div class="row mb-3 form-item mt-3">
-                                        @error('so_luong.*')
-                                            <span class="mb-3 alert alert-danger">{{ $message }}</span>
-                                        @enderror
-                                        @error('don_vi.*')
-                                            <span class="mb-3 alert alert-danger mt-2">{{ $message }}</span>
-                                        @enderror
-                                        @foreach ($medicalInstrument->unitConversions as $index => $unitConversion)
-                                            <div class="col-5 mt-3">
-                                                <label class="form-label" for="name">Số lượng <span class="text-danger">(*)</span></label>
-                                                <input type="number" class="form-control" name="so_luong[]" value="{{ old('so_luong.'.$index, $unitConversion->proportion) }}">
-                                            </div>
-                            
-                                            <div class="col-5 mt-3">
-                                                <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                <select name="don_vi[]" class="form-control">
-                                                    <option value="">Chọn đơn vị</option>
-                                                    <option value="{{ $unitConversion->unit->id }}" @if (old('don_vi.'.$index, $unitConversion->unit_id) == $unitConversion->unit->id) selected @endif>
-                                                        {{ $unitConversion->unit->name }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
+
                             <script>
+                                function deleteUnit(button) {
+                                    const unitConversionList = document.querySelector('.unit-conversion-list');
+                                    const rows = unitConversionList.querySelectorAll('.unit-conversion-row');
+                                    console.log(rows);
+                                    if (rows.length > 1) {
+                                        const row = button.closest('.unit-conversion-row');
+                                        row.remove();
+                                    } else {
+                                        alert('Không thể xóa. Cần ít nhất một đơn vị chuyển đổi.');
+                                    }
+                                }
+
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
-                            
+
                                     const donvis = @json($donvis);
                                     const oldQuantities = @json(old('so_luong', []));
                                     const oldUnits = @json(old('don_vi', []));
-                            
+
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
                                             acc[donvi.parent_id] = [];
@@ -167,7 +193,7 @@
                                         acc[donvi.parent_id].push(donvi);
                                         return acc;
                                     }, {});
-                            
+
                                     function renderChildUnits(parentId, selectElement) {
                                         selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
                                         if (unitsByParent[parentId]) {
@@ -179,20 +205,20 @@
                                             });
                                         }
                                     }
-                            
+
                                     productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
                                             const selectedParentId = event.target.value; // Lấy ID của đơn vị được chọn
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
-                            
+
                                             // Reset tất cả các ô chọn sau ô đã thay đổi
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
                                                 allSelects[i].innerHTML =
                                                     '<option value="">Chọn đơn vị</option>'; // Reset các option
                                                 allSelects[i].value = ''; // Reset giá trị ô chọn
                                             }
-                            
+
                                             // Render các đơn vị con dựa trên ID của đơn vị đã chọn
                                             if (currentSelectIndex < allSelects.length - 1) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
@@ -200,31 +226,34 @@
                                             }
                                         }
                                     });
-                            
+
                                     btnAdd.addEventListener('click', function() {
+                                        const unitConversionList = document.querySelector('.unit-conversion-list');
                                         const index = productNew.querySelectorAll('.form-item').length; // Lấy chỉ số mới cho trường
                                         const newFieldHTML = `
-                                            <div class="row mb-3 form-item mt-3">
-                                                <div class="col-5">
-                                                    <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                    <input type="number" name="so_luong[]" class="form-control" value="${oldQuantities[index] || ''}">
-                                                </div>
-                                                <div class="col-5">
-                                                    <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                    <select name="don_vi[]" class="form-control">
-                                                        <option value="">Chọn đơn vị</option>
-                                                        ${donvis.map(donvi => `<option value="${donvi.id}" ${oldUnits[index] == donvi.id ? 'selected' : ''} data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
-                                                    </select>             
-                                                </div>
-                                                <div class="col-2">
-                                                    <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                                            <div class="row form-item">
+                                                <div class="row unit-conversion-row mb-3 form-item mt-3">
+                                                    <div class="col-5">
+                                                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                                                        <input type="number" name="so_luong[]" class="form-control" value="${oldQuantities[index] || ''}">
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                                                        <select name="don_vi[]" class="form-control">
+                                                            <option value="">Chọn đơn vị</option>
+                                                            ${donvis.map(donvi => `<option value="${donvi.id}" ${oldUnits[index] == donvi.id ? 'selected' : ''} data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
+                                                        </select>             
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <button class="btn btn-danger" type="button" onclick="deleteUnit(this)" style="margin-top: 25px">Xóa</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         `;
-                            
+
                                         productNew.insertAdjacentHTML('beforeend', newFieldHTML);
                                     });
-                            
+
                                     productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
                                             const formItem = event.target.closest('.form-item');
@@ -233,7 +262,7 @@
                                             }
                                         }
                                     });
-                            
+
                                     // Giữ lại giá trị cho các trường đã tạo sẵn
                                     oldQuantities.forEach((quantity, index) => {
                                         if (index > 0) {
@@ -243,7 +272,7 @@
                                         productNew.querySelectorAll('select[name="don_vi[]"]')[index].value = oldUnits[index];
                                     });
                                 });
-                            </script>                            
+                            </script>
 
                         </div>
                     </div>
@@ -434,4 +463,3 @@
         });
     </script>
 @endsection
-

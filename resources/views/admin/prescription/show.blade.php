@@ -27,10 +27,6 @@
         </div>
         <div class="card-body">
             <div class="mb-3">
-                <label><strong>ID:</strong></label>
-                <span>{{ $prescription->id }}</span>
-            </div>
-            <div class="mb-3">
                 <label><strong>Tên khách hàng:</strong></label>
                 <span>{{ $prescription->name_customer }}</span>
             </div>
@@ -81,7 +77,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>#</th>
                         <th>Tên thuốc</th>
                         <th>Đơn vị</th>
                         <th>Số lượng</th>
@@ -93,11 +89,11 @@
                     @if($prescription->prescriptionDetails && $prescription->prescriptionDetails->count())
                         @foreach ($prescription->prescriptionDetails as $detail)
                             <tr>
-                                <td>{{ $detail->id }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $detail->medicine->name }}</td>
                                 <td>{{ $detail->unit->name }}</td>
                                 <td>{{ $detail->quantity }}</td>
-                                <td>{{ number_format($detail->current_price, 0) }} VNĐ</td>
+                                <td>{{ number_format($detail->current_price) }} VNĐ</td>
                                 <td>{{ $detail->dosage }}</td>
                             </tr>
                         @endforeach

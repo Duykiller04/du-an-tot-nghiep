@@ -83,17 +83,17 @@ class EnvironmentController extends Controller
         // Xác thực dữ liệu
         //dd($request->all());
         $validator = Validator::make($request->all(), [
-            'real_temperature' => 'required|numeric|min:-50',
-            'real_humidity' => 'required|numeric|between:10,100',
-            'storage_id' => 'required'
+            'create_real_temperature' => 'required|numeric|min:-50',
+            'create_real_humidity' => 'required|numeric|between:10,100',
+            'create_storage_id' => 'required'
         ], [
-            'storage_id.required' => 'Bạn phải chọn kho.',
-            'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
-            'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
-            'real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
-            'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
-            'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
-            'real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
+            'create_storage_id.required' => 'Bạn phải chọn kho.',
+            'create_real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
+            'create_real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
+            'create_real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
+            'create_real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
+            'create_real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
+            'create_real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
         ]);
     
         // Kiểm tra nếu có lỗi
@@ -106,12 +106,12 @@ class EnvironmentController extends Controller
         $currentTime = Carbon::now('Asia/Ho_Chi_Minh');
         // Tạo bản ghi mới
         Environment::create([
-            'storage_id' => $request->storage_id,
+            'storage_id' => $request->create_storage_id,
             'time' => $currentTime,
             'temperature' => $request->temperature,
             'huminity' => $request->huminity,
-            'real_temperature' => $request->real_temperature,
-            'real_humidity' => $request->real_humidity,
+            'real_temperature' => $request->create_real_temperature,
+            'real_humidity' => $request->create_real_humidity,
         ]);
 
         return redirect()->route('admin.environments.index')->with('success', 'Môi trường đã được thêm thành công.');
@@ -126,29 +126,29 @@ class EnvironmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        //dd($request);
         // Xác thực dữ liệu
         $validator = Validator::make($request->all(), [
-            'real_temperature' => 'required|numeric|min:-50',
-            'real_humidity' => 'required|numeric|between:10,100',
-            'storage_id' => 'required'
+            'edit_real_temperature' => 'required|numeric|min:-50',
+            'edit_real_humidity' => 'required|numeric|between:10,100',
+            'edit_storage_id' => 'required'
         ], [
-            'storage_id.required' => 'Bạn phải chọn kho.',
-            'real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
-            'real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
-            'real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
-            'real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
-            'real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
-            'real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
+            'edit_storage_id.required' => 'Bạn phải chọn kho.',
+            'edit_real_temperature.required' => 'Nhiệt độ thực tế phải được nhập.',
+            'edit_real_temperature.numeric' => 'Nhiệt độ thực tế phải là số.',
+            'edit_real_temperature.min' => 'Nhiệt độ thực tế không được thấp hơn -50°C.',
+            'edit_real_humidity.required' => 'Độ ẩm thực tế phải được nhập.',
+            'edit_real_humidity.numeric' => 'Độ ẩm thực tế phải là số.',
+            'edit_real_humidity.between' => 'Độ ẩm thực tế phải nằm trong khoảng 10% đến 100%.',
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput()->with('turnonmodeledit', 'turnonmodel');
+            return back()->withErrors($validator)->withInput()->with('edit_environment_id_old', $id);
         }
         $environment = Environment::findOrFail($id);
         $environment->update([
-            'real_temperature' => $request->real_temperature,
-            'real_humidity' => $request->real_humidity,
+            'real_temperature' => $request->edit_real_temperature,
+            'real_humidity' => $request->edit_real_humidity,
+            'storage_id' => $request->edit_storage_id,
         ]);
 
         return redirect()->route('admin.environments.index')->with('success', 'Môi trường đã được cập nhật thành công.');

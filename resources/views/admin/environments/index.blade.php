@@ -11,7 +11,7 @@
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 class="mb-sm-0">Danh sách Môi Trường</h4>
-        
+
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Môi Trường</a></li>
@@ -19,24 +19,26 @@
                         </ol>
                     </div>
                 </div>
-        
+
                 <!-- Tiêu đề và thông tin nhiệt độ, độ ẩm -->
                 <div class="page-title-box text-center mt-4">
                     <h2 class="mb-4">Nhiệt độ và Độ ẩm hiện tại</h2>
                     <div class="d-flex justify-content-center align-items-center gap-4">
                         <div class="d-flex align-items-center">
                             <i class="ri-thermometer-line me-2 text-warning" style="font-size: 24px;"></i>
-                            <span class="text-warning" style="font-size: 24px; font-weight: bold;">{{ $weatherData['main']['temp'] }}°C</span>
+                            <span class="text-warning"
+                                style="font-size: 24px; font-weight: bold;">{{ $weatherData['main']['temp'] }}°C</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <i class="ri-humidity-line me-2 text-primary" style="font-size: 24px;"></i>
-                            <span class="text-primary" style="font-size: 24px; font-weight: bold;">{{ $weatherData['main']['humidity'] }}%</span>
+                            <span class="text-primary"
+                                style="font-size: 24px; font-weight: bold;">{{ $weatherData['main']['humidity'] }}%</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- end page title -->
 
         @if (session('success'))
@@ -44,7 +46,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -57,78 +59,91 @@
                             </div>
                             <div class="col-sm-auto">
                                 <div class="d-flex flex-wrap align-items-start gap-2">
-                                    <a href="{{ route('admin.environments.export') }}" class="btn btn-primary">Xuất Excel</a>
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createEnvironment">Thêm mới môi trường</button>
+                                    <a href="{{ route('admin.environments.export') }}" class="btn btn-primary">Xuất
+                                        Excel</a>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#createEnvironment">Thêm mới môi trường</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                     
-                    <div class="modal fade" id="createEnvironment" tabindex="-1" aria-labelledby="createEnvironment" aria-hidden="true">
+
+                    <div class="modal fade" id="createEnvironment" tabindex="-1" aria-labelledby="createEnvironment"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Thêm mới môi trường</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                            {{-- <div class="modal-body">
-                                   
-                             </div> --}}
-                    <div class="modal-body">
-                        
-                        <form action="{{ route('admin.environments.store') }}" method="POST">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="real_temperature" value="{{ old('real_temperature') }}">
-                                @error('real_temperature')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Nhiệt độ môi trường<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="temperature" value="{{ $weatherData['main']['temp']}}" readonly>
-                            </div>
+                                <div class="modal-body">
 
-                            <div class="mb-3">                              
-                                <label class="form-label" for="real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_humidity" name="real_humidity" value="{{ old('real_humidity') }}">
-                                @error('real_humidity')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
+                                    <form action="{{ route('admin.environments.store') }}" method="POST">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="form-label" for="real_temperature">Nhiệt độ trong kho<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control" id="real_temperature"
+                                                name="create_real_temperature" value="{{ old('create_real_temperature') }}">
+                                            @error('create_real_temperature')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="real_temperature">Nhiệt độ môi trường<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control" id="real_temperature"
+                                                name="temperature" value="{{ $weatherData['main']['temp'] }}" readonly>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="real_humidity">Độ ẩm thực tế<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control" id="real_humidity"
+                                                name="create_real_humidity" value="{{ old('create_real_humidity') }}">
+                                            @error('create_real_humidity')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control" id="real_temperature"
+                                                name="huminity" value="{{ $weatherData['main']['humidity'] }}" readonly>
+                                        </div>
+                                        <div class="mb-5">
+                                            <label class="form-label" for="storage_id">Chọn kho</label>
+                                            <select class="form-select" id="storage_id" name="create_storage_id">
+                                                @foreach ($storages as $storage)
+                                                    <option value="{{ $storage->id }}">{{ $storage->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('create_storage_id')
+                                                <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-success">Thêm</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="real_temperature">Độ ẩm theo thời tiết<span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="real_temperature" name="huminity" value="{{ $weatherData['main']['humidity'] }}" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="storage_id">Chọn kho</label>
-                                <select class="form-select" id="storage_id" name="storage_id">
-                                    @foreach($storages as $storage)
-                                        <option value="{{ $storage->id }}">{{ $storage->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('storage_id')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-success">Thêm</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        @if ($errors->any())
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var myModal = new bootstrap.Modal(document.getElementById('createEnvironment'));
-                    myModal.show();
-                });
-            </script>
-        @endif
-        <!-- Modal Sửa Môi Trường -->
-                    <div class="modal fade" id="editEnvironment" tabindex="-1" aria-labelledby="editEnvironment" aria-hidden="true">
+                    @if (
+                        $errors->has('create_real_temperature') ||
+                            $errors->has('create_real_humidity') ||
+                            $errors->has('create_storage_id'))
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var myModal = new bootstrap.Modal(document.getElementById('createEnvironment'));
+                                myModal.show();
+                            });
+                        </script>
+                    @endif
+                    <!-- Modal Sửa Môi Trường -->
+                    <div class="modal fade" id="editEnvironment" tabindex="-1" aria-labelledby="editEnvironment"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -136,48 +151,56 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="" method="POST" id="editEnvironmentForm">
+                                    <form action="" method="" id="editEnvironmentForm">
                                         @csrf
                                         @method('PUT')
                                         <div class="mb-3">
-                                            <label class="form-label" for="edit_real_temperature">Nhiệt độ trong kho<span class="text-danger">*</span></label>
-                                            <input type="number" step="0.01" class="form-control" id="edit_real_temperature" name="real_temperature">
-                                            @error('real_temperature')
+                                            <input type="hidden" name="edit_environment_id" id="edit_environment_id" value="{{ old('edit_environment_id', session('edit_environment_id_old')) }}">
+                                            <label class="form-label" for="edit_real_temperature">Nhiệt độ trong kho<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control"
+                                                id="edit_real_temperature" name="edit_real_temperature"
+                                                value="{{ old('edit_real_temperature') }}">
+                                            @error('edit_real_temperature')
                                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="edit_real_humidity">Độ ẩm thực tế<span class="text-danger">*</span></label>
-                                            <input type="number" step="0.01" class="form-control" id="edit_real_humidity" name="real_humidity">
-                                            @error('real_humidity')
+                                            <label class="form-label" for="edit_real_humidity">Độ ẩm thực tế<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control"
+                                                id="edit_real_humidity" name="edit_real_humidity"
+                                                value="{{ old('edit_real_humidity') }}">
+                                            @error('edit_real_humidity')
                                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-5">
                                             <label class="form-label" for="edit_storage_id">Chọn kho</label>
-                                            <select class="form-select" id="edit_storage_id" name="storage_id">
-                                                @foreach($storages as $storage)
+                                            <select class="form-select" id="edit_storage_id" name="edit_storage_id">
+                                                @foreach ($storages as $storage)
                                                     <option value="{{ $storage->id }}">{{ $storage->name }}</option>
                                                 @endforeach
                                             </select>
-                                            @error('storage_id')
+                                            @error('edit_storage_id')
                                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
                                         <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @if ($errors->any())
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            var myModal = new bootstrap.Modal(document.getElementById('editEnvironment'));
-                            myModal.show();
-                        });
-                    </script>
+                    @if ($errors->has('edit_real_temperature') || $errors->has('edit_real_humidity') || $errors->has('edit_storage_id'))
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var myModal = new bootstrap.Modal(document.getElementById('editEnvironment'));
+                                myModal.show();
+                            });
+                        </script>
                     @endif
 
                     <div class="row">
@@ -185,7 +208,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <!-- Hiển thị nhiệt độ và độ ẩm từ API -->
-                                    
 
                                     <table id="environments-table"
                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -202,29 +224,34 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($environments as $index => $environment)
+                                            @foreach ($environments as $index => $environment)
                                                 <tr>
-                                                    <td>{{ $index+1 }}</td>
+                                                    <td>{{ $index + 1 }}</td>
                                                     <td>{{ $environment->time->format('H:i:s d-m-Y') }}</td>
                                                     <td>{{ $environment->temperature }}°C</td>
                                                     <td>{{ $environment->real_temperature }}°C</td>
                                                     <td>{{ $environment->huminity }}%</td>
                                                     <td>{{ $environment->real_humidity }}%</td>
                                                     <td>
-                                                        <button type="button" class="btn btn-warning btn-md editEnvironmentBtn" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editEnvironment"
-                                                        data-id="{{ $environment->id }}"
-                                                        data-real_temperature="{{ $environment->real_temperature }}"
-                                                        data-real_humidity="{{ $environment->real_humidity }}"
-                                                        data-storage_id="{{ $environment->storage_id }}">
-                                                        Sửa
+                                                        <button type="button"
+                                                            class="btn btn-warning btn-md editEnvironmentBtn"
+                                                            data-bs-toggle="modal" data-bs-target="#editEnvironment"
+                                                            data-id="{{ $environment->id }}"
+                                                            data-real_temperature="{{ $environment->real_temperature }}"
+                                                            data-real_humidity="{{ $environment->real_humidity }}"
+                                                            data-storage_id="{{ $environment->storage_id }}">
+                                                            Sửa
                                                         </button>
 
-                                                        <form action="{{ route('admin.environments.destroy', $environment->id) }}" method="POST" style="display:inline;" class="delete-form d-inline-block">
+                                                        <form
+                                                            action="{{ route('admin.environments.destroy', $environment->id) }}"
+                                                            method="POST" style="display:inline;"
+                                                            class="delete-form d-inline-block">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-md btn-delete" data-id="{{$environment->id}}">Xóa</button>
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-md btn-delete"
+                                                                data-id="{{ $environment->id }}">Xóa</button>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -255,7 +282,8 @@
 @endsection
 
 @section('script-libs')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!--datatable js-->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -307,23 +335,40 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Lấy các nút sửa môi trường
             const editButtons = document.querySelectorAll('.editEnvironmentBtn');
-            
+
             editButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     // Lấy thông tin từ các thuộc tính data- của nút
-                    const id = button.getAttribute('data-id');
+                    const environment_id = button.getAttribute('data-id');
                     const realTemperature = button.getAttribute('data-real_temperature');
                     const realHumidity = button.getAttribute('data-real_humidity');
                     const storageId = button.getAttribute('data-storage_id');
-                    
-                    // Đặt giá trị cho các trường input trong modal
-                    document.getElementById('edit_real_temperature').value = realTemperature;
-                    document.getElementById('edit_real_humidity').value = realHumidity;
-                    document.getElementById('edit_storage_id').value = storageId;
-                    
+
+                    // Gán giá trị cho các trường input trong modal
+                    $('#edit_environment_id').val(environment_id); // Chỉnh sửa id cho phù hợp với HTML
+                    $('#edit_real_temperature').val(realTemperature);
+                    $('#edit_real_humidity').val(realHumidity);
+                    $('#edit_storage_id').val(storageId);
+
                     // Cập nhật URL form action trong modal
                     const form = document.getElementById('editEnvironmentForm');
-                    form.action = `/admin/environments/${id}`;
+                    form.action =
+                    `/admin/environments/${environment_id}`; // Cập nhật đúng URL với id
+
+                    // Hiển thị modal chỉnh sửa
+                    $('#editEnvironment').modal('show');
+                });
+            });
+
+            // Cập nhật form action khi modal hiển thị
+            $('#editEnvironment').on('show.bs.modal', function() {
+                const environment_id = $('#edit_environment_id').val() ?? '';
+                $('#edit_environment_id').val(environment_id); // Đảm bảo giá trị trong input đúng
+
+                // Cập nhật lại form action
+                $('#editEnvironmentForm').attr({
+                    'action': `/admin/environments/${environment_id}`,
+                    'method': 'POST'
                 });
             });
 
