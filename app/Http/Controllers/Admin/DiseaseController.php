@@ -21,7 +21,7 @@ class DiseaseController extends Controller
         // $diseases = Disease::all();
 
         if (request()->ajax()) {
-            $query = Disease::query();
+            $query = Disease::query()->latest();
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -37,6 +37,7 @@ class DiseaseController extends Controller
                 }
             }
             return DataTables::of($query)
+                ->addIndexColumn()
                 ->addColumn('image', function ($row) {
                     $url = Storage::url($row->feature_img);
                     return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
@@ -196,7 +197,7 @@ class DiseaseController extends Controller
     }
     public function getRestore()
     {
-        $data = Disease::onlyTrashed()->get();
+        $data = Disease::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.diseases.restore', compact('data'));
     }
     public function restore(Request $request)

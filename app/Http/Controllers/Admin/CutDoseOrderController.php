@@ -28,7 +28,7 @@ class CutDoseOrderController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = CutDoseOrder::with('cutDoseOrderDetails');
+            $data = CutDoseOrder::with('cutDoseOrderDetails')->latest('id');
 
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -268,7 +268,7 @@ class CutDoseOrderController extends Controller
 
     public function getRestore()
     {
-        $data = CutDoseOrder::onlyTrashed()->get();
+        $data = CutDoseOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.cutdoseorder.restore', compact('data'));
     }
     public function restore(Request $request)

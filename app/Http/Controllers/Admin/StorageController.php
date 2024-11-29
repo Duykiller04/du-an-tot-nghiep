@@ -18,7 +18,7 @@ class StorageController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Storage::query()->withCount('medicines'); // Thêm withCount để đếm số lượng thuốc
+            $query = Storage::query()->withCount('medicines')->latest('id'); // Thêm withCount để đếm số lượng thuốc
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -64,7 +64,7 @@ class StorageController extends Controller
 
         // Nếu không phải yêu cầu AJAX, trả về view
         $data = Storage::query()->latest('id')->paginate(5);
-        return view('admin.storage.index', compact('data','totalMedicines'));
+        return view('admin.storage.index', compact('data', 'totalMedicines'));
     }
 
 
@@ -151,7 +151,7 @@ class StorageController extends Controller
 
     public function getRestore()
     {
-        $data = Storage::onlyTrashed()->get();
+        $data = Storage::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.storage.restore', compact('data'));
     }
     public function restore(Request $request)

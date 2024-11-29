@@ -18,7 +18,7 @@ class CustomerController extends Controller
     {
         // sleep(35);
         if (request()->ajax()) {
-            $query = Customer::query();
+            $query = Customer::query()->latest('id');;
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');

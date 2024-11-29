@@ -28,7 +28,7 @@ class ImportOrderController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = ImportOrder::query()->with(['user', 'storage', 'supplier']);
+            $query = ImportOrder::query()->with(['user', 'storage', 'supplier'])->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -79,7 +79,6 @@ class ImportOrderController extends Controller
         $importOrders = ImportOrder::with(['user', 'storage', 'supplier'])
             ->latest('id')
             ->get();
-        // dd($importOrders);
 
         return view('admin.importorder.index', compact('importOrders'));
     }
@@ -269,7 +268,7 @@ class ImportOrderController extends Controller
 
     public function getRestore()
     {
-        $data = ImportOrder::onlyTrashed()->get();
+        $data = ImportOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.importorder.restore', compact('data'));
     }
     public function restore(Request $request)
@@ -287,5 +286,5 @@ class ImportOrderController extends Controller
             return back()->with('error', 'Khôi phục bản ghi thất bại.');
         }
     }
-    
+
 }

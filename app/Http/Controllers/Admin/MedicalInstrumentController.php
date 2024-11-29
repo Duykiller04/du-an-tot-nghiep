@@ -27,7 +27,8 @@ class MedicalInstrumentController extends Controller
         if (request()->ajax()) {
             $query = Medicine::query()
                 ->with(['suppliers', 'category', 'storage', 'inventory'])
-                ->where('type_product', 1);
+                ->where('type_product', 1)
+                ->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -102,75 +103,6 @@ class MedicalInstrumentController extends Controller
         return view('admin.medicalInstrument.create', compact('categories', 'storages', 'donvis', 'suppliers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     // dd($request->all());
-
-    //     $priceImport = $request->input('medicine.price_import');
-    //     $priceSale = $request->input('medicine.price_sale');
-
-    //     if ($priceSale < $priceImport) {
-    //         return redirect()->back()->withErrors([
-    //             'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
-    //         ])->withInput();
-    //     }
-
-    //     try {
-    //         DB::beginTransaction();
-
-    //         if ($request->hasFile('image')) {
-    //             $image = $request->file('image');
-    //             $imagePath = $image->store('medicalInstruments', 'public');
-    //         } else {
-    //             $imagePath = null;
-    //         }
-
-    //         $medicineData = $request->input('medicine');
-
-    //         $medicineData['type_product'] = 1;
-
-    //         $medicineData['image'] = $imagePath;
-
-    //         $inventories = [];
-    //         $units = $request->don_vi;
-    //         $quantityByUnit = array_slice($request->so_luong, 0);
-
-    //         $medicine = Medicine::create($medicineData);
-
-    //         $inventories['medicine_id'] = $medicine->id;
-
-    //         $inventories['storage_id'] = $request->storage_id;
-
-    //         $inventories['quantity'] = array_product($request->so_luong);
-
-    //         $inventories['unit_id'] = end($units);
-
-    //         Inventory::create($inventories);
-
-    //         foreach ($units as $id => $unit_id_2) {
-    //             if ($unit_id_2 != $inventories['unit_id']) {
-
-    //                 UnitConversion::create([
-    //                     'medicine_id' => $inventories['medicine_id'],
-    //                     'unit_id_1' => $inventories['unit_id'],
-    //                     'unit_id_2' => $unit_id_2,
-    //                     'proportion' => $inventories['quantity'] / $quantityByUnit[$id]
-    //                 ]);
-    //             }
-    //         }
-
-    //         $medicine->suppliers()->attach($request->supplier_id);
-
-    //         DB::commit();
-    //         return redirect()->route('admin.medicalInstruments.index')->with('success', 'Thêm thành công');
-    //     } catch (\Exception $exception) {
-    //         DB::rollback();
-    //         return back()->with('error' . $exception->getMessage());
-    //     }
-    // }
     public function store(StoreProductRequest $request)
     {
         // dd($request->all());
@@ -340,7 +272,7 @@ class MedicalInstrumentController extends Controller
     }
     public function getRestore()
     {
-        $data = Medicine::onlyTrashed()->where('type_product', 1)->get();
+        $data = Medicine::onlyTrashed()->where('type_product', 1)->orderBy('deleted_at', 'desc')->get();
         return view('admin.medicalInstrument.restore', compact('data'));
     }
     public function restore(Request $request)

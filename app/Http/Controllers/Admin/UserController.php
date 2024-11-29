@@ -23,7 +23,7 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = User::query(); // Đổi từ Unit thành User
+            $query = User::query()->latest('id');
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -40,6 +40,7 @@ class UserController extends Controller
             }
 
             return DataTables::of($query)
+                ->addIndexColumn()
                 ->addColumn('image', function ($row) {
                     $url = Storage::url($row->image);
                     return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
@@ -52,7 +53,7 @@ class UserController extends Controller
                     $viewUrl = route('admin.users.show', $row->id);  // Sửa đường dẫn
                     $editUrl = route('admin.users.edit', $row->id);  // Sửa đường dẫn
                     $deleteUrl = route('admin.users.destroy', $row->id);  // Sửa đường dẫn
-
+    
                     return '
                     <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
                     <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
@@ -186,7 +187,7 @@ class UserController extends Controller
     }
     public function getRestore()
     {
-        $data = User::onlyTrashed()->get();
+        $data = User::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.users.restore', compact('data'));
     }
     public function restore(Request $request)
