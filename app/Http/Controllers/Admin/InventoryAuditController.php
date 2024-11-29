@@ -43,7 +43,7 @@ class InventoryAuditController extends Controller
         }
 
         // Lấy danh sách phiếu kiểm kho với các điều kiện lọc
-        $inventoryAudits = $query->with('storage')->get();
+        $inventoryAudits = $query->latest('id')->with('storage')->get();
 
         // Trả về view với dữ liệu
         return view('admin.inventoryAudit.index', compact('inventoryAudits', 'storages'));

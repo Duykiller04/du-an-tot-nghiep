@@ -122,7 +122,7 @@ class CutDosePrescriptionController extends Controller
             DB::beginTransaction();
             $data = $request->except('medicines');
             $cutDosePrescription->update($data);
-            foreach ($request->medicines as  $item) {
+            foreach ($request->medicines as $item) {
                 if (!isset($item['medicine_id'])) {
                     // Bỏ qua item nếu không có medicine_id
                     continue;
@@ -149,7 +149,7 @@ class CutDosePrescriptionController extends Controller
                 }
             }
             if ($request->has('delete_medicines')) {
-                foreach ($request->delete_medicines as  $cutDoseDetailId) {
+                foreach ($request->delete_medicines as $cutDoseDetailId) {
                     $cutDoseDetail = CutDosePrescriptionDetail::find($cutDoseDetailId);
                     $cutDoseDetail->delete();
                 }
@@ -175,7 +175,7 @@ class CutDosePrescriptionController extends Controller
 
     public function getRestore()
     {
-        $data = CutDosePrescription::onlyTrashed()->get();
+        $data = CutDosePrescription::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.cutDosePrescription.restore', compact('data'));
     }
     public function restore(Request $request)

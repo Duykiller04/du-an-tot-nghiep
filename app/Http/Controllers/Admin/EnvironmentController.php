@@ -24,7 +24,7 @@ class EnvironmentController extends Controller
     public function index()
     {
        
-        $environments = Environment::all();
+        $environments = Environment::latest('id')->get();
         $storage = Storage::all();
         $location = $this->getMachineLocation(); 
         $weatherData = $this->getWeatherData($location);

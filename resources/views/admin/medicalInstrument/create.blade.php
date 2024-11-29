@@ -112,12 +112,6 @@
                             <div class="mb-3">
                                 <div class="row productNew mt-3">
                                     <div class="row mb-3 form-item mt-3">
-                                        @error('so_luong.*')
-                                            <span class="mb-3 alert alert-danger">{{ $message }}</span>
-                                        @enderror
-                                        @error('don_vi.*')
-                                            <span class="mb-3 alert alert-danger mt-2">{{ $message }}</span>
-                                        @enderror
                                         <div class="col-5">
                                             <label class="form-label" for="name">Số lượng <span
                                                     class="text-danger">(*)</span></label>
@@ -128,10 +122,11 @@
                                         <div class="col-5">
                                             <label for="">Đơn vị <span class="text-danger">(*)</span></label>
                                             <select name="don_vi[]" class="form-control">
-                                                <option value="">Chọn đơn vị</option>
+                                                <option value="" {{ old('don_vi.0') == null ? 'selected' : '' }}>Chọn
+                                                    đơn vị</option>
                                                 @foreach ($donvis as $donvi)
                                                     <option value="{{ $donvi->id }}"
-                                                        @if (old('don_vi.0') == $donvi->id) selected @endif>
+                                                        {{ old('don_vi.0') == $donvi->id ? 'selected' : '' }}>
                                                         {{ $donvi->name }}
                                                     </option>
                                                 @endforeach
@@ -147,22 +142,22 @@
                                     <input type="text"
                                         class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
                                         id="packaging_specification" name="medicine[packaging_specification]"
-                                        value="{{ old('medicine.packaging_specification') }}">
+                                        value="{{ old('medicine.packaging_specification') }}" readonly>
                                     @error('medicine.packaging_specification')
                                         <span class="d-block text-danger mt-2">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
 
-
                             <script>
-                                document.addEventListener('DOMContentLoaded', function() {
+                                document.addEventListener('DOMContentLoaded', function () {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
 
                                     const donvis = @json($donvis);
                                     const oldQuantities = @json(old('so_luong', []));
                                     const oldUnits = @json(old('don_vi', []));
+                                    const errors = @json($errors->toArray()); // Lấy danh sách lỗi từ Laravel
 
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
@@ -184,68 +179,155 @@
                                         }
                                     }
 
-                                    productNew.addEventListener('change', function(event) {
+                                    function showError(element, message) {
+                                        const errorElement = document.createElement('p');
+                                        errorElement.classList.add('text-danger'); // Thêm class để hiển thị lỗi
+                                        errorElement.textContent = message;
+                                        element.parentElement.appendChild(errorElement); // Gắn lỗi ngay dưới input
+                                    }
+
+                                    function validateFields() {
+                                        const formItems = productNew.querySelectorAll('.form-item');
+                                        let isValid = true;
+
+                                        formItems.forEach((item, index) => {
+                                            const quantityInput = item.querySelector('input[name="so_luong[]"]');
+                                            const unitSelect = item.querySelector('select[name="don_vi[]"]');
+
+                                            // Xóa lỗi cũ
+                                            const oldErrors = item.querySelectorAll('.text-danger');
+                                            oldErrors.forEach(error => error.remove());
+
+                                            // Kiểm tra số lượng
+                                            if (!quantityInput.value || parseFloat(quantityInput.value) <= 0) {
+                                                showError(quantityInput, `Số lượng ở dòng ${index + 1} phải lớn hơn 0.`);
+                                                isValid = false;
+                                            }
+
+                                            // Kiểm tra đơn vị
+                                            if (!unitSelect.value) {
+                                                showError(unitSelect, `Vui lòng chọn đơn vị ở dòng ${index + 1}.`);
+                                                isValid = false;
+                                            }
+                                        });
+
+                                        return isValid;
+                                    }
+
+                                    btnAdd.addEventListener('click', function () {
+                                        const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
+                                        const lastSelect = allSelects[allSelects.length - 1];
+                                        const lastSelectedUnit = lastSelect ? lastSelect.value : null;
+
+                                        if (lastSelectedUnit) {
+                                            const childUnits = unitsByParent[lastSelectedUnit] || [];
+                                            if (childUnits.length > 0) {
+                                                const newFieldHTML = `
+                                                    <div class="row mb-3 form-item mt-3">
+                                                        <div class="col-5">
+                                                            <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                                                            <input type="number" name="so_luong[]" class="form-control">
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                                                            <select name="don_vi[]" class="form-control">
+                                                                <option value="">Chọn đơn vị</option>
+                                                                ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                                                        </div>
+                                                    </div>
+                                                `;
+                                                productNew.insertAdjacentHTML('beforeend', newFieldHTML);
+                                            } else {
+                                                alert('Hết đơn vị con, không thể thêm trường mới!');
+                                            }
+                                        } else {
+                                            alert('Vui lòng chọn đơn vị trước khi thêm trường mới!');
+                                        }
+                                    });
+
+                                    productNew.addEventListener('click', function (event) {
+                                        if (event.target.classList.contains('btn-delete')) {
+                                            const formItem = event.target.closest('.form-item');
+                                            if (formItem) {
+                                                const allFormItems = Array.from(productNew.querySelectorAll('.form-item'));
+                                                const currentIndex = allFormItems.indexOf(formItem);
+
+                                                // Xóa tất cả các trường từ vị trí hiện tại
+                                                for (let i = allFormItems.length - 1; i >= currentIndex; i--) {
+                                                    allFormItems[i].remove();
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    productNew.addEventListener('change', function (event) {
                                         if (event.target.name === 'don_vi[]') {
-                                            const selectedParentId = event.target.value; // Lấy ID của đơn vị được chọn
+                                            const selectedParentId = event.target.value;
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
 
-                                            // Reset tất cả các ô chọn sau ô đã thay đổi
+                                            // Reset các trường sau trường hiện tại
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
-                                                allSelects[i].innerHTML =
-                                                    '<option value="">Chọn đơn vị</option>'; // Reset các option
-                                                allSelects[i].value = ''; // Reset giá trị ô chọn
+                                                allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>';
+                                                allSelects[i].value = '';
                                             }
 
-                                            // Render các đơn vị con dựa trên ID của đơn vị đã chọn
+                                            // Render các đơn vị con
                                             if (currentSelectIndex < allSelects.length - 1) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
                                                 renderChildUnits(selectedParentId, nextSelect);
                                             }
+                                            updatePackagingSpecification();
                                         }
                                     });
 
-                                    btnAdd.addEventListener('click', function() {
-                                        const index = productNew.querySelectorAll('.form-item').length; // Lấy chỉ số mới cho trường
-                                        const newFieldHTML = `
-                                            <div class="row mb-3 form-item mt-3">
-                                                <div class="col-5">
-                                                    <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                    <input type="number" name="so_luong[]" class="form-control" value="${oldQuantities[index] || ''}">
-                                                </div>
-                                                <div class="col-5">
-                                                    <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                    <select name="don_vi[]" class="form-control">
-                                                        <option value="">Chọn đơn vị</option>
-                                                        ${donvis.map(donvi => `<option value="${donvi.id}" ${oldUnits[index] == donvi.id ? 'selected' : ''} data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
-                                                    </select>             
-                                                </div>
-                                                <div class="col-2">
-                                                    <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
-                                                </div>
-                                            </div>
-                                        `;
-
-                                        productNew.insertAdjacentHTML('beforeend', newFieldHTML);
-                                    });
-
-                                    productNew.addEventListener('click', function(event) {
-                                        if (event.target.classList.contains('btn-delete')) {
-                                            const formItem = event.target.closest('.form-item');
-                                            if (formItem) {
-                                                formItem.remove();
-                                            }
-                                        }
-                                    });
-
-                                    // Giữ lại giá trị cho các trường đã tạo sẵn
+                                    // Khôi phục giá trị và lỗi từ session
                                     oldQuantities.forEach((quantity, index) => {
                                         if (index > 0) {
-                                            btnAdd.click(); // Tạo trường mới cho mỗi giá trị cũ
+                                            btnAdd.click();
                                         }
-                                        productNew.querySelectorAll('input[name="so_luong[]"]')[index].value = quantity;
-                                        productNew.querySelectorAll('select[name="don_vi[]"]')[index].value = oldUnits[index];
+                                        const inputs = productNew.querySelectorAll('input[name="so_luong[]"]');
+                                        const selects = productNew.querySelectorAll('select[name="don_vi[]"]');
+
+                                        if (inputs[index]) inputs[index].value = quantity;
+                                        if (selects[index]) selects[index].value = oldUnits[index] || '';
+
+                                        if (errors[`so_luong.${index}`]) {
+                                            showError(inputs[index], errors[`so_luong.${index}`][0]);
+                                        }
+
+                                        if (errors[`don_vi.${index}`]) {
+                                            showError(selects[index], errors[`don_vi.${index}`][0]);
+                                        }
                                     });
+
+                                    function updatePackagingSpecification() {
+                                        const formItems = productNew.querySelectorAll('.form-item');
+                                        const packagingInput = document.querySelector('#packaging_specification');
+
+                                        let packaging = []; // Mảng lưu các đơn vị cha và con
+
+                                        formItems.forEach(item => {
+                                            const unitSelect = item.querySelector('select[name="don_vi[]"]');
+                                            
+                                            if (unitSelect && unitSelect.value) {
+                                                const selectedUnit = unitSelect.options[unitSelect.selectedIndex];
+                                                const selectedUnitText = selectedUnit.textContent.trim(); // Loại bỏ khoảng trắng thừa
+
+                                                if (selectedUnitText) {
+                                                    packaging.push(selectedUnitText); // Lưu tên đơn vị đã chọn vào mảng
+                                                }
+                                            }
+                                        });
+
+                                        // Ghép các đơn vị với dấu "-" nếu có hơn 1 đơn vị, và loại bỏ khoảng trắng thừa
+                                        packagingInput.value = packaging.join('-').trim();
+                                    }
+                                    updatePackagingSpecification();
                                 });
                             </script>
 
@@ -286,8 +368,7 @@
                                 id="medicine[category_id]" name="medicine[category_id]">
                                 <option value="">-- Chọn danh mục --</option>
                                 @foreach ($categories as $item)
-                                    <option value="{{ $item->id }}"
-                                        @if (old('medicine.category_id') == $item->id) selected @endif>
+                                    <option value="{{ $item->id }}" @if (old('medicine.category_id') == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach

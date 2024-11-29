@@ -37,9 +37,9 @@ class StoreProductRequest extends FormRequest
             'medicine.temperature' => 'nullable|numeric|between:-50,50',
             'medicine.moisture' => 'nullable|numeric|between:0,100',
 
-            // 'so_luong.*' => 'required|integer|min:1',
+            'so_luong.*' => 'required|integer|min:1',
 
-            // 'don_vi.*' => 'required|exists:units,id|distinct',
+            'don_vi.*' => 'required|exists:units,id|distinct',
 
             'supplier_id' => 'required|array',
             'supplier_id.*' => 'exists:suppliers,id',

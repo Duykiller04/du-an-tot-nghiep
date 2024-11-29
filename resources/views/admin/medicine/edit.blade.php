@@ -165,26 +165,15 @@
                             </div>
 
                             <script>
-                                function deleteUnit(button) {
-                                    const unitConversionList = document.querySelector('.unit-conversion-list');
-                                    const rows = unitConversionList.querySelectorAll('.unit-conversion-row');
-                                    console.log(rows);
-                                    if (rows.length > 1) {
-                                        const row = button.closest('.unit-conversion-row');
-                                        row.remove();
-                                    } else {
-                                        alert('Không thể xóa. Cần ít nhất một đơn vị chuyển đổi.');
-                                    }
-                                }
-
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
-
                                     const donvis = @json($donvis);
+
                                     const oldQuantities = @json(old('so_luong', []));
                                     const oldUnits = @json(old('don_vi', []));
 
+                                    // Tổ chức đơn vị con theo parent_id
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
                                             acc[donvi.parent_id] = [];
@@ -193,8 +182,9 @@
                                         return acc;
                                     }, {});
 
+                                    // Hàm render các đơn vị con cho một select
                                     function renderChildUnits(parentId, selectElement) {
-                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>';
                                         if (unitsByParent[parentId]) {
                                             unitsByParent[parentId].forEach(donvi => {
                                                 const option = document.createElement('option');
@@ -205,70 +195,101 @@
                                         }
                                     }
 
+                                    // Xử lý sự kiện thêm trường mới
+                                    btnAdd.addEventListener('click', function() {
+                                        const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
+                                        const lastSelect = allSelects[allSelects.length - 1]; // Lấy select cuối cùng
+                                        const lastSelectedUnit = lastSelect ? lastSelect.value :
+                                        null; // Lấy giá trị đơn vị cuối cùng
+
+                                        if (lastSelectedUnit) {
+                                            const childUnits = unitsByParent[lastSelectedUnit] || [];
+                                            if (childUnits.length > 0) {
+                                                const newFieldHTML = `
+                                                    <div class="row form-item unit-conversion-row">
+                                                        <div class="col-5 mt-3">
+                                                            <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                                                            <input type="number" name="so_luong[]" class="form-control" value="">
+                                                        </div>
+                                                        <div class="col-5 mt-3">
+                                                            <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                                                            <select name="don_vi[]" class="form-control">
+                                                                <option value="">Chọn đơn vị</option>
+                                                                ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2 mt-3">
+                                                            <button class="btn btn-danger" type="button" onclick="deleteUnit(this)" style="margin-top: 25px">Xóa</button>
+                                                        </div>
+                                                    </div>
+                                                `;
+                                                productNew.insertAdjacentHTML('beforeend', newFieldHTML);
+                                            } else {
+                                                alert('Hết đơn vị con, không thể thêm trường mới!');
+                                            }
+                                        } else {
+                                            alert('Vui lòng chọn đơn vị trước khi thêm trường mới!');
+                                        }
+                                    });
+
+                                    // Xử lý sự kiện thay đổi đơn vị
                                     productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
-                                            const selectedParentId = event.target.value; // Lấy ID của đơn vị được chọn
+                                            const selectedParentId = event.target.value; // ID đơn vị đã chọn
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
 
-                                            // Reset tất cả các ô chọn sau ô đã thay đổi
+                                            // Reset tất cả các select sau select đã thay đổi
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
-                                                allSelects[i].innerHTML =
-                                                    '<option value="">Chọn đơn vị</option>'; // Reset các option
-                                                allSelects[i].value = ''; // Reset giá trị ô chọn
+                                                allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>';
+                                                allSelects[i].value = '';
                                             }
 
-                                            // Render các đơn vị con dựa trên ID của đơn vị đã chọn
-                                            if (currentSelectIndex < allSelects.length - 1) {
+                                            // Render đơn vị con cho select tiếp theo
+                                            if (unitsByParent[selectedParentId]) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
-                                                renderChildUnits(selectedParentId, nextSelect);
+                                                if (nextSelect) {
+                                                    renderChildUnits(selectedParentId, nextSelect);
+                                                }
                                             }
                                         }
                                     });
 
-                                    btnAdd.addEventListener('click', function() {
-                                        const unitConversionList = document.querySelector('.unit-conversion-list');
-                                        const index = productNew.querySelectorAll('.form-item').length; // Lấy chỉ số mới cho trường
-                                        const newFieldHTML = `
-                                            <div class="row form-item">
-                                                <div class="row unit-conversion-row mb-3 form-item mt-3">
-                                                    <div class="col-5">
-                                                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                        <input type="number" name="so_luong[]" class="form-control" value="${oldQuantities[index] || ''}">
-                                                    </div>
-                                                    <div class="col-5">
-                                                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                        <select name="don_vi[]" class="form-control">
-                                                            <option value="">Chọn đơn vị</option>
-                                                            ${donvis.map(donvi => `<option value="${donvi.id}" ${oldUnits[index] == donvi.id ? 'selected' : ''} data-parent="${donvi.parent_id}">${donvi.name}</option>`).join('')}
-                                                        </select>             
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <button class="btn btn-danger" type="button" onclick="deleteUnit(this)" style="margin-top: 25px">Xóa</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        `;
+                                    // Hàm xóa trường
+                                    window.deleteUnit = function(button) {
+                                        const formItem = button.closest('.form-item'); // Chỉ lấy phần tử cha gần nhất
+                                        if (formItem) {
+                                            const allFormItems = document.querySelectorAll('.form-item');
 
-                                        productNew.insertAdjacentHTML('beforeend', newFieldHTML);
-                                    });
-
-                                    productNew.addEventListener('click', function(event) {
-                                        if (event.target.classList.contains('btn-delete')) {
-                                            const formItem = event.target.closest('.form-item');
-                                            if (formItem) {
+                                            // Chỉ cho phép xóa nếu còn nhiều hơn 1 dòng
+                                            if (allFormItems.length > 1) {
                                                 formItem.remove();
+                                            } else {
+                                                alert('Không thể xóa. Cần ít nhất một đơn vị chuyển đổi.');
                                             }
                                         }
-                                    });
+                                    };
 
-                                    // Giữ lại giá trị cho các trường đã tạo sẵn
+                                    // Render lại các trường đã lưu khi load lại trang
                                     oldQuantities.forEach((quantity, index) => {
                                         if (index > 0) {
-                                            btnAdd.click(); // Tạo trường mới cho mỗi giá trị cũ
+                                            btnAdd.click(); // Thêm trường mới
                                         }
-                                        productNew.querySelectorAll('input[name="so_luong[]"]')[index].value = quantity;
-                                        productNew.querySelectorAll('select[name="don_vi[]"]')[index].value = oldUnits[index];
+                                        const inputs = productNew.querySelectorAll('input[name="so_luong[]"]');
+                                        const selects = productNew.querySelectorAll('select[name="don_vi[]"]');
+
+                                        if (inputs[index]) {
+                                            inputs[index].value = quantity;
+                                        }
+                                        if (selects[index]) {
+                                            selects[index].value = oldUnits[index];
+
+                                            // Render các đơn vị con cho các trường tiếp theo
+                                            if (index > 0) {
+                                                const parentUnit = oldUnits[index - 1];
+                                                renderChildUnits(parentUnit, selects[index]);
+                                            }
+                                        }
                                     });
                                 });
                             </script>

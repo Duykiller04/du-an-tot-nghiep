@@ -141,7 +141,7 @@ class CategoryController extends Controller
     }
     public function getRestore()
     {
-        $data = Category::onlyTrashed()->get();
+        $data = Category::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.catalogue.restore', compact('data'));
     }
     public function restore(Request $request)

@@ -32,7 +32,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h5 class="card-title flex-grow-1 mb-0">Phiếu Kiểm #{{ $inventoryAudit->id }}</h5>
+                            <h5 class="card-title flex-grow-1 mb-0">Phiếu Kiểm: {{ $inventoryAudit->id }}</h5>
                             <div class="flex-shrink-0">
                                 <a href="{{ route('admin.inventoryaudit.index') }}" class="btn btn-primary">Quay Lại</a>
                                 {{-- <a href="{{ route('admin.inventoryaudits.print', $inventoryAudit->id) }}" class="btn btn-success">In Phiếu</a> --}}

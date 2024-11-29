@@ -19,7 +19,8 @@ class SupplierController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Supplier::query();
+            $query = Supplier::query()->latest('id');
+            ;
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -103,10 +104,10 @@ class SupplierController extends Controller
     {
         try {
             $supplier->update([
-                'tax_code'   => $request->tax_code_edit,
-                'name'   => $request->name_edit,
-                'email'  => $request->email_edit,
-                'phone'   => $request->phone_edit,
+                'tax_code' => $request->tax_code_edit,
+                'name' => $request->name_edit,
+                'email' => $request->email_edit,
+                'phone' => $request->phone_edit,
                 'address' => $request->address_edit,
             ]);
             return back()->with('success', 'Thành công');
@@ -125,7 +126,7 @@ class SupplierController extends Controller
     }
     public function getRestore()
     {
-        $data = Supplier::onlyTrashed()->get();
+        $data = Supplier::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.suppliers.restore', compact('data'));
     }
     public function restore(Request $request)

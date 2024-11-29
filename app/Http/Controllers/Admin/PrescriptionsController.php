@@ -29,16 +29,16 @@ class PrescriptionsController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = Prescription::with('prescriptionDetails');
+            $data = Prescription::with('prescriptionDetails')->latest('id');
 
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
                 $endDate = request()->get('endDate');
-                
+
                 if ($startDate && $endDate) {
                     $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
                     $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
-    
+
                     $data->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
@@ -55,7 +55,7 @@ class PrescriptionsController extends Controller
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
-                    $deleteUrl = route('admin.prescriptions.destroy',$row->id);
+                    $deleteUrl = route('admin.prescriptions.destroy', $row->id);
                     return '
                         <a href="' . route('admin.prescriptions.show', $row->id) . '" class="btn btn-info">Xem</a>
                         <a href="' . route('admin.prescriptions.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
@@ -85,7 +85,7 @@ class PrescriptionsController extends Controller
         $unitsSelectMedicine = [];
 
         // dd($cutDosePrescription);
-        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases','unitsSelectMedicine', 'cutDosePrescription'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases', 'unitsSelectMedicine', 'cutDosePrescription'));
     }
 
     /**
@@ -127,7 +127,7 @@ class PrescriptionsController extends Controller
             }
             if ($shiftId) {
                 $shift = Shift::find($shiftId);
-        
+
                 $shift->revenue_summary += $request->input('total_price');
                 $shift->save();
                 broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
@@ -153,7 +153,7 @@ class PrescriptionsController extends Controller
     public function show(string $id)
     {
         $prescription = Prescription::with(['prescriptionDetails.medicine', 'prescriptionDetails.unit'])->findOrFail($id);
-    
+
         return view(self::PATH_VIEW . __FUNCTION__, compact('prescription'));
     }
 
@@ -165,7 +165,7 @@ class PrescriptionsController extends Controller
         $prescription = Prescription::with('prescriptionDetails.medicine', 'prescriptionDetails.unit')->findOrFail($id);
 
         // dd($prescription);
-        
+
         $cutDosePrescription = CutDosePrescription::all(); // Lấy danh sách đơn thuốc mẫu
         $medicines = Medicine::all()->pluck('name', 'id'); // Lấy danh sách thuốc
         $units = Unit::all()->pluck('name', 'id'); // Lấy danh sách đơn vị
@@ -214,7 +214,7 @@ class PrescriptionsController extends Controller
 
     public function getRestore()
     {
-        $data = Prescription::onlyTrashed()->get();
+        $data = Prescription::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.Prescription.restore', compact('data'));
     }
     public function restore(Request $request)

@@ -128,8 +128,11 @@
                         d.endDate = $('#end-date').val();
                     }
                 },
-                columns: [{
-                        data: 'id'
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'disease_name'

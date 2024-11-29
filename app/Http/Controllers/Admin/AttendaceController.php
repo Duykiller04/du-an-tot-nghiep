@@ -19,8 +19,7 @@ class AttendaceController extends Controller
      */
     public function index()
     {
-        $shifts = ShiftUser::with('shift.attendace')->where('user_id', Auth::user()->id)->get();
-        // dd($shifts->toArray());
+        $shifts = ShiftUser::with('shift.attendace')->where('user_id', Auth::user()->id)->latest('id')->get();
         $getStatusClass = function ($status) {
             switch ($status) {
                 case 'kế hoạch':

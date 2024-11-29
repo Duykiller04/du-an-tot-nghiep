@@ -27,7 +27,8 @@ class MedicineController extends Controller
         if (request()->ajax()) {
             $query = Medicine::query()
                 ->with(['suppliers', 'category', 'storage', 'inventory'])
-                ->where('type_product', 0);
+                ->where('type_product', 0)
+                ->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -276,7 +277,7 @@ class MedicineController extends Controller
     }
     public function getRestore()
     {
-        $data = Medicine::onlyTrashed()->where('type_product', 0)->get();
+        $data = Medicine::onlyTrashed()->where('type_product', 0)->orderBy('deleted_at', 'desc')->get();
         return view('admin.medicine.restore', compact('data'));
     }
     public function restore(Request $request)
