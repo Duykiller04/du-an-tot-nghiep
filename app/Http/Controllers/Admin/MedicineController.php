@@ -69,8 +69,13 @@ class MedicineController extends Controller
                     return number_format($row->price_sale) . ' VND';  // Format price
                 })
                 ->addColumn('image', function ($row) {
-                    $url = \Illuminate\Support\Facades\Storage::url($row->image);
-                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
+                    if ($row->image) {
+                        $url = \Illuminate\Support\Facades\Storage::url($row->image);
+                        return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc" ><img src="' . asset($url) . '" width="200" height="150" alt="" /></a>';
+                    } else {
+                        $defaultImage = asset('theme/admin/assets/images/no-img-avatar.png');
+                        return '<img src="' . $defaultImage . '" width="200" height="150" alt="" />';
+                    }
                 })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.medicines.show', $row->id);
@@ -111,7 +116,6 @@ class MedicineController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        // dd($request->all());
 
         $priceImport = $request->input('medicine.price_import');
         $priceSale = $request->input('medicine.price_sale');

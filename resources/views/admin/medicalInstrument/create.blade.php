@@ -405,12 +405,24 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">Ảnh dụng cụ</h5>
                         </div>
-                        <div class="card-body">
-                            <input type="file" class="form-control" id="image" name="image"
-                                accept="image/png, image/gif, image/jpeg, image/jpg">
-                            @error('image')
-                                <span class="d-block text-danger mt-2">{{ $message }}</span>
-                            @enderror
+                        <div class="card-body d-flex justify-content-center">
+                            <div class="avatar-upload text-center">
+                                <div class="position-relative">
+                                    <div class="avatar-preview">
+                                        <div id="imagePreview" class="bg-cover bg-center" style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                        </div>
+                                    </div>
+                                    <div class="change-btn mt-2">
+                                        <input type='file' class="form-control d-none" id="imageUpload"
+                                            name="image" accept=".png, .jpg, .jpeg">
+                                        <label for="imageUpload" class="btn btn-primary light btn">Chọn
+                                            ảnh</label>
+                                    </div>
+                                    @error('image')
+                                        <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -507,6 +519,21 @@
             $('.js-example-basic-single').select2({
                 dropdownAutoWidth: true
             });
+        });
+        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUpload").on('change', function() {
+            readURL(this);
         });
     </script>
 @endsection

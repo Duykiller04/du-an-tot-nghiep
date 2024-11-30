@@ -143,8 +143,7 @@
 
                                                 <div class="col-2 mt-3">
                                                     <button class="btn btn-danger" type="button"
-                                                        style="margin-top: 25px"
-                                                        onclick="deleteUnit(this)">Xóa</button>
+                                                        style="margin-top: 25px" onclick="deleteUnit(this)">Xóa</button>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -200,7 +199,7 @@
                                         const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                         const lastSelect = allSelects[allSelects.length - 1]; // Lấy select cuối cùng
                                         const lastSelectedUnit = lastSelect ? lastSelect.value :
-                                        null; // Lấy giá trị đơn vị cuối cùng
+                                            null; // Lấy giá trị đơn vị cuối cùng
 
                                         if (lastSelectedUnit) {
                                             const childUnits = unitsByParent[lastSelectedUnit] || [];
@@ -369,20 +368,25 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">Ảnh dụng cụ</h5>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-center mb-2">
-                                @if ($medicalInstrument->image)
-                                    <img src="{{ asset('storage/' . $medicalInstrument->image) }}" alt="Ảnh dụng cụ"
-                                        width="200" class="img-fluid">
-                                @else
-                                    <p class="text-center">Chưa có ảnh</p>
-                                @endif
+                        <div class="card-body d-flex justify-content-center">
+                            <div class="avatar-upload text-center">
+                                <div class="position-relative">
+                                    <div class="avatar-preview">
+                                        <div id="imagePreview" class="bg-cover bg-center"
+                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ $medicalInstrument->image ? asset('storage/' . $medicalInstrument->image) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                        </div>
+                                        <div class="change-btn mt-2">
+                                            <input type='file' class="form-control d-none" id="imageUpload"
+                                                name="image" accept=".png, .jpg, .jpeg">
+                                            <label for="imageUpload" class="btn btn-primary light btn">Chọn
+                                                ảnh</label>
+                                        </div>
+                                        @error('image')
+                                            <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            <input type="file" class="form-control" id="image" name="image"
-                                accept="image/png, image/gif, image/jpeg, image/jpg">
-                            @error('image')
-                                <span class="d-block text-danger mt-2">{{ $message }}</span>
-                            @enderror
                         </div>
                     </div>
 
@@ -439,18 +443,17 @@
                     </div>
 
                 </div>
-            </div>
 
-            <div class="col-lg-12 custom-spacing ">
-                <div class="card">
-                    <div class="text-end m-3">
-                        <a href="{{ route('admin.medicalInstruments.index') }}">
-                            <button type="button" class="btn btn-primary w-sm">Quay lại</button>
-                        </a>
-                        <button type="submit" class="btn btn-success w-sm">Sửa</button>
+                <div class="col-lg-12 custom-spacing ">
+                    <div class="card">
+                        <div class="text-end m-3">
+                            <a href="{{ route('admin.medicalInstruments.index') }}">
+                                <button type="button" class="btn btn-primary w-sm">Quay lại</button>
+                            </a>
+                            <button type="submit" class="btn btn-success w-sm">Sửa</button>
+                        </div>
                     </div>
                 </div>
-            </div>
         </form>
     </div>
 @endsection
@@ -480,6 +483,21 @@
             $('.js-example-basic-single').select2({
                 dropdownAutoWidth: true
             });
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#imageUpload").on('change', function() {
+            readURL(this);
         });
     </script>
 @endsection
