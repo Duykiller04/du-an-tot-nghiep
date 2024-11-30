@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Thời gian làm việc
+    Thời gian làm việc của nhân viên
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Thời gian làm việc</h4>
+                    <h4 class="mb-sm-0">Thời gian làm việc của nhân viên</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
@@ -17,7 +17,7 @@
                                 <a href="javascript: void(0);">Trang chủ</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                Thời gian làm việc
+                                Thời gian làm việc của nhân viên
                             </li>
                         </ol>
                     </div>
@@ -30,10 +30,20 @@
             <div class="col-lg-12">
                 <div class="card" id="shiftList">
                     <div class="card-body">
-                        <h3 class="text-center mb-4">Thống kê điểm danh tháng {{ $month }}/{{ $year }}</h3>
+                        <h3 class="text-center mb-4">Thống kê điểm danh nhân viên {{ isset($userId) ? $arrUsers->where('id', $userId)->first()->name : '' }}: tháng {{ $month }}/{{ $year }}</h3>
 
-                        <form action="{{ route('admin.attendace.list') }}" method="GET" class="mb-4">
+                        <form action="{{ route('admin.attendace.list.user') }}" method="GET" class="mb-4">
                             <div class="row">
+                                <div class="col-md-2">
+                                    <select name="user_id" class="form-control">
+                                        <option value="">Chọn nhân viên</option>
+                                        @foreach ($arrUsers as $item)
+                                            <option value="{{ $item->id }}" {{ isset($userId) && $item->id == $userId ? 'selected' : '' }}>
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>                                    
+                                </div>
                                 <div class="col-md-4">
                                     <select name="month" class="form-control">
                                         @for ($i = 1; $i <= 12; $i++)
@@ -52,7 +62,7 @@
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <button type="submit" class="btn btn-primary">Lọc</button>
                                 </div>
                             </div>
@@ -62,6 +72,7 @@
                                 <thead>
                                     <tr>
                                         <th>Ngày</th>
+                                        <th>Nhân viên</th>
                                         <th>Ca làm</th>
                                         <th>Check-in</th>
                                         <th>Thời gian check-in</th>
@@ -74,6 +85,7 @@
                                     @forelse ($attendances as $attendance)
                                         <tr>
                                             <td>{{ \Carbon\Carbon::parse($attendance->created_at)->format('d/m/Y') }}</td>
+                                            <td>{{ $attendance->user->name }}</td>
                                             <td>{{ $attendance->shift_id }}</td>
                                             <td>
                                                 <a
@@ -99,7 +111,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center">Không có dữ liệu</td>
+                                            <td colspan="8" class="text-center">Không có dữ liệu</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -138,4 +150,5 @@
 
     </div>
 @endsection
+
 
