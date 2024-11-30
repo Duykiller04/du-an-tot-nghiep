@@ -167,7 +167,7 @@ class UserController extends Controller
             Mail::to($model->email)->send(new SendMailToUser($model, $password));
             return back()->with('success', 'Cập nhật thành công');
         } catch (\Exception $exception) {
-            Log::error('Loi update ' . $exception->getMessage());
+            Log::error('Lỗi cập nhật tài khoản ' . $exception->getMessage());
             return back()->with('error', 'Cập nhật thất bại: ' . $exception->getMessage());
         }
     }
