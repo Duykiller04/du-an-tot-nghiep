@@ -55,13 +55,46 @@ Route::prefix('admin')
             return view("admin.dashboard");
         })->name('dashboard');
 
-        Route::controller(SettingController::class)
-            ->prefix('setting')->as('setting.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::put('/update/{id}', 'update')->name('update');
-                Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::middleware('admin')->group(function () {
+            Route::controller(SettingController::class)
+                ->prefix('setting')->as('setting.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::put('/update/{id}', 'update')->name('update');
+                    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+                });
+
+            Route::controller(ShiftController::class)
+                ->prefix('shifts')->as('shifts.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/add', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/edit/{id}', 'edit')->name('edit');
+                    Route::get('/getOrders/{id}', 'getorder')->name('getOrders');
+                    Route::put('shifts/{shift}/status/{status}', 'updateStatus')->name('updateStatus');
+                    Route::put('/update/{id}', 'update')->name('update');
+                    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+                });
+
+            Route::controller(ExpirationNotificationController::class)
+                ->prefix('notifications')->as('notifications.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
+                });
+            
+            Route::controller(NotificationLogController::class)
+                ->prefix('notification_log')->as('notification_log.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
+                });
+
             });
+            
+        Route::resource('users', UserController::class);
+            
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')
             ->group(function () {
@@ -71,18 +104,6 @@ Route::prefix('admin')
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::put('/{id}', 'update')->name('update');
-                Route::delete('/delete/{id}', 'destroy')->name('destroy');
-            });
-        Route::controller(ShiftController::class)
-            ->prefix('shifts')->as('shifts.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/add', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{id}', 'edit')->name('edit');
-                Route::get('/getOrders/{id}', 'getorder')->name('getOrders');
-                Route::put('shifts/{shift}/status/{status}', 'updateStatus')->name('updateStatus');
-                Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
             });
 
@@ -98,25 +119,9 @@ Route::prefix('admin')
                 Route::get('/download-template', 'downloadTemplate')->name('downloadTemplate');
             });
 
-        Route::controller(ExpirationNotificationController::class)
-            ->prefix('notifications')->as('notifications.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
-            });
-        Route::controller(NotificationLogController::class)
-            ->prefix('notification_log')->as('notification_log.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
-            });
-
-
         Route::resource('diseases', DiseaseController::class);
 
         Route::resource('catalogues', CategoryController::class);
-
-        Route::resource('users', UserController::class);
 
         Route::resource('customers', CustomerController::class);
 
@@ -189,6 +194,7 @@ Route::prefix('admin')
             Route::get('/prescriptions', [PrescriptionsController::class, 'getRestore'])->name('restore.prescriptions');
             Route::post('/prescriptions', [PrescriptionsController::class, 'restore']);
         });
+
         Route::get('export', [ExportController::class, 'showExportForm'])->name('export.form');
         Route::post('export', [ExportController::class, 'export'])->name('export');
     });
