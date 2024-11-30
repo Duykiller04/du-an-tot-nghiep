@@ -133,4 +133,18 @@ class AttendaceController extends Controller
             return back()->with('success', 'Check-out thành công!');
         }
     }
+
+    public function listAttendace(Request $request){
+        $userId = auth()->id(); // Lấy ID của user đang đăng nhập
+        $month = $request->get('month', now()->format('m')); // Lấy tháng hiện tại hoặc từ request
+        $year = $request->get('year', now()->format('Y')); // Lấy năm hiện tại hoặc từ request
+
+        $attendances = Attendace::where('user_id', $userId)
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->orderBy('created_at')
+            ->paginate(10);
+
+        return view('admin.attendance.list', compact('attendances', 'month', 'year'));
+    }
 }

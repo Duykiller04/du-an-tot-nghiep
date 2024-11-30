@@ -11,3 +11,10 @@
 <!-- App js -->
 <script src="/theme/admin/assets/js/app.js"></script>
 
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        Fancybox.bind('[data-fancybox]', {
+          //
+        });    
+      </script>

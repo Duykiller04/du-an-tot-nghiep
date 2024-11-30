@@ -144,6 +144,8 @@ Route::prefix('admin')
         Route::resource('prescriptions', PrescriptionsController::class);
 
         Route::get('attendace', [AttendaceController::class, 'index'])->name('attendace.index');
+        
+        Route::get('list-attendace', [AttendaceController::class, 'listAttendace'])->name('attendace.list');
 
         Route::post('checkin', [AttendaceController::class, 'checkin'])->name('attendace.checkin');
 

@@ -303,6 +303,10 @@
                                 <a href="{{ route('admin.attendace.index') }}" class="nav-link"
                                     data-key="t-level-1.1">Điểm danh</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.attendace.list') }}" class="nav-link"
+                                    data-key="t-level-1.1">Giờ làm việc</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
