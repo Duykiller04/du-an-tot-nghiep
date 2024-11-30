@@ -30,8 +30,8 @@ class DiseaseController extends Controller
                 // Kiểm tra định dạng ngày và lọc
                 if ($startDate && $endDate) {
                     // Convert to datetime to include the full day
-                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
-                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+                    $startDate = Carbon::parse($startDate)->startOfDay();
+                    $endDate = Carbon::parse($endDate)->endOfDay();
 
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
@@ -39,8 +39,13 @@ class DiseaseController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
-                    $url = Storage::url($row->feature_img);
-                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
+                    if ($row->feature_img) {
+                        $url = Storage::url($row->feature_img);
+                        return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc" ><img src="' . asset($url) . '" width="200" height="150" alt="" /></a>';
+                    } else {
+                        $defaultImage = asset('theme/admin/assets/images/no-img-avatar.png');
+                        return '<img src="' . $defaultImage . '" width="200" height="150" alt="" />';
+                    }
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.diseases.edit', $row->id);

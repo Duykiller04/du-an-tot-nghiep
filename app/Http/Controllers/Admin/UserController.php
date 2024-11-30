@@ -45,8 +45,13 @@ class UserController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
-                    $url = Storage::url($row->image);
-                    return '<img src="' . asset($url) . '" alt="image" width="50" height="50">';
+                    if ($row->image) {
+                        $url = Storage::url($row->image);
+                        return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc" ><img src="' . asset($url) . '" class="rounded-circle" width="50" height="50" alt="" /></a>';
+                    } else {
+                        $defaultImage = asset('theme/admin/assets/images/no-img-avatar.png');
+                        return '<img src="' . $defaultImage . '" class="rounded-circle" width="50" height="50" alt="" />';
+                    }
                 })
                 ->addColumn('created_at', function ($row) {
                     // Kiểm tra nếu có deleted_at, nếu không thì trả về null hoặc dấu -
