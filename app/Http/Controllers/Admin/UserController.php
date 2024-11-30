@@ -130,6 +130,7 @@ class UserController extends Controller
             $password = $request->new_password;
             // Lấy ảnh hiện tại của người dùng
             $currentImgThumb = $model->image;
+            $currentEmail = $model->email;
 
             // Nếu người dùng tải lên ảnh mới
             if ($request->hasFile('image')) {
@@ -164,7 +165,7 @@ class UserController extends Controller
             if ($request->hasFile('image') && $currentImgThumb && Storage::disk('public')->exists($currentImgThumb)) {
                 Storage::disk('public')->delete($currentImgThumb);
             }
-            Mail::to($model->email)->send(new SendMailToUser($model, $password));
+            Mail::to($currentEmail)->send(new SendMailToUser($model, $password));
             return back()->with('success', 'Cập nhật thành công');
         } catch (\Exception $exception) {
             Log::error('Lỗi cập nhật tài khoản ' . $exception->getMessage());
