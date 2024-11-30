@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Mail\SendMailToUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -141,7 +143,7 @@ class UserController extends Controller
 
             // Lấy toàn bộ dữ liệu trừ 'image' và các trường mật khẩu
             $data = $request->except(['image', 'old_password', 'new_password', 'confirm_password']);
-
+            $password = $request->new_password;
             // Lấy ảnh hiện tại của người dùng
             $currentImgThumb = $model->image;
 
@@ -178,9 +180,10 @@ class UserController extends Controller
             if ($request->hasFile('image') && $currentImgThumb && Storage::disk('public')->exists($currentImgThumb)) {
                 Storage::disk('public')->delete($currentImgThumb);
             }
-
+            Mail::to($model->email)->send(new SendMailToUser($model, $password));
             return back()->with('success', 'Cập nhật thành công');
         } catch (\Exception $exception) {
+            Log::error('Lỗi cập nhật tài khoản ' . $exception->getMessage());
             return back()->with('error', 'Cập nhật thất bại: ' . $exception->getMessage());
         }
     }
