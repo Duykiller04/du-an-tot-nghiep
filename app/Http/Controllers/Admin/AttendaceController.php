@@ -8,6 +8,7 @@ use App\Http\Requests\CheckOutRequest;
 use App\Models\Attendace;
 use App\Models\Shift;
 use App\Models\ShiftUser;
+use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -146,5 +147,25 @@ class AttendaceController extends Controller
             ->paginate(10);
 
         return view('admin.attendance.list', compact('attendances', 'month', 'year'));
+    }
+
+    public function listAttendaceUser(Request $request)
+    {
+        $userId = $request->get('user_id');
+        $month = $request->get('month', now()->format('m'));
+        $year = $request->get('year', now()->format('Y'));
+        $arrUsers = User::all();
+
+        $attendances = Attendace::with('user')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month);
+
+        if ($userId) {
+            $attendances = $attendances->where('user_id', $userId);
+        }
+
+        $attendances = $attendances->orderBy('created_at')->paginate(10);
+
+        return view('admin.attendance.list_user', compact('attendances', 'month', 'year', 'arrUsers', 'userId'));
     }
 }
