@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -50,18 +51,29 @@ class UserController extends Controller
                     return $row->created_at ? \Carbon\Carbon::parse($row->created_at)->format('d/m/Y') : '-';
                 })
                 ->addColumn('action', function ($row) {
-                    $viewUrl = route('admin.users.show', $row->id);  // Sửa đường dẫn
-                    $editUrl = route('admin.users.edit', $row->id);  // Sửa đường dẫn
-                    $deleteUrl = route('admin.users.destroy', $row->id);  // Sửa đường dẫn
-    
-                    return '
-                    <a href="' . $viewUrl . '" class="btn  btn-primary">Xem</a>
-                    <a href="' . $editUrl . '" class="btn  btn-warning">Sửa</a>
-                    <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-                    </form>
-                    ';
+                    $viewUrl = route('admin.users.show', $row->id);
+                    $editUrl = route('admin.users.edit', $row->id);
+                    $deleteUrl = route('admin.users.destroy', $row->id);
+
+                    $actionHtml = '<a href="' . $viewUrl . '" class="btn btn-primary me-2">Xem</a>';
+                    
+                    // Nếu người dùng đăng nhập là 'staff', chỉ hiển thị nút sửa tài khoản của họ
+                    if (Auth::user()->type === 'staff') {
+                        if (Auth::id() === $row->id) {
+                            $actionHtml .= '<a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>';
+                        }
+                    } else {
+                        // Với admin, hiển thị cả nút sửa và xóa
+                        $actionHtml .= '
+                            <a href="' . $editUrl . '" class="btn btn-warning me-2">Sửa</a>
+                            <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                                ' . csrf_field() . method_field('DELETE') . '
+                                <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                            </form>
+                        ';
+                    }
+
+                    return $actionHtml;
                 })
                 ->rawColumns(['image', 'action'])
                 ->make(true);
@@ -123,6 +135,10 @@ class UserController extends Controller
         try {
             $model = User::findOrFail($id);
 
+            if (Auth::user()->type === 'staff' && Auth::id() != $id) {
+                return back()->withErrors(['error' => 'Bạn không có quyền sửa tài khoản này.']);
+            }
+
             // Lấy toàn bộ dữ liệu trừ 'image' và các trường mật khẩu
             $data = $request->except(['image', 'old_password', 'new_password', 'confirm_password']);
 
@@ -176,6 +192,10 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $data = User::query()->findOrFail($id);
+
+        if (Auth::user()->type === 'staff') {
+            return back()->withErrors(['error' => 'Bạn không có quyền xóa tài khoản.']);
+        }
 
         $data->delete();
 

@@ -50,10 +50,12 @@
                     <div class="collapse menu-dropdown" id="sidebarMultilevel">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.catalogues.index')}}" class="nav-link" data-key="t-level-1.1">Danh mục</a>
+                                <a href="{{ route('admin.catalogues.index') }}" class="nav-link"
+                                    data-key="t-level-1.1">Danh mục</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('admin.units.index')}}" class="nav-link" data-key="t-level-1.1">Đơn vị</a>
+                                <a href="{{ route('admin.units.index') }}" class="nav-link" data-key="t-level-1.1">Đơn
+                                    vị</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#Medicine" class="nav-link" data-bs-toggle="collapse" role="button"
@@ -62,11 +64,13 @@
                                 <div class="collapse menu-dropdown" id="Medicine">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.medicines.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.medicines.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.medicines.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.medicines.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
@@ -74,16 +78,19 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#MedicineInstrument" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="MedicineInstrument" data-key="t-level-1.2"> Dụng cụ
+                                    aria-expanded="false" aria-controls="MedicineInstrument" data-key="t-level-1.2">
+                                    Dụng cụ
                                 </a>
                                 <div class="collapse menu-dropdown" id="MedicineInstrument">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.medicalInstruments.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.medicalInstruments.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.medicalInstruments.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.medicalInstruments.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
@@ -93,8 +100,8 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMultilevel2" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarMultilevel2">
+                    <a class="nav-link menu-link" href="#sidebarMultilevel2" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarMultilevel2">
                         <i class="ri-file-list-3-fill"></i> <span data-key="t-multi-level">Đơn thuốc</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMultilevel2">
@@ -106,28 +113,33 @@
                                 <div class="collapse menu-dropdown" id="diseases">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.diseases.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.diseases.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.diseases.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.diseases.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#cutDosePrescriptions" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="cutDosePrescriptions" data-key="t-level-1.2"> Mẫu đơn thuốc
+                                <a href="#cutDosePrescriptions" class="nav-link" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="cutDosePrescriptions"
+                                    data-key="t-level-1.2"> Mẫu đơn thuốc
                                 </a>
                                 <div class="collapse menu-dropdown" id="cutDosePrescriptions">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.cutDosePrescriptions.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.cutDosePrescriptions.create') }}"
+                                                class="nav-link" data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.cutDosePrescriptions.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.cutDosePrescriptions.index') }}"
+                                                class="nav-link" data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
@@ -135,16 +147,19 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#cutDoseOrders" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="cutDoseOrders" data-key="t-level-1.2"> Đơn thuốc cắt liều
+                                    aria-expanded="false" aria-controls="cutDoseOrders" data-key="t-level-1.2"> Đơn
+                                    thuốc cắt liều
                                 </a>
                                 <div class="collapse menu-dropdown" id="cutDoseOrders">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.cutDoseOrders.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.cutDoseOrders.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.cutDoseOrders.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.cutDoseOrders.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
@@ -152,16 +167,19 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#prescriptions" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="prescriptions" data-key="t-level-1.2"> Đơn thuốc thông thường
+                                    aria-expanded="false" aria-controls="prescriptions" data-key="t-level-1.2"> Đơn
+                                    thuốc thông thường
                                 </a>
                                 <div class="collapse menu-dropdown" id="prescriptions">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.prescriptions.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.prescriptions.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.prescriptions.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.prescriptions.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
@@ -171,113 +189,131 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMultilevel3" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarMultilevel3">
+                    <a class="nav-link menu-link" href="#sidebarMultilevel3" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarMultilevel3">
                         <i class="ri-store-fill"></i> <span data-key="t-multi-level">Kho</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMultilevel3">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin.storage.index')}}" class="nav-link" data-key="t-level-1.1">Kho thuốc</a>
+                                <a href="{{ route('admin.storage.index') }}" class="nav-link"
+                                    data-key="t-level-1.1">Kho thuốc</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#importorder" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="importorder" data-key="t-level-1.2">Nhập kho thuốc
+                                    aria-expanded="false" aria-controls="importorder" data-key="t-level-1.2">Nhập kho
+                                    thuốc
                                 </a>
                                 <div class="collapse menu-dropdown" id="importorder">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.importorder.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.importorder.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.importorder.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.importorder.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('admin.inventoryaudit.index')}}" class="nav-link" data-key="t-level-1.1">Kiểm kho</a>
+                                <a href="{{ route('admin.inventoryaudit.index') }}" class="nav-link"
+                                    data-key="t-level-1.1">Kiểm kho</a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMultilevel4" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarMultilevel4">
+                    <a class="nav-link menu-link" href="#sidebarMultilevel4" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarMultilevel4">
                         <i class="ri-group-2-fill"></i> <span data-key="t-multi-level">Người dùng và đối tác</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMultilevel4">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="#users" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="users" data-key="t-level-1.2"> Người dùng
+                                    aria-expanded="false" aria-controls="users" data-key="t-level-1.2"> Người
+                                    dùng
                                 </a>
                                 <div class="collapse menu-dropdown" id="users">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.users.create') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.users.create') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Thêm mới </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.users.index') }}" class="nav-link" data-key="t-level-2.1">
+                                            <a href="{{ route('admin.users.index') }}" class="nav-link"
+                                                data-key="t-level-2.1">
                                                 Danh sách </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('admin.customers.index')}}" class="nav-link" data-key="t-level-1.1">Khách hàng</a>
+                                <a href="{{ route('admin.customers.index') }}" class="nav-link"
+                                    data-key="t-level-1.1">Khách hàng</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('admin.suppliers.index')}}" class="nav-link" data-key="t-level-1.1">Nhà cung cấp</a>
+                                <a href="{{ route('admin.suppliers.index') }}" class="nav-link"
+                                    data-key="t-level-1.1">Nhà cung cấp</a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('admin.environments.index') }}" >
+                    <a class="nav-link menu-link" href="{{ route('admin.environments.index') }}">
                         <i class="ri-temp-hot-line"></i> <span data-key="t-apps">Môi trường/Độ ẩm</span>
                     </a>
-                   
+
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMultilevel5" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarMultilevel5">
+                    <a class="nav-link menu-link" href="#sidebarMultilevel5" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarMultilevel5">
                         <i class="ri-group-2-fill"></i> <span data-key="t-multi-level">Ca làm</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMultilevel5">
                         <ul class="nav nav-sm flex-column">
+                            @if (Auth::user()->isAdmin())
+                                <li class="nav-item">
+                                    <a href="#users" class="nav-link" data-bs-toggle="collapse" role="button"
+                                        aria-expanded="false" aria-controls="users" data-key="t-level-1.2"> Quản lý
+                                        ca làm
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="users">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a href="{{ route('admin.shifts.create') }}" class="nav-link"
+                                                    data-key="t-level-2.1">
+                                                    Thêm mới </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="{{ route('admin.shifts.index') }}" class="nav-link"
+                                                    data-key="t-level-2.1">
+                                                    Danh sách </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            @endif
                             <li class="nav-item">
-                                <a href="#users" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="users" data-key="t-level-1.2"> Quản lý ca làm
-                                </a>
-                                <div class="collapse menu-dropdown" id="users">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.shifts.create') }}" class="nav-link" data-key="t-level-2.1">
-                                                Thêm mới </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.shifts.index') }}" class="nav-link" data-key="t-level-2.1">
-                                                Danh sách </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('admin.attendace.index')}}" class="nav-link" data-key="t-level-1.1">Điểm danh</a>
+                                <a href="{{ route('admin.attendace.index') }}" class="nav-link"
+                                    data-key="t-level-1.1">Điểm danh</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
-                        aria-expanded="false" aria-controls="sidebarPages">
-                        <i class="ri-notification-3-fill"></i> <span data-key="t-pages">Cấu hình</span>
-                    </a>
-                </li>
+                @if (Auth::user()->isAdmin())
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('admin.setting.index') }}" role="button"
+                            aria-expanded="false" aria-controls="sidebarPages">
+                            <i class="ri-notification-3-fill"></i> <span data-key="t-pages">Cấu hình</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('admin.export.form') }}" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">

@@ -153,6 +153,13 @@
             </div>
         </div>
     </form>
+    @if (Auth::user()->type === 'staff' && Auth::id() != $user->id)
+        <script>
+            alert('Bạn không có quyền sửa tài khoản này.');
+            window.location.href = "{{ route('admin.users.index') }}";
+        </script>
+    @endif
+
 @endsection
 
 @section('style-libs')
