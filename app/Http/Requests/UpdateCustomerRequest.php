@@ -23,7 +23,7 @@ class UpdateCustomerRequest extends FormRequest
     {
         return [
             'nameEdit' => ['required', 'string', 'max:255'],
-            'phoneEdit' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
+            'phoneEdit' => ['required', 'numeric', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
             'addressEdit' => ['required', 'string','max:255'], 
             'emailEdit' => ['required', 'email','max:255'],
             'ageEdit' => ['required', 'numeric', 'min:0', 'max:150'],

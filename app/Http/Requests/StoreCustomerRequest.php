@@ -23,7 +23,7 @@ class StoreCustomerRequest extends FormRequest
     {
         return [
             'nameCreate' => ['required', 'string', 'max:255'],
-            'phoneCreate' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
+            'phoneCreate' => ['required', 'numeric', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
             'addressCreate' => ['required', 'string','max:255'], 
             'emailCreate' => ['required', 'email','max:255','unique:customers,email'],
             'ageCreate' => ['required', 'numeric', 'min:0', 'max:150'],

@@ -9,6 +9,7 @@ use App\Models\CutDoseOrder;
 use App\Models\Medicine;
 use App\Models\Storage;
 use App\Models\Supplier;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -126,4 +127,73 @@ class DashboardController extends Controller
 
        return response()->json($recentOrders);
     }
+
+
+    public function getDashboardRevenue()
+    {
+        // Tổng doanh thu từ bảng Prescription
+        $totalPrescription = DB::table('prescriptions')
+            ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+            ->sum('total');
+    
+        // Tổng doanh thu từ bảng CutDoseOrder
+        $totalCutDoseOrder = DB::table('cut_dose_orders')
+            ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+            ->sum('total_price');
+    
+        // Tổng doanh thu
+        $totalRevenue = $totalPrescription + $totalCutDoseOrder;
+    
+        // Định dạng tổng doanh thu và các giá trị theo kiểu "36,894 VND"
+        $formattedTotalPrescription = number_format($totalPrescription, 0, ',', ',') . ' VND';
+        $formattedTotalCutDoseOrder = number_format($totalCutDoseOrder, 0, ',', ',') . ' VND';
+        $formattedTotalRevenue = number_format($totalRevenue, 0, ',', ',') . ' VND';
+    
+        // Tạo mảng dữ liệu để trả về
+        $revenueData = [
+            'totalPrescription' => $formattedTotalPrescription,
+            'totalCutDoseOrder' => $formattedTotalCutDoseOrder,
+            'totalRevenue' => $formattedTotalRevenue,
+        ];
+    
+        // Trả về JSON response
+        return response()->json($revenueData);
+    }
+
+    public function getFilter(Request $request)
+{
+    // Lấy giá trị startDate và endDate từ request
+    $startDate = $request->input('startDate');
+    $endDate = $request->input('endDate');
+    
+    // Kiểm tra và parse ngày
+    try {
+        $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
+        $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
+    }
+
+    // Lọc dữ liệu khách hàng trong khoảng thời gian
+    $totalCustomers = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
+
+    // Tính tổng doanh thu
+        $totalPrescription = DB::table('prescriptions')
+            ->whereNull('deleted_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
+    
+        $totalCutDoseOrder = DB::table('cut_dose_orders')
+            ->whereNull('deleted_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total_price');
+    
+        $totalRevenue = $totalPrescription + $totalCutDoseOrder;
+    // Trả về JSON
+    return response()->json([
+        'totalCustomers' => $totalCustomers,
+        'totalRevenue' => $totalRevenue,
+    ], 200);
+}
+
 }
