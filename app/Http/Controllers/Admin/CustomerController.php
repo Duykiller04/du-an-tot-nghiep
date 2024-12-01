@@ -117,12 +117,12 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($id);
 
             $data = [
-                'name' => $request->input('nameEdit'),
-                'phone' => $request->input('phoneEdit'),
-                'address' => $request->input('addressEdit'),
-                'email' => $request->input('emailEdit'),
-                'age' => $request->input('ageEdit'),
-                'weight' => $request->input('weightEdit'),
+                'name' => $request->nameEdit,
+                'phone' => $request->phoneEdit,
+                'address' => $request->addressEdit,
+                'email' => $request->emailEdit,
+                'age' => $request->ageEdit,
+                'weight' => $request->weightEdit,
 
             ];
             $customer->update($data);

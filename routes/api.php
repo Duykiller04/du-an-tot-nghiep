@@ -42,4 +42,11 @@ Route::get('/dashboard/storages', [DashboardController::class, 'getStorage'])->n
 
 
 
-Route::get('dashboard/recent-orders', [DashboardController::class, 'recentOrders'])->name('dashboard.recent.order');
+Route::get('/dashboard/recent-orders', [DashboardController::class, 'recentOrders'])->name('dashboard.recent.order');
+
+Route::get('/dashboard/total-revenue', [DashboardController::class, 'getDashboardRevenue'])->name('dashboard.total.revenue');
+
+Route::post('/dashboard/filter', [DashboardController::class, 'getFilter'])->name('dashboard.filter');
+
+
+
