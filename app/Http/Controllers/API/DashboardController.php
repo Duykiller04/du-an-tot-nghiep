@@ -159,51 +159,6 @@ class DashboardController extends Controller
         // Trả về JSON response
         return response()->json($revenueData);
     }
-    
-
-    // public function getFilter(Request $request)
-    // {
-    //     // Lấy giá trị startDate và endDate từ request
-    //     $startDate = $request->input('startDate');
-    //     $endDate = $request->input('endDate');
-    
-    //     // Kiểm tra và parse ngày
-    //     try {
-    //         $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
-    //         $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
-    //     }
-    
-    //     // Lọc dữ liệu dựa trên khoảng thời gian
-    //     $totalCustomers = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
-    //     // $totalCategories = Category::whereBetween('created_at', [$startDate, $endDate])->count();
-    //     // $totalSuppliers = Supplier::whereBetween('created_at', [$startDate, $endDate])->count();
-    //     // $totalStorages = Storage::whereBetween('created_at', [$startDate, $endDate])->count();
-    
-    //     // Tính tổng doanh thu
-    //     // $totalPrescription = DB::table('prescriptions')
-    //     //     ->whereNull('deleted_at')
-    //     //     ->whereBetween('created_at', [$startDate, $endDate])
-    //     //     ->sum('total');
-    
-    //     // $totalCutDoseOrder = DB::table('cut_dose_orders')
-    //     //     ->whereNull('deleted_at')
-    //     //     ->whereBetween('created_at', [$startDate, $endDate])
-    //     //     ->sum('total_price');
-    
-    //     // $totalRevenue = $totalPrescription + $totalCutDoseOrder;
-    
-    //     // Trả về JSON
-    //     return response()->json([
-    //         'totalCustomers' => $totalCustomers,
-    //         // 'totalCategories' => $totalCategories,
-    //         // 'totalSuppliers' => $totalSuppliers,
-    //         // 'totalStorages' => $totalStorages,
-    //         // 'totalRevenue' => $totalRevenue,
-    //     ]);
-    // }
-    
 
     public function getFilter(Request $request)
 {
