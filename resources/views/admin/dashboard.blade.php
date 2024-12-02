@@ -268,23 +268,7 @@
                                         data-colors='["--vz-light", "--vz-success", "--vz-primary"]' style="height: 269px"
                                         dir="ltr"></div>
 
-                                    <div class="px-2 py-2 mt-1" id="dashboard-suppliers">
-                                        {{-- <p class="mb-1">Nhà cung cấp A <span class="float-end">75%</span></p>
-                                    <div class="progress mt-2" style="height: 6px;">
-                                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="75"></div>
-                                    </div>
-
-                                    <p class="mt-3 mb-1">Nhà cung cấp B <span class="float-end">47%</span>
-                                    </p>
-                                    <div class="progress mt-2" style="height: 6px;">
-                                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 47%" aria-valuenow="47" aria-valuemin="0" aria-valuemax="47"></div>
-                                    </div>
-
-                                    <p class="mt-3 mb-1">Nhà cung cấp C <span class="float-end">82%</span></p>
-                                    <div class="progress mt-2" style="height: 6px;">
-                                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 82%" aria-valuenow="82" aria-valuemin="0" aria-valuemax="82"></div>
-                                    </div> --}}
-                                    </div>
+                                    <div class="px-2 py-2 mt-1" id="dashboard-suppliers"></div>
                                 </div>
                                 <!-- end card body -->
                             </div>
@@ -745,7 +729,7 @@
                     </div> <!-- end row-->
 
                     <div class="row">
-                        <div class="col-xl-4">
+                        <div class="col-6">
                             <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thông kê có bao nhiêu thuốc thuốc 1 danh mục
@@ -774,45 +758,7 @@
                                 </div>
                             </div> <!-- .card-->
                         </div> <!-- .col-->
-
-                        <div class="col-xl-8">
-                            <div class="card">
-                                <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Đơn hàng gần đây</h4>
-                                    <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-soft-info btn-sm">
-                                            <i class="ri-file-list-3-line align-middle"></i> Xuất báo cáo
-                                        </button>
-                                    </div>
-                                </div><!-- end card header -->
-
-                                <div class="card-body">
-                                    <div class="table-responsive table-card">
-                                        <table
-                                            class="table table-borderless table-centered align-middle table-nowrap mb-0 text-center">
-                                            <thead class="text-muted table-light">
-                                                <tr>
-                                                    <th scope="col">STT</th>
-                                                    <th scope="col">Khách hàng</th>
-                                                    <th scope="col">Bệnh</th>
-                                                    <th scope="col">Tổng tiền</th>
-                                                    <th scope="col">Người kê đơn</th>
-                                                    <th scope="col">Ca làm</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="recentOrders">
-
-                                            </tbody><!-- end tbody -->
-                                        </table><!-- end table -->
-                                    </div>
-                                </div>
-                            </div> <!-- .card-->
-                        </div> <!-- .col-->
-                    </div> <!-- end row-->
-
-
-                    <div class="row">
-                        <div class="col-xl-4">
+                        <div class="col-6">
                             <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thống kê thuốc, dụng cụ theo kho</h4>
@@ -849,7 +795,38 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div>      
+                    </div> <!-- end row-->
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header align-items-center d-flex">
+                                    <h4 class="card-title mb-0 flex-grow-1">Đơn hàng gần đây</h4>
+                                </div><!-- end card header -->
+
+                                <div class="card-body">
+                                    <div class="table-responsive table-card">
+                                        <table
+                                            class="table table-borderless table-centered align-middle table-nowrap mb-0 text-center" style="min-height: 300px">
+                                            <thead class="text-muted table-light">
+                                                <tr>
+                                                    <th scope="col">STT</th>
+                                                    <th scope="col">Khách hàng</th>
+                                                    <th scope="col">Bệnh</th>
+                                                    <th scope="col">Tổng tiền</th>
+                                                    <th scope="col">Người kê đơn</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recentOrders">
+
+                                            </tbody><!-- end tbody -->
+                                        </table><!-- end table -->
+                                    </div>
+                                </div>
+                            </div> <!-- .card-->
+                        </div> <!-- .col-->
                     </div>
 
                 </div>
