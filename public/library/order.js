@@ -4,12 +4,19 @@ $(document).ready(function () {
             url: "api/dashboard/recent-orders",
             method: "GET",
             success: function (data) {
-                console.log(data);
                 var orderList = $("#recentOrders");
                 var stt = 0;
                 orderList.empty();
+
+                 // Sử dụng Intl.NumberFormat để định dạng tiền tệ
+                 const currencyFormatter = new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                });
+
                 data.forEach(function (order) {
                     let staffNames = order.shift.users.map(user => user.name).join(", ");
+                    let formattedPrice = currencyFormatter.format(order.total_price); // Định dạng giá tiền
                     orderList.append(`
                 <tr>
                             <td>${(stt += 1)}</td>
@@ -18,10 +25,9 @@ $(document).ready(function () {
                             </td>
                             <td>${order.disease.disease_name}</td>
                             <td>
-                                <span class="text-success">${order.total_price} VND</span>
+                                <span class="text-success">${formattedPrice}</span>
                             </td>
                             <td>${staffNames}</td>
-                            <td>${order.shift.shift_name}</td>
                 </tr>
                             `);
                 });

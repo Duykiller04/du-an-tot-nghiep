@@ -120,9 +120,9 @@ class DashboardController extends Controller
                 'disease',
                 'customer'
                 ])
-        ->where('created_at', '>=', now()->subDays(7))
+        ->where('created_at', '>=', now()->subDays(30))
         ->orderByDesc('created_at')
-        ->limit(5)
+        ->limit(10)
         ->get();
 
        return response()->json($recentOrders);
