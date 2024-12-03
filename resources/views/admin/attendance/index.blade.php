@@ -116,10 +116,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     @foreach ($shifts as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->shift->shift_name }}</td>
+                                            <td>{{ $item->shift->shift_name}}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->shift->start_time)->format('H:i d-m-Y') }}
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($item->shift->end_time)->format('H:i d-m-Y') }}

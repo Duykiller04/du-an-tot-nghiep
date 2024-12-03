@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendace;
 use App\Models\CutDoseOrder;
 use App\Models\Shift;
 use App\Models\ShiftUser;
@@ -133,6 +134,14 @@ class ShiftController extends Controller
             ShiftUser::create([
                 'user_id' => $detail['user_id'],
                 'shift_id' => $shift->id,
+            ]);
+            Attendace::create([
+                'user_id' => $detail['user_id'],
+                'shift_id' => $shift->id,
+                'img_check_in' => null, // Để trống, sẽ cập nhật sau khi nhân viên điểm danh
+                'img_check_out' => null,
+                'time_out' => null,
+                'reasons' => null,
             ]);
         }
 
@@ -284,7 +293,8 @@ class ShiftController extends Controller
             return redirect()->route('admin.shifts.index')->with('error', 'Chỉ có thể xóa ca làm việc ở trạng thái kế hoạch hoặc đã hủy.');
         }
 
-
+         // Xóa các bản ghi Attendance liên quan
+        $shift->attendace()->delete();
         $shift->delete();
 
         return redirect()->route('admin.shifts.index')->with('success', 'Ca làm việc đã được xóa thành công.');
