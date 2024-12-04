@@ -114,10 +114,10 @@
                                 <div class="mb-3">
                                     <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu <span class="text-danger">(*)</span></label>
                                     <select name="cutDosePrescription" id="cutDosePrescription" class="form-select select2 @error('cutDosePrescription') is-invalid @enderror">
-                                        <option value="">Chọn bệnh</option>
+                                        <option value="">Chọn tên đơn thuốc</option>
                                         @foreach ($cutDosePrescription as $prescription)
                                             <option value="{{ $prescription['id'] }}" {{ old('cutDosePrescription') == $prescription['id'] ? 'selected' : '' }}>
-                                                {{ $prescription['disease']['disease_name'] }}</option>
+                                                {{ $prescription['name'] }}</option>
                                         @endforeach
                                     </select>
                                     @error('cutDosePrescription')
@@ -144,6 +144,10 @@
                                     @error('sale_date')
                                         <span class="d-block text-danger mt-2">{{ $message }}</span>
                                     @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="description">Mô tả đơn thuốc</label>
+                                    <textarea name="description" id="description" cols="30" rows="13" class="form-control">{{ old('description') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -332,7 +336,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#cutDosePrescription').change(function() {
+            $('#cutDosePrescription').change(function() {        
                 var selectedPrescriptionId = $(this).val();
                 let totalPrice = 0; // Biến để lưu tổng tiền
 
@@ -385,10 +389,11 @@
                         id: selectedPrescriptionId
                     },
                     success: function(response) {
-                        console.log(response);
-
+                        console.log(response); 
                         $('#medicine-container').empty(); // Xóa nội dung cũ
                         totalPrice = 0; // Reset tổng tiền
+                        const description = document.getElementById('description');
+                        description.value =  response.cutDosePrescription.description;
 
                         if (response.prescriptionDetails.length > 0) {
                             $.each(response.prescriptionDetails, function(index, detail) {
