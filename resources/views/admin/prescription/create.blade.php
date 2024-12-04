@@ -393,7 +393,7 @@
                         $('#medicine-container').empty(); // Xóa nội dung cũ
                         totalPrice = 0; // Reset tổng tiền
                         const description = document.getElementById('description');
-                        description.value =  response.cutDosePrescription.description
+                        description.value =  response.cutDosePrescription.description;
 
                         if (response.prescriptionDetails.length > 0) {
                             $.each(response.prescriptionDetails, function(index, detail) {
