@@ -67,46 +67,100 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="d-flex mb-3">
+                            <span class="badge text-bg-dark p-3">
+                                Số buổi không đi làm: {{ $missedDays }}
+                            </span>
+                            <span class="badge text-bg-secondary ms-3 p-3">
+                                Số buổi đi muộn: {{ $lateCount }}
+                            </span>
+                            <span class="badge text-bg-warning ms-3 p-3">
+                                Số buổi về sớm: {{ $earlyCount }}
+                            </span>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped align-middle">
                                 <thead>
                                     <tr>
-                                        <th>Ngày</th>
+                                        <th>STT</th>
+                                        <th class="text-info">Ngày</th>
+                                        <th class="text-info">Ca làm</th>
+                                        <th class="text-info">Thời gian bắt đầu</th>
+                                        <th class="text-info">Thời gian kết thúc ca</th>
                                         <th>Nhân viên</th>
-                                        <th>Ca làm</th>
                                         <th>Check-in</th>
                                         <th>Thời gian check-in</th>
                                         <th>Check-out</th>
                                         <th>Thời gian check-out</th>
+                                        <th>Thời gian check-out lần 2</th>
                                         <th class="text-danger">Lý do check-out lần 2</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($attendances as $attendance)
                                         <tr>
-                                            <td>{{ \Carbon\Carbon::parse($attendance->created_at)->format('d/m/Y') }}</td>
+                                            <td><strong>{{ $loop->iteration + ($attendances->currentPage() - 1) * $attendances->perPage() }}</strong></td>
+                                            <td class="text-info">{{ \Carbon\Carbon::parse($attendance->created_at)->format('d/m/Y') }}</td>
+                                            <td class="text-info">{{ $attendance->shift->shift_name }}</td>
+                                            <td class="text-info">
+                                                <p>{{ \Carbon\Carbon::parse($attendance->shift->start_time)->format('H:i:s') }}</p>
+                                                <p>{{ \Carbon\Carbon::parse($attendance->shift->start_time)->format('d/m/Y') }}</p>
+                                            </td>
+                                            <td class="text-info">
+                                                <p>{{ \Carbon\Carbon::parse($attendance->shift->end_time)->format('H:i:s') }}</p>
+                                                <p>{{ \Carbon\Carbon::parse($attendance->shift->end_time)->format('d/m/Y') }}</p>
+                                            </td>
                                             <td>{{ $attendance->user->name }}</td>
-                                            <td>{{ $attendance->shift_id }}</td>
                                             <td>
-                                                <a
-                                                data-fancybox
-                                                data-src="{{ asset($attendance->img_check_in) }}"
-                                                data-caption="Ảnh check-in"
-                                                >
-                                                    <img src="{{ asset($attendance->img_check_in) }}" width="200" height="150" alt="" />
-                                                </a>
+                                                @if ($attendance->img_check_in)
+                                                    <a
+                                                    data-fancybox
+                                                    data-src="{{ asset($attendance->img_check_in) }}"
+                                                    data-caption="Ảnh check-in"
+                                                    >
+                                                        <img src="{{ asset($attendance->img_check_in) }}" width="100" height="80" alt="" />
+                                                    </a>
+                                                @else
+                                                    <img src="{{ asset('theme/admin/assets/images/no-img-avatar.png') }}" width="100" height="80" alt="No image" />
+                                                @endif
                                             </td>
-                                            <td>{{ \Carbon\Carbon::parse($attendance->created_at)->format('d/m/Y H:i:s') }}</td>
                                             <td>
-                                                <a
-                                                data-fancybox
-                                                data-src="{{ asset($attendance->img_check_out) }}"
-                                                data-caption="Ảnh check-out"
-                                                >
-                                                    <img src="{{ asset($attendance->img_check_out) }}" width="200" height="150" alt="" />
-                                                </a>
+                                                @if ($attendance->time_in)
+                                                    <p>{{\Carbon\Carbon::parse($attendance->time_in)->format('H:i:s')}}</p>
+                                                    <p>{{\Carbon\Carbon::parse($attendance->time_in)->format('d/m/Y')}}</p>
+                                                @else
+                                                    <p>N/A</p>
+                                                @endif
                                             </td>
-                                            <td>{{ \Carbon\Carbon::parse($attendance->time_out)->format('d/m/Y H:i:s') }}</td>
+                                            <td>
+                                                @if ($attendance->img_check_out)
+                                                    <a
+                                                    data-fancybox
+                                                    data-src="{{ asset($attendance->img_check_out) }}"
+                                                    data-caption="Ảnh check-out"
+                                                    >
+                                                        <img src="{{ asset($attendance->img_check_out) }}" width="100" height="80" alt="" />
+                                                    </a>
+                                                @else
+                                                    <img src="{{ asset('theme/admin/assets/images/no-img-avatar.png') }}" width="100" height="80" alt="No image" />
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($attendance->time_out)
+                                                    <p>{{\Carbon\Carbon::parse($attendance->time_out)->format('H:i:s')}}</p>
+                                                    <p>{{\Carbon\Carbon::parse($attendance->time_out)->format('d/m/Y')}}</p>
+                                                @else
+                                                    <p>N/A</p>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($attendance->time_out_2)
+                                                    <p>{{\Carbon\Carbon::parse($attendance->time_out_2)->format('H:i:s')}}</p>
+                                                    <p>{{\Carbon\Carbon::parse($attendance->time_out_2)->format('d/m/Y')}}</p>
+                                                @else
+                                                    <p>N/A</p>
+                                                @endif
+                                            </td>
                                             <td class="text-danger">{{ $attendance->reasons }}</td>
                                         </tr>
                                     @empty
