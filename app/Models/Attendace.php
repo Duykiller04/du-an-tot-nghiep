@@ -16,6 +16,8 @@ class Attendace extends Model
         'img_check_in',
         'img_check_out',
         'time_out',
+        'time_out_2',
+        'time_in',
         'reasons',
     ];
     public function user(){

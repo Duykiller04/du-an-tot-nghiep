@@ -70,7 +70,7 @@
             aria-labelledby="checkOutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content" width="700" height="500">
-                    <form action="{{ route('admin.attendace.checkout') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.attendace.checkout') }}" method="POST" enctype="multipart/form-data" id="formCheckOut">
                         @csrf
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="checkOutModalLabel">Check out</h1>
@@ -121,9 +121,13 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->shift->shift_name}}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->shift->start_time)->format('H:i d-m-Y') }}
+                                            <td>
+                                                <p>{{ \Carbon\Carbon::parse($item->shift->start_time)->format('H:i:s') }}</p>
+                                                <p>{{ \Carbon\Carbon::parse($item->shift->start_time)->format('d/m/Y') }}</p>
                                             </td>
-                                            <td>{{ \Carbon\Carbon::parse($item->shift->end_time)->format('H:i d-m-Y') }}
+                                            <td>
+                                                <p>{{ \Carbon\Carbon::parse($item->shift->end_time)->format('H:i:s') }}</p>
+                                                <p>{{ \Carbon\Carbon::parse($item->shift->end_time)->format('d/m/Y') }}</p>
                                             </td>
                                             <td>
                                                 <span class="badge {{ $getStatusClass($item->shift->status) }}">
@@ -133,17 +137,21 @@
                                             <td>
                                                 {{-- @dd($item->shift->attendace->toArray()); --}}
                                                 @if ($item->shift->status == 'đang mở')
-                                                    @if ($item->shift->attendace == null)
+                                                    @if ( $item->shift->attendace->img_check_in == null && 
+                                                    now() >= Carbon\Carbon::parse($item->shift->start_time)->subMinutes(30) && 
+                                                    now() <= Carbon\Carbon::parse($item->shift->end_time))
                                                         <button type="button" class="btn btn-primary"
                                                             data-bs-toggle="modal" data-bs-target="#checkInModal"
                                                             data-shift-id="{{ $item->shift->id }}">
                                                             Check in
                                                         </button>
-                                                    @elseif ($item->shift->attendace->reasons == null)
+                                                    @elseif ($item->shift->attendace->reasons == null && $item->shift->attendace->img_check_in != null)
                                                         <button type="button" class="btn btn-danger"
                                                             data-bs-toggle="modal" data-bs-target="#checkOutModal"
                                                             data-shift-id="{{ $item->shift->id }}"
-                                                            data-reasons="{{ $item->shift->attendace->reasons }}">
+                                                            data-reasons="{{ $item->shift->attendace->reasons }}"
+                                                            data-img-check-out = "{{ $item->shift->attendace->img_check_out }}"
+                                                            >
                                                             Check out
                                                         </button>
                                                     @endif
@@ -187,12 +195,13 @@
             button.addEventListener('click', function() {
                 const shiftId = this.getAttribute('data-shift-id');
                 const reasons = this.getAttribute('data-reasons');
+                const imgCheckOut = this.getAttribute('data-img-check-out');
 
                 document.getElementById('shift_id_checkout').value = shiftId;
                 initializeVideo(document.getElementById('videoCheckOut'));
 
-                // Hiển thị trường lý do nếu reasons là null
-                if (reasons === "null" || reasons === "") {
+                // Hiển thị trường lý do nếu imgCheckOut là null
+                if (imgCheckOut != "") {
                     document.getElementById('reasonField').style.display = 'block';
                 } else {
                     document.getElementById('reasonField').style.display = 'none';
@@ -215,5 +224,18 @@
             context.drawImage(document.getElementById('videoCheckOut'), 0, 0, 450, 338);
             document.getElementById('captured_image_checkout').value = canvas.toDataURL('image/png');
         });
+
+        document.getElementById('formCheckOut').addEventListener('submit', function(event) {
+            // Check if the reason field is visible
+            const reasonField = document.getElementById('reasonField');
+            const reasonsInput = document.getElementById('reasons');
+            
+            // If the reason field is visible and the reasons input is empty, prevent form submission
+            if (reasonField.style.display !== 'none' && reasonsInput.value.trim() === '') {
+                event.preventDefault(); // Prevent form submission
+                alert('Không được bỏ trống lý do check out lần 2.');
+            }
+        });
+
     </script>
 @endsection
