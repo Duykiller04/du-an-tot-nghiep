@@ -37,6 +37,9 @@ class DiseaseController extends Controller
                 }
             }
             return DataTables::of($query)
+                ->addColumn('verify_date', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                })
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
                     if ($row->feature_img) {
@@ -46,6 +49,14 @@ class DiseaseController extends Controller
                         $defaultImage = asset('theme/admin/assets/images/no-img-avatar.png');
                         return '<img src="' . $defaultImage . '" width="200" height="150" alt="" />';
                     }
+                })
+                ->addColumn('danger_level', function ($row) {
+                    $dangerLevels = [
+                        'low' => 'Thấp',
+                        'medium' => 'Trung bình',
+                        'high' => 'Cao'
+                    ];
+                    return $dangerLevels[$row->danger_level] ?? 'Không xác định';
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.diseases.edit', $row->id);
