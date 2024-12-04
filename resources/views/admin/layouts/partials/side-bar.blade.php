@@ -299,10 +299,12 @@
                                     </div>
                                 </li>
                             @endif
-                            <li class="nav-item">
-                                <a href="{{ route('admin.attendace.index') }}" class="nav-link"
-                                    data-key="t-level-1.1">Điểm danh</a>
-                            </li>
+                            @if (!Auth::user()->isAdmin())
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.attendace.index') }}" class="nav-link"
+                                        data-key="t-level-1.1">Điểm danh</a>
+                                </li>
+                            @endif
                             <li class="nav-item">
                                 <a href="{{ (Auth::user()->type == 'admin') ? route('admin.attendace.list.user') : route('admin.attendace.list') }}" class="nav-link"
                                     data-key="t-level-1.1">{{ (Auth::user()->type == 'admin') ? 'Giờ làm việc của nhân viên' : 'Giờ làm việc' }}</a>
