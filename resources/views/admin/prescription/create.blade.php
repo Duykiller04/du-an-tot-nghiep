@@ -114,10 +114,10 @@
                                 <div class="mb-3">
                                     <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu <span class="text-danger">(*)</span></label>
                                     <select name="cutDosePrescription" id="cutDosePrescription" class="form-select select2 @error('cutDosePrescription') is-invalid @enderror">
-                                        <option value="">Chọn bệnh</option>
+                                        <option value="">Chọn tên đơn thuốc</option>
                                         @foreach ($cutDosePrescription as $prescription)
                                             <option value="{{ $prescription['id'] }}" {{ old('cutDosePrescription') == $prescription['id'] ? 'selected' : '' }}>
-                                                {{ $prescription['disease']['disease_name'] }}</option>
+                                                {{ $prescription['name'] }}</option>
                                         @endforeach
                                     </select>
                                     @error('cutDosePrescription')
@@ -144,6 +144,10 @@
                                     @error('sale_date')
                                         <span class="d-block text-danger mt-2">{{ $message }}</span>
                                     @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="description">Mô tả đơn thuốc</label>
+                                    <textarea name="description" id="description" cols="30" rows="13" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
