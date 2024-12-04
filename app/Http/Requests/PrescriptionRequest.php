@@ -29,7 +29,7 @@ class PrescriptionRequest extends FormRequest
             'email' => 'nullable|email|max:255',
             'weight' => 'nullable|numeric|min:0',
             'gender' => 'required|in:0,1',
-            'cutDosePrescription' => 'required|exists:cut_dose_prescriptions,id',
+            'cutDosePrescription' => 'nullable|exists:cut_dose_prescriptions,id',
             'type_sell' => 'required|string|max:255',
             'sale_date' => 'required|date',
 
@@ -48,7 +48,6 @@ class PrescriptionRequest extends FormRequest
             'customer_name.required' => 'Tên khách hàng là bắt buộc.',
             'age.required' => 'Tuổi là bắt buộc.',
             'gender.required' => 'Giới tính là bắt buộc.',
-            'cutDosePrescription.required' => 'Đơn thuốc mẫu là bắt buộc.',
             'type_sell.required' => 'Kiểu bán là bắt buộc.',
             'sale_date.required' => 'Ngày bán là bắt buộc.',
             'email.email' => 'Email không đúng định dạng.',
