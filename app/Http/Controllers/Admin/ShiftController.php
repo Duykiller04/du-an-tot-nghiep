@@ -72,7 +72,7 @@ class ShiftController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'start_time' => 'required|date|after_or_equal:today',
@@ -138,7 +138,8 @@ class ShiftController extends Controller
             Attendace::create([
                 'user_id' => $detail['user_id'],
                 'shift_id' => $shift->id,
-                'img_check_in' => null, // Để trống, sẽ cập nhật sau khi nhân viên điểm danh
+                //'time_in' => $shift->start_time,//bổ xung 
+                'img_check_in' => null, 
                 'img_check_out' => null,
                 'time_out' => null,
                 'reasons' => null,
@@ -213,6 +214,13 @@ class ShiftController extends Controller
                 if ($overlappingShifts > 0) {
                     return redirect()->route('admin.shifts.edit', $shiftId)
                         ->with('error', 'Thời gian ca làm bị trùng lặp với một ca đang mở khác. Vui lòng điều chỉnh thời gian.');
+                }
+                // Kiểm tra xem có ca nào đang mở hay không
+                $openShifts = Shift::where('status', 'đang mở')->count();
+
+                if ($openShifts > 0) {
+                    return redirect()->route('admin.shifts.edit', $shiftId)
+                        ->with('error', 'Không thể mở ca mới vì đã có một ca đang mở.');
                 }
             }
             $shift->status = $status;
@@ -293,7 +301,7 @@ class ShiftController extends Controller
             return redirect()->route('admin.shifts.index')->with('error', 'Chỉ có thể xóa ca làm việc ở trạng thái kế hoạch hoặc đã hủy.');
         }
 
-         // Xóa các bản ghi Attendance liên quan
+        // Xóa các bản ghi Attendance liên quan
         $shift->attendace()->delete();
         $shift->delete();
 
