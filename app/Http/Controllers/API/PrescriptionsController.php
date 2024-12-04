@@ -62,6 +62,7 @@ class PrescriptionsController extends Controller
             $quantities[$medicineId] = $newQuantity;
         }
         return response()->json([
+            'cutDosePrescription' =>   $cutDosePrescription,
             'prescriptionDetails' => $prescriptionDetails,
             'quantities' => $quantities // Trả về số lượng tồn kho theo từng đơn vị
         ]);

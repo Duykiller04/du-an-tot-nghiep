@@ -147,7 +147,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="description">Mô tả đơn thuốc</label>
-                                    <textarea name="description" id="description" cols="30" rows="13" class="form-control"></textarea>
+                                    <textarea name="description" id="description" cols="30" rows="13" class="form-control">{{ old('description') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +336,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#cutDosePrescription').change(function() {
+            $('#cutDosePrescription').change(function() {        
                 var selectedPrescriptionId = $(this).val();
                 let totalPrice = 0; // Biến để lưu tổng tiền
 
@@ -389,10 +389,11 @@
                         id: selectedPrescriptionId
                     },
                     success: function(response) {
-                        console.log(response);
-
+                        console.log(response); 
                         $('#medicine-container').empty(); // Xóa nội dung cũ
                         totalPrice = 0; // Reset tổng tiền
+                        const description = document.getElementById('description');
+                        description.value =  response.cutDosePrescription.description
 
                         if (response.prescriptionDetails.length > 0) {
                             $.each(response.prescriptionDetails, function(index, detail) {
