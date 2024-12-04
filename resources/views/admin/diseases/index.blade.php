@@ -53,14 +53,18 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div class="mb-4 me-3">
-                                <label for="minDate">Ngày tạo từ:</label>
-                                <input type="date" id="minDate" class="form-control">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="start-date">Ngày bắt đầu:</label>
+                                <input type="date" id="start-date" class="form-control" />
                             </div>
-                            <div class="mb-4 ms-3">
-                                <label for="maxDate">Ngày tạo đến:</label>
-                                <input type="date" id="maxDate" class="form-control">
+                            <div class="col-6">
+                                <label for="end-date">Ngày kết thúc:</label>
+                                <div class="d-flex">
+                                    <input type="date" id="end-date" class="form-control me-2" />
+                                    <button id="filter-btn" class="btn btn-primary">Lọc</button>
+
+                                </div>
                             </div>
                         </div>
                         <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -118,109 +122,77 @@
 
     <script>
         $(document).ready(function() {
-            var table = $('#example').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route('admin.diseases.index') }}',
-                    data: function(d) {
-                        d.startDate = $('#start-date').val();
-                        d.endDate = $('#end-date').val();
-                    }
-                },
-                columns: [
-                    {
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'disease_name'
-                    },
-                    {
-                        data: 'image',
-                        name: 'image',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'verify_date'
-                    },
-                    {
-                        data: 'danger_level'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                dom: 'Bfrtip',
-                language: {
-                    "sEmptyTable": "Không có dữ liệu trong bảng",
-                    "sInfo": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
-                    "sInfoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-                    "sInfoFiltered": "(đã lọc từ _MAX_ mục)",
-                    "sLengthMenu": "Hiển thị _MENU_ mục",
-                    "sLoadingRecords": "Đang tải...",
-                    "sProcessing": "Đang xử lý...",
-                    "sSearch": "Tìm kiếm:",
-                    "sZeroRecords": "Không tìm thấy kết quả nào",
-                    "oPaginate": {
-                        "sFirst": "Đầu",
-                        "sLast": "Cuối",
-                        "sNext": "Kế tiếp",
-                        "sPrevious": "Trước"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Sắp xếp tăng dần",
-                        "sSortDescending": ": Sắp xếp giảm dần"
-                    }
-                },
-                buttons: [{
-                        extend: 'excel',
-                        text: 'Xuất Excel',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !== 5; // Ví dụ: Nếu cột `action` là cột số 5
-                            }
+            $(document).ready(function() {
+                var table = $('#example').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{{ route('admin.diseases.index') }}',
+                        data: function(d) {
+                            d.startDate = $('#start-date').val();
+                            d.endDate = $('#end-date').val();
                         }
                     },
-                    {
-                        extend: 'csv',
-                        text: 'Xuất CSV',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !== 5; // Ví dụ: Nếu cột `action` là cột số 5
-                            }
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'disease_name'
+                        },
+                        {
+                            data: 'image',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'verify_date'
+                        },
+                        {
+                            data: 'danger_level'
+                        },
+                        {
+                            data: 'action',
+                            orderable: false,
+                            searchable: false
                         }
-                    },
-                    {
-                        extend: 'pdf',
-                        text: 'Xuất PDF',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !== 5; // Ví dụ: Nếu cột `action` là cột số 5
-                            }
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: 'In',
-                        exportOptions: {
-                            columns: function(idx, data, node) {
-                                // Loại bỏ cột `action` khi xuất
-                                return idx !== 5; // Ví dụ: Nếu cột `action` là cột số 5
-                            }
+                    ],
+                    dom: 'Bfrtip',
+                    language: {
+                        sEmptyTable: "Không có dữ liệu trong bảng",
+                        sInfo: "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                        sInfoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+                        sInfoFiltered: "(đã lọc từ _MAX_ mục)",
+                        sLengthMenu: "Hiển thị _MENU_ mục",
+                        sLoadingRecords: "Đang tải...",
+                        sProcessing: "Đang xử lý...",
+                        sSearch: "Tìm kiếm:",
+                        sZeroRecords: "Không tìm thấy kết quả nào",
+                        oPaginate: {
+                            sFirst: "Đầu",
+                            sLast: "Cuối",
+                            sNext: "Kế tiếp",
+                            sPrevious: "Trước"
+                        },
+                        oAria: {
+                            sSortAscending: ": Sắp xếp tăng dần",
+                            sSortDescending: ": Sắp xếp giảm dần"
                         }
                     }
-                ]
+                });
 
+                // Gọi lại Ajax khi thay đổi ngày bắt đầu
+                $('#start-date').on('change', function() {
+                    table.ajax.reload();
+                });
+
+                // Gọi lại Ajax khi thay đổi ngày kết thúc
+                $('#end-date').on('change', function() {
+                    table.ajax.reload();
+                });
             });
+
 
             $('#filter-btn').click(function() {
                 table.draw();
