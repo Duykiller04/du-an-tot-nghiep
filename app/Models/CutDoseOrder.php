@@ -11,6 +11,7 @@ class CutDoseOrder extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'seller',
         'disease_id',
         'customer_id',
         'weight',
