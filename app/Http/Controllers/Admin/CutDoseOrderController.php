@@ -14,6 +14,7 @@ use App\Models\Disease;
 use App\Models\Medicine;
 use App\Models\Shift;
 use App\Models\Unit;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -126,7 +127,8 @@ class CutDoseOrderController extends Controller
                 'phone' => $request->input('phone'),
                 'address' => $request->input('address'),
                 'shift_id' => $shiftId,
-                'total_price' => $request->input('total_price')
+                'total_price' => $request->input('total_price'),
+                'seller' => Auth::user()->name,
             ]);
             // Cập nhật doanh thu cho ca làm việc
             if ($shiftId) {
