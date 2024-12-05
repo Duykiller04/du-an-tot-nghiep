@@ -15,7 +15,6 @@ $(document).ready(function () {
                 });
 
                 data.forEach(function (order) {
-                    let staffNames = order.shift.users.map(user => user.name).join(", ");
                     let formattedPrice = currencyFormatter.format(order.total_price); // Định dạng giá tiền
                     orderList.append(`
                 <tr>
@@ -27,7 +26,7 @@ $(document).ready(function () {
                             <td>
                                 <span class="text-success">${formattedPrice}</span>
                             </td>
-                            <td>${staffNames}</td>
+                            <td>${order.seller}</td>
                 </tr>
                             `);
                 });

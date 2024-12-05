@@ -807,10 +807,10 @@
                                 </div><!-- end card header -->
 
                                 <div class="card-body">
-                                    <div class="table-responsive table-card">
+                                    <div class="table-responsive table-card"  style="min-height: 300px">
                                         <table
                                             class="table table-borderless table-centered align-middle table-nowrap mb-0 text-center"
-                                            style="min-height: 300px">
+                                        >
                                             <thead class="text-muted table-light">
                                                 <tr>
                                                     <th scope="col">STT</th>
