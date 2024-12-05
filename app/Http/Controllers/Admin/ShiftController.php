@@ -142,6 +142,7 @@ class ShiftController extends Controller
                 'img_check_in' => null, 
                 'img_check_out' => null,
                 'time_out' => null,
+                //'time_out_2' => null,
                 'reasons' => null,
             ]);
         }
