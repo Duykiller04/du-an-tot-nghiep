@@ -114,9 +114,6 @@ class DashboardController extends Controller
     {
         $recentOrders = CutDoseOrder::with(
             [
-                'shift.users' => function ($query) {
-                    $query->where('type', 'staff');
-                },
                 'cutDoseOrderDetails.medicine',
                 'cutDoseOrderDetails.unit',
                 'disease',
