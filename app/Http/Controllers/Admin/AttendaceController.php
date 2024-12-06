@@ -20,19 +20,19 @@ class AttendaceController extends Controller
      */
     public function index()
     {
-        $shifts = ShiftUser::with('shift.attendace')->where('user_id', Auth::user()->id)->latest('id')->get();
+        $shifts = ShiftUser::with('shift')
+            ->where('user_id', Auth::user()->id)
+            ->whereHas('shift', function ($query) {
+                $query->whereIn('status', ['đang mở', 'đã chốt']);
+            })
+            ->latest('id')
+            ->get();
         $getStatusClass = function ($status) {
             switch ($status) {
-                case 'kế hoạch':
-                    return 'bg-warning text-dark'; // Màu vàng cho 'kế hoạch'
                 case 'đang mở':
                     return 'bg-success text-white'; // Màu xanh cho 'đang mở'
-                case 'tạm dừng':
-                    return 'bg-secondary text-white'; // Màu xám cho 'tạm dừng'
                 case 'đã chốt':
                     return 'bg-primary text-white'; // Màu xanh dương cho 'đã chốt'
-                case 'đã hủy':
-                    return 'bg-danger text-white'; // Màu đỏ cho 'đã hủy'
                 default:
                     return ''; // Mặc định không có màu
             }
@@ -73,11 +73,12 @@ class AttendaceController extends Controller
         $imageUrl = 'storage/checkin_images/' . $fileName;
 
         // Tạo bản ghi mới trong bảng Attendace
-        Attendace::create([
-            'user_id' => Auth::user()->id,
-            'shift_id' => $request->input('shift_id'),
-            'img_check_in' => $imageUrl,  // Lưu URL có thể truy cập
-        ]);
+        Attendace::where('user_id', Auth::user()->id)
+            ->where('shift_id', $request->shift_id)
+            ->update([
+                'img_check_in' => $imageUrl,
+                'time_in' => Carbon::now()->format('Y-m-d H:i:s'),
+            ]);
 
         // Trả về thông báo thành công
         return back()->with('success', 'Check-in thành công!');
@@ -122,7 +123,7 @@ class AttendaceController extends Controller
             //check out lan 2
             $attendace->update([
                 'img_check_out' => $imageUrl,
-                'time_out' => Carbon::now()->format('Y-m-d H:i:s'),
+                'time_out_2' => Carbon::now()->format('Y-m-d H:i:s'),
                 'reasons' => $request->reasons,
             ]);
             return back()->with('success', 'Check-out thành công!');
@@ -140,13 +141,39 @@ class AttendaceController extends Controller
         $month = $request->get('month', now()->format('m')); // Lấy tháng hiện tại hoặc từ request
         $year = $request->get('year', now()->format('Y')); // Lấy năm hiện tại hoặc từ request
 
-        $attendances = Attendace::where('user_id', $userId)
+        $attendances = Attendace::with('shift')->where('user_id', $userId)
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->paginate(10);
 
-        return view('admin.attendance.list', compact('attendances', 'month', 'year'));
+        $lateCount = 0;
+        $earlyCount = 0;
+        $missedDays = 0;
+        
+        foreach ($attendances as $attendance) {
+            $shiftEndTime = Carbon::parse($attendance->shift->end_time);
+
+            // Nếu đã hết ca làm và không có điểm danh
+            if (Carbon::now()->gt($shiftEndTime) && !$attendance->time_in) {
+                $missedDays++;
+                continue; // Bỏ qua các logic khác nếu đã xác định là không đi làm
+            }
+
+            // Kiểm tra đi muộn
+            $timeIn = Carbon::parse($attendance->time_in);
+            $lateTime = Carbon::parse($attendance->shift->start_time)->addMinutes(5);
+            if ($timeIn && $timeIn->gt($lateTime)) {
+                $lateCount++;
+            }
+
+            // Kiểm tra về sớm
+            if ($attendance->time_out && Carbon::parse($attendance->time_out)->lt($shiftEndTime)) {
+                $earlyCount++;
+            }
+        }
+
+        return view('admin.attendance.list', compact('attendances', 'month', 'year', 'lateCount', 'earlyCount', 'missedDays'));
     }
 
     public function listAttendaceUser(Request $request)
@@ -156,7 +183,7 @@ class AttendaceController extends Controller
         $year = $request->get('year', now()->format('Y'));
         $arrUsers = User::all();
 
-        $attendances = Attendace::with('user')
+        $attendances = Attendace::with(['shift', 'user'])
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month);
 
@@ -164,8 +191,34 @@ class AttendaceController extends Controller
             $attendances = $attendances->where('user_id', $userId);
         }
 
-        $attendances = $attendances->orderBy('created_at')->paginate(10);
+        $attendances = $attendances->orderByDesc('created_at')->paginate(10);
 
-        return view('admin.attendance.list_user', compact('attendances', 'month', 'year', 'arrUsers', 'userId'));
+        $lateCount = 0;
+        $earlyCount = 0;
+        $missedDays = 0;
+        
+        foreach ($attendances as $attendance) {
+            $shiftEndTime = Carbon::parse($attendance->shift->end_time);
+
+            // Nếu đã hết ca làm và không có điểm danh
+            if (Carbon::now()->gt($shiftEndTime) && !$attendance->time_in) {
+                $missedDays++;
+                continue; // Bỏ qua các logic khác nếu đã xác định là không đi làm
+            }
+
+            // Kiểm tra đi muộn
+            $timeIn = Carbon::parse($attendance->time_in);
+            $lateTime = Carbon::parse($attendance->shift->start_time)->addMinutes(5);
+            if ($timeIn && $timeIn->gt($lateTime)) {
+                $lateCount++;
+            }
+
+            // Kiểm tra về sớm
+            if ($attendance->time_out && Carbon::parse($attendance->time_out)->lt($shiftEndTime)) {
+                $earlyCount++;
+            }
+        }
+
+        return view('admin.attendance.list_user', compact('attendances', 'month', 'year', 'arrUsers', 'userId','lateCount', 'earlyCount', 'missedDays'));
     }
 }

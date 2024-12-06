@@ -11,6 +11,8 @@ class CutDosePrescription extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'name',
+        'description',
         'disease_id',
         'name_hospital',
         'name_doctor',

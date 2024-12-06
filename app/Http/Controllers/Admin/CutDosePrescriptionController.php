@@ -51,7 +51,6 @@ class CutDosePrescriptionController extends Controller
      */
     public function store(StoreCutDosePrescriptionRequest $request)
     {
-        // dd($request->all());
         try {
             DB::beginTransaction();
             $total = 0;
@@ -61,6 +60,8 @@ class CutDosePrescriptionController extends Controller
                 $total += $subTotal;
             }
             $cutDosePrescription = CutDosePrescription::query()->create([
+                'name' =>  $request->name,
+                'description' =>  $request->description,
                 'disease_id' => $request->disease_id,
                 'name_hospital' => $request->name_hospital,
                 'name_doctor' => $request->name_doctor,

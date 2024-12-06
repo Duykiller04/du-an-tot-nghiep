@@ -11,6 +11,7 @@ class Prescription extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'id',
+        'seller',
         'total',
         'age',
         'type_sell',

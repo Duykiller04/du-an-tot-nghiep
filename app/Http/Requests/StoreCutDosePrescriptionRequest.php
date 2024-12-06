@@ -22,6 +22,8 @@ class StoreCutDosePrescriptionRequest extends FormRequest
     public function rules()
     {
         return [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
             'disease_id' => 'exists:diseases,id',
             'name_hospital' => 'required|string|max:255',
             'name_doctor' => 'required|string|max:255',
@@ -40,6 +42,12 @@ class StoreCutDosePrescriptionRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'Tên đơn thuốc không được để trống.',
+            'name.string' => 'Tên đơn thuốc phải là một chuỗi ký tự.',
+            'name.max' => 'Tên  đơn thuốc không được vượt quá 255 ký tự.',
+            'description.string' => 'Mô tả đơn thuốc phải là một chuỗi ký tự.',
+            'description.max' => 'Mô tả đơn thuốc không được vượt quá 255 ký tự.',
+
             'name_hospital.required' => 'Tên bệnh viện không được để trống.',
             'name_hospital.string' => 'Tên bệnh viện phải là một chuỗi ký tự.',
             'name_hospital.max' => 'Tên bệnh viện không được vượt quá 255 ký tự.',

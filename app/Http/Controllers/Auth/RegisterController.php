@@ -22,13 +22,14 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    const TYPE_STAFF = 'staff';
 
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
-    protected $redirectTo = '/login';
+    protected $redirectTo = '/admin';
 
     /**
      * Create a new controller instance.
@@ -67,7 +68,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'type' => 1,
+            'type' => self::TYPE_STAFF,
         ]);
     }
 }

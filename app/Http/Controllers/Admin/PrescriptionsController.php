@@ -15,6 +15,7 @@ use App\Models\PrescriptionDetail;
 use App\Models\Shift;
 use App\Models\Unit;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -112,6 +113,7 @@ class PrescriptionsController extends Controller
                 'weight' => $request->weight,
                 'gender' => $request->gender,
                 'shift_id' => $shiftId,
+                'seller' => Auth::user()->name,
             ]);
 
             // Tạo các bản ghi mới trong bảng prescription_details

@@ -48,6 +48,8 @@ Route::get('/dashboard/total-revenue', [DashboardController::class, 'getDashboar
 
 Route::post('/dashboard/filter', [DashboardController::class, 'getFilter'])->name('dashboard.filter');
 
+Route::get('/dashboard/total-orders', [DashboardController::class, 'totalOrders'])->name('dashboard.total.orders');
+
 
 Route::get('/dashboardtopsuppliers', [DashboardController::class, 'getTopSuppliers'])->name('dashboard.dashboardtopsuppliers');
 Route::get('/dashboardtopmedicines', [DashboardController::class, 'getTopMedicines'])->name('dashboard.dashboardtopmedicines');
