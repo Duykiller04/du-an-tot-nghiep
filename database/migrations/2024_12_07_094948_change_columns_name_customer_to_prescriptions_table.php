@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('prescriptions', function (Blueprint $table) {
-            $table->string('phone')->nullable()->after('name_customer');
-            $table->string('address')->nullable()->after('phone');
-            $table->string('email')->nullable()->after('address');
-            $table->integer('weight')->nullable()->after('email');
-            $table->boolean('gender')->nullable()->after('weight');
+            $table->dropColumn('name_customer');
+            $table->dropColumn('total');
+            $table->string('customer_name', 50)->after('type_sell');
+            $table->double('total_price')->after('seller');
         });
     }
 
@@ -26,7 +25,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('prescriptions', function (Blueprint $table) {
-            $table->dropColumn(['phone', 'address', 'email', 'weight', 'gender']);
+            $table->dropColumn('customer_name');
+            $table->dropColumn('total_price');
+            $table->string('name_customer', 50)->after('type_sell');
+            $table->double('total')->after('seller');
         });
     }
 };

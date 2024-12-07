@@ -815,7 +815,6 @@
                                                 <tr>
                                                     <th scope="col">STT</th>
                                                     <th scope="col">Khách hàng</th>
-                                                    <th scope="col">Bệnh</th>
                                                     <th scope="col">Tổng tiền</th>
                                                     <th scope="col">Người kê đơn</th>
                                                 </tr>

@@ -35,7 +35,7 @@
                             <div class="mb-3">
                                 <label for="customer_name" class="form-label">Tên khách hàng <span class="text-danger">(*)</span></label>
                                 <input type="text" class="form-control @error('customer_name') is-invalid @enderror"
-                                    id="customer_name" name="customer_name" value="{{ old('customer_name', $prescription->name_customer) }}">
+                                    id="customer_name" name="customer_name" value="{{ old('customer_name', $prescription->customer_name) }}">
                                 @error('customer_name')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror

@@ -14,9 +14,8 @@ use App\Models\Prescription;
 use App\Models\PrescriptionDetail;
 use App\Models\Shift;
 use App\Models\Unit;
-
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
@@ -49,8 +48,8 @@ class PrescriptionsController extends Controller
                 ->addColumn('gender', function ($row) {
                     return $row->gender == 0 ? 'Nam' : 'Nữ'; // Chuyển đổi giới tính
                 })
-                ->addColumn('total', function ($row) {
-                    return number_format($row->total) . ' VND';  // Format price
+                ->addColumn('total_price', function ($row) {
+                    return number_format($row->total_price) . ' VND';  // Format price
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
@@ -103,10 +102,10 @@ class PrescriptionsController extends Controller
             $shiftId = $activeShift ? $activeShift->id : null;
 
             $prescription = Prescription::create([
-                'total' => $request->total_price, // Chắc chắn rằng total_price được gửi lên
+                'total_price' => $request->total_price, // Chắc chắn rằng total_price được gửi lên
                 'age' => $request->age,
                 'type_sell' => $request->type_sell,
-                'name_customer' => $request->customer_name,
+                'customer_name' => $request->customer_name,
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'email' => $request->email,
@@ -187,7 +186,7 @@ class PrescriptionsController extends Controller
             $prescription->update([
                 'age' => $request->age,
                 'type_sell' => $request->type_sell,
-                'name_customer' => $request->customer_name,
+                'customer_name' => $request->customer_name,
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'email' => $request->email,

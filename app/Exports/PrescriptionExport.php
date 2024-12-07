@@ -64,10 +64,10 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
         foreach ($Prescription->prescriptionDetails as $detail) {
             $data[] = [
                 $index++,                               // STT
-                $Prescription->total,                  // Tổng tiền
+                $Prescription->total_price,                  // Tổng tiền
                 $Prescription->age,                    // Tuổi
                 $Prescription->type_sell,              // Loại bán
-                $Prescription->name_customer,          // Tên khách hàng
+                $Prescription->customer_name,          // Tên khách hàng
                 $Prescription->phone,                  // Số điện thoại
                 $Prescription->address,                // Địa chỉ
                 $Prescription->email,                  // Email
