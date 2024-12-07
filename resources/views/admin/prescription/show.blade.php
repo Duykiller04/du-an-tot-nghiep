@@ -28,7 +28,7 @@
         <div class="card-body">
             <div class="mb-3">
                 <label><strong>Tên khách hàng:</strong></label>
-                <span>{{ $prescription->name_customer }}</span>
+                <span>{{ $prescription->customer_name }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Giới tính:</strong></label>
@@ -56,7 +56,7 @@
             </div>
             <div class="mb-3">
                 <label><strong>Tổng:</strong></label>
-                <span>{{ number_format($prescription->total, 2) }}</span>
+                <span>{{ number_format($prescription->total_price, 2) }}</span>
             </div>
             <div class="mb-3">
                 <label><strong>Thời gian tạo:</strong></label>

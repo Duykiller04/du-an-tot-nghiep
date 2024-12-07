@@ -61,7 +61,7 @@
                                                                             value="{{ $item->id }}">
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->name_customer }}</td>
+                                                                    <td>{{ $item->customer_name }}</td>
                                                                     <td>{{ $item->gender }}</td>
                                                                     <td>{{ $item->age }}</td>
                                                                     <td>{{ $item->phone }}</td>
@@ -69,7 +69,7 @@
                                                                     <td>{{ $item->address }}</td>
                                                                     <td>{{ $item->email }}</td>
                                                                     <td>{{ $item->weight }}</td>
-                                                                    <td>{{ $item->total }}</td>
+                                                                    <td>{{ $item->total_price }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach

@@ -12,10 +12,10 @@ class Prescription extends Model
     protected $fillable = [
         'id',
         'seller',
-        'total',
+        'total_price',
         'age',
         'type_sell',
-        'name_customer',
+        'customer_name',
         'phone',
         'address',
         'email',
