@@ -51,4 +51,8 @@ Route::post('/dashboard/filter', [DashboardController::class, 'getFilter'])->nam
 Route::get('/dashboard/total-orders', [DashboardController::class, 'totalOrders'])->name('dashboard.total.orders');
 
 
+Route::get('/dashboard/profit', [DashboardController::class, 'getProfit'])->name('dashboard.profit');
+
+
+
 

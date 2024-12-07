@@ -101,7 +101,7 @@
                                             <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                 <span class="counter-value" id="totalOrders" data-target="0">0</span> Đơn
                                             </h4>
-{{-- 
+                                            {{-- 
                                             <a href="" class="text-decoration-underline">Danh sách đơn thuốc thông
                                                 thường</a><br>
                                             <a href="" class="text-decoration-underline">Danh sách đơn thuốc cắt
@@ -140,8 +140,8 @@
                                             <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                 <span id="totalCustomers" class="counter-value">0</span> Người
                                             </h4>
-                                            <a href="{{ route('admin.customers.index') }}"
-                                                class="text-decoration-underline">Xem danh sách</a>
+                                            {{-- <a href="{{ route('admin.customers.index') }}"
+                                                class="text-decoration-underline">Xem danh sách</a> --}}
                                         </div>
                                         <div class="avatar-sm flex-shrink-0">
                                             <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -162,17 +162,12 @@
                                             <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Tổng lợi
                                                 nhuận</p>
                                         </div>
-                                        <div class="flex-shrink-0">
-                                            <h5 class="text-muted fs-14 mb-0">
-                                                +0.00 %
-                                            </h5>
-                                        </div>
                                     </div>
                                     <div class="d-flex align-items-end justify-content-between mt-4">
                                         <div>
-                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                    data-target="165.89">0</span>k </h4>
-                                            <a href="" class="text-decoration-underline">Xem chi tiết</a>
+                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                                <span id="totalReturns" class="counter-value">0</span>
+                                            </h4>
                                         </div>
                                         <div class="avatar-sm flex-shrink-0">
                                             <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -784,8 +779,8 @@
                                 </div><!-- end card header -->
 
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
-                                        <canvas id="myPieChart" style="width: 100%; height: 100%;"></canvas>
+                                    <div class="d-flex justify-content-center align-items-center" style="height: 260px;">
+                                        <canvas id="myPieChart" style="width: 200px; height: 200px;"></canvas>
                                     </div>
 
                                     <div class="d-flex justify-content-center align-items-center gap-1">
@@ -1054,6 +1049,11 @@
                         var formattedRevenue = totalRevenue
                             .toLocaleString(); // Định dạng số với dấu phân cách
                         $('#totalRevenue').text(formattedRevenue + " VND");
+
+                        // Hiển thị lợi nhuận
+                        var profit = response.profit || 0; // Đảm bảo lấy giá trị lợi nhuận từ response
+                        var formattedProfit = profit.toLocaleString(); // Định dạng lợi nhuận
+                        $('#totalReturns').text(formattedProfit + " VND");
                     },
                     error: function(xhr, status, error) {
                         console.error("Lỗi khi gửi yêu cầu:", error);
@@ -1076,6 +1076,28 @@
                     counter.setAttribute('data-target', totalOrders);
                 })
                 .catch(error => console.error('Lỗi khi tải dữ liệu:', error));
+
+            $.ajax({
+                url: '/api/dashboard/profit', // URL route của bạn
+                method: "GET",
+                success: function(data) {
+                    if (data.profit !== undefined) {
+                        // Định dạng số với dấu phân cách hàng ngàn là dấu phẩy
+                        var formattedProfit = data.profit.toLocaleString(
+                            'en-US'); // Dấu phân cách là dấu phẩy
+
+                        // Thêm "VND" vào cuối
+                        $('#totalReturns').text(formattedProfit + " VND");
+
+                        console.log("Tổng lợi nhuận:", formattedProfit + " VND");
+                    } else {
+                        console.error("Dữ liệu trả về không hợp lệ!");
+                    }
+                },
+                error: function(error) {
+                    console.error("Có lỗi xảy ra:", error);
+                }
+            });
 
 
 
