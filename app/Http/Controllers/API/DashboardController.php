@@ -120,12 +120,22 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->orderByDesc('created_at')
             ->limit(value: 5)
-            ->get()->toArray();
+            ->get()->toArray();         
             $presscriptions = Prescription::where('created_at', '>=', now()->subDays(30))
                 ->orderByDesc('created_at')
                 ->limit(value: 5)
                 ->get()->toArray();
-            $recentOrders = array_merge($cutDoseOrders,$presscriptions);
+                
+        // Thêm trường 'prescription_name' cho đơn thuốc cắt liều
+        foreach ($cutDoseOrders as &$cutDoseOrder) {
+            $cutDoseOrder['prescription_name'] = 'Đơn thuốc cắt liều';
+        }
+
+        // Thêm trường 'prescription_name' cho đơn thuốc thông thường
+        foreach ($presscriptions as &$order) {
+            $order['prescription_name'] = 'Đơn thuốc thông thường';
+        }
+        $recentOrders = array_merge($cutDoseOrders,$presscriptions);
         return response()->json($recentOrders);
     }
 
@@ -225,69 +235,44 @@ class DashboardController extends Controller
             'totalCount' => $totalCount
         ]);
     }
-    // public function getStatistics(Request $request)
-    // {
-    //     $type = $request->query('type', 'day');
+    public function getStatistics(Request $request)
+    {
+        $type = $request->query('type', 'day');
+        $startDate = null;
+        $endDate = Carbon::now();
 
-    //     // Xử lý thống kê tổng từ trước đến nay
-    //     $totalRevenueAllTime = Order::where('status_order', Order::STATUS_ORDER_DELIVERED)
-    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
-    //         ->sum('total_price');
-
-    //     $totalOrdersAllTime = Order::where('status_order', Order::STATUS_ORDER_DELIVERED)
-    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
-    //         ->count();
-
-    //     $totalCanceledOrdersAllTime = Order::where('status_order', Order::STATUS_ORDER_CANCELED)
-    //         ->count();
-
-    //     $totalMembersAllTime = Customer::count();
-    //     $startDate = null;
-    //     $endDate = Carbon::now();
-
-    //     // Xử lý thống kê theo khoảng thời gian cụ thể
-    //     switch ($type) {
-    //         case 'week':
-    //             $startDate = Carbon::now()->startOfWeek();
-    //             break;
-    //         case 'month':
-    //             $startDate = Carbon::now()->startOfMonth();
-    //             break;
-    //         case 'year':
-    //             $startDate = Carbon::now()->startOfYear();
-    //             break;
-    //         default:
-    //             $startDate = Carbon::now()->startOfDay();
-    //             break;
-    //     }
-    //     // Tổng doanh thu
-    //     $totalRevenue = Order::whereBetween('created_at', [$startDate, $endDate])
-    //         ->where('status_order', Order::STATUS_ORDER_DELIVERED)
-    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
-    //         ->sum('total_price');
-
-    //     // Tổng số đơn hàng
-    //     $totalOrders = Order::whereBetween('created_at', [$startDate, $endDate])
-    //         ->where('status_order', Order::STATUS_ORDER_DELIVERED)
-    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
-    //         ->count();
-    //     // Tổng số đơn hàng bị hủy
-    //     $totalCanceledOrders = Order::whereBetween('created_at', [$startDate, $endDate])
-    //         ->where('status_order', Order::STATUS_ORDER_CANCELED)
-    //         ->count();
-    //     // Tính tỷ lệ giao hàng thành công
-    //     $deliverySuccessRatio = $totalOrdersAllTime > 0 ? ($totalOrders / $totalOrdersAllTime) * 100 : 0;
-    //     return response()->json([
-    //         'totalRevenueAllTime' => $totalRevenueAllTime,
-    //         'totalOrdersAllTime' => $totalOrdersAllTime,
-    //         'totalMembersAllTime' => $totalMembersAllTime,
-    //         'totalCanceledOrdersAllTime' => $totalCanceledOrdersAllTime,
-    //         'totalRevenue' => $totalRevenue,
-    //         'totalOrders' => $totalOrders,
-    //         'totalCanceledOrders' => $totalCanceledOrders,
-    //         'deliverySuccessRatio' => round($deliverySuccessRatio, 2)
-    //     ]);
-    // }
+        // Xử lý thống kê theo khoảng thời gian cụ thể
+        switch ($type) {
+            case 'week':
+                $startDate = Carbon::now()->startOfWeek();
+                break;
+            case 'month':
+                $startDate = Carbon::now()->startOfMonth();
+                break;
+            case 'year':
+                $startDate = Carbon::now()->startOfYear();
+                break;
+            default:
+                $startDate = Carbon::now()->startOfDay();
+                break;
+        }
+        // Tổng doanh thu
+        $totalRevenueCutDoseOrders = CutDoseOrder::whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total_price');
+        $totalRevenuePrescriptions = Prescription::whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total_price');
+        $totalRevenue = $totalRevenueCutDoseOrders + $totalRevenuePrescriptions;
+        // Tổng số đơn hàng
+        $totalCutDoseOrders = CutDoseOrder::whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+        $totalPrecriptions = Prescription::whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+        $totalOrders = $totalCutDoseOrders + $totalPrecriptions;
+        return response()->json([
+            'totalRevenue' => $totalRevenue,
+            'totalOrders' =>$totalOrders,
+          ]);
+    }
 
     public function getTopSuppliers(Request $request)
     {
@@ -392,5 +377,4 @@ class DashboardController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 }

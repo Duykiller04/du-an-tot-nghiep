@@ -14,7 +14,7 @@ $(document).ready(function () {
                     currency: "VND",
                 });
 
-                data.forEach(function (order) {              
+                data.forEach(function (order) {                
                     let formattedPrice = currencyFormatter.format(order.total_price); // Định dạng giá tiền
                    let customerName = order.customer_name;
                     if(customerName == null || customerName == ''){
@@ -26,6 +26,9 @@ $(document).ready(function () {
                             <td>${(stt += 1)}</td>
                             <td>       
                                     <div class="flex-grow-1">${customerName}</div>
+                            </td>
+                              <td>       
+                                    <div class="flex-grow-1">${order.prescription_name}</div>
                             </td>
                             <td>
                                 <span class="text-success">${formattedPrice}</span>

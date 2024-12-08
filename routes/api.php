@@ -52,4 +52,7 @@ Route::get('/dashboard/total-orders', [DashboardController::class, 'totalOrders'
 
 Route::get('/dashboardtopsuppliers', [DashboardController::class, 'getTopSuppliers'])->name('dashboard.dashboardtopsuppliers');
 Route::get('/dashboardtopmedicines', [DashboardController::class, 'getTopMedicines'])->name('dashboard.dashboardtopmedicines');
+Route::get('/dashboard/store-statistics', [DashboardController::class, 'getStatistics'])->name('dashboard.store.statistics');
+
+
 

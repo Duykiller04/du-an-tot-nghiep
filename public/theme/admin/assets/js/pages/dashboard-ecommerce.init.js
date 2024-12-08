@@ -161,10 +161,6 @@ function loadCharts() {
             markersSelectable: !0,
             markers: [
                 { name: "Hà Nội ( Việt Nam )", coords: [21.028511, 105.804817] }
-                // { name: "Palestine", coords: [31.9474, 35.2272] },
-                // { name: "Russia", coords: [61.524, 105.3188] },
-                // { name: "Canada", coords: [56.1304, -106.3468] },
-                // { name: "Greenland", coords: [71.7069, -42.6043] },
             ],
             markerStyle: { initial: { fill: e[1] }, selected: { fill: e[2] } },
             labels: {
