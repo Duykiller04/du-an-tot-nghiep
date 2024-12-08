@@ -1,0 +1,4 @@
+.btn-timeFrame.selected {
+    background-color: #405189; /* Màu nền khi chọn */
+    color: white; /* Màu chữ khi chọn */
+}

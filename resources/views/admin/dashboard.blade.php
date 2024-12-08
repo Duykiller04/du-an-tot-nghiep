@@ -186,52 +186,48 @@
                                 <div class="card-header border-0 align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thông số thua nhập cửa hàng</h4>
                                     <div>
-                                        <button type="button" class="btn btn-soft-secondary btn-sm">
-                                            ALL
+                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
+                                            data-type="day">
+                                            Day
                                         </button>
-                                        <button type="button" class="btn btn-soft-secondary btn-sm">
-                                            1M
+                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
+                                            data-type="week">
+                                            Week
                                         </button>
-                                        <button type="button" class="btn btn-soft-secondary btn-sm">
-                                            6M
+                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
+                                            data-type="month">
+                                            Month
                                         </button>
-                                        <button type="button" class="btn btn-soft-primary btn-sm">
-                                            1Y
+                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
+                                            data-type="year">
+                                            Year
                                         </button>
                                     </div>
                                 </div><!-- end card header -->
 
                                 <div class="card-header p-0 border-0 bg-light-subtle">
                                     <div class="row g-0 text-center">
-                                        <div class="col-6 col-sm-3">
+                                        <div class="col-6 col-sm-4">
                                             <div class="p-3 border border-dashed border-start-0">
                                                 <h5 class="mb-1"><span class="counter-value"
-                                                        data-target="7585">0</span></h5>
+                                                id="totalStoreOrders">0</span></h5>
                                                 <p class="text-muted mb-0">Đơn thuốc</p>
                                             </div>
                                         </div>
                                         <!--end col-->
-                                        <div class="col-6 col-sm-3">
+                                        <div class="col-6 col-sm-4">
                                             <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1">$<span class="counter-value"
-                                                        data-target="22.89">0</span>k</h5>
+                                                <h5 class="mb-1"><span class="counter-value"
+                                                    id="totalRevenueOrders">0</span></h5>
                                                 <p class="text-muted mb-0">Thu nhập</p>
                                             </div>
                                         </div>
                                         <!--end col-->
-                                        <div class="col-6 col-sm-3">
+                                        <div class="col-6 col-sm-4">
                                             <div class="p-3 border border-dashed border-start-0">
                                                 <h5 class="mb-1"><span class="counter-value" data-target="367">0</span>
                                                 </h5>
-                                                <p class="text-muted mb-0">Hoàn trả</p>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-6 col-sm-3">
-                                            <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                                <h5 class="mb-1 text-success"><span class="counter-value"
-                                                        data-target="18.92">0</span>%</h5>
-                                                <p class="text-muted mb-0">Tỉ lệ tư vấn</p>
+                                                <p class="text-muted mb-0">Doanh thu</p>
                                             </div>
                                         </div>
                                         <!--end col-->
@@ -252,21 +248,11 @@
                             <!-- card -->
                             <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Bản đồ nhà cung cấp</h4>
-                                    <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-soft-primary btn-sm">
-                                            Xuất báo cáo
-                                        </button>
-                                    </div>
+                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp</h4>
                                 </div><!-- end card header -->
 
                                 <!-- card body -->
                                 <div class="card-body">
-
-                                    <div id="sales-by-locations"
-                                        data-colors='["--vz-light", "--vz-success", "--vz-primary"]' style="height: 269px"
-                                        dir="ltr"></div>
-
                                     <div class="px-2 py-2 mt-1" id="dashboard-suppliers"></div>
                                 </div>
                                 <!-- end card body -->
@@ -450,6 +436,7 @@
                                                 <tr>
                                                     <th scope="col">STT</th>
                                                     <th scope="col">Khách hàng</th>
+                                                    <th scope="col">Tên đơn thuốc</th>
                                                     <th scope="col">Tổng tiền</th>
                                                     <th scope="col">Người kê đơn</th>
                                                 </tr>
@@ -480,6 +467,7 @@
     <!--Swiper slider css-->
     <link href="{{ asset('theme/admin/assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('library/style.css') }}">
 @endsection
 
 @section('script-libs')
@@ -494,16 +482,19 @@
     <script src="{{ asset('theme/admin/assets/libs/swiper/swiper-bundle.min.js') }}"></script>
 
     <!-- Dashboard init -->
-    <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
+    {{-- <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('library/dashboard-supplier.js') }}"></script>
     <script src="{{ asset('library/order.js') }}"></script>
     <script src="{{ asset('library/dashboard-topmedicines.js') }}"></script>
     <script src="{{ asset('library/dashboard-topsupplier.js') }}"></script>
+    <script src="{{ asset('library/total-store-revenue.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+    
+
         $(document).ready(function() {
             // Gửi yêu cầu AJAX để lấy dữ liệu tổng số khách hàng
             flatpickr("#dateRangePicker", {
@@ -745,3 +736,8 @@
         });
     </script>
 @endsection
+
+@section('css')
+    
+@endsection
+
