@@ -135,7 +135,7 @@ Danh sách đơn thuốc
                 },
                 columns: [
                     { data: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'name_customer' },
+                    { data: 'customer_name' },
                     { data: 'gender' },
                     { data: 'age' },
                     { data: 'phone' },
@@ -144,7 +144,7 @@ Danh sách đơn thuốc
                     { data: 'email' },
                     { data: 'weight' },
                     { data: 'created_at' },
-                    { data: 'total' },
+                    { data: 'total_price' },
                     { data: 'action', orderable: false, searchable: false }
                 ],
                 language: {

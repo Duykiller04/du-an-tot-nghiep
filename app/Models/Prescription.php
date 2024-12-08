@@ -11,10 +11,11 @@ class Prescription extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'id',
-        'total',
+        'seller',
+        'total_price',
         'age',
         'type_sell',
-        'name_customer',
+        'customer_name',
         'phone',
         'address',
         'email',

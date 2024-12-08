@@ -112,7 +112,7 @@
                         <div class="d-flex">
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu <span class="text-danger">(*)</span></label>
+                                    <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu</label>
                                     <select name="cutDosePrescription" id="cutDosePrescription" class="form-select select2 @error('cutDosePrescription') is-invalid @enderror">
                                         <option value="">Chọn tên đơn thuốc</option>
                                         @foreach ($cutDosePrescription as $prescription)

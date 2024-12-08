@@ -138,7 +138,7 @@
                                                 {{-- @dd($item->shift->attendace->toArray()); --}}
                                                 @if ($item->shift->status == 'đang mở')
                                                     @if ( $item->shift->attendace->img_check_in == null && 
-                                                    now() >= Carbon\Carbon::parse($item->shift->start_time)->subMinutes(30) && 
+                                                    now() >= Carbon\Carbon::parse($item->shift->start_time) && 
                                                     now() <= Carbon\Carbon::parse($item->shift->end_time))
                                                         <button type="button" class="btn btn-primary"
                                                             data-bs-toggle="modal" data-bs-target="#checkInModal"

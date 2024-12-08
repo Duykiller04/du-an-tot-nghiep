@@ -112,22 +112,20 @@ class DashboardController extends Controller
 
     public function recentOrders()
     {
-        $recentOrders = CutDoseOrder::with(
+        $cutDoseOrders = CutDoseOrder::with(
             [
-                'shift.users' => function ($query) {
-                    $query->where('type', 'staff');
-                },
-                'cutDoseOrderDetails.medicine',
-                'cutDoseOrderDetails.unit',
                 'disease',
-                'customer'
             ]
         )
             ->where('created_at', '>=', now()->subDays(30))
             ->orderByDesc('created_at')
-            ->limit(10)
-            ->get();
-
+            ->limit(value: 5)
+            ->get()->toArray();
+            $presscriptions = Prescription::where('created_at', '>=', now()->subDays(30))
+                ->orderByDesc('created_at')
+                ->limit(value: 5)
+                ->get()->toArray();
+            $recentOrders = array_merge($cutDoseOrders,$presscriptions);
         return response()->json($recentOrders);
     }
 
@@ -257,5 +255,172 @@ class DashboardController extends Controller
             'total_revenue' => $totalRevenue,
             'profit' => $profit,
         ]);
+    }
+    // public function getStatistics(Request $request)
+    // {
+    //     $type = $request->query('type', 'day');
+
+    //     // Xử lý thống kê tổng từ trước đến nay
+    //     $totalRevenueAllTime = Order::where('status_order', Order::STATUS_ORDER_DELIVERED)
+    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
+    //         ->sum('total_price');
+
+    //     $totalOrdersAllTime = Order::where('status_order', Order::STATUS_ORDER_DELIVERED)
+    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
+    //         ->count();
+
+    //     $totalCanceledOrdersAllTime = Order::where('status_order', Order::STATUS_ORDER_CANCELED)
+    //         ->count();
+
+    //     $totalMembersAllTime = Customer::count();
+    //     $startDate = null;
+    //     $endDate = Carbon::now();
+
+    //     // Xử lý thống kê theo khoảng thời gian cụ thể
+    //     switch ($type) {
+    //         case 'week':
+    //             $startDate = Carbon::now()->startOfWeek();
+    //             break;
+    //         case 'month':
+    //             $startDate = Carbon::now()->startOfMonth();
+    //             break;
+    //         case 'year':
+    //             $startDate = Carbon::now()->startOfYear();
+    //             break;
+    //         default:
+    //             $startDate = Carbon::now()->startOfDay();
+    //             break;
+    //     }
+    //     // Tổng doanh thu
+    //     $totalRevenue = Order::whereBetween('created_at', [$startDate, $endDate])
+    //         ->where('status_order', Order::STATUS_ORDER_DELIVERED)
+    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
+    //         ->sum('total_price');
+
+    //     // Tổng số đơn hàng
+    //     $totalOrders = Order::whereBetween('created_at', [$startDate, $endDate])
+    //         ->where('status_order', Order::STATUS_ORDER_DELIVERED)
+    //         ->where('status_payment', Order::STATUS_PAYMENT_PAID)
+    //         ->count();
+    //     // Tổng số đơn hàng bị hủy
+    //     $totalCanceledOrders = Order::whereBetween('created_at', [$startDate, $endDate])
+    //         ->where('status_order', Order::STATUS_ORDER_CANCELED)
+    //         ->count();
+    //     // Tính tỷ lệ giao hàng thành công
+    //     $deliverySuccessRatio = $totalOrdersAllTime > 0 ? ($totalOrders / $totalOrdersAllTime) * 100 : 0;
+    //     return response()->json([
+    //         'totalRevenueAllTime' => $totalRevenueAllTime,
+    //         'totalOrdersAllTime' => $totalOrdersAllTime,
+    //         'totalMembersAllTime' => $totalMembersAllTime,
+    //         'totalCanceledOrdersAllTime' => $totalCanceledOrdersAllTime,
+    //         'totalRevenue' => $totalRevenue,
+    //         'totalOrders' => $totalOrders,
+    //         'totalCanceledOrders' => $totalCanceledOrders,
+    //         'deliverySuccessRatio' => round($deliverySuccessRatio, 2)
+    //     ]);
+    // }
+
+    public function getTopSuppliers(Request $request)
+    {
+        // Lấy giá trị startDate và endDate từ request
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+
+        // Kiểm tra và parse ngày
+        try {
+            if (!$startDate || !$endDate) {
+                $startDate = Carbon::now()->subYear()->startOfDay(); // 1 năm trước
+                $endDate = Carbon::now()->endOfDay(); // Ngày hiện tại
+            } else {
+                $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
+                $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
+        }
+
+
+        // Lấy top 5 nhà cung cấp có nhiều đơn thuốc từ các bảng liên quan
+        try {
+            $topSuppliers = DB::table('medicine_supplier')
+                ->join('suppliers', 'medicine_supplier.supplier_id', '=', 'suppliers.id')
+                ->join('medicines', 'medicine_supplier.medicine_id', '=', 'medicines.id')
+                ->leftJoin('cut_dose_order_details', 'medicines.id', '=', 'cut_dose_order_details.medicine_id')
+                ->leftJoin('cut_dose_orders', 'cut_dose_order_details.cut_dose_order_id', '=', 'cut_dose_orders.id')
+                ->leftJoin('prescription_details', 'medicines.id', '=', 'prescription_details.medicine_id')
+                ->leftJoin('prescriptions', 'prescription_details.prescription_id', '=', 'prescriptions.id')
+                ->select(
+                    'suppliers.name as supplier_name', // Lấy tên nhà cung cấp
+                    'suppliers.created_at as join_date', // Lấy ngày tham gia của nhà cung cấp
+                    DB::raw('count(distinct prescriptions.id) + count(distinct cut_dose_orders.id) as total_orders') // Tổng số đơn thuốc
+                )
+                ->whereNull('suppliers.deleted_at')
+                ->where(function($query) use ($startDate, $endDate) {
+                    $query->whereBetween('prescriptions.created_at', [$startDate, $endDate])
+                        ->orWhereBetween('cut_dose_orders.created_at', [$startDate, $endDate]);
+                })
+                ->groupBy('suppliers.id')
+                ->orderBy('total_orders', 'desc')
+                ->take(5)
+                ->get();
+
+
+            // Trả về JSON
+            return response()->json(['topSuppliers' => $topSuppliers], 200);
+        } catch (\Exception $e) {
+            // Trả về lỗi nếu có vấn đề
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getTopMedicines(Request $request)
+    {
+        // Lấy giá trị startDate và endDate từ request
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+
+        // Kiểm tra và parse ngày
+        try {
+            if (!$startDate || !$endDate) {
+                $startDate = Carbon::now()->subYear()->startOfDay(); // 1 năm trước
+                $endDate = Carbon::now()->endOfDay(); // Ngày hiện tại
+            } else {
+                $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
+                $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
+        }
+
+
+        // Lấy top 5 thuốc bán chạy nhất từ các bảng liên quan
+        try {
+            $topMedicines = DB::table('medicines')
+                ->leftJoin('cut_dose_order_details', 'medicines.id', '=', 'cut_dose_order_details.medicine_id')
+                ->leftJoin('cut_dose_orders', 'cut_dose_order_details.cut_dose_order_id', '=', 'cut_dose_orders.id')
+                ->leftJoin('prescription_details', 'medicines.id', '=', 'prescription_details.medicine_id')
+                ->leftJoin('prescriptions', 'prescription_details.prescription_id', '=', 'prescriptions.id')
+                ->select(
+                    'medicines.name as medicine_name',
+                    'medicines.created_at as import_date', // Sử dụng created_at làm ngày nhập thuốc
+                    DB::raw('count(distinct prescriptions.id) + count(distinct cut_dose_orders.id) as total_orders') // Tổng số đơn thuốc
+                )
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('prescriptions.created_at', [$startDate, $endDate])
+                        ->orWhereBetween('cut_dose_orders.created_at', [$startDate, $endDate]);
+                })
+                ->groupBy('medicines.id') // Nhóm theo ID thuốc
+                ->orderBy('total_orders', 'desc')
+                ->take(5)
+                ->get();
+
+
+            // Trả về JSON
+            return response()->json(['topMedicines' => $topMedicines], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

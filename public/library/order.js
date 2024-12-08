@@ -3,7 +3,7 @@ $(document).ready(function () {
         $.ajax({
             url: "api/dashboard/recent-orders",
             method: "GET",
-            success: function (data) {
+            success: function (data) {             
                 var orderList = $("#recentOrders");
                 var stt = 0;
                 orderList.empty();
@@ -14,20 +14,23 @@ $(document).ready(function () {
                     currency: "VND",
                 });
 
-                data.forEach(function (order) {
-                    let staffNames = order.shift.users.map(user => user.name).join(", ");
+                data.forEach(function (order) {              
                     let formattedPrice = currencyFormatter.format(order.total_price); // Định dạng giá tiền
+                   let customerName = order.customer_name;
+                    if(customerName == null || customerName == ''){
+                        customerName = '-';
+                    }
+              
                     orderList.append(`
                 <tr>
                             <td>${(stt += 1)}</td>
                             <td>       
-                                    <div class="flex-grow-1">${order.customer_name}</div>
+                                    <div class="flex-grow-1">${customerName}</div>
                             </td>
-                            <td>${order.disease.disease_name}</td>
                             <td>
                                 <span class="text-success">${formattedPrice}</span>
                             </td>
-                            <td>${staffNames}</td>
+                            <td>${order.seller}</td>
                 </tr>
                             `);
                 });

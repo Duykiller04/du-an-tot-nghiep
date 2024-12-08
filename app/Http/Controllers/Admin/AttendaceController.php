@@ -161,7 +161,9 @@ class AttendaceController extends Controller
             }
 
             // Kiểm tra đi muộn
-            if ($attendance->time_in && Carbon::parse($attendance->time_in)->gt(Carbon::parse($attendance->shift->start_time))) {
+            $timeIn = Carbon::parse($attendance->time_in);
+            $lateTime = Carbon::parse($attendance->shift->start_time)->addMinutes(5);
+            if ($timeIn && $timeIn->gt($lateTime)) {
                 $lateCount++;
             }
 
@@ -205,7 +207,9 @@ class AttendaceController extends Controller
             }
 
             // Kiểm tra đi muộn
-            if ($attendance->time_in && Carbon::parse($attendance->time_in)->gt(Carbon::parse($attendance->shift->start_time))) {
+            $timeIn = Carbon::parse($attendance->time_in);
+            $lateTime = Carbon::parse($attendance->shift->start_time)->addMinutes(5);
+            if ($timeIn && $timeIn->gt($lateTime)) {
                 $lateCount++;
             }
 
