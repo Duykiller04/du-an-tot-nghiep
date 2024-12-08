@@ -130,6 +130,7 @@ class DashboardController extends Controller
     }
 
 
+    //tông doanh thu
     public function getDashboardRevenue()
     {
         // Tổng doanh thu từ bảng Prescription
@@ -162,57 +163,66 @@ class DashboardController extends Controller
     }
 
     public function getFilter(Request $request)
-    {
-        // Lấy giá trị startDate và endDate từ request
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
+{
+    // Lấy giá trị startDate và endDate từ request
+    $startDate = $request->input('startDate');
+    $endDate = $request->input('endDate');
 
-        // Kiểm tra và parse ngày
-        try {
-            $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
-            $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
-        }
-
-        // Lọc dữ liệu khách hàng trong khoảng thời gian
-        $totalCustomers = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
-
-        // Tính tổng doanh thu
-        $totalPrescription = DB::table('prescriptions')
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum('total');
-
-        $totalCutDoseOrder = DB::table('cut_dose_orders')
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->sum('total_price');
-
-        $totalRevenue = $totalPrescription + $totalCutDoseOrder;
-
-
-
-        // Tính tổng số đơn thuốc bán ra
-        $totalPrescriptionOrders = DB::table('prescriptions')
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->count(); // Tính tổng số đơn thuốc bán ra từ bảng prescriptions
-
-        $totalCutDoseOrders = DB::table('cut_dose_orders')
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->count(); // Tính tổng số đơn thuốc bán ra từ bảng cut_dose_orders
-
-        $totalOrders = $totalPrescriptionOrders + $totalCutDoseOrders; // Tổng số đơn thuốc bán ra
-
-        // Trả về JSON
-        return response()->json([
-            'totalCustomers' => $totalCustomers,
-            'totalRevenue' => $totalRevenue,
-            'totalOrders' => $totalOrders
-        ], 200);
+    // Kiểm tra và parse ngày
+    try {
+        $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
+        $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
     }
+
+    // Lọc dữ liệu khách hàng trong khoảng thời gian
+    $totalCustomers = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
+
+    // Tính tổng doanh thu
+    $totalPrescription = DB::table('prescriptions')
+        ->whereNull('deleted_at')
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->sum('total');
+
+    $totalCutDoseOrder = DB::table('cut_dose_orders')
+        ->whereNull('deleted_at')
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->sum('total_price');
+
+    $totalRevenue = $totalPrescription + $totalCutDoseOrder;
+
+    // Tính tổng giá nhập (price_import) trong khoảng thời gian
+    $totalCostPrice = DB::table('medicines')
+        ->whereBetween('created_at', [$startDate, $endDate]) // Lọc theo ngày nhập
+        ->sum('price_import');
+
+    // Tính lợi nhuận
+    $profit = $totalRevenue - $totalCostPrice;
+
+    // Tính tổng số đơn thuốc bán ra
+    $totalPrescriptionOrders = DB::table('prescriptions')
+        ->whereNull('deleted_at')
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->count();
+
+    $totalCutDoseOrders = DB::table('cut_dose_orders')
+        ->whereNull('deleted_at')
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->count();
+
+    $totalOrders = $totalPrescriptionOrders + $totalCutDoseOrders;
+
+    // Trả về JSON
+    return response()->json([
+        'totalCustomers' => $totalCustomers,
+        'totalRevenue' => $totalRevenue,
+        'totalCostPrice' => $totalCostPrice, // Tổng giá nhập
+        'profit' => $profit, // Lợi nhuận
+        'totalOrders' => $totalOrders
+    ], 200);
+}
+
 
     public function totalOrders()
     {
@@ -223,6 +233,27 @@ class DashboardController extends Controller
             'totalPrescriptionOrders' => $totalPrescriptionOrders,
             'totalCutdouseOrders' => $totalCutdouseOrders,
             'totalCount' => $totalCount
+        ]);
+    }
+
+    public function getProfit()
+    {
+        $totalCostPrice = DB::table('medicines')->sum('price_import');
+        // dd($totalCostPrice);
+        $totalPrescriptionPrice = DB::table('prescriptions')->sum('total');
+
+        $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')->sum('total_price');
+        
+
+        $totalRevenue = $totalPrescriptionPrice + $totalcutDoseOrdersPrice;
+
+        // Tính lợi nhuận
+        $profit = $totalRevenue - $totalCostPrice;
+        
+        return response()->json([
+            'total_cost_price' => $totalCostPrice,
+            'total_revenue' => $totalRevenue,
+            'profit' => $profit,
         ]);
     }
     // public function getStatistics(Request $request)
@@ -392,5 +423,4 @@ class DashboardController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 }

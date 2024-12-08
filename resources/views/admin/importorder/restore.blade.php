@@ -59,7 +59,6 @@
                                                                     <td>{{ $item->storage->name }}</td>
                                                                     <td>{{ $item->user->name }}</td>
                                                                     <td>{{ $item->supplier->name }}</td>
-                                                                    <td>{{ $item->date_added}}</td>
                                                                     <td>{{ $item->total }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
