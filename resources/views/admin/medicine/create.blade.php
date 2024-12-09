@@ -135,7 +135,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="mb-3">
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
                                             class="text-danger">(*)</span></label>
@@ -150,15 +149,15 @@
                             </div>
 
                             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
+                                document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
+                                    const donvis = @json($donvis); // Data for units
+                                    const oldQuantities = @json(old('so_luong', [])); // Old quantities from session
+                                    const oldUnits = @json(old('don_vi', [])); // Old units from session
+                                    const errors = @json($errors->toArray()); // Errors from Laravel
 
-                                    const donvis = @json($donvis);
-                                    const oldQuantities = @json(old('so_luong', []));
-                                    const oldUnits = @json(old('don_vi', []));
-                                    const errors = @json($errors->toArray()); // Lấy danh sách lỗi từ Laravel
-
+                                    // Organize units by parent_id
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
                                             acc[donvi.parent_id] = [];
@@ -167,8 +166,9 @@
                                         return acc;
                                     }, {});
 
+                                    // Render child units for the select dropdown based on parent_id
                                     function renderChildUnits(parentId, selectElement) {
-                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset options
                                         if (unitsByParent[parentId]) {
                                             unitsByParent[parentId].forEach(donvi => {
                                                 const option = document.createElement('option');
@@ -179,13 +179,15 @@
                                         }
                                     }
 
+                                    // Show error message
                                     function showError(element, message) {
                                         const errorElement = document.createElement('p');
-                                        errorElement.classList.add('text-danger'); // Thêm class để hiển thị lỗi
+                                        errorElement.classList.add('text-danger');
                                         errorElement.textContent = message;
-                                        element.parentElement.appendChild(errorElement); // Gắn lỗi ngay dưới input
+                                        element.parentElement.appendChild(errorElement);
                                     }
 
+                                    // Validate fields
                                     function validateFields() {
                                         const formItems = productNew.querySelectorAll('.form-item');
                                         let isValid = true;
@@ -194,17 +196,17 @@
                                             const quantityInput = item.querySelector('input[name="so_luong[]"]');
                                             const unitSelect = item.querySelector('select[name="don_vi[]"]');
 
-                                            // Xóa lỗi cũ
+                                            // Remove previous error messages
                                             const oldErrors = item.querySelectorAll('.text-danger');
                                             oldErrors.forEach(error => error.remove());
 
-                                            // Kiểm tra số lượng
+                                            // Validate quantity
                                             if (!quantityInput.value || parseFloat(quantityInput.value) <= 0) {
                                                 showError(quantityInput, `Số lượng ở dòng ${index + 1} phải lớn hơn 0.`);
                                                 isValid = false;
                                             }
 
-                                            // Kiểm tra đơn vị
+                                            // Validate unit
                                             if (!unitSelect.value) {
                                                 showError(unitSelect, `Vui lòng chọn đơn vị ở dòng ${index + 1}.`);
                                                 isValid = false;
@@ -214,7 +216,8 @@
                                         return isValid;
                                     }
 
-                                    btnAdd.addEventListener('click', function () {
+                                    // Add new unit row
+                                    btnAdd.addEventListener('click', function() {
                                         const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                         const lastSelect = allSelects[allSelects.length - 1];
                                         const lastSelectedUnit = lastSelect ? lastSelect.value : null;
@@ -223,23 +226,23 @@
                                             const childUnits = unitsByParent[lastSelectedUnit] || [];
                                             if (childUnits.length > 0) {
                                                 const newFieldHTML = `
-                                                    <div class="row mb-3 form-item mt-3">
-                                                        <div class="col-5">
-                                                            <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                            <input type="number" name="so_luong[]" class="form-control">
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                            <select name="don_vi[]" class="form-control">
-                                                                <option value="">Chọn đơn vị</option>
-                                                                ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-2">
-                                                            <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
-                                                        </div>
-                                                    </div>
-                                                `;
+                <div class="row mb-3 form-item mt-3">
+                    <div class="col-5">
+                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                        <input type="number" name="so_luong[]" class="form-control">
+                    </div>
+                    <div class="col-5">
+                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                        <select name="don_vi[]" class="form-control">
+                            <option value="">Chọn đơn vị</option>
+                            ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                    </div>
+                </div>
+            `;
                                                 productNew.insertAdjacentHTML('beforeend', newFieldHTML);
                                             } else {
                                                 alert('Hết đơn vị con, không thể thêm trường mới!');
@@ -249,34 +252,31 @@
                                         }
                                     });
 
-                                    productNew.addEventListener('click', function (event) {
+                                    // Handle deleting unit row
+                                    productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
                                             const formItem = event.target.closest('.form-item');
                                             if (formItem) {
-                                                const allFormItems = Array.from(productNew.querySelectorAll('.form-item'));
-                                                const currentIndex = allFormItems.indexOf(formItem);
-
-                                                // Xóa tất cả các trường từ vị trí hiện tại
-                                                for (let i = allFormItems.length - 1; i >= currentIndex; i--) {
-                                                    allFormItems[i].remove();
-                                                }
+                                                formItem.remove();
+                                                updatePackagingSpecification();
                                             }
                                         }
                                     });
 
-                                    productNew.addEventListener('change', function (event) {
+                                    // Handle change in unit select
+                                    productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
                                             const selectedParentId = event.target.value;
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
 
-                                            // Reset các trường sau trường hiện tại
+                                            // Reset all selects after the current one
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
                                                 allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>';
                                                 allSelects[i].value = '';
                                             }
 
-                                            // Render các đơn vị con
+                                            // Render child units
                                             if (currentSelectIndex < allSelects.length - 1) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
                                                 renderChildUnits(selectedParentId, nextSelect);
@@ -285,7 +285,32 @@
                                         }
                                     });
 
-                                    // Khôi phục giá trị và lỗi từ session
+                                    // Handle change in quantity input
+                                    productNew.addEventListener('input', function(event) {
+                                        if (event.target.name === 'so_luong[]') {
+                                            updatePackagingSpecification();
+                                        }
+                                    });
+
+                                    // Update packaging specification based on quantity and unit selection
+                                    function updatePackagingSpecification() {
+                                        const quantities = productNew.querySelectorAll('input[name="so_luong[]"]');
+                                        const units = productNew.querySelectorAll('select[name="don_vi[]"]');
+                                        let packagingSpec = '';
+
+                                        quantities.forEach((quantityInput, index) => {
+                                            const unitSelect = units[index];
+                                            if (quantityInput.value && unitSelect.value) {
+                                                packagingSpec +=
+                                                    `${quantityInput.value}-${unitSelect.options[unitSelect.selectedIndex].text}, `;
+                                            }
+                                        });
+
+                                        document.getElementById('packaging_specification').value = packagingSpec.slice(0, -
+                                        2); // Remove trailing comma
+                                    }
+
+                                    // Restore old values and errors from session
                                     oldQuantities.forEach((quantity, index) => {
                                         if (index > 0) {
                                             btnAdd.click();
@@ -305,34 +330,17 @@
                                         }
                                     });
 
-                                    function updatePackagingSpecification() {
-                                        const formItems = productNew.querySelectorAll('.form-item');
-                                        const packagingInput = document.querySelector('#packaging_specification');
-
-                                        let packaging = []; // Mảng lưu các đơn vị cha và con
-
-                                        formItems.forEach(item => {
-                                            const unitSelect = item.querySelector('select[name="don_vi[]"]');
-                                            
-                                            if (unitSelect && unitSelect.value) {
-                                                const selectedUnit = unitSelect.options[unitSelect.selectedIndex];
-                                                const selectedUnitText = selectedUnit.textContent.trim(); // Loại bỏ khoảng trắng thừa
-
-                                                if (selectedUnitText) {
-                                                    packaging.push(selectedUnitText); // Lưu tên đơn vị đã chọn vào mảng
-                                                }
-                                            }
-                                        });
-
-                                        // Ghép các đơn vị với dấu "-" nếu có hơn 1 đơn vị, và loại bỏ khoảng trắng thừa
-                                        packagingInput.value = packaging.join('-').trim();
-                                    }
-                                    updatePackagingSpecification();
+                                    // Validate on submit
+                                    document.querySelector('#submit-button').addEventListener('click', function(event) {
+                                        if (!validateFields()) {
+                                            event.preventDefault();
+                                        }
+                                    });
                                 });
                             </script>
-
                         </div>
                     </div>
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Thông tin phụ</h5>
@@ -451,7 +459,8 @@
                             <div class="avatar-upload text-center">
                                 <div class="position-relative">
                                     <div class="avatar-preview">
-                                        <div id="imagePreview" class="bg-cover bg-center" style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                        <div id="imagePreview" class="bg-cover bg-center"
+                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
                                         </div>
                                     </div>
                                     <div class="change-btn mt-2">

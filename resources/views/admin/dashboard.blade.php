@@ -489,6 +489,13 @@
     <script src="{{ asset('library/dashboard-topmedicines.js') }}"></script>
     <script src="{{ asset('library/dashboard-topsupplier.js') }}"></script>
     <script src="{{ asset('library/total-store-revenue.js') }}"></script>
+    <script src="{{ asset('library/dashboard-filter.js') }}"></script>
+    <script src="{{ asset('library/dashboard-totalcustomer.js') }}"></script>
+    <script src="{{ asset('library/dashboard-categories.js') }}"></script>
+    <script src="{{ asset('library/dashboard-storages.js') }}"></script>
+    <script src="{{ asset('library/dashboard-totalrevenue.js') }}"></script>
+    <script src="{{ asset('library/dashboard-totalOrders.js') }}"></script>
+    <script src="{{ asset('library/dashboard-profit.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
