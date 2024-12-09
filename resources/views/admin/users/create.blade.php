@@ -26,101 +26,109 @@
     <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-4">
                 <div class="card">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Thêm mới</h4>
-                    </div><!-- end card header -->
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Thông tin người dùng</span></h5>
+                    </div>
                     <div class="card-body">
-                        <div class="live-preview row">
-                            <div class="col-6">
-                                <div class="form-group mb-3">
-                                    <label for="name">Tên người dùng <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ old('name') }}">
-                                    @error('name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
 
-                                <div class="form-group mb-3">
-                                    <label for="phone">Điện thoại<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="phone" name="phone"
-                                        value="{{ old('phone') }}">
-                                    @error('phone')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                        <div class="form-group mb-3">
+                            <label for="name">Tên người dùng <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                value="{{ old('name') }}">
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                                <div class="form-group mb-3">
-                                    <label for="address">Địa chỉ</label>
-                                    <input type="text" class="form-control   " id="address" name="address"
-                                        value="{{ old('address') }}">
-                                    @error('address')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="birth">Ngày sinh</label>
-                                    <input type="date" class="form-control " id="birth" name="birth"
-                                        value="{{ old('birth') }}">
-                                    @error('birth')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="image">Ảnh</label>
-                                    <input type="file" class="form-control  " id="image" name="image">
-                                    @error('image')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-6">
-                                <div class="form-group mb-3">
-                                    <label for="description">Mô tả</label>
-                                    <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="email">Email<span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control " id="email" name="email"
-                                        value="{{ old('email') }}">
-                                    @error('email')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="password">Mật khẩu<span class="text-danger">*</span></label>
-                                    <input type="password" class="form-control " id="password" name="password">
-                                    @error('password')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="password_confirmation" class="mt-4">Xác nhận mật khẩu<span
-                                            class="text-danger">*</span></label>
-                                    <input class="form-control" type="password" name="password_confirmation" id=" password">
-                                </div>
-
-                                <div class="col-12 mb-3">
-                                    <div>
-                                        <label for="password" class="form-label">Vai trò <span
-                                                class="text-danger">*</span></label>
-                                        <select name="type" id="" class="form-select">
-                                            <option value="admin" selected>Quản trị viên</option>
-                                            <option value="staff">Nhân viên</option>
-                                        </select>
-                                    </div>
-                                </div>
+                        <div class="form-group mb-3">
+                            <div>
+                                <label for="password" class="form-label">Vai trò <span class="text-danger">*</span></label>
+                                <select name="type" id="" class="form-select">
+                                    <option value="admin" selected>Quản trị viên</option>
+                                    <option value="staff">Nhân viên</option>
+                                </select>
                             </div>
                         </div>
-                        <!--end row-->
+
+                        <div class="form-group mb-3">
+                            <label for="password">Mật khẩu<span class="text-danger">*</span></label>
+                            <input type="password" class="form-control " id="password" name="password">
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password_confirmation" class="mt-4">Xác nhận mật khẩu<span
+                                    class="text-danger">*</span></label>
+                            <input class="form-control" type="password" name="password_confirmation" id=" password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Ảnh</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <input type="file" class="form-control  " id="image" name="image">
+                            @error('image')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Thông tin chi tiết</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label for="email">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control " id="email" name="email"
+                                value="{{ old('email') }}">
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="phone">Điện thoại <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                value="{{ old('phone') }}">
+                            @error('phone')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="address">Địa chỉ</label>
+                            <input type="text" class="form-control   " id="address" name="address"
+                                value="{{ old('address') }}">
+                            @error('address')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="birth">Ngày sinh</label>
+                            <input type="date" class="form-control " id="birth" name="birth"
+                                value="{{ old('birth') }}">
+                            @error('birth')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="description">Mô tả</label>
+                            <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
+                        </div>
                     </div>
                 </div>
             </div>
