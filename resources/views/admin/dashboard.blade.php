@@ -236,9 +236,7 @@
 
                                 <div class="card-body p-0 pb-2">
                                     <div class="w-100">
-                                        <div id="customer_impression_charts"
-                                            data-colors='["--vz-primary", "--vz-success", "--vz-danger"]'
-                                            class="apex-charts" dir="ltr"></div>
+                                        <canvas id="statisticsChart"></canvas>
                                     </div>
                                 </div><!-- end card body -->
                             </div><!-- end card -->
