@@ -40,6 +40,23 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
+                                <label class="form-label" for="name">Tên đơn thuốc (<span
+                                        class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                    id="name" name="name" value="{{ old('name') }}">
+                                @error('name')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="name">Mô tả đơn thuốc (<span
+                                        class="text-danger">*</span>)</label>
+                              <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="5">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
                                 <label for="medicine_id" class="form-label">Bệnh (<span
                                         class="text-danger">*</span>)</label>
                                 <select name="disease_id" id="disease_id" class="form-select select2">

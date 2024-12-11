@@ -33,7 +33,7 @@ class CutDoseOrderRequest extends FormRequest
             'medicines.*.unit_id' => 'required|integer|exists:units,id',
             'medicines.*.quantity' => 'required|integer|min:1',
             'medicines.*.dosage' => 'required|string|max:255',
-            'disease_id' => 'required|exists:diseases,id',
+            'disease_id' => 'nullable|exists:diseases,id',
             'sale_date' => 'required|date|after_or_equal:today',
 
             'medicines.*.current_price' => 'required|numeric|min:0',
@@ -73,7 +73,6 @@ class CutDoseOrderRequest extends FormRequest
             'medicines.*.dosage.required' => 'Liều lượng là bắt buộc.',
             'medicines.*.dosage.string' => 'Liều lượng phải là một chuỗi.',
             'medicines.*.dosage.max' => 'Liều lượng không được vượt quá 255 ký tự.',
-            'disease_id.required' => 'Vui lòng chọn bệnh.',
             'disease_id.exists' => 'Bệnh đã chọn không hợp lệ.',
             'sale_date.required' => 'Vui lòng chọn ngày bán.',
             'sale_date.date' => 'Ngày bán phải là một ngày hợp lệ.',

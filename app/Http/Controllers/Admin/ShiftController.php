@@ -138,11 +138,11 @@ class ShiftController extends Controller
             Attendace::create([
                 'user_id' => $detail['user_id'],
                 'shift_id' => $shift->id,
-                //'time_in' => $shift->start_time,//bổ xung 
+                'time_in' => null,
                 'img_check_in' => null, 
                 'img_check_out' => null,
                 'time_out' => null,
-                //'time_out_2' => null,
+                'time_out_2' => null,
                 'reasons' => null,
             ]);
         }

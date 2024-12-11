@@ -102,7 +102,7 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu <span class="text-danger">(*)</span></label>
+                                <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu</label>
                                 @foreach ($cutDosePrescription as $item)
                                     <input type="text" class="form-control" value="{{ $item['disease']['disease_name'] }}" readonly>
                                 @endforeach

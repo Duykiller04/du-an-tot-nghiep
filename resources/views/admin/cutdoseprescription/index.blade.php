@@ -38,6 +38,7 @@
                         <thead>
                             <tr>
                                 <th>STT</th>
+                                <th>Tên đơn thuốc</th>
                                 <th>Bệnh</th>
                                 <th>Tên bệnh viện</th>
                                 <th>Tên bác sĩ</th>
@@ -56,6 +57,7 @@
                             @foreach ($data as $item)
                                 <tr>
                                     <td>{{ $stt++ }}</td>
+                                    <td>{{ $item->name }}</td>
                                     <td>{{ $item->disease->disease_name }}</td>
                                     <td>{{ $item->name_hospital }}</td>
                                     <td>{{ $item->name_doctor }}</td>
