@@ -86,7 +86,7 @@
                             </div>
 
                             <!-- Nhận cảnh báo về nhiệt độ bảo quản -->
-                            <div class="mb-3 row">
+                            {{-- <div class="mb-3 row">
                                 <label for="receive_temperature_warnings" class="col-sm-3 col-form-label">Nhận cảnh báo về nhiệt độ bảo quản</label>
                                 <div class="col-sm-9">
                                     <!-- Hidden input để gửi giá trị 0 nếu checkbox không được chọn -->
@@ -100,7 +100,7 @@
                                             </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="card-header border-0">
                                 <h5 class="card-title mb-0">Thiết lập ca làm</h5>
                             </div>

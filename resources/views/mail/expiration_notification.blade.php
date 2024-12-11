@@ -7,7 +7,7 @@
 <body>
     <h1>Thông báo thuốc sắp hết hạn</h1>
     <p>Chào bạn,</p>
-    <p>Dưới đây là danh sách các thuốc sắp hết hạn trong vòng {{ config('app.expiration_notification_days') }} ngày:</p>
+    <p>Dưới đây là danh sách các thuốc sắp hết hạn :</p>
     
     <ul>
         @foreach($medicines as $medicine)

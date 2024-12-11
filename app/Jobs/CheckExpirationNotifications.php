@@ -34,21 +34,14 @@ class CheckExpirationNotifications implements ShouldQueue
         if (!$settings || !$settings->notification_enabled) {
             return; // Dừng nếu thông báo không được bật
         }
-
-        // Xác định ngày hết hạn cần thông báo dựa trên cấu hình
         $expirationDateThreshold = Carbon::now()->addDays($settings->expiration_notification_days);
-
-        // Lấy danh sách thuốc sắp hết hạn
         $medicines = Medicine::where('expiration_date', '<=', $expirationDateThreshold)->get();
 
         foreach ($medicines as $medicine) {
-            // Kiểm tra nếu đã có thông báo chưa gửi cho thuốc này
-            $existingNotification = ExpirationNotification::where('medicine_id', $medicine->id)
-                ->where('notification_sent', false)
-                ->first();
+            // Kiểm tra nếu đã có thông báo cho thuốc này
+            $existingNotification = ExpirationNotification::where('medicine_id', $medicine->id)->first();
 
             if (!$existingNotification) {
-                
                 ExpirationNotification::create([
                     'medicine_id' => $medicine->id,
                     'notified_at' => Carbon::now(),

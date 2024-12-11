@@ -66,7 +66,6 @@ class SettingController extends Controller
         // Xử lý giá trị của các checkbox
         $notification_enabled = $request->input('notification_enabled') === 'on' ? true : false;
         $receive_email_notifications = $request->input('receive_email_notifications') === '1' ? true : false;
-        $receive_temperature_warnings = $request->input('receive_temperature_warnings') === '1' ? true : false;
         $auto_open_shift = $request->input('auto_open_shift') === '1';
         $auto_close_shift = $request->input('auto_close_shift') === '1';
 
@@ -76,7 +75,6 @@ class SettingController extends Controller
             'expiration_notification_days' => $validated['expiration_notification_days'],
             'email'=> $validated['email'],
             'receive_email_notifications' => $receive_email_notifications,
-            'temperature_warning' => $receive_temperature_warnings,
             'auto_open_shift' => $auto_open_shift,
             'auto_close_shift' => $auto_close_shift,
             'close_after_minutes' => $validated['close_after_minutes'],
