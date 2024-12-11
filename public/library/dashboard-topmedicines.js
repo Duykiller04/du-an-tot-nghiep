@@ -1,78 +1,49 @@
-async function fetchTopSuppliers() {
-    const startDate = '01/01/2024'; // Thay đổi theo nhu cầu của bạn
-    const endDate = '31/12/2024'; // Thay đổi theo nhu cầu của bạn
+$(document).ready(function () {
+    // Gọi hàm ban đầu để lấy danh sách thuốc
+    fetchTopMedicines(); // Gọi hàm fetchTopMedicines mà không cần tham số
 
-    try {
-        const response = await fetch(
-            `/api/dashboardtopsuppliers?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
-        );
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-        }
-        const data = await response.json();
-        populateSuppliersTable(data.topSuppliers);
-    } catch (error) {
-        console.error('Error fetching top suppliers:', error);
+    // Hàm gọi API để lấy danh sách top thuốc
+    function fetchTopMedicines() {
+        $.ajax({
+            url: "/api/dashboardtopmedicines", // Đường dẫn API
+            method: "GET",
+            beforeSend: function () {
+                $("#medicinesTable tbody").html(
+                    "<tr><td colspan='4'>Đang tải dữ liệu...</td></tr>"
+                );
+            },
+            success: function (response) {
+                populateMedicinesTable(response.topMedicines);
+            },
+            error: function (xhr) {
+                console.error("Lỗi:", xhr);
+                $("#medicinesTable tbody").html(
+                    "<tr><td colspan='4'>Đã xảy ra lỗi khi tải dữ liệu.</td></tr>"
+                );
+            },
+        });
     }
-}
 
-function populateSuppliersTable(suppliers) {
-    const tableBody = document.querySelector('#suppliersTable tbody');
-    tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+    // Hàm để điền dữ liệu vào bảng thuốc
+    function populateMedicinesTable(medicines) {
+        const tableBody = $("#medicinesTable tbody");
+        tableBody.empty(); // Xóa dữ liệu cũ
 
-    suppliers.forEach(supplier => {
-        const row = document.createElement('tr');
-        const totalOrders = supplier.total_orders || 0;
+        if (medicines && medicines.length > 0) {
+            medicines.forEach((medicine, index) => {
+                const totalOrders = medicine.total_orders || 0;
 
-        row.innerHTML = `
-            <td>${supplier.supplier_name}</td>
-            <td>${new Date(supplier.join_date).toLocaleDateString('vi-VN')}</td>
-            <td>${totalOrders}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-async function fetchTopMedicines() {
-    const startDate = '01/01/2024'; // Thay đổi theo nhu cầu của bạn
-    const endDate = '31/12/2024'; // Thay đổi theo nhu cầu của bạn
-
-    try {
-        const response = await fetch(
-            `/api/dashboardtopmedicines?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
-        );
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td> <!-- STT -->
+                        <td>${medicine.medicine_name}</td>
+                        <td>${new Date(medicine.import_date).toLocaleDateString("vi-VN")}</td> <!-- Ngày nhập thuốc -->
+                        <td>${totalOrders}</td>
+                    </tr>`;
+                tableBody.append(row);
+            });
+        } else {
+            tableBody.html("<tr><td colspan='4'>Không có dữ liệu.</td></tr>");
         }
-        const data = await response.json();
-        populateMedicinesTable(data.topMedicines);
-    } catch (error) {
-        console.error('Error fetching top medicines:', error);
     }
-}
-
-function populateMedicinesTable(medicines) {
-    const tableBody = document.querySelector('#medicinesTable tbody');
-    tableBody.innerHTML = ''; // Xóa dữ liệu cũ
-
-    medicines.forEach(medicine => {
-        const row = document.createElement('tr');
-        const totalOrders = medicine.total_orders || 0;
-
-        row.innerHTML = `
-            <td>${medicine.medicine_name}</td>
-             <td>${new Date(medicine.import_date).toLocaleDateString('vi-VN')}</td> <!-- Thêm ngày nhập thuốc -->
-            <td>${totalOrders}</td>
-           
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-// Gọi cả hai hàm khi trang được tải
-window.onload = () => {
-    fetchTopSuppliers();
-    fetchTopMedicines();
-};
+});
