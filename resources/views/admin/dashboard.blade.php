@@ -246,12 +246,12 @@
                             <!-- card -->
                             <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp</h4>
+                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp theo tổng số thuốc</h4>
                                 </div><!-- end card header -->
 
                                 <!-- card body -->
                                 <div class="card-body">
-                                    <div class="px-2 py-2 mt-1" id="dashboard-suppliers"></div>
+                                    <canvas id="supplierChartCanvas" width="400" height="400"></canvas>
                                 </div>
                                 <!-- end card body -->
                             </div>
