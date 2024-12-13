@@ -17,7 +17,7 @@ class Supplier extends Model
         'email',
     ];
 
-    public function medicines() {
-        return $this->belongsToMany(Medicine::class);
+    public function batches() {
+        return $this->hasMany(Batch::class);
     }
 }

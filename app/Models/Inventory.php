@@ -10,7 +10,7 @@ class Inventory extends Model
     use HasFactory;
     protected $fillable = [
         'storage_id',
-        'medicine_id',
+        'batch_id',
         'unit_id',
         'quantity',
     ];
@@ -20,9 +20,9 @@ class Inventory extends Model
         return $this->belongsTo(Storage::class);
     }
 
-    public function medicine()
+    public function batch()
     {
-        return $this->belongsTo(Medicine::class);
+        return $this->belongsTo(Batch::class);
     }
     public function unit()
     {
