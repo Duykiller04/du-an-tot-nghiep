@@ -77,7 +77,7 @@ Route::prefix('admin')
                     Route::delete('/delete/{id}', 'destroy')->name('destroy');
                 });
 
-            Route::get('list-attendace-user', [AttendaceController::class, 'listAttendaceUser'])->name('attendace.list.user');
+            Route::get('list-attendace/user', [AttendaceController::class, 'listAttendaceUser'])->name('attendace.list.user');
 
             Route::controller(ExpirationNotificationController::class)
                 ->prefix('notifications')->as('notifications.')
