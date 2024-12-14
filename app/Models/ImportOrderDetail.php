@@ -16,7 +16,6 @@ class ImportOrderDetail extends Model
         'quantity',
         'import_price',
         'total',
-        'note',
         'medication_name',
         'expiration_date',
     ];
