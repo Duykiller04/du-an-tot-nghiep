@@ -306,26 +306,43 @@ class DashboardController extends Controller
 
     public function getTopSuppliers(Request $request)
     {
-        // Lấy giá trị startDate và endDate từ request
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
+        // Lấy loại thống kê thời gian từ query (mặc định là 'today')
+        $type = $request->query('type', 'today');
+        $startDate = now()->startOfDay();
+        $endDate = now()->endOfDay();
 
 
-        // Kiểm tra và parse ngày
-        try {
-            if (!$startDate || !$endDate) {
-                $startDate = Carbon::now()->subYear()->startOfDay(); // 1 năm trước
-                $endDate = Carbon::now()->endOfDay(); // Ngày hiện tại
-            } else {
-                $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
-                $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
+        // Xử lý thời gian dựa vào loại $type
+        switch ($type) {
+            case 'yesterday':
+                $startDate = now()->subDay()->startOfDay();
+                $endDate = now()->subDay()->endOfDay();
+                break;
+            case 'last_7_days':
+                $startDate = now()->subDays(7)->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
+            case 'last_30_days':
+                $startDate = now()->subDays(30)->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
+            case 'this_month':
+                $startDate = now()->startOfMonth()->startOfDay();
+                $endDate = now()->endOfMonth()->endOfDay();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth()->startOfDay();
+                $endDate = now()->subMonth()->endOfMonth()->endOfDay();
+                break;
+            case 'today':
+            default:
+                $startDate = now()->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
         }
 
 
-        // Lấy top 5 nhà cung cấp có nhiều đơn thuốc từ các bảng liên quan
+        // Lấy top 5 nhà cung cấp
         try {
             $topSuppliers = DB::table('medicine_supplier')
                 ->join('suppliers', 'medicine_supplier.supplier_id', '=', 'suppliers.id')
@@ -335,12 +352,12 @@ class DashboardController extends Controller
                 ->leftJoin('prescription_details', 'medicines.id', '=', 'prescription_details.medicine_id')
                 ->leftJoin('prescriptions', 'prescription_details.prescription_id', '=', 'prescriptions.id')
                 ->select(
-                    'suppliers.name as supplier_name', // Lấy tên nhà cung cấp
-                    'suppliers.created_at as join_date', // Lấy ngày tham gia của nhà cung cấp
-                    DB::raw('count(distinct prescriptions.id) + count(distinct cut_dose_orders.id) as total_orders') // Tổng số đơn thuốc
+                    'suppliers.name as supplier_name',
+                    'suppliers.created_at as join_date',
+                    DB::raw('count(distinct prescriptions.id) + count(distinct cut_dose_orders.id) as total_orders')
                 )
                 ->whereNull('suppliers.deleted_at')
-                ->where(function($query) use ($startDate, $endDate) {
+                ->where(function ($query) use ($startDate, $endDate) {
                     $query->whereBetween('prescriptions.created_at', [$startDate, $endDate])
                         ->orWhereBetween('cut_dose_orders.created_at', [$startDate, $endDate]);
                 })
@@ -353,7 +370,7 @@ class DashboardController extends Controller
             // Trả về JSON
             return response()->json(['topSuppliers' => $topSuppliers], 200);
         } catch (\Exception $e) {
-            // Trả về lỗi nếu có vấn đề
+            // Trả về lỗi nếu xảy ra vấn đề
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
