@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Disease;
 use Illuminate\Http\Request;
 
 class CounterSaleController extends Controller
@@ -12,7 +13,8 @@ class CounterSaleController extends Controller
      */
     public function index()
     {
-        return view('admin.sell.index');
+        $disisease = Disease::select('id', 'disease_name')->get();
+        return view('admin.sell.index', compact('disisease'));
     }
 
     /**

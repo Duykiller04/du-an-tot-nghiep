@@ -131,7 +131,7 @@ class PrescriptionsController extends Controller
             DB::commit();
 
             // Redirect với thông báo thành công
-            return redirect()->route('admin.prescriptions.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.sell.index')->with('success', 'Thêm thành công');
 
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
