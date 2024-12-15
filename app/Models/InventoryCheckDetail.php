@@ -11,7 +11,7 @@ class InventoryCheckDetail extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'inventory_audit_id',
-        'medicine_id',
+        'batch_id',
         'expected_quantity',
         'actual_quantity',
         'difference',
@@ -21,8 +21,8 @@ class InventoryCheckDetail extends Model
     {
         return $this->belongsTo(InventoryAudit::class);
     }
-    public function medicine()
+    public function batch_id()
     {
-        return $this->belongsTo(Medicine::class);
+        return $this->belongsTo(Batch::class);
     }
 }

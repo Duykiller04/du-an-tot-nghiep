@@ -268,47 +268,45 @@
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Top 5 Hãng thuốc bán chạy nhất</h4>
                                     <div class="flex-shrink-0">
-                                        <div class="dropdown card-header-dropdown">
-                                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="fw-semibold text-uppercase fs-12">Sắp xếp theo:
-                                                </span><span class="text-muted">Hôm nay<i
-                                                        class="mdi mdi-chevron-down ms-1"></i></span>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Hôm nay</a>
-                                                <a class="dropdown-item" href="#">Hôm qua</a>
-                                                <a class="dropdown-item" href="#">7 ngày trước</a>
-                                                <a class="dropdown-item" href="#">7 ngày sau</a>
-                                                <a class="dropdown-item" href="#">Tháng này</a>
-                                                <a class="dropdown-item" href="#">Tháng trước</a>
-                                            </div>
+                                        <div class="form-group">
+                                            <select id="timeFilter" class="form-select form-select-sm">
+                                                <!-- Sử dụng form-select-sm để thu nhỏ -->
+                                                <option value="today">Hôm nay</option>
+                                                <option value="yesterday">Hôm qua</option>
+                                                <option value="last_7_days">7 ngày gần đây</option>
+                                                <option value="last_30_days">30 ngày gần đây</option>
+                                                <option value="this_month">Tháng này</option>
+                                                <option value="last_month">Tháng trước</option>
+                                            </select>
                                         </div>
                                     </div>
-                                </div><!-- end card header -->
-
+                                </div>
+                                <!-- end card header -->
 
                                 <div class="card-body">
                                     <div class="table-responsive table-card">
-                                        <table class="table table-hover table-centered align-middle table-nowrap mb-0 text-center"
+                                        <table
+                                            class="table table-hover table-centered align-middle table-nowrap mb-0 text-center"
                                             id="suppliersTable">
                                             <thead>
                                                 <tr>
+                                                    <th>#</th>
                                                     <th>Tên Nhà Cung Cấp</th>
                                                     <th>Ngày Tham Gia</th>
                                                     <th>Tổng Đơn</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="supplierList">
                                                 <!-- Dữ liệu sẽ được thêm vào đây -->
+                                                <tr>
+                                                    <td colspan="3" class="text-center">Đang tải dữ liệu...</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="col-xl-6">
                             <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
@@ -332,10 +330,12 @@
 
                                 <div class="card-body">
                                     <div class="table-responsive table-card">
-                                        <table class="table table-centered table-hover align-middle table-nowrap mb-0 text-center"
+                                        <table
+                                            class="table table-centered table-hover align-middle table-nowrap mb-0 text-center"
                                             id="medicinesTable">
                                             <thead>
                                                 <tr>
+                                                    <th>#</th>
                                                     <th>Tên thuốc </th>
                                                     <th>Ngày nhập</th>
                                                     <th>Tổng Đơn</th>

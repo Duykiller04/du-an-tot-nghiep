@@ -91,7 +91,7 @@ class PrescriptionsController extends Controller
     /**
      * Store a newly created resource in Prescription.
      */
-    public function store(PrescriptionRequest $request)
+    public function store(Request $request)
     {
         // Bắt đầu giao dịch
         DB::beginTransaction();
@@ -102,43 +102,36 @@ class PrescriptionsController extends Controller
             $shiftId = $activeShift ? $activeShift->id : null;
 
             $prescription = Prescription::create([
-                'total_price' => $request->total_price, // Chắc chắn rằng total_price được gửi lên
-                'age' => $request->age,
-                'type_sell' => $request->type_sell,
+                'total_price' => $request->total_price,
                 'customer_name' => $request->customer_name,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'email' => $request->email,
-                'weight' => $request->weight,
-                'gender' => $request->gender,
                 'shift_id' => $shiftId,
                 'seller' => Auth::user()->name,
+                'note' => $request->note,
+                'dosage' => $request->dosage
             ]);
 
-            // Tạo các bản ghi mới trong bảng prescription_details
-            foreach ($request->medicines as $medicine) {
+            foreach ($request->unit_id as $key => $value) {
                 PrescriptionDetail::create([
-                    'medicine_id' => $medicine['medicine_id'],
-                    'unit_id' => $medicine['unit_id'],
+                    'batch_id' => $key,
+                    'unit_id' => $value,
                     'prescription_id' => $prescription->id,
-                    'quantity' => $medicine['quantity'],
-                    'current_price' => $medicine['current_price'],
-                    'dosage' => $medicine['dosage'],
+                    'quantity' => $request->quantity[$key],
+                    'current_price' => $request->batch_total_price[$key],
                 ]);
             }
+
             if ($shiftId) {
                 $shift = Shift::find($shiftId);
 
-                $shift->revenue_summary += $request->input('total_price');
+                $shift->revenue_summary += $request->total_price;
                 $shift->save();
                 broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
                 // event(new TransactionCreated($cutDoseOrder));
             }
-            // Cam kết giao dịch
             DB::commit();
 
             // Redirect với thông báo thành công
-            return redirect()->route('admin.prescriptions.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.sell.index')->with('success', 'Thêm thành công');
 
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
