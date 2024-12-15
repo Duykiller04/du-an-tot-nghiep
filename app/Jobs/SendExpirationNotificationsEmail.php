@@ -27,25 +27,34 @@ class SendExpirationNotificationsEmail implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void
-    {
-        $settings = NotificationSetting::first();
+{
+    $settings = NotificationSetting::first();
 
-        if (!$settings || !$settings->notification_enabled || !$settings->receive_email_notifications) {
-            return; // Nếu không có cài đặt hoặc tắt thông báo, không làm gì
-        }
-
-        
-        $medicines = Medicine::where('expiration_date', '<=', now()->addDays($settings->expiration_notification_days))
-            ->where('expiration_date', '>=', now())
-            ->get();
-
-        if ($medicines->isEmpty()) {
-            return; 
-        }
-
-        
-        $userEmail = $settings->email; 
-
-        Mail::to($userEmail)->send(new \App\Mail\ExpirationNotificationEmail($medicines));
+    if (!$settings || !$settings->notification_enabled || !$settings->receive_email_notifications) {
+        return; // Nếu không có cài đặt hoặc tắt thông báo, không làm gì
     }
+    $medicines = Medicine::where('expiration_date', '<=', now()->addDays($settings->expiration_notification_days))
+        ->where('expiration_date', '>=', now())
+        ->whereHas('expirationNotifications', function ($query) {
+            $query->where('notification_sent', false);
+        })
+        ->get();
+
+    if ($medicines->isEmpty()) {
+        return; // Không có thuốc nào cần thông báo, không làm gì
+    }
+    $userEmail = $settings->email;
+    Mail::to($userEmail)->send(new \App\Mail\ExpirationNotificationEmail($medicines));
+
+    // Cập nhật các thuốc đã được gửi thông báo
+    foreach ($medicines as $medicine) {
+        $medicine->expirationNotifications()
+            ->where('notification_sent', false)
+            ->update([
+                'notified_at' => now(),
+                'notification_sent' => true,
+            ]);
+    }
+}
+
 }
