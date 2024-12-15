@@ -46,4 +46,8 @@ class Batch extends Model
     public function inventory(){
         return $this->hasOne(Inventory::class);
     }
+    public function expirationNotifications()
+    {
+        return $this->hasMany(ExpirationNotification::class);
+    }
 }
