@@ -23,11 +23,15 @@
             </div>
         </div>
         <!-- end page title -->
-
         @if ($errors->any())
-            {{-- @dd($errors->toArray()) --}}
-            <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
-        @endif
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <form id="create-disease-form" method="POST" action="{{ route('admin.medicines.store') }}"
             enctype="multipart/form-data">
@@ -113,7 +117,7 @@
                                 <div class="row productNew mt-3">
                                     <div class="row mb-3 form-item mt-3">
                                         <div class="col-5">
-                                            <label class="form-label" for="name">Số lượng nhập<span
+                                            <label class="form-label" for="name">Số lượng <span
                                                     class="text-danger">(*)</span></label>
                                             <input type="number" class="form-control" name="so_luong[]"
                                                 value="{{ old('so_luong.0') }}">
@@ -135,6 +139,7 @@
                                     </div>
                                 </div>
 
+
                                 <div class="mb-3">
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
                                             class="text-danger">(*)</span></label>
@@ -152,12 +157,12 @@
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
-                                    const donvis = @json($donvis); // Data for units
-                                    const oldQuantities = @json(old('so_luong', [])); // Old quantities from session
-                                    const oldUnits = @json(old('don_vi', [])); // Old units from session
-                                    const errors = @json($errors->toArray()); // Errors from Laravel
+                                    const donvis = @json($donvis); // Dữ liệu đơn vị từ Laravel
+                                    const oldQuantities = @json(old('so_luong', []));
+                                    const oldUnits = @json(old('don_vi', []));
+                                    const errors = @json($errors->toArray());
 
-                                    // Organize units by parent_id
+                                    // Tạo cấu trúc phân cấp từ parent_id
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
                                             acc[donvi.parent_id] = [];
@@ -166,9 +171,9 @@
                                         return acc;
                                     }, {});
 
-                                    // Render child units for the select dropdown based on parent_id
+                                    // Hàm render các đơn vị con cho một đơn vị cha
                                     function renderChildUnits(parentId, selectElement) {
-                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset options
+                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
                                         if (unitsByParent[parentId]) {
                                             unitsByParent[parentId].forEach(donvi => {
                                                 const option = document.createElement('option');
@@ -179,7 +184,7 @@
                                         }
                                     }
 
-                                    // Show error message
+                                    // Hàm hiển thị lỗi
                                     function showError(element, message) {
                                         const errorElement = document.createElement('p');
                                         errorElement.classList.add('text-danger');
@@ -187,7 +192,7 @@
                                         element.parentElement.appendChild(errorElement);
                                     }
 
-                                    // Validate fields
+                                    // Hàm kiểm tra lỗi khi nhập dữ liệu
                                     function validateFields() {
                                         const formItems = productNew.querySelectorAll('.form-item');
                                         let isValid = true;
@@ -196,17 +201,17 @@
                                             const quantityInput = item.querySelector('input[name="so_luong[]"]');
                                             const unitSelect = item.querySelector('select[name="don_vi[]"]');
 
-                                            // Remove previous error messages
+                                            // Xóa lỗi cũ
                                             const oldErrors = item.querySelectorAll('.text-danger');
                                             oldErrors.forEach(error => error.remove());
 
-                                            // Validate quantity
+                                            // Kiểm tra số lượng
                                             if (!quantityInput.value || parseFloat(quantityInput.value) <= 0) {
                                                 showError(quantityInput, `Số lượng ở dòng ${index + 1} phải lớn hơn 0.`);
                                                 isValid = false;
                                             }
 
-                                            // Validate unit
+                                            // Kiểm tra đơn vị
                                             if (!unitSelect.value) {
                                                 showError(unitSelect, `Vui lòng chọn đơn vị ở dòng ${index + 1}.`);
                                                 isValid = false;
@@ -216,7 +221,7 @@
                                         return isValid;
                                     }
 
-                                    // Add new unit row
+                                    // Thêm trường đơn vị mới
                                     btnAdd.addEventListener('click', function() {
                                         const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                         const lastSelect = allSelects[allSelects.length - 1];
@@ -226,23 +231,23 @@
                                             const childUnits = unitsByParent[lastSelectedUnit] || [];
                                             if (childUnits.length > 0) {
                                                 const newFieldHTML = `
-                <div class="row mb-3 form-item mt-3">
-                    <div class="col-5">
-                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                        <input type="number" name="so_luong[]" class="form-control">
-                    </div>
-                    <div class="col-5">
-                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                        <select name="don_vi[]" class="form-control">
-                            <option value="">Chọn đơn vị</option>
-                            ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
-                    </div>
-                </div>
-            `;
+                                                <div class="row mb-3 form-item mt-3">
+                                                    <div class="col-5">
+                                                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                                                        <input type="number" name="so_luong[]" class="form-control">
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                                                        <select name="don_vi[]" class="form-control">
+                                                            <option value="">Chọn đơn vị</option>
+                                                            ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                                                    </div>
+                                                </div>
+                                            `;
                                                 productNew.insertAdjacentHTML('beforeend', newFieldHTML);
                                             } else {
                                                 alert('Hết đơn vị con, không thể thêm trường mới!');
@@ -252,7 +257,7 @@
                                         }
                                     });
 
-                                    // Handle deleting unit row
+                                    // Xử lý sự kiện xóa trường đơn vị
                                     productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
                                             const formItem = event.target.closest('.form-item');
@@ -263,20 +268,20 @@
                                         }
                                     });
 
-                                    // Handle change in unit select
+                                    // Xử lý sự kiện thay đổi đơn vị
                                     productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
                                             const selectedParentId = event.target.value;
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
 
-                                            // Reset all selects after the current one
+                                            // Reset các trường sau trường hiện tại
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
                                                 allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>';
                                                 allSelects[i].value = '';
                                             }
 
-                                            // Render child units
+                                            // Render các đơn vị con
                                             if (currentSelectIndex < allSelects.length - 1) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
                                                 renderChildUnits(selectedParentId, nextSelect);
@@ -285,59 +290,63 @@
                                         }
                                     });
 
-                                    // Handle change in quantity input
-                                    productNew.addEventListener('input', function(event) {
-                                        if (event.target.name === 'so_luong[]') {
-                                            updatePackagingSpecification();
-                                        }
-                                    });
-
-                                    // Update packaging specification based on quantity and unit selection
                                     function updatePackagingSpecification() {
-                                        const quantities = productNew.querySelectorAll('input[name="so_luong[]"]');
-                                        const units = productNew.querySelectorAll('select[name="don_vi[]"]');
-                                        let packagingSpec = '';
+                                        const formItems = document.querySelectorAll('.form-item'); // Lấy tất cả các nhóm đơn vị
+                                        const packagingInput = document.querySelector('#packaging_specification'); // Input hiển thị kết quả
 
-                                        quantities.forEach((quantityInput, index) => {
-                                            const unitSelect = units[index];
-                                            if (quantityInput.value && unitSelect.value) {
-                                                packagingSpec +=
-                                                    `${quantityInput.value}-${unitSelect.options[unitSelect.selectedIndex].text}, `;
+                                        let packaging = []; // Mảng chứa quy cách đóng gói
+
+                                        // Bắt đầu từ phần tử thứ 2 (index = 1) để bỏ qua "có 2 thùng"
+                                        formItems.forEach((item, index) => {
+                                            // Bỏ qua phần tử đầu tiên
+                                            if (index === 0) return;
+
+                                            const currentUnitSelect = item.querySelector(
+                                            'select[name="don_vi[]"]'); // Đơn vị hiện tại
+                                            const currentQuantityInput = item.querySelector(
+                                            'input[name="so_luong[]"]'); // Số lượng hiện tại
+
+                                            if (
+                                                currentUnitSelect &&
+                                                currentUnitSelect.value &&
+                                                currentQuantityInput &&
+                                                currentQuantityInput.value
+                                            ) {
+                                                const currentUnitText = currentUnitSelect.options[currentUnitSelect.selectedIndex]
+                                                    .textContent.trim(); // Tên đơn vị hiện tại
+                                                const quantity = currentQuantityInput.value; // Số lượng hiện tại
+
+                                                // Tìm đơn vị cha (nếu có)
+                                                const previousItem = formItems[index - 1]; // Đơn vị cha là phần tử trước đó
+                                                let parentUnitText = '';
+
+                                                if (previousItem) {
+                                                    const parentUnitSelect = previousItem.querySelector(
+                                                    'select[name="don_vi[]"]'); // Đơn vị cha
+                                                    if (parentUnitSelect && parentUnitSelect.value) {
+                                                        parentUnitText = parentUnitSelect.options[parentUnitSelect.selectedIndex]
+                                                            .textContent.trim(); // Tên đơn vị cha
+                                                    }
+                                                }
+
+                                                // Tạo chuỗi đóng gói: "1 đơn vị cha có X đơn vị con"
+                                                if (parentUnitText) {
+                                                    packaging.push(`1 ${parentUnitText} có ${quantity} ${currentUnitText}`);
+                                                }
                                             }
                                         });
 
-                                        document.getElementById('packaging_specification').value = packagingSpec.slice(0, -
-                                        2); // Remove trailing comma
+                                        // Ghép các đơn vị và số lượng với dấu "-"
+                                        packagingInput.value = packaging.join(' - ').trim();
                                     }
 
-                                    // Restore old values and errors from session
-                                    oldQuantities.forEach((quantity, index) => {
-                                        if (index > 0) {
-                                            btnAdd.click();
-                                        }
-                                        const inputs = productNew.querySelectorAll('input[name="so_luong[]"]');
-                                        const selects = productNew.querySelectorAll('select[name="don_vi[]"]');
 
-                                        if (inputs[index]) inputs[index].value = quantity;
-                                        if (selects[index]) selects[index].value = oldUnits[index] || '';
-
-                                        if (errors[`so_luong.${index}`]) {
-                                            showError(inputs[index], errors[`so_luong.${index}`][0]);
-                                        }
-
-                                        if (errors[`don_vi.${index}`]) {
-                                            showError(selects[index], errors[`don_vi.${index}`][0]);
-                                        }
-                                    });
-
-                                    // Validate on submit
-                                    document.querySelector('#submit-button').addEventListener('click', function(event) {
-                                        if (!validateFields()) {
-                                            event.preventDefault();
-                                        }
-                                    });
+                                    updatePackagingSpecification(); // Khởi tạo giá trị quy cách đóng gói khi trang tải lần đầu
                                 });
                             </script>
+
+
+
                         </div>
                     </div>
 
