@@ -13,6 +13,7 @@ class CutDosePrescriptionDetail extends Model
         'medicine_id',
         'cut_dose_prescription_id',
         'unit_id',
+        'batch_id',
         'quantity',
         'current_price',
         'dosage',
@@ -26,6 +27,10 @@ class CutDosePrescriptionDetail extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 
     public function cutDosePrescription()

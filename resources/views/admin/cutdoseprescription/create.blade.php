@@ -128,20 +128,23 @@
                                     </div>
 
                                     <div class="col-md-2">
-                                        <label for="unit_id" class="form-label">Đơn vị</label>
-                                        <select name="medicines[0][unit_id]" class="form-select select2">
-                                            <option value="">Chọn đơn vị</option>
+                                        <label for="batch_id" class="form-label">Chọn lô</label>
+                                        <select name="medicines[0][batch_id]" class="form-select select2">
+                                            <option value="">Chọn lô</option>
+                                            @foreach ($batchs as $id => $created_at)
+                                            <option value="{{ $id }}" {{ old('medicines.0.batch_id') == $id ? 'selected' : '' }}>Lô ({{ $created_at->format("d/m/Y H:i:s") }})</option>
+                                            @endforeach
                                         </select>
                                     </div>
 
                                     <div class="col-md-2">
                                         <label for="quantity" class="form-label">Số lượng</label>
-                                        <input type="number" name="medicines[0][quantity]" value="{{ old('medicines.0.quantity') }}" class="form-control">
+                                        <input type="number" name="medicines[0][quantity]" value="{{ old('medicines.0.quantity') ?? 0 }}" class="form-control">
                                     </div>
 
                                     <div class="col-md-2">
                                         <label for="current_price" class="form-label">Giá</label>
-                                        <input type="number" name="medicines[0][current_price]" value="{{ old('medicines.0.current_price') }}" class="form-control">
+                                        <input type="number" name="medicines[0][current_price]" value="{{ old('medicines.0.current_price') ?? 0}}" class="form-control">
                                     </div>
 
                                     <div class="col-md-2">
@@ -192,7 +195,7 @@
     <script src="{{ asset('library/cut-dose-prescriptions.js') }}"></script>
     <script>
         const medicines = @json($medicines);
-        const units = @json($units);
+        const batchs  = @json($batchs);
         const oldData = @json(old('medicines', []));
     </script>
 @endsection

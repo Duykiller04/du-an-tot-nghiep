@@ -180,9 +180,9 @@
                         </div><!-- end col -->
                     </div> <!-- end row-->
 
-                    <div class="row">
+                    <div class="row align-items-stretch">
                         <div class="col-xl-8">
-                            <div class="card">
+                            <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thông số thua nhập cửa hàng</h4>
                                     <div>

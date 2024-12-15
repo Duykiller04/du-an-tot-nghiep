@@ -6,6 +6,7 @@ use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCutDosePrescriptionRequest;
 use App\Http\Requests\UpdateCutDosePresciptionRequest;
+use App\Models\Batch;
 use App\Models\CutDosePrescription;
 use App\Models\CutDosePrescriptionDetail;
 use App\Models\Disease;
@@ -37,13 +38,9 @@ class CutDosePrescriptionController extends Controller
     {
         $medicines = Medicine::query()->pluck('name', 'id');
         $diseases = Disease::query()->pluck('disease_name', 'id');
-        $units = Unit::query()->pluck('name', 'id');
+        $batchs = Batch::query()->pluck('created_at', 'id');
 
-        //khởi tạo biến để lưu các đơn vị của thuốc
-        $unitsSelectMedicine = [];
-
-        // dd($medicines);
-        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'units', 'diseases', 'unitsSelectMedicine'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('medicines', 'diseases','batchs'));
     }
 
     /**
@@ -54,7 +51,7 @@ class CutDosePrescriptionController extends Controller
         try {
             DB::beginTransaction();
             $total = 0;
-            //duyetừng thuốc
+            //duyệt từng thuốc
             foreach ($request->medicines as $medicine) {
                 $subTotal = $medicine['quantity'] * $medicine['current_price'];
                 $total += $subTotal;
@@ -70,10 +67,13 @@ class CutDosePrescriptionController extends Controller
                 'total' => $total,
             ]);
             foreach ($request->medicines as $medicine) {
+                $inventory = Inventory::where('batch_id', $medicine['batch_id'])->first();
+                $unit_id = $inventory->unit_id;
                 CutDosePrescriptionDetail::query()->create([
                     'medicine_id' => $medicine['medicine_id'],
                     'cut_dose_prescription_id' => $cutDosePrescription->id,
-                    'unit_id' => $medicine['unit_id'],
+                    'unit_id' => $unit_id,
+                    'batch_id' => $medicine['batch_id'],
                     'quantity' => $medicine['quantity'],
                     'current_price' => $medicine['current_price'],
                     'dosage' => $medicine['dosage'],
@@ -84,7 +84,6 @@ class CutDosePrescriptionController extends Controller
                 ->with('success', 'Thêm đơn thuốc thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
-            dd($exception->getMessage());
             Log::error('Lỗi thêm đơn thuốc ' . $exception->getMessage());
             return back()->with('error', 'Lỗi thêm đơn thuốc');
         }
@@ -98,8 +97,9 @@ class CutDosePrescriptionController extends Controller
         $diseases = Disease::query()->pluck('disease_name', 'id');
         $medicines = Medicine::query()->pluck('name', 'id');
         $units = Unit::query()->pluck('name', 'id');
+        $batchs = Batch::query()->pluck('created_at', 'id');
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'units'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'units','batchs'));
     }
 
     /**
@@ -109,9 +109,9 @@ class CutDosePrescriptionController extends Controller
     {
         $diseases = Disease::query()->pluck('disease_name', 'id');
         $medicines = Medicine::query()->pluck('name', 'id');
-        $units = Unit::query()->pluck('name', 'id');
+        $batchs = Batch::query()->pluck('created_at', 'id');
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'units'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cutDosePrescription', 'diseases', 'medicines', 'batchs'));
     }
 
     /**
@@ -131,18 +131,24 @@ class CutDosePrescriptionController extends Controller
                 if (isset($item['id'])) {
                     $detail = CutDosePrescriptionDetail::find($item['id']);
                     if ($detail) {
+                        $inventory = Inventory::where('batch_id', $item['batch_id'])->first();
+                        $unit_id = $inventory->unit_id;
                         $detail->update([
                             'medicine_id' => $item['medicine_id'],
-                            'unit_id' => $item['unit_id'],
+                            'unit_id' => $unit_id,
+                            'batch_id' => $item['batch_id'],
                             'quantity' => $item['quantity'],
                             'current_price' => $item['current_price'],
                             'dosage' => $item['dosage'],
                         ]);
                     }
                 } else {
+                    $inventory = Inventory::where('batch_id', $item['batch_id'])->first();
+                    $unit_id = $inventory->unit_id;
                     $detail = $cutDosePrescription->cutDosePrescriptionDetails()->create([
                         'medicine_id' => $item['medicine_id'],
-                        'unit_id' => $item['unit_id'],
+                        'unit_id' => $unit_id,
+                        'batch_id' => $item['batch_id'],
                         'quantity' => $item['quantity'],
                         'current_price' => $item['current_price'],
                         'dosage' => $item['dosage'],
