@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Models\Batch;
 use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Medicine;
@@ -26,7 +27,7 @@ class MedicineController extends Controller
     {
         if (request()->ajax()) {
             $query = Medicine::query()
-                ->with(['suppliers', 'category', 'storage', 'inventory'])
+                ->with(['category'])
                 ->where('type_product', 0)
                 ->latest('id');
 
@@ -49,15 +50,6 @@ class MedicineController extends Controller
                 ->addIndexColumn()
                 ->addColumn('category_name', function ($row) {
                     return $row->category->name ?? '';  // Lấy tên từ bảng category
-                })
-                ->addColumn('storage_location', function ($row) {
-                    return $row->storage->location ?? '';  // Lấy vị trí từ bảng storage
-                })
-                ->addColumn('inventory_stock', function ($row) {
-                    return $row->inventory->stock ?? '';  // Lấy số lượng từ bảng inventory
-                })
-                ->addColumn('expiration_date', function ($row) {
-                    return $row->expiration_date ? $row->expiration_date->format('d/m/Y') : '';
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
@@ -83,6 +75,7 @@ class MedicineController extends Controller
                     $deleteUrl = route('admin.medicines.destroy', $row->id);
 
                     return '
+                <a href="' . $viewUrl . '" class="btn btn-info">Xem</a>
                 <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
                 <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                     ' . csrf_field() . method_field('DELETE') . '
@@ -94,7 +87,7 @@ class MedicineController extends Controller
                 ->make(true);
         }
 
-        $medicines = Medicine::with(['suppliers', 'category', 'storage', 'inventory'])->where('type_product', 0)->latest('id')->get();
+        $medicines = Medicine::with(['category'])->where('type_product', 0)->latest('id')->get();
         return view('admin.medicine.index', compact('medicines'));
     }
 
@@ -116,6 +109,7 @@ class MedicineController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        // dd($request->all());
 
         $priceImport = $request->input('medicine.price_import');
         $priceSale = $request->input('medicine.price_sale');
@@ -142,19 +136,40 @@ class MedicineController extends Controller
 
             $medicineData['image'] = $imagePath;
 
-            $medicineData['storage_id'] = $request->storage_id;
+            $batchData = $request->input('batch');
+
+            $batchData['storage_id'] = $request->storage_id;
+
+            $batchData['supplier_id'] = $request->supplier_id;
 
             $inventories = [];
 
             $units = $request->don_vi;
             $quantities = $request->so_luong;
 
-            $quantityByUnit = array_slice($request->so_luong, 0);
+            $total_quantity = 1;
 
+            foreach ($units as $i => $unit) {
+                $total_quantity *= $quantities[$i];
+            }
+            
+            $price_in_smallest_unit = $request->batch['price_sale'] / $total_quantity;
+
+            $batchData['price_in_smallest_unit'] = $price_in_smallest_unit;
+            
+            // $quantityByUnit = array_slice($request->so_luong, 0);
 
             $medicine = Medicine::create($medicineData);
 
-            $inventories['medicine_id'] = $medicine->id;
+            $batchData['medicine_id'] = $medicine->id;
+
+            $batchData['supplier_id'] = $request->supplier_id;
+
+            
+            $batch = Batch::create($batchData);
+            
+            // dd($batch->id);
+            $inventories['batch_id'] = $batch->id;
 
             $inventories['storage_id'] = $request->storage_id;
 
@@ -166,13 +181,13 @@ class MedicineController extends Controller
 
             foreach ($units as $i => $unit) {
                 UnitConversion::create([
-                    'medicine_id' => $inventories['medicine_id'],
+                    'medicine_id' => $medicine->id,
                     'unit_id' => $unit,
                     'proportion' => $quantities[$i]
                 ]);
             }
 
-            $medicine->suppliers()->attach($request->supplier_id);
+            // $batch->supplier()->attach($request->supplier_id);
 
             DB::commit();
             return redirect()->route('admin.medicines.index')->with('success', 'Thêm thành công');
@@ -182,13 +197,83 @@ class MedicineController extends Controller
             return back()->with('error' . $exception->getMessage());
         }
 
+    if ($priceSale < $priceImport) {
+        return redirect()->back()->withErrors([
+            'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+        ])->withInput();
     }
+
+    try {
+        DB::beginTransaction();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('medicine', 'public');
+        } else {
+            $imagePath = null;
+        }
+
+        $medicineData = $request->input('medicine');
+
+        $medicineData['type_product'] = 0;
+        $medicineData['image'] = $imagePath;
+        $medicineData['storage_id'] = $request->storage_id;
+
+        // Lấy danh sách đơn vị và số lượng từ request
+        $units = $request->don_vi;
+        $quantities = $request->so_luong;
+        $donvis = Unit::all(); // Lấy tất cả các đơn vị
+
+        // Tạo giá trị packaging_specification
+        $medicineData['packaging_specification'] = implode(' - ', array_map(function ($unit, $quantity) use ($donvis) {
+            $unitName = $donvis->firstWhere('id', $unit)->name ?? 'Chưa xác định';
+            return $unitName . " ($quantity)";
+        }, $units, $quantities));
+
+        $inventories = [];
+        $quantityByUnit = array_slice($request->so_luong, 0);
+
+        // Tạo thuốc mới
+        $medicine = Medicine::create($medicineData);
+
+        $inventories['medicine_id'] = $medicine->id;
+        $inventories['storage_id'] = $request->storage_id;
+        $inventories['quantity'] = array_product($request->so_luong); // Số lượng tổng theo đơn vị bé nhất
+        $inventories['unit_id'] = end($units); // ID đơn vị bé nhất
+
+        // Tạo bản ghi kho
+        Inventory::create($inventories);
+
+        // Tạo bản ghi chuyển đổi đơn vị
+        foreach ($units as $i => $unit) {
+            UnitConversion::create([
+                'medicine_id' => $inventories['medicine_id'],
+                'unit_id' => $unit,
+                'proportion' => $quantities[$i]
+            ]);
+        }
+
+        // Gắn nhà cung cấp
+        $medicine->suppliers()->attach($request->supplier_id);
+
+        DB::commit();
+        return redirect()->route('admin.medicines.index')->with('success', 'Thêm thành công');
+    } catch (\Exception $exception) {
+        DB::rollback();
+        dd($exception->getMessage());
+        return back()->with('error', $exception->getMessage());
+    }
+}
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
+        $medicine = Medicine::with(['batches.supplier','batches.storage','category'])->findOrFail($id);
+            // dd($medicine->toArray());
+        return view('admin.medicine.show', compact('medicine'));
     }
 
     /**
@@ -208,68 +293,80 @@ class MedicineController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StoreProductRequest $request, string $id)
-    {
-        $medicine = Medicine::findOrFail($id);
+{
+    $medicine = Medicine::findOrFail($id);
 
-        $priceImport = $request->input('medicine.price_import');
-        $priceSale = $request->input('medicine.price_sale');
+    $priceImport = $request->input('medicine.price_import');
+    $priceSale = $request->input('medicine.price_sale');
 
-        if ($priceSale < $priceImport) {
-            return redirect()->back()->withErrors([
-                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
-            ])->withInput();
-        }
-
-        try {
-            DB::beginTransaction();
-
-            // Kiểm tra và cập nhật hình ảnh nếu có
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imagePath = $image->store('medicines', 'public');
-                $medicine->image = $imagePath;
-            }
-
-            // Cập nhật thông tin thuốc
-            $medicineData = $request->input('medicine');
-            $medicine->update($medicineData);
-
-            // Cập nhật thông tin kho và số lượng
-            $storageId = $request->storage_id;
-            $units = $request->don_vi;
-            $quantities = $request->so_luong;
-
-            $inventories = Inventory::where('medicine_id', $medicine->id)
-                ->where('storage_id', $storageId)
-                ->first();
-
-            // Cập nhật số lượng tổng theo đơn vị bé nhất
-            $inventories->quantity = array_product($quantities);
-            $inventories->unit_id = end($units); // ID đơn vị bé nhất
-            $inventories->save();
-
-            // Cập nhật đơn vị quy đổi
-            UnitConversion::where('medicine_id', $medicine->id)->delete();
-            foreach ($units as $i => $unit) {
-                UnitConversion::create([
-                    'medicine_id' => $medicine->id,
-                    'unit_id' => $unit,
-                    'proportion' => $quantities[$i]
-                ]);
-            }
-
-            // Cập nhật nhà cung cấp
-            $medicine->suppliers()->sync($request->supplier_id);
-
-            DB::commit();
-
-            return redirect()->route('admin.medicines.index')->with('success', 'Cập nhật thành công');
-        } catch (\Exception $exception) {
-            DB::rollback();
-            dd($exception->getMessage());
-            return back()->with('error', $exception->getMessage());
-        }
+    if ($priceSale < $priceImport) {
+        return redirect()->back()->withErrors([
+            'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
+        ])->withInput();
     }
+
+    try {
+        DB::beginTransaction();
+
+        // Kiểm tra và cập nhật hình ảnh nếu có
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('medicines', 'public');
+            $medicine->image = $imagePath;
+        }
+
+        // Cập nhật thông tin thuốc
+        $medicineData = $request->input('medicine');
+        
+        // Tính lại packaging_specification (quy cách đóng gói)
+        $units = $request->don_vi;
+        $quantities = $request->so_luong;
+        $donvis = Unit::all();  // Giả sử bạn có bảng Unit để lấy tên đơn vị
+
+        // Tính lại packaging_specification
+        $medicineData['packaging_specification'] = implode(' - ', array_map(function ($unit, $quantity) use ($donvis) {
+            $unitName = $donvis->firstWhere('id', $unit)->name ?? 'Chưa xác định';
+            return $unitName . " ($quantity)";
+        }, $units, $quantities));
+
+        // Cập nhật thông tin thuốc vào cơ sở dữ liệu
+        $medicine->update($medicineData);
+
+        // Cập nhật thông tin kho và số lượng
+        $storageId = $request->storage_id;
+        $inventories = Inventory::where('medicine_id', $medicine->id)
+            ->where('storage_id', $storageId)
+            ->first();
+
+        // Cập nhật số lượng tổng theo đơn vị bé nhất
+        $inventories->quantity = array_product($quantities); // Tính số lượng tổng
+        $inventories->unit_id = end($units); // ID đơn vị bé nhất
+        $inventories->save();
+
+        // Cập nhật hoặc xóa các bản ghi chuyển đổi đơn vị cũ
+        UnitConversion::where('medicine_id', $medicine->id)->delete();
+
+        foreach ($units as $i => $unit) {
+            UnitConversion::create([
+                'medicine_id' => $medicine->id,
+                'unit_id' => $unit,
+                'proportion' => $quantities[$i]
+            ]);
+        }
+
+        // Cập nhật nhà cung cấp
+        $medicine->suppliers()->sync($request->supplier_id);
+
+        DB::commit();
+
+        return redirect()->route('admin.medicines.index')->with('success', 'Cập nhật thành công');
+    } catch (\Exception $exception) {
+        DB::rollback();
+        dd($exception->getMessage());
+        return back()->with('error', $exception->getMessage());
+    }
+}
+
 
     /**
      * Remove the specified resource from storage.

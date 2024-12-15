@@ -10,14 +10,11 @@ class PrescriptionDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'medicine_id',
+        'batch_id',
         'unit_id',
         'prescription_id',
         'quantity',
         'current_price',
-        'dosage',
-
-        
     ];
 
     public function medicine()

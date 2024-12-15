@@ -23,11 +23,15 @@
             </div>
         </div>
         <!-- end page title -->
-
         @if ($errors->any())
-            {{-- @dd($errors->toArray()) --}}
-            <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
-        @endif
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <form id="create-disease-form" method="POST" action="{{ route('admin.medicines.store') }}"
             enctype="multipart/form-data">
@@ -57,10 +61,10 @@
                                 <label class="form-label" for="name">Số đăng ký <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.registration_number') is-invalid @enderror"
-                                    id="name" name="medicine[registration_number]"
-                                    value="{{ old('medicine.registration_number') }}">
-                                @error('medicine.registration_number')
+                                    class="form-control @error('batch.registration_number') is-invalid @enderror"
+                                    id="name" name="batch[registration_number]"
+                                    value="{{ old('batch.registration_number') }}">
+                                @error('batch.registration_number')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -79,9 +83,9 @@
                                 <label class="form-label" for="name">Giá nhập <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.price_import') is-invalid @enderror" id="name"
-                                    name="medicine[price_import]" value="{{ old('medicine.price_import') }}">
-                                @error('medicine.price_import')
+                                    class="form-control @error('batch.price_import') is-invalid @enderror" id="name"
+                                    name="batch[price_import]" value="{{ old('batch.price_import') }}">
+                                @error('batch.price_import')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -90,9 +94,9 @@
                                 <label class="form-label" for="name">Giá bán <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.price_sale') is-invalid @enderror" id="name"
-                                    name="medicine[price_sale]" value="{{ old('medicine.price_sale') }}">
-                                @error('medicine.price_sale')
+                                    class="form-control @error('batch.price_sale') is-invalid @enderror" id="name"
+                                    name="batch[price_sale]" value="{{ old('batch.price_sale') }}">
+                                @error('batch.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -140,25 +144,25 @@
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text"
-                                        class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
-                                        id="packaging_specification" name="medicine[packaging_specification]"
-                                        value="{{ old('medicine.packaging_specification') }}" readonly>
-                                    @error('medicine.packaging_specification')
+                                        class="form-control @error('batch.packaging_specification') is-invalid @enderror"
+                                        id="packaging_specification" name="batch[packaging_specification]"
+                                        value="{{ old('batch.packaging_specification') }}" readonly>
+                                    @error('batch.packaging_specification')
                                         <span class="d-block text-danger mt-2">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
 
                             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
+                                document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
-
-                                    const donvis = @json($donvis);
+                                    const donvis = @json($donvis); // Dữ liệu đơn vị từ Laravel
                                     const oldQuantities = @json(old('so_luong', []));
                                     const oldUnits = @json(old('don_vi', []));
-                                    const errors = @json($errors->toArray()); // Lấy danh sách lỗi từ Laravel
+                                    const errors = @json($errors->toArray());
 
+                                    // Tạo cấu trúc phân cấp từ parent_id
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
                                         if (!acc[donvi.parent_id]) {
                                             acc[donvi.parent_id] = [];
@@ -167,6 +171,7 @@
                                         return acc;
                                     }, {});
 
+                                    // Hàm render các đơn vị con cho một đơn vị cha
                                     function renderChildUnits(parentId, selectElement) {
                                         selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
                                         if (unitsByParent[parentId]) {
@@ -179,13 +184,15 @@
                                         }
                                     }
 
+                                    // Hàm hiển thị lỗi
                                     function showError(element, message) {
                                         const errorElement = document.createElement('p');
-                                        errorElement.classList.add('text-danger'); // Thêm class để hiển thị lỗi
+                                        errorElement.classList.add('text-danger');
                                         errorElement.textContent = message;
-                                        element.parentElement.appendChild(errorElement); // Gắn lỗi ngay dưới input
+                                        element.parentElement.appendChild(errorElement);
                                     }
 
+                                    // Hàm kiểm tra lỗi khi nhập dữ liệu
                                     function validateFields() {
                                         const formItems = productNew.querySelectorAll('.form-item');
                                         let isValid = true;
@@ -214,7 +221,8 @@
                                         return isValid;
                                     }
 
-                                    btnAdd.addEventListener('click', function () {
+                                    // Thêm trường đơn vị mới
+                                    btnAdd.addEventListener('click', function() {
                                         const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                         const lastSelect = allSelects[allSelects.length - 1];
                                         const lastSelectedUnit = lastSelect ? lastSelect.value : null;
@@ -223,23 +231,23 @@
                                             const childUnits = unitsByParent[lastSelectedUnit] || [];
                                             if (childUnits.length > 0) {
                                                 const newFieldHTML = `
-                                                    <div class="row mb-3 form-item mt-3">
-                                                        <div class="col-5">
-                                                            <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                            <input type="number" name="so_luong[]" class="form-control">
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                            <select name="don_vi[]" class="form-control">
-                                                                <option value="">Chọn đơn vị</option>
-                                                                ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-2">
-                                                            <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
-                                                        </div>
+                                                <div class="row mb-3 form-item mt-3">
+                                                    <div class="col-5">
+                                                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                                                        <input type="number" name="so_luong[]" class="form-control">
                                                     </div>
-                                                `;
+                                                    <div class="col-5">
+                                                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                                                        <select name="don_vi[]" class="form-control">
+                                                            <option value="">Chọn đơn vị</option>
+                                                            ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                                                    </div>
+                                                </div>
+                                            `;
                                                 productNew.insertAdjacentHTML('beforeend', newFieldHTML);
                                             } else {
                                                 alert('Hết đơn vị con, không thể thêm trường mới!');
@@ -249,22 +257,19 @@
                                         }
                                     });
 
-                                    productNew.addEventListener('click', function (event) {
+                                    // Xử lý sự kiện xóa trường đơn vị
+                                    productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
                                             const formItem = event.target.closest('.form-item');
                                             if (formItem) {
-                                                const allFormItems = Array.from(productNew.querySelectorAll('.form-item'));
-                                                const currentIndex = allFormItems.indexOf(formItem);
-
-                                                // Xóa tất cả các trường từ vị trí hiện tại
-                                                for (let i = allFormItems.length - 1; i >= currentIndex; i--) {
-                                                    allFormItems[i].remove();
-                                                }
+                                                formItem.remove();
+                                                updatePackagingSpecification();
                                             }
                                         }
                                     });
 
-                                    productNew.addEventListener('change', function (event) {
+                                    // Xử lý sự kiện thay đổi đơn vị
+                                    productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
                                             const selectedParentId = event.target.value;
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
@@ -285,54 +290,66 @@
                                         }
                                     });
 
-                                    // Khôi phục giá trị và lỗi từ session
-                                    oldQuantities.forEach((quantity, index) => {
-                                        if (index > 0) {
-                                            btnAdd.click();
-                                        }
-                                        const inputs = productNew.querySelectorAll('input[name="so_luong[]"]');
-                                        const selects = productNew.querySelectorAll('select[name="don_vi[]"]');
-
-                                        if (inputs[index]) inputs[index].value = quantity;
-                                        if (selects[index]) selects[index].value = oldUnits[index] || '';
-
-                                        if (errors[`so_luong.${index}`]) {
-                                            showError(inputs[index], errors[`so_luong.${index}`][0]);
-                                        }
-
-                                        if (errors[`don_vi.${index}`]) {
-                                            showError(selects[index], errors[`don_vi.${index}`][0]);
-                                        }
-                                    });
-
                                     function updatePackagingSpecification() {
-                                        const formItems = productNew.querySelectorAll('.form-item');
-                                        const packagingInput = document.querySelector('#packaging_specification');
+                                        const formItems = document.querySelectorAll('.form-item'); // Lấy tất cả các nhóm đơn vị
+                                        const packagingInput = document.querySelector('#packaging_specification'); // Input hiển thị kết quả
 
-                                        let packaging = []; // Mảng lưu các đơn vị cha và con
+                                        let packaging = []; // Mảng chứa quy cách đóng gói
 
-                                        formItems.forEach(item => {
-                                            const unitSelect = item.querySelector('select[name="don_vi[]"]');
-                                            
-                                            if (unitSelect && unitSelect.value) {
-                                                const selectedUnit = unitSelect.options[unitSelect.selectedIndex];
-                                                const selectedUnitText = selectedUnit.textContent.trim(); // Loại bỏ khoảng trắng thừa
+                                        // Bắt đầu từ phần tử thứ 2 (index = 1) để bỏ qua "có 2 thùng"
+                                        formItems.forEach((item, index) => {
+                                            // Bỏ qua phần tử đầu tiên
+                                            if (index === 0) return;
 
-                                                if (selectedUnitText) {
-                                                    packaging.push(selectedUnitText); // Lưu tên đơn vị đã chọn vào mảng
+                                            const currentUnitSelect = item.querySelector(
+                                            'select[name="don_vi[]"]'); // Đơn vị hiện tại
+                                            const currentQuantityInput = item.querySelector(
+                                            'input[name="so_luong[]"]'); // Số lượng hiện tại
+
+                                            if (
+                                                currentUnitSelect &&
+                                                currentUnitSelect.value &&
+                                                currentQuantityInput &&
+                                                currentQuantityInput.value
+                                            ) {
+                                                const currentUnitText = currentUnitSelect.options[currentUnitSelect.selectedIndex]
+                                                    .textContent.trim(); // Tên đơn vị hiện tại
+                                                const quantity = currentQuantityInput.value; // Số lượng hiện tại
+
+                                                // Tìm đơn vị cha (nếu có)
+                                                const previousItem = formItems[index - 1]; // Đơn vị cha là phần tử trước đó
+                                                let parentUnitText = '';
+
+                                                if (previousItem) {
+                                                    const parentUnitSelect = previousItem.querySelector(
+                                                    'select[name="don_vi[]"]'); // Đơn vị cha
+                                                    if (parentUnitSelect && parentUnitSelect.value) {
+                                                        parentUnitText = parentUnitSelect.options[parentUnitSelect.selectedIndex]
+                                                            .textContent.trim(); // Tên đơn vị cha
+                                                    }
+                                                }
+
+                                                // Tạo chuỗi đóng gói: "1 đơn vị cha có X đơn vị con"
+                                                if (parentUnitText) {
+                                                    packaging.push(`1 ${parentUnitText} có ${quantity} ${currentUnitText}`);
                                                 }
                                             }
                                         });
 
-                                        // Ghép các đơn vị với dấu "-" nếu có hơn 1 đơn vị, và loại bỏ khoảng trắng thừa
-                                        packagingInput.value = packaging.join('-').trim();
+                                        // Ghép các đơn vị và số lượng với dấu "-"
+                                        packagingInput.value = packaging.join(' - ').trim();
                                     }
-                                    updatePackagingSpecification();
+
+
+                                    updatePackagingSpecification(); // Khởi tạo giá trị quy cách đóng gói khi trang tải lần đầu
                                 });
                             </script>
 
+
+
                         </div>
                     </div>
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Thông tin phụ</h5>
@@ -384,11 +401,10 @@
                             <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <select id="supplier" name="supplier_id[]"
-                                class="js-example-basic-multiple @error('supplier_id') is-invalid @enderror"
-                                multiple="multiple">
+                            <select id="supplier" name="supplier_id"
+                                class="js-example-basic-single @error('supplier_id') is-invalid @enderror">
                                 @foreach ($suppliers as $item)
-                                    <option value="{{ $item->id }}" @if (in_array($item->id, old('supplier_id', []))) selected @endif>
+                                    <option value="{{ $item->id }}" @if (old('supplier_id') == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -451,7 +467,8 @@
                             <div class="avatar-upload text-center">
                                 <div class="position-relative">
                                     <div class="avatar-preview">
-                                        <div id="imagePreview" class="bg-cover bg-center" style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                        <div id="imagePreview" class="bg-cover bg-center"
+                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
                                         </div>
                                     </div>
                                     <div class="change-btn mt-2">
@@ -473,9 +490,9 @@
                             <h5 class="card-title mb-0">Xuất xứ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <input type="text" class="form-control @error('medicine.origin') is-invalid @enderror"
-                                id="origin" name="medicine[origin]" value="{{ old('medicine.origin') }}">
-                            @error('medicine.origin')
+                            <input type="text" class="form-control @error('batch.origin') is-invalid @enderror"
+                                id="origin" name="batch[origin]" value="{{ old('batch.origin') }}">
+                            @error('batch.origin')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
@@ -510,10 +527,10 @@
                         </div>
                         <div class="card-body">
                             <input type="date"
-                                class="form-control @error('medicine.expiration_date') is-invalid @enderror"
-                                id="expiration_date" name="medicine[expiration_date]"
-                                value="{{ old('medicine.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
-                            @error('medicine.expiration_date')
+                                class="form-control @error('batch.expiration_date') is-invalid @enderror"
+                                id="expiration_date" name="batch[expiration_date]"
+                                value="{{ old('batch.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
+                            @error('batch.expiration_date')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>

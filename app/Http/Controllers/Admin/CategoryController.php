@@ -16,9 +16,86 @@ use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
 {
-    public function index()
+    // public function index(Request $request)
+    // {
+    //     $query = Category::query();
+    
+    //     // Lọc theo ngày
+    //     if ($request->has('startDate') && $request->has('endDate')) {
+    //         $startDate = $request->get('startDate');
+    //         $endDate = $request->get('endDate');
+    
+    //         if ($startDate && $endDate) {
+    //             $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+    //             $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+    
+    //             // Sử dụng whereBetween để lọc dữ liệu theo ngày
+    //             $query->whereBetween('created_at', [$startDate, $endDate]);
+    //         }
+    //     }
+    
+    //     // Xử lý request Ajax
+    //     if ($request->ajax()) {
+    //         $categories = $query->select(['id', 'name', 'parent_id', 'created_at'])->get(); // Thêm $query vào đây để sử dụng bộ lọc
+    
+    //         $sortedCategories = $this->buildCategoryTree($categories);
+    
+    //         $data = collect($sortedCategories)->map(function ($category, $index) {
+    //             return [
+    //                 'DT_RowIndex' => $index + 1,
+    //                 'id' => $category->id,
+    //                 'name' => $category->name,
+    //                 'created_at' => $category->created_at,
+    //                 'action' => '<a href="#" class="btn btn-sm btn-primary">Edit</a>',
+    //             ];
+    //         });
+    
+    //         return response()->json(['data' => $data]);
+    //     }
+    
+    //     $catalogues = Category::all(); // Lấy tất cả danh mục
+    //     return view('admin.catalogue.index', compact('catalogues')); // Truyền vào view
+    // }
+    
+
+// Hàm xây dựng cây danh mục
+// private function buildCategoryTree($categories, $parentId = null, $prefix = '')
+// {
+//     // dd($categories->toArray());
+//     $tree = [];
+//     foreach ($categories as $category) {
+//         if ($category->parent_id == $parentId) {
+//             $category->name = $prefix . $category->name;
+//             $tree[] = $category;
+//             $tree = array_merge($tree, $this->buildCategoryTree($categories, $category->id, $prefix . '- '));
+//         }
+//     }
+//     return $tree;
+// }
+//     private function buildCategoryTree($categories, $parentId = null, $prefix = '')
+// {
+//     // dd($categories->toArray());
+//     $tree = [];
+//     foreach ($categories as $category) {
+//         if ($category->parent_id == $parentId) {
+//             $category->name = $prefix . $category->name;
+//             $tree[] = $category;
+//             $tree = array_merge($tree, $this->buildCategoryTree($categories, $category->id, $prefix . '- '));
+//         }
+//     }
+//     return $tree;
+// }
+
+
+
+public function index()
     {
-        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
+        $catalogues = Category::query()
+        ->with('children')
+        ->whereNull('parent_id')
+        ->orderBy('id', 'asc')
+        ->get();
+        
         if (request()->ajax()) {
             $query = Category::with('children')->orderBy('id', 'desc');
 
@@ -42,6 +119,29 @@ class CategoryController extends Controller
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
                 })
+                ->addColumn('name', function ($row  ) {
+                    // Xây dựng cây danh mục và chỉ lấy phần tử đầu tiên (category gốc)
+                    $categories = Category::select(['id', 'name', 'parent_id', 'created_at'])->get();
+                    $tree = $this->buildCategoryTree($categories);
+                    // dd($tree);   
+                    $index = array_search($row->id, array_column($tree, 'id'));
+                    return $tree[$index]->name ?? '';
+                })
+                // ->addColumn('name', function ($row) {
+                //     // Lấy tất cả danh mục
+                //     $categories = Category::select(['id', 'name', 'parent_id', 'created_at'])->get();
+                    
+                //     // Xây dựng cây danh mục
+                //     $tree = $this->buildCategoryTree($categories);
+                    
+                //     // Tìm danh mục cha tương ứng với ID của row
+                //     $index = $this->findCategoryInTree($tree, $row->id);
+                    
+                //     // Trả về tên danh mục cha
+                //     return $index !== null ? $tree[$index]->name : ''; 
+                // })
+                
+                
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalogues.edit', $row->id);
                     $deleteUrl = route('admin.catalogues.destroy', $row->id);
@@ -69,9 +169,23 @@ class CategoryController extends Controller
         return view('admin.catalogue.index', compact('catalogues'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    private function buildCategoryTree($categories, $parentId = null, $prefix = '')
+{
+    // dd($categories->toArray());
+    $tree = [];
+    foreach ($categories as $category) {
+        if ($category->parent_id == $parentId) {
+            $category->name = $prefix . $category->name;
+            $tree[] = $category;
+            $tree = array_merge($tree, $this->buildCategoryTree($categories, $category->id, $prefix . '- '));
+        }
+    }
+    return $tree;
+}
+
+
+
+
     public function create()
     {
         //

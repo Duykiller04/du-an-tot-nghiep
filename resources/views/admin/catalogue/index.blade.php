@@ -44,7 +44,8 @@
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="project-title-input">Tên danh mục <span class="text-danger">(*)</span></label>
+                                <label class="form-label" for="project-title-input">Tên danh mục <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="text" name="nameCreate" class="form-control" id="project-title-input"
                                     placeholder="Nhập tên danh mục" value="{{ old('name') }}">
                                 @error('nameCreate')
@@ -65,7 +66,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="" class="form-label">Trạng thái <span class="text-danger">(*)</span></label>
+                                <label for="" class="form-label">Trạng thái <span
+                                        class="text-danger">(*)</span></label>
                                 <select name="is_activeCreate" class="form-select" data-choices data-choices-search-false
                                     id="">
                                     <option value="1" selected>Hoạt động</option>
@@ -100,7 +102,8 @@
                         <input type="hidden" id="edit_category_id" name="category_id">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="edit_name">Tên danh mục <span class="text-danger">(*)</span></label>
+                                <label class="form-label" for="edit_name">Tên danh mục <span
+                                        class="text-danger">(*)</span></label>
                                 <input type="text" name="nameEdit" class="form-control" id="edit_name"
                                     placeholder="Nhập tên danh mục">
                                 @error('nameEdit')
@@ -121,7 +124,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="edit_choices_status_input" class="form-label">Trạng thái <span class="text-danger">(*)</span></label>
+                                <label for="edit_choices_status_input" class="form-label">Trạng thái <span
+                                        class="text-danger">(*)</span></label>
                                 <select name="is_activeEdit" class="form-select" data-choices data-choices-search-false
                                     id="edit_choices_status_input">
                                     <option value="1">Hoạt động</option>
@@ -166,47 +170,46 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
-                                        Lọc
-                                    </button>
+                                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
+                                            Lọc
+                                        </button>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Lọc</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-4">
-                                                        <label for="start-date">Ngày tạo từ:</label>
-                                                        <input type="date" id="start-date" class="form-control">
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Lọc</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                     </div>
-                                                    <div class="mb-4">
-                                                        <label for="end-date">Ngày tạo đến:</label>
-                                                        <input type="date" id="end-date" class="form-control">
+                                                    <div class="modal-body">
+                                                        <div class="mb-4">
+                                                            <label for="start-date">Ngày tạo từ:</label>
+                                                            <input type="date" id="start-date" class="form-control">
+                                                        </div>
+                                                        <div class="mb-4">
+                                                            <label for="end-date">Ngày tạo đến:</label>
+                                                            <input type="date" id="end-date" class="form-control">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-primary"
-                                                        id="filter-btn" data-bs-dismiss="modal">Lọc</button>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="button" class="btn btn-primary" id="filter-btn"
+                                                            data-bs-dismiss="modal">Lọc</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                     </div>
                                     <table id="example"
                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th></th> <!-- Cột để click mở rộng -->
                                                 <th>STT</th>
                                                 <th>Tên danh mục</th>
                                                 <th>Ngày tạo</th>
@@ -259,57 +262,53 @@
 @section('js')
     <script>
         $(document).ready(function() {
+            // Mở modal khi có lỗi
             @if ($errors->has('nameEdit'))
                 $('#editCategoryModal').modal('show');
             @endif
             @if ($errors->has('nameCreate'))
                 $('#createCategoryModal').modal('show');
             @endif
+
+            // Mở modal tạo danh mục
             $('#createCategoryBtn').on('click', function() {
-                $('#createCategoryModal').modal('show'); // Show the modal
+                $('#createCategoryModal').modal('show'); // Hiển thị modal
             });
+
+            // Xử lý sự kiện click vào nút "Sửa" trong bảng
             $('#example tbody').on('click', '.btn-warning', function() {
                 var row = $(this).closest('tr');
                 var data = $('#example').DataTable().row(row).data();
 
-                // Điền dữ liệu vào các trường của modal sửa
+                // Điền dữ liệu vào modal sửa
                 $('#edit_category_id').val(data.id);
                 $('#edit_name').val(data.name);
-                $('select#edit_choices_status_input').val(data.is_active); // Đảm bảo đúng ID của modal sửa
+                $('select#edit_choices_status_input').val(data.is_active);
                 $('select[name="parent_idEdit"]').val(data.parent_id !== null ? data.parent_id : '0');
 
-                // Hiện modal sửa
+                // Mở modal sửa
                 $('#editCategoryModal').modal('show');
             });
 
+            // Đặt action cho form trong modal sửa khi mở modal
             $('#editCategoryModal').on('show.bs.modal', function() {
                 var id = $('#edit_category_id').val() ?? '';
-
-                $('#editForm').attr({
-                    'action': '{{ route('admin.catalogues.update', ':id') }}'.replace(':id', id),
-                    'method': 'POST'
-                });
-
+                $('#editForm').attr('action', '{{ route('admin.catalogues.update', ':id') }}'.replace(
+                    ':id', id));
             });
 
+            // Khởi tạo DataTable
             var table = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax:{
+                ajax: {
                     url: '{{ route('admin.catalogues.index') }}',
                     data: function(d) {
                         d.startDate = $('#start-date').val();
                         d.endDate = $('#end-date').val();
                     }
-                }, 
+                },
                 columns: [{
-                        className: 'details-control',
-                        orderable: false,
-                        data: null,
-                        defaultContent: '<i class="bx bx-sort-down"></i>',
-                        width: '20px'
-                    },
-                    {
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
@@ -329,7 +328,7 @@
                     }
                 ],
                 order: [
-                    [1, 'desc']
+                    [1, 'asc'] // Sắp xếp theo tên (hoặc cột thứ 2)
                 ],
                 language: {
                     "sEmptyTable": "Không có dữ liệu trong bảng",
@@ -346,72 +345,65 @@
                         "sLast": "Cuối",
                         "sNext": "Kế tiếp",
                         "sPrevious": "Trước"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Sắp xếp tăng dần",
-                        "sSortDescending": ": Sắp xếp giảm dần"
                     }
                 }
             });
 
-            $('#filter-btn').click(function() {
-                    table.draw();
-                });
-
-            $('#example tbody').on('click', 'td.details-control', function() {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    var rowData = row.data();
-                    var categoryId = rowData.id;
-
-                    $.ajax({
-                        url: '{{ route('admin.catalogues.getChildren') }}',
-                        method: 'GET',
-                        data: {
-                            id: categoryId
-                        },
-                        success: function(children) {
-                            // Nếu children là chuỗi JSON, hãy phân tích nó
-                            if (typeof children === 'string') {
-                                children = JSON.parse(children);
-                            }
-
-                            if (children.length > 0) {
-                                var html =
-                                    '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
-                                children.forEach(function(child) {
-                                    html += '<tr><td>' + child.id + '</td><td>' + child
-                                        .name + '</td><td>' + child.created_at +
-                                        '</td><td>' + child.updated_at + '</td>';
-                                    html += '<td><a href="' + child.edit_url +
-                                        '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
-                                });
-                                html += '</table>';
-                                row.child(html).show();
-                                tr.addClass('shown');
-                            } else {
-                                row.child('<div>Không có danh mục con</div>').show();
-                                tr.addClass('shown');
-                            }
-                        },
-                        error: function() {
-                            row.child('<div>Lỗi khi tải danh mục con.</div>').show();
-                            tr.addClass('shown');
-                        }
-                    });
-
-                }
+            // Xử lý sự kiện nhấn nút "Lọc"
+            $('#filter-btn').on('click', function() {
+                table.ajax.reload(); // Tải lại dữ liệu từ server sau khi lọc
             });
 
+
+
+
+            // Hiển thị danh mục con khi click vào dấu cộng
+            // $('#example tbody').on('click', 'td.details-control', function() {
+            //     var tr = $(this).closest('tr');
+            //     var row = table.row(tr);
+
+            //     if (row.child.isShown()) {
+            //         row.child.hide();
+            //         tr.removeClass('shown');
+            //     } else {
+            //         var rowData = row.data();
+            //         var categoryId = rowData.id;
+
+            //         $.ajax({
+            //             url: '{{ route('admin.catalogues.getChildren') }}',
+            //             method: 'GET',
+            //             data: { id: categoryId },
+            //             success: function(children) {
+            //                 if (typeof children === 'string') {
+            //                     children = JSON.parse(children);
+            //                 }
+
+            //                 var html = '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
+            //                 if (children.length > 0) {
+            //                     children.forEach(function(child) {
+            //                         html += '<tr><td>' + child.id + '</td><td>' + child.name + '</td><td>' + child.created_at + '</td><td>' + child.updated_at + '</td>';
+            //                         html += '<td><a href="' + child.edit_url + '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
+            //                     });
+            //                     html += '</table>';
+            //                     row.child(html).show();
+            //                     tr.addClass('shown');
+            //                 } else {
+            //                     row.child('<div>Không có danh mục con</div>').show();
+            //                     tr.addClass('shown');
+            //                 }
+            //             },
+            //             error: function() {
+            //                 row.child('<div>Lỗi khi tải danh mục con.</div>').show();
+            //                 tr.addClass('shown');
+            //             }
+            //         });
+            //     }
+            // });
+
+            // Xác nhận xóa danh mục
             $(document).on('click', '.btn-delete', function(e) {
                 e.preventDefault();
-
-                let form = $(this).closest('.delete-form');
+                var form = $(this).closest('.delete-form');
                 Swal.fire({
                     title: "Bạn có chắc muốn xóa không?",
                     icon: "warning",
@@ -430,4 +422,3 @@
         });
     </script>
 @endsection
-
