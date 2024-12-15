@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Batch;
 use App\Models\Inventory;
 use App\Models\Medicine;
 use App\Models\Unit;
@@ -48,4 +49,46 @@ class UnitMedicineController extends Controller
         ]);
     }
 
+    public function getLargestUnit($medicineId){
+        $packaging_specification = Batch::where('medicine_id', $medicineId)
+        ->first()
+        ->packaging_specification;
+
+        $units = UnitConversion::where('medicine_id', $medicineId)
+        ->get();
+
+        $proportion = 1;
+        $counter = 0;
+        foreach ($units as $unit) {
+            if ($counter === 0 && $units->count() > 1) {
+                $counter++;
+                continue;
+            }
+            $proportion *= $unit->proportion;
+        }
+
+        $largestProportion = 1;
+        foreach ($units as $unit) {
+            $largestProportion *= $unit->proportion;
+        }
+
+        return response()->json([
+            'largestUnit' => Medicine::where('id', $medicineId)
+                ->first()
+                ->unitConversions
+                ->first()
+                ->unit
+            ,
+            'smallestUnit' => Medicine::where('id', $medicineId)
+                ->first()
+                ->unitConversions
+                ->last()
+                ->unit
+            ,
+            'proportion' => $proportion,
+            'largestProportion' => $largestProportion,
+            'nameMedicine' => Medicine::where('id', $medicineId)->first()->name,
+            'packagingSpecification' => $packaging_specification
+        ]);
+    }
 }

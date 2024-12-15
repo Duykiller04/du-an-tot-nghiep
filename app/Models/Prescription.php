@@ -14,7 +14,6 @@ class Prescription extends Model
         'seller',
         'total_price',
         'age',
-        'type_sell',
         'customer_name',
         'phone',
         'address',
@@ -22,7 +21,9 @@ class Prescription extends Model
         'weight',
         'gender',
         'status',
-        'shift_id'
+        'shift_id',
+        'note',
+        'dosage',
     ];
     public function prescriptionDetails(){
         return $this->hasMany(PrescriptionDetail::class);

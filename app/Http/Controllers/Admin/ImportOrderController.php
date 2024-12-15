@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportOrderRequest;
 use App\Http\Requests\StoreImportOrderRequest;
+use App\Models\Batch;
 use App\Models\Category;
 use App\Models\ImportOrder;
 use App\Models\ImportOrderDetail;
@@ -83,7 +84,6 @@ class ImportOrderController extends Controller
         return view('admin.importorder.index', compact('importOrders'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -100,28 +100,21 @@ class ImportOrderController extends Controller
         return view('admin.importorder.create', compact('suppliers', 'storages', 'medicines', 'users', 'units', 'categories'));
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
     // Phương thức lưu đơn nhập kho
 
-    public function store(ImportOrderRequest $request)
+    public function store(Request $request)
     {
         $data = $request->all();
 
-        // Khởi động transaction
         try {
             DB::beginTransaction();
 
             // Tạo đơn nhập kho
             $importOrder = ImportOrder::create([
                 'user_id' => $data['user_id'],
-                'storage_id' => $data['storage_id'],
-                'supplier_id' => $data['supplier_id'], // Giữ nguyên là số nguyên
-                'price_paid' => $data['price_paid'],
-                'still_in_debt' => $data['still_in_debt'],
-                'status' => $data['status'],
                 'note' => $data['note'],
                 'total' => array_sum(array_column($data['details'], 'total')),
                 'date_added' => now(),
@@ -129,73 +122,37 @@ class ImportOrderController extends Controller
 
             // Tạo chi tiết đơn nhập kho
             foreach ($data['details'] as $detail) {
-                if (!isset($detail['units']) || empty($detail['units'])) {
-                    throw new \Exception('Thiếu thông tin đơn vị cho thuốc: ' . json_encode($detail));
-                }
 
-                // Lấy đơn vị đầu tiên làm unit_id
-                $detail['unit_id'] = $detail['units'][0]['unit'];
-
-                // Gán giá trị mặc định cho quantity nếu không có
-                $detail['quantity'] = $detail['quantity'] ?? 1;
-
-                $detail['storage_id'] = $data['storage_id'];
-
-                // Kiểm tra thuốc đã tồn tại
-                $existingMedicine = Medicine::where('medicine_code', $detail['medicine_code'])->first();
-
-                // Xử lý hình ảnh nếu có
-                if (isset($detail['image']) && $detail['image']) {
-                    $image = $detail['image'];
-                    $imagePath = $image->store('medicine', 'public');
-                    $detail['image'] = $imagePath;
-                } else {
-                    $detail['image'] = null;
-                }
-
-                if ($existingMedicine) {
-                    $medicineId = $existingMedicine->id;
-                    $detail['name'] = $existingMedicine->name . ' ' . now()->format('d/m/Y');
-                } else {
-                    $newMedicine = Medicine::create($detail);
-                    $medicineId = $newMedicine->id;
-                    $newMedicine->suppliers()->attach($data['supplier_id']);
-
-                    foreach ($detail['units'] as $unit) {
-                        UnitConversion::create([
-                            'medicine_id' => $medicineId,
-                            'unit_id' => $unit['unit'],
-                            'proportion' => $unit['quantity']
-                        ]);
-                    }
-                }
-
-                $conversion = UnitConversion::where('medicine_id', $medicineId)
-                    ->where('unit_id', $detail['unit_id'])
-                    ->first();
-
-                if ($conversion) {
-                    $smallestUnitQuantity = $detail['quantity'] * $conversion->proportion;
-                } else {
-                    throw new \Exception('Không tìm thấy tỷ lệ chuyển đổi cho thuốc này.');
-                }
+                $batch = Batch::create([
+                    'medicine_id' => $detail['medicine_id'],
+                    'supplier_id' => $detail['supplier_id'],
+                    'storage_id' => $detail['storage_id'],
+                    'registration_number' => $detail['registration_number'],
+                    'origin' => $detail['origin'],
+                    'price_import' => $detail['price_import'],
+                    'price_sale' => $detail['price_sale'],
+                    'status_expiry' => 0,
+                    'expiration_date' => $detail['expiration_date'],
+                    'packaging_specification' => $detail['packaging_specification'],
+                    'price_in_smallest_unit' => $detail['price_sale'] / $detail['largest_proportion'],
+                ]);
 
                 Inventory::create([
-                    'storage_id' => $data['storage_id'],
-                    'medicine_id' => $medicineId,
-                    'unit_id' => $detail['unit_id'],
-                    'quantity' => $smallestUnitQuantity
+                    'batch_id' => $batch->id,
+                    'storage_id' => $detail['storage_id'],
+                    'quantity' => $detail['quantity'] * $detail['proportion'],
+                    'unit_id' => $detail['smallest_unit_id'],
                 ]);
 
                 ImportOrderDetail::create([
-                    'import_order_id' => $importOrder->id,
+                    'medication_name' => $detail['name_medicine'],
                     'unit_id' => $detail['unit_id'],
-                    'medicine_id' => $medicineId,
+                    'medicine_id' => $detail['medicine_id'],
+                    'import_order_id' => $importOrder->id,
                     'date_added' => now(),
                     'quantity' => $detail['quantity'],
                     'import_price' => $detail['price_import'],
                     'total' => $detail['total'],
-                    'medication_name' => isset($newMedicine) ? $newMedicine->name : $existingMedicine->name,
                     'expiration_date' => $detail['expiration_date'],
                 ]);
             }
@@ -210,10 +167,6 @@ class ImportOrderController extends Controller
         }
     }
 
-
-
-
-
     /**
      * Display the specified resource.
      */
@@ -224,7 +177,6 @@ class ImportOrderController extends Controller
 
         return view('admin.importorder.show', compact('importOrder'));
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -264,13 +216,12 @@ class ImportOrderController extends Controller
         return redirect()->route('admin.importorder.index')->with('error', 'Phiếu nhập thuốc không tồn tại.');
     }
 
-
-
     public function getRestore()
     {
         $data = ImportOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
         return view('admin.importorder.restore', compact('data'));
     }
+
     public function restore(Request $request)
     {
         try {
@@ -286,5 +237,4 @@ class ImportOrderController extends Controller
             return back()->with('error', 'Khôi phục bản ghi thất bại.');
         }
     }
-
 }
