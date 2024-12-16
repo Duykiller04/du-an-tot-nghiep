@@ -15,50 +15,78 @@ class UnitController extends Controller
 {
     public function index()
     {
-        $units = Unit::query()->with('children')->orderByDesc('id')->whereNull('parent_id')->get();
+        $units = Unit::query()
+            ->with('children')
+            ->whereNull('parent_id')
+            ->orderBy('id', 'asc')
+            ->get();
         if (request()->ajax()) {
-            $query = Unit::query()->with('children')->orderBy('id', 'desc');
-            // Lọc theo ngày tháng nếu có
-            if (request()->has('startDate') && request()->has('endDate')) {
-                $startDate = request()->get('startDate');
-                $endDate = request()->get('endDate');
+            $units = Unit::query()
+                ->orderBy('parent_id', 'asc')
+                ->orderBy('id', 'asc')
+                ->get()
+                ->toArray();
 
-                // Kiểm tra định dạng ngày và lọc
-                if ($startDate && $endDate) {
-                    // Convert to datetime to include the full day
-                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
-                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
-
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
+            function buildTree(array $units, $parentId = null)
+            {
+                $tree = [];
+                foreach ($units as $item) {
+                    if ($item['parent_id'] == $parentId) {
+                        $children = buildTree($units, $item['id']);
+                        if ($children) {
+                            $item['children'] = $children;
+                        }
+                        $tree[] = $item;
+                    }
                 }
+                return $tree;
             }
-            return DataTables::of($query)
+
+            function flattenTree(array $tree, $depth = 0)
+            {
+                $flat = [];
+                foreach ($tree as $node) {
+                    $node['depth'] = $depth;
+                    $flat[] = $node;
+                    if (isset($node['children'])) {
+                        $flat = array_merge($flat, flattenTree($node['children'], $depth + 1));
+                        unset($node['children']);
+                    }
+                }
+                return $flat;
+            }
+
+
+            $itemTree = buildTree($units);
+
+
+            $sortedunits = collect(flattenTree($itemTree));
+
+            return DataTables::of($sortedunits)
                 ->addIndexColumn()
-                ->addColumn('details-control', function () {
-                    return '';
+                ->addColumn('name', function ($row) {
+
+                    $indentation = str_repeat('-', $row['depth']);
+                    return $indentation . e($row['name']);
                 })
                 ->addColumn('created_at', function ($row) {
-                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                    return isset($row['created_at']) ? \Carbon\Carbon::parse($row['created_at'])->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.units.edit', $row->id);
-                    $deleteUrl = route('admin.units.destroy', $row->id);
+                    $editUrl = route('admin.catalogues.edit', $row['id']);
+                    $deleteUrl = route('admin.catalogues.destroy', $row['id']);
 
                     return '
-                    <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '">Sửa</button>
-                    <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-                    </form>
-                ';
-                })
-                ->addColumn('children', function ($row) {
-                    $children = $row->children;
-                    foreach ($children as $child) {
-                        $child->edit_url = route('admin.units.edit', $child->id);
-                        $child->delete_url = route('admin.units.destroy', $child->id);
-                    }
-                    return $children;  // Trả về danh mục con để xử lý trong JavaScript
+                        <button class="btn btn-warning edit-btn" 
+                            data-id="' . $row['id'] . '" 
+                            data-name="' . $row['name'] . '" 
+                            data-parent-id="' . ($row['parent_id'] ?? 0) . '" 
+                            data-is-active="' . ($row['is_active'] ?? 0) . '">Sửa</button>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row['id'] . '">Xóa</button>
+                        </form>
+                    ';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -91,16 +119,21 @@ class UnitController extends Controller
 
     public function update(UpdateUnitRequest $request, string $id)
     {
-        $parenId = $request->input('parent_idEdit') === 0 ? null : $request->input('parent_idEdit');
+
+        $name = $request->nameEdit;
+        $name = str_replace('-', '', $name);
+
+        $parenId = $request->parent_idEdit === 0 ? null : $request->parent_idEdit;
 
         $unit = Unit::findOrFail($id);
         $unit->update([
-            'name' => $request->nameEdit,
+            'name' => $name,
             'parent_id' => $parenId
         ]);
 
         return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được sửa thành công');
     }
+
 
     public function destroy(string $id)
     {

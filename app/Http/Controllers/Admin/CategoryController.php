@@ -18,49 +18,73 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $catalogues = Category::query()->with('children')->orderBy('id', 'desc')->whereNull('parent_id')->get();
+        $catalogues = Category::query()
+            ->with('children')
+            ->whereNull('parent_id')
+            ->orderBy('id', 'asc')
+            ->get();
         if (request()->ajax()) {
-            $query = Category::with('children')->orderBy('id', 'desc');
+            $categories = Category::query()
+                ->orderBy('parent_id', 'asc')
+                ->orderBy('id', 'asc')
+                ->get()
+                ->toArray();
 
-            if (request()->has('startDate') && request()->has('endDate')) {
-                $startDate = request()->get('startDate');
-                $endDate = request()->get('endDate');
-                
-                if ($startDate && $endDate) {
-                    $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
-                    $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
-    
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
+            function buildTree(array $categories, $parentId = null)
+            {
+                $tree = [];
+                foreach ($categories as $category) {
+                    if ($category['parent_id'] == $parentId) {
+                        $children = buildTree($categories, $category['id']);
+                        if ($children) {
+                            $category['children'] = $children;
+                        }
+                        $tree[] = $category;
+                    }
                 }
+                return $tree;
+            }
+            function flattenTree(array $tree, $depth = 0)
+            {
+                $flat = [];
+                foreach ($tree as $node) {
+                    $node['depth'] = $depth;
+                    $flat[] = $node;
+                    if (isset($node['children'])) {
+                        $flat = array_merge($flat, flattenTree($node['children'], $depth + 1));
+                        unset($node['children']);
+                    }
+                }
+                return $flat;
             }
 
-            return DataTables::of($query)
+            $categoryTree = buildTree($categories);
+            $sortedCategories = collect(flattenTree($categoryTree));
+
+            return DataTables::of($sortedCategories)
                 ->addIndexColumn()
-                ->addColumn('details-control', function () {
-                    return '';
+                ->addColumn('name', function ($row) {
+                    $indentation = str_repeat('-', $row['depth']);
+                    return $indentation . e($row['name']);
                 })
                 ->addColumn('created_at', function ($row) {
-                    return $row->created_at ? $row->created_at->format('d/m/Y') : '';
+                    return isset($row['created_at']) ? \Carbon\Carbon::parse($row['created_at'])->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.catalogues.edit', $row->id);
-                    $deleteUrl = route('admin.catalogues.destroy', $row->id);
+                    $editUrl = route('admin.catalogues.edit', $row['id']);
+                    $deleteUrl = route('admin.catalogues.destroy', $row['id']);
 
                     return '
-                        <button class="btn btn-warning edit-btn" data-id="' . $row->id . '" data-name="' . $row->name . '" data-parent-id="' . ($row->parent_id ?? 0) . '" data-is-active="' . $row->is_active . '">Sửa</button>
+                        <button class="btn btn-warning edit-btn" 
+                            data-id="' . $row['id'] . '" 
+                            data-name="' . $row['name'] . '" 
+                            data-parent-id="' . ($row['parent_id'] ?? 0) . '" 
+                            data-is-active="' . ($row['is_active'] ?? 0) . '">Sửa</button>
                         <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                             ' . csrf_field() . method_field('DELETE') . '
-                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row['id'] . '">Xóa</button>
                         </form>
                     ';
-                })
-                ->addColumn('children', function ($row) {
-                    $children = $row->children;
-                    foreach ($children as $child) {
-                        $child->edit_url = route('admin.catalogues.edit', $child->id);
-                        $child->delete_url = route('admin.catalogues.destroy', $child->id);
-                    }
-                    return $children;  // Trả về danh mục con để xử lý trong JavaScript
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -69,9 +93,6 @@ class CategoryController extends Controller
         return view('admin.catalogue.index', compact('catalogues'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
@@ -112,19 +133,30 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, string $id)
+    public function update(UpdateCategoryRequest $request)
     {
-        $parentId = $request->input('parent_idEdit') === '0' ? null : $request->input('parent_id');
-        $isActive = $request->input('is_activeEdit') === '1' ? 1 : 0;
+        try {
 
-        $category = Category::find($id);
-        $category->name = $request->input('nameEdit');
-        $category->parent_id = $parentId;
-        $category->is_active = $isActive;
-        $category->save();
+            $parentIdEdit = (int)$request->parent_idEdit;
+            $parentId = $parentIdEdit == 0 ? null : $parentIdEdit;
+            $isActive = $request->is_activeEdit === '1' ? 1 : 0;
 
-        return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được sửa thành công');
+            $category = Category::findOrFail($request->category_id);
+
+            $name = str_replace('-', '', $request->nameEdit);
+            $category->update([
+                'name' => $name,
+                'parent_id' => $parentId,
+                'is_active' => $isActive
+            ]);
+
+            return redirect()->route('admin.catalogues.index')->with('success', 'Danh mục đã được sửa thành công');
+        } catch (\Exception $exception) {
+            Log::error('Lỗi xảy ra: ' . $exception->getMessage());
+            return redirect()->route('admin.catalogues.index')->with('error', 'Cập nhật danh mục thất bại.');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
