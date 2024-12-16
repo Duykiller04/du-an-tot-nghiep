@@ -100,7 +100,7 @@ $(document).on("change", 'select[name$="[medicine_id]"]', function () {
                 
                 //  Thêm các lô vào danh sách
                 $.each(response.batchs, function (index, batch) {
-                    const date = new Date(created_at); 
+                    const date = new Date(batch.created_at); 
 
                     // Định dạng ngày, tháng, năm
                     const day = String(date.getDate()).padStart(2, '0'); // Ngày (2 chữ số)
