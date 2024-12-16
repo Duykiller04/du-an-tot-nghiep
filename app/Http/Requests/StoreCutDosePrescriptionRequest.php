@@ -24,7 +24,7 @@ class StoreCutDosePrescriptionRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
-            'disease_id' => 'exists:diseases,id',
+            'disease_id' => 'exists:diseases,id|required',
             'name_hospital' => 'required|string|max:255',
             'name_doctor' => 'required|string|max:255',
             'age' => 'required|integer',
@@ -63,6 +63,7 @@ class StoreCutDosePrescriptionRequest extends FormRequest
             'phone_doctor.regex' => 'Số điện thoại không đúng định dạng.',
 
             'disease_id.exists' => 'Bệnh không tồn tại trong cơ sở dữ liệu.',
+            'disease_id.required' => 'Bệnh không được để trống.',
 
             'medicines.*.medicine_id.required' => 'Bạn phải chọn một loại thuốc.',
             'medicines.*.medicine_id.exists' => 'Thuốc không tồn tại trong cơ sở dữ liệu.',
