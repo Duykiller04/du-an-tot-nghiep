@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Models\Batch;
 use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Medicine;
@@ -15,7 +17,6 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class MedicalInstrumentController extends Controller
 {
@@ -26,7 +27,7 @@ class MedicalInstrumentController extends Controller
     {
         if (request()->ajax()) {
             $query = Medicine::query()
-                ->with(['suppliers', 'category', 'storage', 'inventory'])
+                ->with(['category'])
                 ->where('type_product', 1)
                 ->latest('id');
 
@@ -37,26 +38,18 @@ class MedicalInstrumentController extends Controller
 
                 // Kiểm tra định dạng ngày và lọc
                 if ($startDate && $endDate) {
+                    // Convert to datetime to include the full day
                     $startDate = \Carbon\Carbon::parse($startDate)->startOfDay();
                     $endDate = \Carbon\Carbon::parse($endDate)->endOfDay();
 
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
-
+            
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('category_name', function ($row) {
                     return $row->category->name ?? '';  // Lấy tên từ bảng category
-                })
-                ->addColumn('storage_location', function ($row) {
-                    return $row->storage->location ?? '';  // Lấy vị trí từ bảng storage
-                })
-                ->addColumn('inventory_stock', function ($row) {
-                    return $row->inventory->stock ?? '';  // Lấy số lượng từ bảng inventory
-                })
-                ->addColumn('expiration_date', function ($row) {
-                    return $row->expiration_date ? $row->expiration_date->format('d/m/Y') : '';
                 })
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d/m/Y') : '';
@@ -77,22 +70,25 @@ class MedicalInstrumentController extends Controller
                     }
                 })
                 ->addColumn('action', function ($row) {
+                    $viewUrl = route('admin.medicalInstruments.show', $row->id);
                     $editUrl = route('admin.medicalInstruments.edit', $row->id);
                     $deleteUrl = route('admin.medicalInstruments.destroy', $row->id);
 
                     return '
-                        <a href="' . $editUrl . '" class="btn btn btn-warning">Sửa</a>
-                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                            ' . csrf_field() . method_field('DELETE') . '
-                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-                        </form>
-                    ';
+                <a href="' . $viewUrl . '" class="btn btn-info">Xem</a>
+                <a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>
+                <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                    ' . csrf_field() . method_field('DELETE') . '
+                    <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                </form>
+            ';
                 })
                 ->rawColumns(['image', 'action'])
                 ->make(true);
         }
 
-        return view('admin.medicalInstrument.index');
+        $medicines = Medicine::with(['category'])->where('type_product', 1)->latest('id')->get();
+        return view('admin.medicalInstrument.index', compact('medicines'));
     }
 
 
@@ -110,8 +106,6 @@ class MedicalInstrumentController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        // dd($request->all());
-
         $priceImport = $request->input('medicine.price_import');
         $priceSale = $request->input('medicine.price_sale');
 
@@ -137,19 +131,38 @@ class MedicalInstrumentController extends Controller
 
             $medicineData['image'] = $imagePath;
 
-            $medicineData['storage_id'] = $request->storage_id;
+            $batchData = $request->input('batch');
+
+            $batchData['storage_id'] = $request->storage_id;
+
+            $batchData['supplier_id'] = $request->supplier_id;
 
             $inventories = [];
 
             $units = $request->don_vi;
             $quantities = $request->so_luong;
 
-            $quantityByUnit = array_slice($request->so_luong, 0);
+            $total_quantity = 1;
 
+            foreach ($units as $i => $unit) {
+                $total_quantity *= $quantities[$i];
+            }
+            
+            $price_in_smallest_unit = $request->batch['price_sale'] / $total_quantity;
+
+            $batchData['price_in_smallest_unit'] = $price_in_smallest_unit;
 
             $medicine = Medicine::create($medicineData);
 
-            $inventories['medicine_id'] = $medicine->id;
+            $batchData['medicine_id'] = $medicine->id;
+
+            $batchData['supplier_id'] = $request->supplier_id;
+
+            
+            $batch = Batch::create($batchData);
+            
+            // dd($batch->id);
+            $inventories['batch_id'] = $batch->id;
 
             $inventories['storage_id'] = $request->storage_id;
 
@@ -161,13 +174,13 @@ class MedicalInstrumentController extends Controller
 
             foreach ($units as $i => $unit) {
                 UnitConversion::create([
-                    'medicine_id' => $inventories['medicine_id'],
+                    'medicine_id' => $medicine->id,
                     'unit_id' => $unit,
                     'proportion' => $quantities[$i]
                 ]);
             }
 
-            $medicine->suppliers()->attach($request->supplier_id);
+            // $batch->supplier()->attach($request->supplier_id);
 
             DB::commit();
             return redirect()->route('admin.medicalInstruments.index')->with('success', 'Thêm thành công');
@@ -176,7 +189,6 @@ class MedicalInstrumentController extends Controller
             dd($exception->getMessage());
             return back()->with('error' . $exception->getMessage());
         }
-
     }
 
     /**
@@ -184,7 +196,8 @@ class MedicalInstrumentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $medicine = Medicine::with(['batches.supplier','batches.storage','category', 'batches.inventory.unit'])->findOrFail($id);
+        return view('admin.medicalInstrument.show', compact('medicine'));
     }
 
     /**
@@ -192,29 +205,21 @@ class MedicalInstrumentController extends Controller
      */
     public function edit(string $id)
     {
-        $medicalInstrument = Medicine::with(['suppliers', 'storage', 'category', 'unitConversions.unit'])->findOrFail($id);
+        $medicine = Medicine::with(['category', 'unitConversions.unit'])->findOrFail($id);
+        $packaging_specification = Batch::where('medicine_id', $id)->pluck('packaging_specification')->first();
         $categories = Category::all();
         $storages = Storage::all();
         $suppliers = Supplier::all();
         $donvis = Unit::all();
-        return view('admin.medicalInstrument.edit', compact('medicalInstrument', 'categories', 'storages', 'suppliers', 'donvis'));
+        return view('admin.medicalInstrument.edit', compact('medicine', 'categories', 'storages', 'suppliers', 'donvis', 'packaging_specification'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreProductRequest $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
         $medicine = Medicine::findOrFail($id);
-
-        $priceImport = $request->input('medicine.price_import');
-        $priceSale = $request->input('medicine.price_sale');
-
-        if ($priceSale < $priceImport) {
-            return redirect()->back()->withErrors([
-                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
-            ])->withInput();
-        }
 
         try {
             DB::beginTransaction();
@@ -227,35 +232,8 @@ class MedicalInstrumentController extends Controller
             }
 
             // Cập nhật thông tin thuốc
-            $medicineData = $request->input('medicine');
+            $medicineData = $request->medicine;
             $medicine->update($medicineData);
-
-            // Cập nhật thông tin kho và số lượng
-            $storageId = $request->storage_id;
-            $units = $request->don_vi;
-            $quantities = $request->so_luong;
-
-            $inventories = Inventory::where('medicine_id', $medicine->id)
-                ->where('storage_id', $storageId)
-                ->first();
-
-            // Cập nhật số lượng tổng theo đơn vị bé nhất
-            $inventories->quantity = array_product($quantities);
-            $inventories->unit_id = end($units); // ID đơn vị bé nhất
-            $inventories->save();
-
-            // Cập nhật đơn vị quy đổi
-            UnitConversion::where('medicine_id', $medicine->id)->delete();
-            foreach ($units as $i => $unit) {
-                UnitConversion::create([
-                    'medicine_id' => $medicine->id,
-                    'unit_id' => $unit,
-                    'proportion' => $quantities[$i]
-                ]);
-            }
-
-            // Cập nhật nhà cung cấp
-            $medicine->suppliers()->sync($request->supplier_id);
 
             DB::commit();
 

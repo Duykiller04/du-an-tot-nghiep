@@ -15,7 +15,7 @@
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">dụng cụ</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dụng cụ</a></li>
                             <li class="breadcrumb-item active">Thêm dụng cụ</li>
                         </ol>
                     </div>
@@ -57,10 +57,10 @@
                                 <label class="form-label" for="name">Số đăng ký <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.registration_number') is-invalid @enderror"
-                                    id="name" name="medicine[registration_number]"
-                                    value="{{ old('medicine.registration_number') }}">
-                                @error('medicine.registration_number')
+                                    class="form-control @error('batch.registration_number') is-invalid @enderror"
+                                    id="name" name="batch[registration_number]"
+                                    value="{{ old('batch.registration_number') }}">
+                                @error('batch.registration_number')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -79,9 +79,9 @@
                                 <label class="form-label" for="name">Giá nhập <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.price_import') is-invalid @enderror" id="name"
-                                    name="medicine[price_import]" value="{{ old('medicine.price_import') }}">
-                                @error('medicine.price_import')
+                                    class="form-control @error('batch.price_import') is-invalid @enderror" id="name"
+                                    name="batch[price_import]" value="{{ old('batch.price_import') }}">
+                                @error('batch.price_import')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -90,9 +90,9 @@
                                 <label class="form-label" for="name">Giá bán <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.price_sale') is-invalid @enderror" id="name"
-                                    name="medicine[price_sale]" value="{{ old('medicine.price_sale') }}">
-                                @error('medicine.price_sale')
+                                    class="form-control @error('batch.price_sale') is-invalid @enderror" id="name"
+                                    name="batch[price_sale]" value="{{ old('batch.price_sale') }}">
+                                @error('batch.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -113,7 +113,7 @@
                                 <div class="row productNew mt-3">
                                     <div class="row mb-3 form-item mt-3">
                                         <div class="col-5">
-                                            <label class="form-label" for="name">Số lượng <span
+                                            <label class="form-label" for="name">Số lượng nhập<span
                                                     class="text-danger">(*)</span></label>
                                             <input type="number" class="form-control" name="so_luong[]"
                                                 value="{{ old('so_luong.0') }}">
@@ -140,10 +140,10 @@
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text"
-                                        class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
-                                        id="packaging_specification" name="medicine[packaging_specification]"
-                                        value="{{ old('medicine.packaging_specification') }}" readonly>
-                                    @error('medicine.packaging_specification')
+                                        class="form-control @error('batch.packaging_specification') is-invalid @enderror"
+                                        id="packaging_specification" name="batch[packaging_specification]"
+                                        value="{{ old('batch.packaging_specification') }}" readonly>
+                                    @error('batch.packaging_specification')
                                         <span class="d-block text-danger mt-2">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -343,11 +343,10 @@
                             <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <select id="supplier" name="supplier_id[]"
-                                class="js-example-basic-multiple @error('supplier_id') is-invalid @enderror"
-                                multiple="multiple">
+                            <select id="supplier" name="supplier_id"
+                                class="js-example-basic-single @error('supplier_id') is-invalid @enderror">
                                 @foreach ($suppliers as $item)
-                                    <option value="{{ $item->id }}" @if (in_array($item->id, old('supplier_id', []))) selected @endif>
+                                    <option value="{{ $item->id }}" @if (old('supplier_id') == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -368,7 +367,8 @@
                                 id="medicine[category_id]" name="medicine[category_id]">
                                 <option value="">-- Chọn danh mục --</option>
                                 @foreach ($categories as $item)
-                                    <option value="{{ $item->id }}" @if (old('medicine.category_id') == $item->id) selected @endif>
+                                    <option value="{{ $item->id }}"
+                                        @if (old('medicine.category_id') == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -431,9 +431,9 @@
                             <h5 class="card-title mb-0">Xuất xứ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <input type="text" class="form-control @error('medicine.origin') is-invalid @enderror"
-                                id="origin" name="medicine[origin]" value="{{ old('medicine.origin') }}">
-                            @error('medicine.origin')
+                            <input type="text" class="form-control @error('batch.origin') is-invalid @enderror"
+                                id="origin" name="batch[origin]" value="{{ old('batch.origin') }}">
+                            @error('batch.origin')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
@@ -468,10 +468,10 @@
                         </div>
                         <div class="card-body">
                             <input type="date"
-                                class="form-control @error('medicine.expiration_date') is-invalid @enderror"
-                                id="expiration_date" name="medicine[expiration_date]"
-                                value="{{ old('medicine.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
-                            @error('medicine.expiration_date')
+                                class="form-control @error('batch.expiration_date') is-invalid @enderror"
+                                id="expiration_date" name="batch[expiration_date]"
+                                value="{{ old('batch.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
+                            @error('batch.expiration_date')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>

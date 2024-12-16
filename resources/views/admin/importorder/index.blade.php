@@ -71,9 +71,7 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tên Kho</th>
                                         <th>Người kiểm tra</th>
-                                        <th>Nhà cung cấp</th>
                                         <th>Ngày nhập</th>
                                         <th>Tổng tiền</th>
                                         <th>Hành động</th>
@@ -138,16 +136,8 @@
                         searchable: false
                     },
                     {
-                        data: 'storage.name',
-                        name: 'storage.name'
-                    },
-                    {
                         data: 'user.name',
                         name: 'user.name'
-                    },
-                    {
-                        data: 'supplier.name',
-                        name: 'supplier.name'
                     },
                     {
                         data: 'date_added',

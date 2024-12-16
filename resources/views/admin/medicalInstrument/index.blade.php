@@ -71,12 +71,7 @@
                                     <th>Mã dụng cụ</th>
                                     <th>Tên dụng cụ</th>
                                     <th>Ảnh dụng cụ</th>
-                                    <th>Giá nhập</th>
-                                    <th>Giá bán</th>
-                                    <th>Ngày hết hạn</th>
                                     <th>Danh mục</th>
-                                    <th>Nhà cung cấp</th>
-                                    <th>Số lượng</th>
                                     <th>Thời gian tạo</th>
                                     <th>Hành động</th>
                                 </tr>
@@ -151,27 +146,8 @@
                         searchable: false
                     },
                     {
-                        data: 'price_import'
-                    },
-                    {
-                        data: 'price_sale'
-                    },
-                    {
-                        data: 'expiration_date'
-                    },
-                    {
                         data: 'category.name',
                         name: 'category.name'
-                    },
-                    {
-                        data: 'suppliers',
-                        render: function(data, type, row) {
-                            return data.map(supplier => `<p>${supplier.name}</p>`).join('');
-                        }
-                    },
-                    {
-                        data: 'inventory.quantity',
-                        name: 'inventory.quantity'
                     },
                     {
                         data: 'created_at'
