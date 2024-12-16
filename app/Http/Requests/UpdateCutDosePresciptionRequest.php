@@ -29,9 +29,9 @@ class UpdateCutDosePresciptionRequest extends FormRequest
             'phone_doctor' => ['required', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
 
             'medicines' => 'array',
-            'medicines.*' => 'array|required_array_keys:medicine_id,unit_id,quantity,current_price,dosage',
+            'medicines.*' => 'array|required_array_keys:medicine_id,batch_id,quantity,current_price,dosage',
             'medicines.*.medicine_id' => 'required|exists:medicines,id',
-            'medicines.*.unit_id' => 'required|exists:units,id',
+            'medicines.*.batch_id' => 'required|exists:batches,id',
             'medicines.*.quantity' => 'required|integer|min:1',
             'medicines.*.current_price' => 'required|numeric|min:0',
             'medicines.*.dosage' => 'required|string|max:255',

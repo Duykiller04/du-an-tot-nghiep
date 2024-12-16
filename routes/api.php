@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\BatchMedicineController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\API\CutDoseOrderController;
@@ -24,7 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('get-units/{medicineId}', [UnitMedicineController::class, 'getUnits']);
+Route::get('get-batchs/{medicineId}', [BatchMedicineController::class, 'getBatchs']);
 
 Route::get('get-largest-unit/{medicineId}', [UnitMedicineController::class, 'getLargestUnit']);
 

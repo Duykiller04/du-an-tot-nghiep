@@ -137,14 +137,14 @@
                                         </div>
 
                                         <div class="col-md-2">
-                                            <label for="unit_id" class="form-label">Đơn vị</label>
-                                            <select name="medicines[{{ $index }}][unit_id]"
+                                            <label for="batch_id" class="form-label">Lô</label>
+                                            <select name="medicines[{{ $index }}][batch_id]"
                                                 class="form-select select2">
-                                                <option value="">Chọn đơn vị</option>
-                                                @foreach ($units as $id => $name)
+                                                <option value="">Chọn lô</option>
+                                                @foreach ($batchs as $id => $created_at)
                                                     <option value="{{ $id }}"
-                                                        @if ($item->unit_id == $id) selected @endif>
-                                                        {{ $name }}
+                                                        @if ($item->batch_id == $id) selected @endif>
+                                                        Lô ({{ $created_at->format("d/m/Y H:i:s") }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -222,6 +222,6 @@
     <script src="{{ asset('library/cut-dose-prescriptions-edit.js') }}"></script>
     <script>
         const medicines = @json($medicines);
-        const units = @json($units);
+        const batchs = @json($batchs);
     </script>
 @endsection

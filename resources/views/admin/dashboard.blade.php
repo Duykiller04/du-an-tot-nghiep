@@ -180,9 +180,9 @@
                         </div><!-- end col -->
                     </div> <!-- end row-->
 
-                    <div class="row">
+                    <div class="row align-items-stretch">
                         <div class="col-xl-8">
-                            <div class="card">
+                            <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thông số thua nhập cửa hàng</h4>
                                     <div>
@@ -236,9 +236,7 @@
 
                                 <div class="card-body p-0 pb-2">
                                     <div class="w-100">
-                                        <div id="customer_impression_charts"
-                                            data-colors='["--vz-primary", "--vz-success", "--vz-danger"]'
-                                            class="apex-charts" dir="ltr"></div>
+                                        <canvas id="statisticsChart"></canvas>
                                     </div>
                                 </div><!-- end card body -->
                             </div><!-- end card -->
@@ -248,12 +246,12 @@
                             <!-- card -->
                             <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp</h4>
+                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp theo tổng số thuốc</h4>
                                 </div><!-- end card header -->
 
                                 <!-- card body -->
                                 <div class="card-body">
-                                    <div class="px-2 py-2 mt-1" id="dashboard-suppliers"></div>
+                                    <canvas id="supplierChartCanvas" width="400" height="400"></canvas>
                                 </div>
                                 <!-- end card body -->
                             </div>
