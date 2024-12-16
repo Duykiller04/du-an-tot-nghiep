@@ -131,9 +131,6 @@
                                         <label for="batch_id" class="form-label">Chọn lô</label>
                                         <select name="medicines[0][batch_id]" class="form-select select2">
                                             <option value="">Chọn lô</option>
-                                            @foreach ($batchs as $id => $created_at)
-                                            <option value="{{ $id }}" {{ old('medicines.0.batch_id') == $id ? 'selected' : '' }}>Lô ({{ $created_at->format("d/m/Y H:i:s") }})</option>
-                                            @endforeach
                                         </select>
                                     </div>
 
