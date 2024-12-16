@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Batch;
 use App\Models\Category;
 use App\Models\Inventory;
@@ -204,7 +205,7 @@ class MedicineController extends Controller
      */
     public function show(string $id)
     {
-        $medicine = Medicine::with(['batches.supplier','batches.storage','category'])->findOrFail($id);
+        $medicine = Medicine::with(['batches.supplier','batches.storage','category', 'batches.inventory.unit'])->findOrFail($id);
             // dd($medicine->toArray());
         return view('admin.medicine.show', compact('medicine'));
     }
@@ -214,29 +215,21 @@ class MedicineController extends Controller
      */
     public function edit(string $id)
     {
-        $medicine = Medicine::with(['suppliers', 'storage', 'category', 'unitConversions.unit'])->findOrFail($id);
+        $medicine = Medicine::with(['category', 'unitConversions.unit'])->findOrFail($id);
+        $packaging_specification = Batch::where('medicine_id', $id)->pluck('packaging_specification')->first();
         $categories = Category::all();
         $storages = Storage::all();
         $suppliers = Supplier::all();
         $donvis = Unit::all();
-        return view('admin.medicine.edit', compact('medicine', 'categories', 'storages', 'suppliers', 'donvis'));
+        return view('admin.medicine.edit', compact('medicine', 'categories', 'storages', 'suppliers', 'donvis', 'packaging_specification'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreProductRequest $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
         $medicine = Medicine::findOrFail($id);
-
-        $priceImport = $request->input('medicine.price_import');
-        $priceSale = $request->input('medicine.price_sale');
-
-        if ($priceSale < $priceImport) {
-            return redirect()->back()->withErrors([
-                'medicine.price_sale' => 'Giá bán không thể nhỏ hơn giá nhập'
-            ])->withInput();
-        }
 
         try {
             DB::beginTransaction();
@@ -249,35 +242,8 @@ class MedicineController extends Controller
             }
 
             // Cập nhật thông tin thuốc
-            $medicineData = $request->input('medicine');
+            $medicineData = $request->medicine;
             $medicine->update($medicineData);
-
-            // Cập nhật thông tin kho và số lượng
-            $storageId = $request->storage_id;
-            $units = $request->don_vi;
-            $quantities = $request->so_luong;
-
-            $inventories = Inventory::where('medicine_id', $medicine->id)
-                ->where('storage_id', $storageId)
-                ->first();
-
-            // Cập nhật số lượng tổng theo đơn vị bé nhất
-            $inventories->quantity = array_product($quantities);
-            $inventories->unit_id = end($units); // ID đơn vị bé nhất
-            $inventories->save();
-
-            // Cập nhật đơn vị quy đổi
-            UnitConversion::where('medicine_id', $medicine->id)->delete();
-            foreach ($units as $i => $unit) {
-                UnitConversion::create([
-                    'medicine_id' => $medicine->id,
-                    'unit_id' => $unit,
-                    'proportion' => $quantities[$i]
-                ]);
-            }
-
-            // Cập nhật nhà cung cấp
-            $medicine->suppliers()->sync($request->supplier_id);
 
             DB::commit();
 
