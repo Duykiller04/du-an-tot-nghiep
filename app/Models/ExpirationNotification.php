@@ -13,8 +13,11 @@ class ExpirationNotification extends Model
     // Các cột có thể được fill
     protected $fillable = [
         'medicine_id',
+        'batch_id',
         'notified_at',
         'notification_sent',
+        'message',
+        'expiration_date',
     ];
 
     /**
@@ -23,5 +26,9 @@ class ExpirationNotification extends Model
     public function medicine()
     {
         return $this->belongsTo(Medicine::class, 'medicine_id');
+    }
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 }

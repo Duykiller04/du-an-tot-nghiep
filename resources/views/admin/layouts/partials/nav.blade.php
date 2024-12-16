@@ -238,14 +238,14 @@
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-2 lh-base">
-                                                            Thuốc <b>{{ $notification->medicine->name }}</b> sắp hết
-                                                            hạn!
+                                                            <b>{{ $notification->message }}</b>
+                                                            
                                                         </h6>
                                                     </a>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                                                         <span><i class="mdi mdi-clock-outline"></i>
                                                             Hết hạn vào:
-                                                            {{ \Carbon\Carbon::parse($notification->medicine->expiration_date)->format('H:i d-m-Y') }}
+                                                            {{ $notification->expiration_date }}
                                                         </span>
                                                     </p>
                                                 </div>
@@ -298,14 +298,14 @@
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-2 lh-base">
-                                                            Thuốc <b>{{ $notification->medicine->name }}</b> sắp hết
-                                                            hạn!
+                                                            <b>{{ $notification->message }}</b>
+                                                            
                                                         </h6>
                                                     </a>
                                                     <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                                                         <span><i class="mdi mdi-clock-outline"></i>
                                                             Hết hạn vào:
-                                                            {{ \Carbon\Carbon::parse($notification->medicine->expiration_date)->format('H:i d-m-Y') }}
+                                                            {{ $notification->expiration_date }}
                                                         </span>
                                                     </p>
                                                 </div>

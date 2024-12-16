@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Jobs;
+
+use App\Models\Batch;
 use App\Models\Medicine;
 use App\Models\NotificationSetting;
 use App\Models\ExpirationNotification;
@@ -27,27 +29,46 @@ class CheckExpirationNotifications implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void
-    {
-        // Lấy cấu hình thông báo
-        $settings = NotificationSetting::first();
-        
-        if (!$settings || !$settings->notification_enabled) {
-            return; // Dừng nếu thông báo không được bật
+{
+    // Lấy cấu hình thông báo
+    $settings = NotificationSetting::first();
+    
+    if (!$settings || !$settings->notification_enabled) {
+        return; // Dừng nếu thông báo không được bật
+    }
+
+    // Xác định ngưỡng ngày hết hạn
+    $expirationDateThreshold = Carbon::now()->addDays($settings->expiration_notification_days);
+
+    // Lấy các lô thuốc sắp hết hạn
+    $batches = Batch::where('expiration_date', '<=', $expirationDateThreshold)->get();
+
+    foreach ($batches as $batch) {
+        $medicine = $batch->medicine; // Lấy thông tin thuốc từ lô
+        if (!$medicine) {
+            continue; // Bỏ qua nếu không có thông tin thuốc
         }
-        $expirationDateThreshold = Carbon::now()->addDays($settings->expiration_notification_days);
-        $medicines = Medicine::where('expiration_date', '<=', $expirationDateThreshold)->get();
 
-        foreach ($medicines as $medicine) {
-            // Kiểm tra nếu đã có thông báo cho thuốc này
-            $existingNotification = ExpirationNotification::where('medicine_id', $medicine->id)->first();
+        // Tạo nội dung thông báo
+        $message = "Thuốc '{$medicine->name}' sắp hết hạn. Lô nhập ngày: ".$batch->created_at->format('d-m-Y') ;
 
-            if (!$existingNotification) {
-                ExpirationNotification::create([
-                    'medicine_id' => $medicine->id,
-                    'notified_at' => Carbon::now(),
-                    'notification_sent' => false,
-                ]);
-            }
+        // Kiểm tra nếu đã có thông báo cho thuốc và lô này
+        $existingNotification = ExpirationNotification::where('medicine_id', $medicine->id)
+            ->where('expiration_date', $batch->expiration_date)
+            ->first();
+
+        if (!$existingNotification) {
+            // Tạo thông báo mới
+            ExpirationNotification::create([
+                'medicine_id' => $medicine->id,
+                'bacth_id' => $batch->id,
+                'notified_at' => Carbon::now(),
+                'notification_sent' => false,
+                'message' => $message,
+                'expiration_date' => $batch->expiration_date,
+            ]);
         }
     }
+}
+
 }
