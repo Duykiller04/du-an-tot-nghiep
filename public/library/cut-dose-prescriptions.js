@@ -100,7 +100,7 @@ $(document).on("change", 'select[name$="[medicine_id]"]', function () {
                 
                 //  Thêm các lô vào danh sách
                 $.each(response.batchs, function (index, batch) {
-                    const date = new Date(created_at); 
+                    const date = new Date(batch.created_at); 
 
                     // Định dạng ngày, tháng, năm
                     const day = String(date.getDate()).padStart(2, '0'); // Ngày (2 chữ số)
@@ -111,7 +111,7 @@ $(document).on("change", 'select[name$="[medicine_id]"]', function () {
                     const hours = String(date.getHours()).padStart(2, '0'); // Giờ (2 chữ số)
                     const minutes = String(date.getMinutes()).padStart(2, '0'); // Phút (2 chữ số)
                     const seconds = String(date.getSeconds()).padStart(2, '0'); // Giây (2 chữ số)
-                
+                    priceInput.data("smallest_price", batch.price_in_smallest_unit);
                     // Gộp lại thành định dạng đầy đủ
                     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
                     batchsSelect.append(

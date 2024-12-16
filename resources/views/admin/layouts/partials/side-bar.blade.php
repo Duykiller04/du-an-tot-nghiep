@@ -64,7 +64,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.medicalInstruments.index') }}" class="nav-link {{ Request::is('admin/medicalInstruments') ? 'active' : '' }}" data-key="t-level-1.1">
+                                <a href="{{ route('admin.medicalInstruments.index') }}" class="nav-link {{ Request::is('admin/medicalInstruments*') ? 'active' : '' }}" data-key="t-level-1.1">
                                     Dụng cụ
                                 </a>
                             </li>
