@@ -52,12 +52,6 @@ class ImportOrderController extends Controller
                 ->addColumn('user_name', function ($row) {
                     return $row->user->name ?? '';  // Lấy tên từ bảng user
                 })
-                ->addColumn('storage_location', function ($row) {
-                    return $row->storage->location ?? '';  // Lấy vị trí từ bảng storage
-                })
-                ->addColumn('supplier_name', function ($row) {
-                    return $row->supplier->name ?? '';  // Lấy tên từ bảng supplier
-                })
                 ->addColumn('total', function ($row) {
                     return number_format($row->total) . ' VND';  // Format price
                 })

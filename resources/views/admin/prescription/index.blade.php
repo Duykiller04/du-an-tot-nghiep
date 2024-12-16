@@ -71,12 +71,6 @@ Danh sách đơn thuốc
                                 <th>STT</th>
                                 <th>Tên khách hàng</th>
                                 <th>Giới tính</th>
-                                <th>Tuổi</th>
-                                <th>Điện thoại</th>
-                                <th>Loại bán</th>
-                                <th>Địa chỉ</th>
-                                <th>Email</th>
-                                <th>Cân nặng</th>
                                 <th>Ngày mua</th>
                                 <th>Tổng đơn hàng</th>
                                 <th>Hành động</th>
@@ -137,12 +131,6 @@ Danh sách đơn thuốc
                     { data: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'customer_name' },
                     { data: 'gender' },
-                    { data: 'age' },
-                    { data: 'phone' },
-                    { data: 'type_sell' },
-                    { data: 'address' },
-                    { data: 'email' },
-                    { data: 'weight' },
                     { data: 'created_at' },
                     { data: 'total_price' },
                     { data: 'action', orderable: false, searchable: false }
