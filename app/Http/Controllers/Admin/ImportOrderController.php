@@ -212,7 +212,7 @@ class ImportOrderController extends Controller
 
     public function getRestore()
     {
-        $data = ImportOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = ImportOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.importorder.restore', compact('data'));
     }
 

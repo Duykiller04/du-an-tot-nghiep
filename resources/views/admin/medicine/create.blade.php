@@ -78,9 +78,8 @@
                             <div class="mb-3">
                                 <label class="form-label" for="name">Giá nhập <span
                                         class="text-danger">(*)</span></label>
-                                <input type="number"
-                                    class="form-control @error('batch.price_import') is-invalid @enderror" id="name"
-                                    name="batch[price_import]" value="{{ old('batch.price_import') }}">
+                                <input type="number" class="form-control @error('batch.price_import') is-invalid @enderror"
+                                    id="name" name="batch[price_import]" value="{{ old('batch.price_import') }}">
                                 @error('batch.price_import')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -89,9 +88,8 @@
                             <div class="mb-3">
                                 <label class="form-label" for="name">Giá bán <span
                                         class="text-danger">(*)</span></label>
-                                <input type="number"
-                                    class="form-control @error('batch.price_sale') is-invalid @enderror" id="name"
-                                    name="batch[price_sale]" value="{{ old('batch.price_sale') }}">
+                                <input type="number" class="form-control @error('batch.price_sale') is-invalid @enderror"
+                                    id="name" name="batch[price_sale]" value="{{ old('batch.price_sale') }}">
                                 @error('batch.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -153,23 +151,21 @@
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
-                                    const donvis = @json($donvis); // Dữ liệu đơn vị từ Laravel
+                                    const packagingInput = document.querySelector('#packaging_specification');
+
+                                    const donvis = @json($donvis);
                                     const oldQuantities = @json(old('so_luong', []));
                                     const oldUnits = @json(old('don_vi', []));
                                     const errors = @json($errors->toArray());
 
-                                    // Tạo cấu trúc phân cấp từ parent_id
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
-                                        if (!acc[donvi.parent_id]) {
-                                            acc[donvi.parent_id] = [];
-                                        }
+                                        if (!acc[donvi.parent_id]) acc[donvi.parent_id] = [];
                                         acc[donvi.parent_id].push(donvi);
                                         return acc;
                                     }, {});
 
-                                    // Hàm render các đơn vị con cho một đơn vị cha
                                     function renderChildUnits(parentId, selectElement) {
-                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>';
                                         if (unitsByParent[parentId]) {
                                             unitsByParent[parentId].forEach(donvi => {
                                                 const option = document.createElement('option');
@@ -180,44 +176,57 @@
                                         }
                                     }
 
-                                    // Hàm hiển thị lỗi
-                                    function showError(element, message) {
-                                        const errorElement = document.createElement('p');
-                                        errorElement.classList.add('text-danger');
-                                        errorElement.textContent = message;
-                                        element.parentElement.appendChild(errorElement);
-                                    }
-
-                                    // Hàm kiểm tra lỗi khi nhập dữ liệu
-                                    function validateFields() {
+                                    function updatePackagingSpecification() {
                                         const formItems = productNew.querySelectorAll('.form-item');
-                                        let isValid = true;
+                                        let quantities = [];
+                                        let units = [];
 
-                                        formItems.forEach((item, index) => {
+                                        formItems.forEach((item) => {
                                             const quantityInput = item.querySelector('input[name="so_luong[]"]');
                                             const unitSelect = item.querySelector('select[name="don_vi[]"]');
 
-                                            // Xóa lỗi cũ
-                                            const oldErrors = item.querySelectorAll('.text-danger');
-                                            oldErrors.forEach(error => error.remove());
+                                            const quantity = quantityInput ? quantityInput.value.trim() : '';
+                                            const unit = unitSelect && unitSelect.value 
+                                            ? unitSelect.options[unitSelect.selectedIndex]?.textContent.trim() 
+                                            : null;
 
-                                            // Kiểm tra số lượng
-                                            if (!quantityInput.value || parseFloat(quantityInput.value) <= 0) {
-                                                showError(quantityInput, `Số lượng ở dòng ${index + 1} phải lớn hơn 0.`);
-                                                isValid = false;
-                                            }
-
-                                            // Kiểm tra đơn vị
-                                            if (!unitSelect.value) {
-                                                showError(unitSelect, `Vui lòng chọn đơn vị ở dòng ${index + 1}.`);
-                                                isValid = false;
+                                            if (quantity && unit) {
+                                                quantities.push(quantity);
+                                                units.push(unit);
                                             }
                                         });
 
-                                        return isValid;
+                                        let packaging = [];
+                                        let flag = false;
+                                        for (let i = 0; i < quantities.length; i++) {
+                                            if (i === 0) {
+                                                // Luôn hiển thị giá trị gốc là "1 thùng"
+                                                packaging.push(`1 ${units[i]}`);
+                                            } else {
+                                                if(flag == false){
+                                                    packaging.push(`1 ${units[i - 1]} có ${quantities[i]} ${units[i]}`);
+                                                    flag = true;
+                                                    continue;
+                                                }
+                                                packaging.push(`- 1 ${units[i - 1]} có ${quantities[i]} ${units[i]}`);
+                                            }
+                                        }
+
+                                        // Xóa phần "1 thùng" ở các cấp sâu hơn
+                                        if (packaging.length > 1) {
+                                            packaging.shift(); // Xóa "1 thùng" khỏi kết quả
+                                        }
+
+                                        packagingInput.value = packaging.join(' ');
                                     }
 
-                                    // Thêm trường đơn vị mới
+
+                                    productNew.addEventListener('input', function(event) {
+                                        if (event.target.name === 'so_luong[]' || event.target.name === 'don_vi[]') {
+                                            updatePackagingSpecification();
+                                        }
+                                    });
+
                                     btnAdd.addEventListener('click', function() {
                                         const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                         const lastSelect = allSelects[allSelects.length - 1];
@@ -230,7 +239,7 @@
                                                 <div class="row mb-3 form-item mt-3">
                                                     <div class="col-5">
                                                         <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                        <input type="number" name="so_luong[]" class="form-control">
+                                                        <input type="number" name="so_luong[]" class="form-control" min="1">
                                                     </div>
                                                     <div class="col-5">
                                                         <label for="">Đơn vị <span class="text-danger">(*)</span></label>
@@ -245,6 +254,7 @@
                                                 </div>
                                             `;
                                                 productNew.insertAdjacentHTML('beforeend', newFieldHTML);
+                                                updatePackagingSpecification();
                                             } else {
                                                 alert('Hết đơn vị con, không thể thêm trường mới!');
                                             }
@@ -253,31 +263,24 @@
                                         }
                                     });
 
-                                    // Xử lý sự kiện xóa trường đơn vị
                                     productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
-                                            const formItem = event.target.closest('.form-item');
-                                            if (formItem) {
-                                                formItem.remove();
-                                                updatePackagingSpecification();
-                                            }
+                                            event.target.closest('.form-item').remove();
+                                            updatePackagingSpecification();
                                         }
                                     });
 
-                                    // Xử lý sự kiện thay đổi đơn vị
                                     productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
                                             const selectedParentId = event.target.value;
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
 
-                                            // Reset các trường sau trường hiện tại
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
                                                 allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>';
                                                 allSelects[i].value = '';
                                             }
 
-                                            // Render các đơn vị con
                                             if (currentSelectIndex < allSelects.length - 1) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
                                                 renderChildUnits(selectedParentId, nextSelect);
@@ -286,62 +289,21 @@
                                         }
                                     });
 
-                                    function updatePackagingSpecification() {
-                                        const formItems = document.querySelectorAll('.form-item'); // Lấy tất cả các nhóm đơn vị
-                                        const packagingInput = document.querySelector('#packaging_specification'); // Input hiển thị kết quả
+                                    oldQuantities.forEach((quantity, index) => {
+                                        if (index > 0) btnAdd.click();
+                                        const inputs = productNew.querySelectorAll('input[name="so_luong[]"]');
+                                        const selects = productNew.querySelectorAll('select[name="don_vi[]"]');
 
-                                        let packaging = []; // Mảng chứa quy cách đóng gói
+                                        if (inputs[index]) inputs[index].value = quantity;
+                                        if (selects[index]) selects[index].value = oldUnits[index] || '';
 
-                                        // Bắt đầu từ phần tử thứ 2 (index = 1) để bỏ qua "có 2 thùng"
-                                        formItems.forEach((item, index) => {
-                                            // Bỏ qua phần tử đầu tiên
-                                            if (index === 0) return;
+                                        if (errors[`so_luong.${index}`]) showError(inputs[index], errors[`so_luong.${index}`][0]);
+                                        if (errors[`don_vi.${index}`]) showError(selects[index], errors[`don_vi.${index}`][0]);
+                                    });
 
-                                            const currentUnitSelect = item.querySelector(
-                                            'select[name="don_vi[]"]'); // Đơn vị hiện tại
-                                            const currentQuantityInput = item.querySelector(
-                                            'input[name="so_luong[]"]'); // Số lượng hiện tại
-
-                                            if (
-                                                currentUnitSelect &&
-                                                currentUnitSelect.value &&
-                                                currentQuantityInput &&
-                                                currentQuantityInput.value
-                                            ) {
-                                                const currentUnitText = currentUnitSelect.options[currentUnitSelect.selectedIndex]
-                                                    .textContent.trim(); // Tên đơn vị hiện tại
-                                                const quantity = currentQuantityInput.value; // Số lượng hiện tại
-
-                                                // Tìm đơn vị cha (nếu có)
-                                                const previousItem = formItems[index - 1]; // Đơn vị cha là phần tử trước đó
-                                                let parentUnitText = '';
-
-                                                if (previousItem) {
-                                                    const parentUnitSelect = previousItem.querySelector(
-                                                    'select[name="don_vi[]"]'); // Đơn vị cha
-                                                    if (parentUnitSelect && parentUnitSelect.value) {
-                                                        parentUnitText = parentUnitSelect.options[parentUnitSelect.selectedIndex]
-                                                            .textContent.trim(); // Tên đơn vị cha
-                                                    }
-                                                }
-
-                                                // Tạo chuỗi đóng gói: "1 đơn vị cha có X đơn vị con"
-                                                if (parentUnitText) {
-                                                    packaging.push(`1 ${parentUnitText} có ${quantity} ${currentUnitText}`);
-                                                }
-                                            }
-                                        });
-
-                                        // Ghép các đơn vị và số lượng với dấu "-"
-                                        packagingInput.value = packaging.join(' - ').trim();
-                                    }
-
-
-                                    updatePackagingSpecification(); // Khởi tạo giá trị quy cách đóng gói khi trang tải lần đầu
+                                    updatePackagingSpecification();
                                 });
                             </script>
-
-
 
                         </div>
                     </div>
@@ -462,7 +424,8 @@
                             <div class="avatar-upload text-center">
                                 <div class="position-relative">
                                     <div class="avatar-preview">
-                                        <div id="imagePreview" class="bg-cover bg-center" style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                        <div id="imagePreview" class="bg-cover bg-center"
+                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
                                         </div>
                                     </div>
                                     <div class="change-btn mt-2">

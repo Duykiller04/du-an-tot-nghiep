@@ -182,7 +182,7 @@ class CutDosePrescriptionController extends Controller
 
     public function getRestore()
     {
-        $data = CutDosePrescription::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = CutDosePrescription::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.cutDosePrescription.restore', compact('data'));
     }
     public function restore(Request $request)

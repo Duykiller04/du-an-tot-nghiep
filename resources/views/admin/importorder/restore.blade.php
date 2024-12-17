@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card vh-100">
 
 
                 <div class="card-body">
@@ -40,9 +40,8 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Tên Kho</th>
+                                                                <th>Mã nhập kho</th>
                                                                 <th>Người kiểm tra</th>
-                                                                <th>Nhà cung cấp</th>
                                                                 <th>Ngày nhập</th>
                                                                 <th>Tổng tiền</th>
                                                                 <th>Ngày xóa</th>
@@ -56,9 +55,8 @@
                                                                             value="{{ $item->id }}">
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->storage->name }}</td>
                                                                     <td>{{ $item->user->name }}</td>
-                                                                    <td>{{ $item->supplier->name }}</td>
+                                                                    <td>{{ $item->date_added }}</td>
                                                                     <td>{{ $item->total }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
@@ -70,6 +68,7 @@
                                             </thead>
                                         </table>
                                         <!-- end table -->
+                                        {{ $data->links() }}
                                     </div>
                                 </div>
                                 <!--end accordion-->

@@ -148,7 +148,7 @@ class UnitController extends Controller
     }
     public function getRestore()
     {
-        $data = Unit::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = Unit::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.unit.restore', compact('data'));
     }
     public function restore(Request $request)
