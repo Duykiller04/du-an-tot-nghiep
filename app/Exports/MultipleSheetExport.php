@@ -30,11 +30,11 @@ class MultipleSheetExport implements WithMultipleSheets
         }
 
         if (in_array('medicine', $this->tablesToExport)) {
-            $sheets[] = new MedicineExport('Thuốc'); // Tên sheet là "Thuốc"
+            $sheets[] = new MedicineExport(' bảng Thuốc, dụng cụ'); // Tên sheet là "Thuốc"
         }
 
-        if (in_array('medical_instrument', $this->tablesToExport)) {
-            $sheets[] = new MedicalInstrumentExport('Dụng cụ y tế'); // Tên sheet là "Dụng cụ y tế"
+        if (in_array('batch', $this->tablesToExport)) {
+            $sheets[] = new BatchExport('Lô thuốc'); // Tên sheet là "Lô"
         }
 
         if (in_array('DiseasesExport', $this->tablesToExport)) {

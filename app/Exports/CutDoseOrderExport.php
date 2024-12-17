@@ -21,68 +21,69 @@ class CutDoseOrderExport implements FromCollection, WithHeadings, WithMapping, W
     {
         $this->title = $title;
     }
-    // Lấy toàn bộ dữ liệu từ bảng Users
+    // Lấy toàn bộ dữ liệu từ bảng 
     public function collection()
     {
         return CutDoseOrder::with('cutDoseOrderDetails')->get();
     }
-
-
-    // Tiêu đề bảng
     public function headings(): array
     {
         return [
             'STT',
+            'Người bán',                                      // Đặt Seller lên đầu tiên
             'Tên bệnh mắc phải',
             'ID khách hàng',
+            'Tên khách hàng',
             'Cân nặng',
             'Tuổi',
             'Giới tính',
-            'Tên khách hàng',
             'Số điện thoại',
             'Địa chỉ',
             'Id ca làm việc',
             'Tổng giá',
-            'Tên thuốc',
+            'Liều lượng',
             'Id đơn thuốc cắt liều',
             'Đơn vị',
             'Số lượng',
-            'Liều lượng',
+            'Lô thuốc'
         ];
     }
-
     // Ánh xạ dữ liệu của từng hàng
-    public function map($CutDoseOrder): array
+    public function map($cutDoseOrder): array
     {
         $data = [];
-        $index = 1;
+        $index = 1;  // Khởi tạo biến $index để đếm STT
+
+        // Kiểm tra xem có bất kỳ chi tiết đơn thuốc nào không
+        if ($cutDoseOrder->cutDoseOrderDetails->isEmpty()) {
+            return $data;  // Nếu không có chi tiết đơn thuốc, trả về mảng rỗng
+        }
 
         // Duyệt qua từng chi tiết của đơn thuốc
-        foreach ($CutDoseOrder->cutDoseOrderDetails as $detail) {
+        foreach ($cutDoseOrder->cutDoseOrderDetails as $detail) {
             $data[] = [
-                $index++,                                     // STT
-                $CutDoseOrder->disease->disease_name,       // Tên bệnh
-                $CutDoseOrder->customer_id,                  // ID khách hàng
-                $CutDoseOrder->weight,                       // Cân nặng
-                $CutDoseOrder->age,                          // Tuổi
-                $CutDoseOrder->gender == 0 ? 'Nam' : 'Nữ',   // Giới tính (sửa ở đây)
-                $CutDoseOrder->customer_name,                // Tên khách hàng
-                $CutDoseOrder->phone,                        // Số điện thoại
-                $CutDoseOrder->address,                      // Địa chỉ
-                $CutDoseOrder->shift_id,                     // Id ca làm việc
-                $CutDoseOrder->total_price,                  // Tổng giá
-                $detail->medicine->name,           // Tên thuốc
-                $detail->cut_dose_order_id,            // Id đơn thuốc cắt liều
-                $detail->unit->name,               // Đơn vị
-                $detail->quantity,                           // Số lượng
-                $detail->dosage,                             // Liều lượng
+                $index++,                                     // STT: Tăng dần trong mỗi vòng lặp
+                $cutDoseOrder->seller,                        // Seller lên đầu tiên
+                $cutDoseOrder->disease->disease_name,          // Tên bệnh mắc phải
+                $cutDoseOrder->customer_id,                    // ID khách hàng
+                $cutDoseOrder->customer_name,                  // Tên khách hàng
+                $cutDoseOrder->weight,                         // Cân nặng
+                $cutDoseOrder->age,                            // Tuổi
+                $cutDoseOrder->gender == 0 ? 'Nam' : 'Nữ',     // Giới tính (Nam nếu 0, Nữ nếu 1)
+                $cutDoseOrder->phone,                          // Số điện thoại
+                $cutDoseOrder->address,                        // Địa chỉ
+                $cutDoseOrder->shift_id,                       // Id ca làm việc
+                $cutDoseOrder->total_price,                    // Tổng giá
+                $cutDoseOrder->dosage,                         // Liều lượng
+                $detail->cut_dose_order_id,                    // Id đơn thuốc cắt liều
+                $detail->unit->name,                           // Đơn vị
+                $detail->quantity,                             // Số lượng
+                $detail->batch_id,                             // Lô thuốc
             ];
         }
 
         return $data;
     }
-
-
     // Định dạng các cột trong bảng
     public function styles($sheet)
     {

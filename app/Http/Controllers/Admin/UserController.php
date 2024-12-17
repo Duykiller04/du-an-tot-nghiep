@@ -27,6 +27,7 @@ class UserController extends Controller
     {
         if (request()->ajax()) {
             $query = User::query()->latest('id');
+
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
                 $startDate = request()->get('startDate');
@@ -46,15 +47,16 @@ class UserController extends Controller
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
                     if ($row->image) {
-                        $url = Storage::url($row->image);
-                        return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc" ><img src="' . asset($url) . '" class="rounded-circle" width="50" height="50" alt="" /></a>';
+                        $url = \Illuminate\Support\Facades\Storage::url($row->image);
+                        return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc">
+                                <img src="' . asset($url) . '" width="200" height="150" alt="" />
+                            </a>';
                     } else {
                         $defaultImage = asset('theme/admin/assets/images/no-img-avatar.png');
-                        return '<img src="' . $defaultImage . '" class="rounded-circle" width="50" height="50" alt="" />';
+                        return '<img src="' . $defaultImage . '" width="200" height="150" alt="Không có ảnh" />';
                     }
                 })
                 ->addColumn('created_at', function ($row) {
-                    // Kiểm tra nếu có deleted_at, nếu không thì trả về null hoặc dấu -
                     return $row->created_at ? \Carbon\Carbon::parse($row->created_at)->format('d/m/Y') : '-';
                 })
                 ->addColumn('action', function ($row) {
@@ -63,21 +65,19 @@ class UserController extends Controller
                     $deleteUrl = route('admin.users.destroy', $row->id);
 
                     $actionHtml = '<a href="' . $viewUrl . '" class="btn btn-primary me-2">Xem</a>';
-                    
-                    // Nếu người dùng đăng nhập là 'staff', chỉ hiển thị nút sửa tài khoản của họ
+
                     if (Auth::user()->type === 'staff') {
                         if (Auth::id() === $row->id) {
                             $actionHtml .= '<a href="' . $editUrl . '" class="btn btn-warning">Sửa</a>';
                         }
                     } else {
-                        // Với admin, hiển thị cả nút sửa và xóa
                         $actionHtml .= '
-                            <a href="' . $editUrl . '" class="btn btn-warning me-2">Sửa</a>
-                            <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                                ' . csrf_field() . method_field('DELETE') . '
-                                <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-                            </form>
-                        ';
+                        <a href="' . $editUrl . '" class="btn btn-warning me-2">Sửa</a>
+                        <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                        </form>
+                    ';
                     }
 
                     return $actionHtml;
@@ -87,6 +87,7 @@ class UserController extends Controller
         }
         return view(self::PATH_VIEW . __FUNCTION__);
     }
+
 
     /**
      * Show the form for creating a new resource.
