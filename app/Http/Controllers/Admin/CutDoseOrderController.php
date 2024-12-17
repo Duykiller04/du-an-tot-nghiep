@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
 use App\Models\Disease;
+use App\Models\Inventory;
 use App\Models\Medicine;
 use App\Models\Shift;
 use App\Models\Unit;
@@ -151,13 +152,18 @@ class CutDoseOrderController extends Controller
                     'unit_id' => $value,
                     'quantity' => $request->quantity[$key],
                 ]);
+
+                $inventory = Inventory::where('batch_id', $key)->first();
+                $inventory->update([
+                    'quantity' => $inventory->quantity - $request->quantity[$key],
+                ]);
             }
 
             // Commit transaction
             DB::commit();
 
             // Trả về view thành công
-            return redirect()->route('admin.sell.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.sell.index')->with('success', 'Tạo đơn thuốc thành công');
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PrescriptionRequest;
 use App\Http\Requests\UpdatePrescriptionRequest;
 use App\Models\CutDosePrescription;
 use App\Models\Disease;
-use App\Models\ImportOrder;
+use App\Models\Inventory;
 use App\Models\Medicine;
 use App\Models\Prescription;
 use App\Models\PrescriptionDetail;
@@ -118,6 +117,11 @@ class PrescriptionsController extends Controller
                     'quantity' => $request->quantity[$key],
                     'current_price' => $request->batch_total_price[$key],
                 ]);
+                
+                $inventory = Inventory::where('batch_id', $key)->first();
+                $inventory->update([
+                    'quantity' => $inventory->quantity - $request->quantity[$key],
+                ]);
             }
 
             if ($shiftId) {
@@ -131,7 +135,7 @@ class PrescriptionsController extends Controller
             DB::commit();
 
             // Redirect với thông báo thành công
-            return redirect()->route('admin.sell.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.sell.index')->with('success', 'Tạo đơn thuốc thành công');
 
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
