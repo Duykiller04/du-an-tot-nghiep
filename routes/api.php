@@ -32,6 +32,7 @@ Route::get('get-batchs/{medicineId}', [BatchMedicineController::class, 'getBatch
 Route::get('get-largest-unit/{medicineId}', [UnitMedicineController::class, 'getLargestUnit']);
 
 Route::get('get-all-product', [GetAllProductController::class, 'getAllProduct']);
+Route::get('/invoices/today', [GetAllProductController::class, 'getInvoicesOfTheDay']);
 
 Route::get('cut-dose-order/{medicineId}', [CutDoseOrderController::class, 'getUnits']);
 // Route::get('get-price/{medicineId}', [UnitMedicineController::class, 'getPrice']);
@@ -62,6 +63,8 @@ Route::get('/dashboard/profit', [DashboardController::class, 'getProfit'])->name
 Route::get('/dashboardtopsuppliers', [DashboardController::class, 'getTopSuppliers'])->name('dashboard.dashboardtopsuppliers');
 Route::get('/dashboardtopmedicines', [DashboardController::class, 'getTopMedicines'])->name('dashboard.dashboardtopmedicines');
 Route::get('/dashboard/store-statistics', [DashboardController::class, 'getStatistics'])->name('dashboard.store.statistics');
+
+
 
 
 
