@@ -70,16 +70,7 @@
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="name_hospital">Tên bệnh viện (<span
-                                        class="text-danger">*</span>)</label>
-                                <input type="text" class="form-control @error('name_hospital') is-invalid @enderror"
-                                    id="name_hospital" name="name_hospital"
-                                    value="{{ $cutDosePrescription->name_hospital }}">
-                                @error('name_hospital')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
+                    
                             <div class="mb-3">
                                 <label class="form-label" for="name_doctor">Tên bác sĩ (<span
                                         class="text-danger">*</span>)</label>
@@ -88,24 +79,7 @@
                                 @error('name_doctor')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="age">Tuổi (<span class="text-danger">*</span>)</label>
-                                <input type="number" class="form-control" id="age" name="age"
-                                    value="{{ $cutDosePrescription->age }}">
-                                @error('age')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="phone_doctor">Số điện thoại (<span
-                                        class="text-danger">*</span>)</label>
-                                <input type="number" class="form-control @error('phone_doctor') is-invalid @enderror"
-                                    id="phone_doctor" name="phone_doctor" value="{{ $cutDosePrescription->phone_doctor }}">
-                                @error('phone_doctor')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            </div>     
                         </div>
                     </div>
                 </div>
@@ -122,7 +96,7 @@
                                     <input type="hidden" name="medicines[{{ $index }}][id]"
                                         value="{{ $item->id }}">
                                     <div class="row mb-3 medicine-row" id="medicine-{{ $item->id }}">
-                                        <div class="col-md-3">
+                                        <div class="col-4">
                                             <label for="medicine_id" class="form-label">Thuốc</label>
                                             <select name="medicines[{{ $index }}][medicine_id]"
                                                 class="form-select select2">
@@ -136,33 +110,14 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <label for="batch_id" class="form-label">Lô</label>
-                                            <select name="medicines[{{ $index }}][batch_id]"
-                                                class="form-select select2">
-                                                <option value="">Chọn lô</option>
-                                                @foreach ($batchs as $id => $created_at)
-                                                    <option value="{{ $id }}"
-                                                        @if ($item->batch_id == $id) selected @endif>
-                                                        Lô ({{ $created_at->format("d/m/Y H:i:s") }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label for="quantity" class="form-label">Số lượng</label>
+                                        <div class="col-3">
+                                            <label for="quantity" class="form-label" id="unitLabel-0">Số lượng</label>
                                             <input type="number" name="medicines[{{ $index }}][quantity]"
                                                 class="form-control" value="{{ $item->quantity }}">
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <label for="current_price" class="form-label">Giá</label>
-                                            <input type="number" name="medicines[{{ $index }}][current_price]"
-                                                class="form-control" value="{{ $item->current_price }}">
-                                        </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-4">
                                             <label for="dosage" class="form-label">Liều lượng</label>
                                             <input type="text" name="medicines[{{ $index }}][dosage]"
                                                 class="form-control" value="{{ $item->dosage }}">
@@ -187,18 +142,19 @@
                             </div>
                         </div>
 
+                        <div class="text-end mb-3 px-4">
+                            <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button"
+                                    class="btn btn-primary w-sm">Quay
+                                    lại</button></a>
+                            <button type="submit" class="btn btn-success w-sm">Cập nhật</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
     </div>
 
     <!-- Nút Lưu bệnh -->
-    <div class="text-end mb-3">
-        <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button"
-                class="btn btn-primary w-sm">Quay
-                lại</button></a>
-        <button type="submit" class="btn btn-success w-sm">Cập nhật</button>
-    </div>
     </form>
     </div>
 @endsection

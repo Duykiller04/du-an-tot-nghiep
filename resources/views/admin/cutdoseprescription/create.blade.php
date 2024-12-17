@@ -49,9 +49,9 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="name">Mô tả đơn thuốc (<span
-                                        class="text-danger">*</span>)</label>
-                              <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="5">{{ old('description') }}</textarea>
+                                <label class="form-label" for="name">Mô tả đơn thuốc</label>
+                                <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
+                                    rows="5">{{ old('description') }}</textarea>
                                 @error('description')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -62,19 +62,11 @@
                                 <select name="disease_id" id="disease_id" class="form-select select2">
                                     <option value="">Chọn bệnh</option>
                                     @foreach ($diseases as $id => $name)
-                                        <option value="{{ $id }}" {{ old('disease_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                        <option value="{{ $id }}"
+                                            {{ old('disease_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
                                 @error('disease_id')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="name_hospital">Tên bệnh viện (<span
-                                        class="text-danger">*</span>)</label>
-                                <input type="text" class="form-control @error('name_hospital') is-invalid @enderror"
-                                    id="name_hospital" name="name_hospital" value="{{ old('name_hospital') }}">
-                                @error('name_hospital')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -84,23 +76,6 @@
                                 <input type="text" class="form-control @error('name_doctor') is-invalid @enderror"
                                     id="name_doctor" name="name_doctor" value="{{ Auth::user()->name }}">
                                 @error('name_doctor')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="age">Tuổi (<span class="text-danger">*</span>)</label>
-                                <input type="number" class="form-control  @error('age') is-invalid @enderror" id="age" name="age"
-                                    value="{{ old('age') }}">
-                                @error('age')
-                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="phone_doctor">Số điện thoại (<span
-                                        class="text-danger">*</span>)</label>
-                                <input type="number" class="form-control @error('phone_doctor') is-invalid @enderror"
-                                    id="phone_doctor" name="phone_doctor" value="{{ old('phone_doctor') }}">
-                                @error('phone_doctor')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -117,36 +92,28 @@
                             <!-- Thông tin chi tiết thuốc -->
                             <div id="medicine-container">
                                 <div class="row mb-3 medicine-row">
-                                    <div class="col-md-3">
+                                    <div class="col-4">
                                         <label for="medicine_id" class="form-label">Thuốc</label>
                                         <select name="medicines[0][medicine_id]" class="form-select select2">
                                             <option value="">Chọn thuốc</option>
                                             @foreach ($medicines as $id => $name)
-                                                <option value="{{ $id }}" {{ old('medicines.0.medicine_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                                <option value="{{ $id }}"
+                                                    {{ old('medicines.0.medicine_id') == $id ? 'selected' : '' }}>
+                                                    {{ $name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-md-2">
-                                        <label for="batch_id" class="form-label">Chọn lô</label>
-                                        <select name="medicines[0][batch_id]" class="form-select select2">
-                                            <option value="">Chọn lô</option>
-                                        </select>
+                                    <div class="col-3">
+                                        <label for="quantity" class="form-label" id="unitLabel-0">Số lượng</label>
+                                        <input type="number" name="medicines[0][quantity]"
+                                            value="{{ old('medicines.0.quantity') ?? 0 }}" class="form-control">
                                     </div>
 
-                                    <div class="col-md-2">
-                                        <label for="quantity" class="form-label">Số lượng</label>
-                                        <input type="number" name="medicines[0][quantity]" value="{{ old('medicines.0.quantity') ?? 0 }}" class="form-control">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <label for="current_price" class="form-label">Giá</label>
-                                        <input type="number" name="medicines[0][current_price]" value="{{ old('medicines.0.current_price') ?? 0}}" class="form-control">
-                                    </div>
-
-                                    <div class="col-md-2">
+                                    <div class="col-4">
                                         <label for="dosage" class="form-label">Liều lượng</label>
-                                        <input type="text" name="medicines[0][dosage]" value="{{ old('medicines.0.dosage') }}" class="form-control">
+                                        <input type="text" name="medicines[0][dosage]"
+                                            value="{{ old('medicines.0.dosage') }}" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -160,16 +127,17 @@
                         </div>
                         <!-- Nút Lưu bệnh -->
                         <div class="text-end mb-3 me-2">
-                            <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button" class="btn btn-primary w-sm">Quay
+                            <a href="{{ route('admin.cutDosePrescriptions.index') }}"><button type="button"
+                                    class="btn btn-primary w-sm">Quay
                                     lại</button></a>
                             <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
                         </div>
                     </div>
                 </div>
             </div>
-    </div>
-    
-    </form>
+         </div>
+
+        </form>
     </div>
 @endsection
 
@@ -192,7 +160,6 @@
     <script src="{{ asset('library/cut-dose-prescriptions.js') }}"></script>
     <script>
         const medicines = @json($medicines);
-        const batchs  = @json($batchs);
         const oldData = @json(old('medicines', []));
     </script>
 @endsection

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\API\CutDoseOrderController;
 use App\Http\Controllers\Api\GetAllProductController;
+use App\Http\Controllers\API\GetMedicineDetail;
 use App\Http\Controllers\API\UnitMedicineController;
 use App\Http\Controllers\API\PrescriptionsController;
 use App\Http\Controllers\API\Unitcontroller;
@@ -27,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('get-units/{medicineId}', [UnitMedicineController::class, 'getUnits']);
-Route::get('get-batchs/{medicineId}', [BatchMedicineController::class, 'getBatchs']);
+Route::get('get-medicine-detail/{medicineId}', [GetMedicineDetail::class, 'getMedicineDetail']);
 
 Route::get('get-largest-unit/{medicineId}', [UnitMedicineController::class, 'getLargestUnit']);
 
