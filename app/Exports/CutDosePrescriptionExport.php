@@ -15,24 +15,22 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize, WithTitle
 {
     protected $title;
-
     // Constructor nhận tên sheet
     public function __construct($title)
     {
         $this->title = $title;
     }
-    // Lấy toàn bộ dữ liệu từ bảng Users
     public function collection()
     {
-
         return CutDosePrescription::with('cutDosePrescriptionDetails')->get();
     }
-
     // Tiêu đề bảng
     public function headings(): array
     {
         return [
             'STT',
+            'Tên đơn thuốc',
+            'Miêu tả Bệnh',
             'Tênh bệnh mắc phải',
             'Tên bệnh viên',
             'Tên bác sĩ',
@@ -47,7 +45,6 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
             'Liều lượng',
         ];
     }
-
     // Ánh xạ dữ liệu của từng hàng
     public function map($CutDosePrescription): array
     {
@@ -57,7 +54,9 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
         // Lặp qua từng chi tiết đơn thuốc (prescriptionDetails)
         foreach ($CutDosePrescription->cutDosePrescriptionDetails as $detail) {
             $data[] = [
-                $index++,                             
+                $index++,   
+                $CutDosePrescription->name,        
+                $CutDosePrescription->description,                             
                 $CutDosePrescription->disease->disease_name,
                 $CutDosePrescription->name_hospital,
                 $CutDosePrescription->name_doctor,
@@ -75,7 +74,6 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
 
         return $data;
     }
-
     // Định dạng các cột trong bảng
     public function styles($sheet)
     {
@@ -87,7 +85,6 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
         // Áp dụng căn giữa dọc cho toàn bộ dữ liệu từ hàng thứ 2 trở đi
         $sheet->getStyle('A2:' . chr(64 + $columnsCount) . (CutDosePrescription::count() + 1))->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
     }
-
     public function title(): string
     {
         return $this->title;

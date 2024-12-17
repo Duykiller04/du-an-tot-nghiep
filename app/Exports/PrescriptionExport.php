@@ -35,10 +35,12 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
     {
         return [
             'STT',
+            'Người bán',
             'Tổng cộng',
-            'Tuổi',
-            'Loại bán',
             'Tên khách hàng',
+            'Ghi chú',
+            'Liều lượng',
+            'Tuổi',
             'Số điện thoại',
             'Địa chỉ',
             'Email',
@@ -46,12 +48,12 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
             'Giới tính',
             'Trạng thái',
             'Id ca làm việc',
-            'ID thuốc',
+            'Id thuốc chi tiết ',
             'ID đơn vị',
-            'ID đơn thuốc',
             'Số lượng',
             'Giá hiện tại',
-            'Liều lượng',
+            'Lô thuốc',
+           
         ];
     }
 
@@ -64,10 +66,12 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
         foreach ($Prescription->prescriptionDetails as $detail) {
             $data[] = [
                 $index++,                               // STT
-                $Prescription->total_price,                  // Tổng tiền
-                $Prescription->age,                    // Tuổi
-                $Prescription->type_sell,              // Loại bán
+                $Prescription->seller,                 // người bán
+                $Prescription->total_price,            // Tổng tiền
                 $Prescription->customer_name,          // Tên khách hàng
+                $Prescription->note,                   //Ghi chú
+                $Prescription->dosage,                 // Liều lượng
+                $Prescription->age,                    // Tuổi
                 $Prescription->phone,                  // Số điện thoại
                 $Prescription->address,                // Địa chỉ
                 $Prescription->email,                  // Email
@@ -75,12 +79,11 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
                 $Prescription->gender == 0 ? 'Nam' : 'Nữ',   // Giới tính (sửa ở đây)
                 $Prescription->status,                 // Trạng thái
                 $Prescription->shift_id,               // ID ca làm việc
-                optional($detail->medicine)->name,     // Tên thuốc (nếu có quan hệ medicine)
-                optional($detail->unit)->name,         // Tên đơn vị (nếu có quan hệ unit)
                 $detail->prescription_id,              // ID đơn thuốc trong chi tiết
+                optional($detail->unit)->name,         // Tên đơn vị (nếu có quan hệ unit)
                 $detail->quantity,                     // Số lượng
                 $detail->current_price,                // Giá hiện tại
-                $detail->dosage,                       // Liều lượng
+                $detail->batch_id,                // Giá hiện tại
             ];
         }
 
