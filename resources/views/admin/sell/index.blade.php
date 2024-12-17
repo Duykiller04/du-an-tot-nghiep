@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('/theme/client/assets/css/custom.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -53,15 +54,15 @@
                 <div class="row mb-3">
                     <!-- Thanh tìm kiếm -->
                     <div class="col-md-4">
-                        <input type="text" id="search" class="form-control" placeholder="Tìm kiếm sản phẩm...">
+                        <input type="text" id="search1" class="form-control" placeholder="Tìm kiếm sản phẩm...">
                     </div>
                     <!-- Lọc danh mục -->
                     <div class="col-md-2">
-                        <select id="category-filter" class="form-select">
+                        <select id="category-filter1" class="form-select">
                             <option value="">Tất cả danh mục</option>
-                            <option value="Thuốc bổ">Thuốc bổ</option>
-                            <option value="Kháng sinh">Kháng sinh</option>
-                            <option value="Vitamin">Vitamin</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->name }}">{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -81,6 +82,17 @@
                         <form id="create-disease-form" method="POST" action="{{ route('admin.prescriptions.store') }}"
                             class="form">
                             @csrf
+                            <div class="mb-3 mt-3">
+                                <label for="cutDosePrescription" class="form-label">Đơn thuốc mẫu</label>
+                                <select name="cutDosePrescription" id="cutDosePrescription" class="form-select select2 @error('cutDosePrescription') is-invalid @enderror">
+                                    <option value="">Chọn mẫu đơn thuốc</option>
+                                    @foreach ($cutDosePrescription as $prescription)
+                                        <option value="{{ $prescription['id'] }}" {{ old('cutDosePrescription') == $prescription['id'] ? 'selected' : '' }}>
+                                            {{ $prescription['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <ul class="list-group mb-3" id="cart">
                                 <!-- Sản phẩm trong giỏ hàng sẽ được thêm ở đây -->
                             </ul>
@@ -122,16 +134,16 @@
                 <div class="row mb-3">
                     <!-- Thanh tìm kiếm -->
                     <div class="col-md-4">
-                        <input type="text" id="search" class="form-control"
+                        <input type="text" id="search2" class="form-control"
                             placeholder="Tìm kiếm sản phẩm...">
                     </div>
                     <!-- Lọc danh mục -->
                     <div class="col-md-2">
-                        <select id="category-filter" class="form-select">
+                        <select id="category-filter2" class="form-select">
                             <option value="">Tất cả danh mục</option>
-                            <option value="Thuốc bổ">Thuốc bổ</option>
-                            <option value="Kháng sinh">Kháng sinh</option>
-                            <option value="Vitamin">Vitamin</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->name }}">{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -252,6 +264,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script>
+        $('#cutDosePrescription').on('change', function() {
+            var prescriptionId = $(this).val(); // Lấy id đơn thuốc mẫu
+            var selectedPrescription = @json($cutDosePrescription);
+
+            var medicineIds = []; // Mảng để lưu id của thuốc
+
+            selectedPrescription.forEach(function(prescription) {
+                if (prescription.id == prescriptionId) {
+                    prescription.cut_dose_prescription_details.forEach(function(detail) {
+                        medicineIds.push(detail.medicine_id); // Lấy id thuốc
+                    });
+                }
+            });
+
+            // Log ra danh sách id thuốc của đơn thuốc mẫu được chọn
+            console.log(medicineIds);
+        });
+
         let products = [];
         let productsDose = [];
         $.ajax({
@@ -472,12 +502,12 @@
         }
 
         let selectedCategory = "";
-        document.getElementById("category-filter").addEventListener("change", (e) => {
+        document.getElementById("category-filter1").addEventListener("change", (e) => {
             selectedCategory = e.target.value;
-            renderProducts(document.getElementById("search").value);
+            renderProducts(document.getElementById("search1").value);
         });
 
-        document.getElementById("search").addEventListener("input", (e) => {
+        document.getElementById("search1").addEventListener("input", (e) => {
             renderProducts(e.target.value);
         });
 
@@ -497,7 +527,7 @@
 
             let filteredProducts = productsDose.filter(productsDose =>
                 productsDose.name.toLowerCase().includes(filter.toLowerCase()) &&
-                (!selectedCategory || productsDose.category === selectedCategory)
+                (!selectedDoseCategory || productsDose.category === selectedDoseCategory)
             );
             console.log(filteredProducts);
 
@@ -696,12 +726,12 @@
         }
 
         let selectedDoseCategory = "";
-        document.getElementById("category-filter").addEventListener("change", (e) => {
+        document.getElementById("category-filter2").addEventListener("change", (e) => {
             selectedDoseCategory = e.target.value;
-            renderProducts2(document.getElementById("search").value);
+            renderProducts2(document.getElementById("search2").value);
         });
 
-        document.getElementById("search").addEventListener("input", (e) => {
+        document.getElementById("search2").addEventListener("input", (e) => {
             renderProducts2(e.target.value);
         });
 

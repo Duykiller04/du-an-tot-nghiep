@@ -81,3 +81,16 @@ body {
     border-color: #28a745;
     /* Đường viền xanh lá */
 }
+
+/* Ẩn nút lên xuống trong input[type="number"] */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Ẩn nút lên xuống cho Firefox */
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}

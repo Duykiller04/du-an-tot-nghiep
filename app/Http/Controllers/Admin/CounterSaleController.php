@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\CutDosePrescription;
 use App\Models\Disease;
 use Illuminate\Http\Request;
 
@@ -13,8 +15,11 @@ class CounterSaleController extends Controller
      */
     public function index()
     {
+        $categories = Category::all();
+        $cutDosePrescription = CutDosePrescription::query()->with(['disease', 'cutDosePrescriptionDetails'])->get();
+        // dd($cutDosePrescription->toArray());
         $disisease = Disease::select('id', 'disease_name')->get();
-        return view('admin.sell.index', compact('disisease'));
+        return view('admin.sell.index', compact('disisease', 'cutDosePrescription', 'categories'));
     }
 
     /**
