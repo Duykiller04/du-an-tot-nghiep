@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card vh-100">
 
   
                 <div class="card-body">
@@ -67,7 +67,7 @@
                                                                         <img src="{{ Storage::url($item->feature_img) }}" alt="">
                                                                     </td>
                                                                     <td>{{ $dangerLevels[$item->danger_level] ?? 'Không xác định' }}</td>
-                                                                    <td>{{ $item->verify_date->format('d-m-Y') }}</td>
+                                                                    <td>{{ $item->verify_date}}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -77,6 +77,7 @@
                                             </thead>
                                         </table>
                                         <!-- end table -->
+                                        {{ $data->links() }}
                                     </div>
                                 </div>
                                 <!--end accordion-->

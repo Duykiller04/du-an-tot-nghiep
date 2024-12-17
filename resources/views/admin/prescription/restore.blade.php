@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card vh-100">
 
 
                 <div class="card-body">
@@ -80,6 +80,7 @@
                                             </thead>
                                         </table>
                                         <!-- end table -->
+                                        {{ $data->links() }}
                                     </div>
                                 </div>
                                 <!--end accordion-->
