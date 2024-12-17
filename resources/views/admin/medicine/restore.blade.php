@@ -34,6 +34,9 @@
                                             <thead class="table-light">
                                                 <form action="{{ route('admin.restore.medicines') }}" method="POST">
                                                     @csrf
+                                                    <div class="d-flex justify-content-end pb-3">
+                                                        <button type="submit" class="btn btn-primary">Khôi phục</button>
+                                                    </div>
                                                     <table id="example"
                                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
                                                         style="width:100%">
@@ -66,7 +69,6 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
-                                                    <button type="submit" class="btn btn-primary">Khôi phục</button>
                                                 </form>
                                             </thead>
                                         </table>
