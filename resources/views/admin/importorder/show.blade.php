@@ -36,7 +36,7 @@
                 <table class="table table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th class="ps-0" scope="row">Người kiểm kho:</th>
+                            <th class="ps-0" scope="row">Người nhập kho:</th>
                             <td class="text-muted">{{ $importOrder->user->name}}</td>
                         </tr>
 
@@ -46,7 +46,7 @@
                         </tr>
                         <tr>
                             <th class="ps-0" scope="row">Tổng tiền:</th>
-                            <td class="text-muted">{{ number_format($importOrder->total, 2) }}</td>
+                            <td class="text-muted">{{ number_format($importOrder->total, 2) }} VNĐ</td>
                         </tr>
                         <tr>
                             <th class="ps-0" scope="row">Ghi chú :</th>

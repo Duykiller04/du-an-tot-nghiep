@@ -238,7 +238,7 @@
                                 
                                 <div class="mb-3 col-2">
                                     <label for="expiration_date-${detailCounter}" class="form-label">Ngày hết hạn:<span class="text-danger">*</span></label>
-                                    <input type="date" id="expiration_date-${detailCounter}" name="details[${detailCounter}][expiration_date]" class="form-control">
+                                    <input type="date" id="expiration_date-${detailCounter}" name="details[${detailCounter}][expiration_date]" class="form-control" min="{{ date('Y-m-d') }}">
                                     <div class="text-danger" id="expiration-date-error-${detailCounter}"></div>
                                 </div>
 

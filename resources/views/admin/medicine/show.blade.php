@@ -114,9 +114,9 @@
                                     <td>{{ $batch->registration_number }}</td>
                                     <td>{{ $batch->origin }}</td>
                                     <td>{{ $batch->packaging_specification }}</td>
-                                    <td>{{ number_format($batch->price_import, 0, ',', '.') }} VND</td>
-                                    <td>{{ number_format($batch->price_sale, 0, ',', '.') }} VND</td>
-                                    <td>{{ number_format($batch->price_in_smallest_unit, 0, ',', '.') }} VND</td>
+                                    <td>{{ number_format($batch->price_import, 0, ',', '.') }} VNĐ</td>
+                                    <td>{{ number_format($batch->price_sale, 0, ',', '.') }} VNĐ</td>
+                                    <td>{{ number_format($batch->price_in_smallest_unit, 0, ',', '.') }} VNĐ</td>
                                     <td>{{ $batch->inventory->quantity }} ({{ $batch->inventory->unit->name }})</td>
                                     <td>{{ $medicine->temperature }}</td>
                                     <td>{{ $medicine->moisture }}</td>

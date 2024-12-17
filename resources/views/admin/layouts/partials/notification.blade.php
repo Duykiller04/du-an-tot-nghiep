@@ -4,7 +4,7 @@
             icon: "success",
             title: "Thành công",
             text: "{{ session('success') }}",
-            timer: 1500
+            timer: 2000
         });
     </script>
 @else
