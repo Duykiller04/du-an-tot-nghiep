@@ -458,7 +458,7 @@
         }
 
 
-        // Hàm cập nhật số lượng và ngày hết hạn khi người dùng thay đổi lô
+       
         function updateQuantityOnLotChange(itemId, selectElement) {
             let selectedOption = selectElement.selectedOptions[0];
             let newQuantity = selectedOption.getAttribute('data-quantity');
@@ -466,33 +466,54 @@
             let expirationDate = selectedOption.getAttribute('data-expiration-date');
 
             let cartItem = cart.find(item => item.id === itemId);
-            if (cartItem) {
-                // Update the cart item's details
-                cartItem.price = newPrice;
-                cartItem.expiration_date = expirationDate;
-
-                // Update the selected batch stock
-                let quantityElement = selectElement.closest('.d-flex').querySelector('small');
-                quantityElement.innerText = `(Tồn: ${newQuantity})`;
-
-                // Update the displayed price and expiration date
-                document.getElementById(`price-${itemId}`).innerText = newPrice.toLocaleString() + "₫";
-                document.getElementById(`expiration-date-${itemId}`).innerText = `(HSD: ${expirationDate})`;
-
-                // Re-render the cart to recalculate totals
-                renderCart();
+            if (!cartItem) {
+                console.error(`Không tìm thấy sản phẩm với ID: ${itemId}`);
+                return;
             }
+
+            // Update the cart item's details
+            cartItem.price = newPrice;
+            cartItem.expiration_date = expirationDate;
+
+            // Update the selected batch stock
+            let container = selectElement.closest('.d-flex');
+            if (container) {
+                let quantityElement = container.querySelector('small');
+                if (quantityElement) {
+                    quantityElement.innerText = `(Tồn: ${newQuantity})`;
+                }
+            }
+
+            // Update the displayed price and expiration date
+            let priceElement = document.getElementById(`price-${itemId}`);
+            if (priceElement) {
+                priceElement.innerText = newPrice.toLocaleString() + "₫";
+            }
+
+            let expirationElement = document.getElementById(`expiration-date-${itemId}`);
+            if (expirationElement) {
+                expirationElement.innerText = `(HSD: ${expirationDate})`;
+            }
+
+            // Re-render the cart to recalculate totals
+            renderCart();
         }
 
         function updateQuantity(itemId, price, quantity) {
-            if (quantity < 1) {
-                alert("Số lượng không thể nhỏ hơn 1.");
-                quantity = 1;
-            }
-
             let cartItem = cart.find(item => item.id === itemId && item.price === price);
             if (cartItem) {
-                cartItem.quantity = parseInt(quantity);
+                // Lấy số tồn kho của lô hàng hiện tại
+                let stock = cartItem.batches.find(batch => batch.price_in_smallest_unit === price)?.quantity || 0;
+
+                if (quantity < 1) {
+                    alert("Số lượng không thể nhỏ hơn 1.");
+                    cartItem.quantity = 1;
+                } else if (quantity > stock) {
+                    alert("Số lượng không được vượt quá tồn kho!");
+                    cartItem.quantity = stock;
+                } else {
+                    cartItem.quantity = parseInt(quantity);
+                }
                 renderCart();
             }
         }
@@ -548,14 +569,19 @@
 
 
         function increaseQuantity(itemId, price) {
-            // Tìm item trong giỏ hàng dựa trên id sản phẩm và price của lô hàng
             let cartItem = cart.find(item => item.id === itemId && item.price === price);
             if (cartItem) {
-                cartItem.quantity++;
+                // Lấy số tồn kho của lô hàng hiện tại
+                let stock = cartItem.batches.find(batch => batch.price_in_smallest_unit === price)?.quantity || 0;
+
+                if (cartItem.quantity < stock) {
+                    cartItem.quantity++;
+                } else {
+                    alert("Số lượng không được vượt quá tồn kho!");
+                }
                 renderCart();
             }
         }
-
 
         function decreaseQuantity(itemId, price) {
             // Tìm item trong giỏ hàng dựa trên id sản phẩm và price của lô hàng
@@ -670,7 +696,7 @@
                         <div class="d-flex align-items-center">
                              <select class="form-select form-select-sm mt-2 lot-select me-2" 
                                     data-item-id="${item.id}"
-                                    onchange="updateQuantityOnLotChange(${item.id}, this)">
+                                    onchange="updateQuantityDoseOnLotChange(${item.id}, this)">
                                 ${batchOptions}
                             </select>
                         </div>
@@ -715,38 +741,60 @@
             let expirationDate = selectedOption.getAttribute('data-expiration-date');
 
             let cartItem = doseCart.find(item => item.id === itemId);
-            if (cartItem) {
-                // Update the cart item's details
-                cartItem.price = newPrice;
-                cartItem.expiration_date = expirationDate;
-
-                // Update the selected batch stock
-                let quantityElement = selectElement.closest('.d-flex').querySelector('small');
-                quantityElement.innerText = `(Tồn: ${newQuantity})`;
-
-                // Update the displayed price and expiration date
-                document.getElementById(`price-${itemId}`).innerText = newPrice.toLocaleString() + "₫";
-                document.getElementById(`expiration-date-${itemId}`).innerText = `(HSD: ${expirationDate})`;
-
-                // Re-render the cart to recalculate totals
-                renderDoseCart();
+            if (!cartItem) {
+                console.error(`Không tìm thấy sản phẩm với ID: ${itemId}`);
+                return;
             }
-        }
 
+            // Update the cart item's details
+            cartItem.price = newPrice;
+            cartItem.expiration_date = expirationDate;
+
+            // Update the selected batch stock
+            let container = selectElement.closest('.d-flex');
+            if (container) {
+                let quantityElement = container.querySelector('small');
+                if (quantityElement) {
+                    quantityElement.innerText = `(Tồn: ${newQuantity})`;
+                }
+            }
+
+            // Update the displayed price and expiration date
+            let priceElement = document.getElementById(`price-${itemId}`);
+            if (priceElement) {
+                priceElement.innerText = newPrice.toLocaleString() + "₫";
+            }
+
+            let expirationElement = document.getElementById(`expiration-date-${itemId}`);
+            if (expirationElement) {
+                expirationElement.innerText = `(HSD: ${expirationDate})`;
+            }
+
+            // Re-render the cart to recalculate totals
+            renderDoseCart();
+        }
+        
        
         function updateDoseQuantity(itemId, price, quantity) {
-            if (quantity < 1) {
-                alert("Số lượng không thể nhỏ hơn 1.");
-                quantity = 1;
-            }
-
+            
             let cartItem = doseCart.find(item => item.id === itemId && item.price === price);
             if (cartItem) {
-                cartItem.quantity = parseInt(quantity);
+                // Lấy số tồn kho của lô hàng hiện tại
+                let stock = cartItem.batches.find(batch => batch.price_in_smallest_unit === price)?.quantity || 0;
+
+                if (quantity < 1) {
+                    alert("Số lượng không thể nhỏ hơn 1.");
+                    cartItem.quantity = 1;
+                } else if (quantity > stock) {
+                    alert("Số lượng không được vượt quá tồn kho!");
+                    cartItem.quantity = stock;
+                } else {
+                    cartItem.quantity = parseInt(quantity);
+                }
                 renderDoseCart();
             }
         }
-
+        
         function updateDoseTotalAmount() {
             // Giả sử mỗi item trong giỏ hàng có các thuộc tính 'price' (giá) và 'quantity' (số lượng)
             let totalAmount = 0;
@@ -790,7 +838,13 @@
         function increaseDoseQuantity(itemId, price) {
             let cartItem = doseCart.find(item => item.id === itemId && item.price === price);
             if (cartItem) {
-                cartItem.quantity++;
+                // Lấy số tồn kho của lô hàng hiện tại
+                let stock = cartItem.batches.find(batch => batch.price_in_smallest_unit === price)?.quantity || 0;
+                if (cartItem.quantity < stock) {
+                    cartItem.quantity++;
+                } else {
+                    alert("Số lượng không được vượt quá tồn kho!");
+                }
                 renderDoseCart();
             }
         }
