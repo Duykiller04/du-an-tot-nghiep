@@ -262,7 +262,7 @@
                             <th>Tên khách hàng</th>
                             <th>Tổng tiền</th>
                             <th>Thời gian tạo</th>
-                            <th>loại đơn thuốc</th>
+                            <th>Loại đơn thuốc</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -276,23 +276,66 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script>
-        $('#cutDosePrescription').on('change', function() {
-            var prescriptionId = $(this).val(); // Lấy id đơn thuốc mẫu
+        //Sửa chữa
+        $('#cutDosePrescription').on('change', function () {
+            var prescriptionId = $(this).val(); // Lấy ID đơn thuốc mẫu được chọn
             var selectedPrescription = @json($cutDosePrescription);
 
-            var medicineIds = []; // Mảng để lưu id của thuốc
-
-            selectedPrescription.forEach(function(prescription) {
+            var medicineIds = []; // Mảng để lưu ID của thuốc trong đơn thuốc mẫu
+            
+            // Lấy danh sách `medicineIds` từ đơn thuốc mẫu
+            selectedPrescription.forEach(function (prescription) {
                 if (prescription.id == prescriptionId) {
-                    prescription.cut_dose_prescription_details.forEach(function(detail) {
-                        medicineIds.push(detail.medicine_id); // Lấy id thuốc
+                    prescription.cut_dose_prescription_details.forEach(function (detail) {
+                        medicineIds.push(detail.medicine_id); // Lưu ID thuốc
                     });
                 }
             });
 
-            // Log ra danh sách id thuốc của đơn thuốc mẫu được chọn
-            console.log(medicineIds);
+            // Clear giỏ hàng và thêm lại các thuốc từ đơn thuốc mẫu
+            updateCartWithSelectedPrescription(medicineIds);
         });
+
+        function updateCartWithSelectedPrescription(medicineIds) {
+            // 1. Tạo một giỏ hàng mới (newCart)
+            let newCart = [];
+
+            medicineIds.forEach(medicineId => {
+                let product = products.find(product => product.id === medicineId);
+
+                if (!product) {
+                    console.warn(`Không tìm thấy thông tin thuốc với ID: ${medicineId}`);
+                    return;
+                }
+
+                // Kiểm tra xem thuốc có chứa lô hàng (batches)
+                if (!product.batches || product.batches.length === 0) {
+                    console.error(`Thuốc với ID ${medicineId} không có thông tin lô.`);
+                    return;
+                }
+
+                // Chỉ lấy lô đầu tiên trong danh sách `batches`
+                let firstBatch = product.batches[0];
+                
+
+                // Thêm thuốc vào giỏ hàng mới với lô đầu tiên
+                newCart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: firstBatch.price_in_smallest_unit,
+                    quantity: 1, // Số lượng mặc định là 1
+                    expiration_date: firstBatch.expiration_date,
+                    batches: product.batches, // Thêm thông tin tất cả lô (nếu cần sau này xử lý)
+                    donvi: product.unit_smallest
+                });
+            });
+
+            // 2. Gán giỏ hàng mới vào biến `cart`
+            cart = newCart;
+
+            // 3. Cập nhật lại giao diện
+            renderCart();
+        }
 
         let products = [];
         let productsDose = [];
@@ -326,8 +369,10 @@
                     <div class="card product-card mb-3" data-id="${product.id}">
                         <img src="${product.img}" class="card-img-top" alt="${product.name}">
                         <div class="card-body text-center">
-                            <h6>${product.name}(${product.quantity})</h6>
-                            <p >${product.price.toLocaleString()}₫ <small class="text-muted">${product.category}</small></p>
+                            <h6>${product.name}</h6>
+                            <small class="text-muted">${product.category}</small>
+                            <p class="text-success">(Tồn: ${product.quantity})</p>
+                            <h5 class="text-danger">${product.price.toLocaleString()}₫ </h5>
                         </div>
                     </div>
                 `;
@@ -340,7 +385,7 @@
             let cartElement = document.getElementById("cart");
             cartElement.innerHTML = "";
             let totalPrice = 0;
-
+            
             cart.forEach(item => {
                 let cartItem = document.createElement("li");
                 cartItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center",
@@ -361,24 +406,26 @@
 
                 // Find the selected batch's quantity and expiration date
                 let selectedBatch = item.batches.find(batch => batch.price_in_smallest_unit === item.price);
-
+                
                 cartItem.innerHTML = `
                     <div>
-                        <span>${item.name}</span>
-                        <input type="hidden" name="unit_id[${selectedBatch ? selectedBatch.id : ''}]" value="${item.unit_smallest}">
-                        <br>
-                        <small id="price-${item.id}">${item.price.toLocaleString()}₫</small>
+                        <h6>${item.name}</h6>
+                        <input type="hidden" name="unit_id[${selectedBatch ? selectedBatch.id : ''}]" value="${item.unit_smallest || cart[0].donvi}">
+                        
+                        <div class="d-flex flex-column">
+                            <h5 class="m-0 p-0 text-danger" id="price-${item.id}">${item.price.toLocaleString()}₫</h5>
+                            <small class="text-success mt-2 mb-2">(Tồn: ${selectedBatch ? selectedBatch.quantity : 0})</small>
+                            <small id="expiration-date-${item.id}">
+                                (HSD: ${selectedBatch ? selectedBatch.expiration_date : "N/A"})
+                            </small>
+                        </div>
+
                         <div class="d-flex align-items-center">
                             <select class="form-select form-select-sm mt-2 lot-select me-2" 
                                     data-item-id="${item.id}"
                                     onchange="updateQuantityOnLotChange(${item.id}, this)">
                                 ${batchOptions}
                             </select>
-
-                            <small class="me-2">(Tồn: ${selectedBatch ? selectedBatch.quantity : 0})</small>
-                            <small class="me-2" id="expiration-date-${item.id}">
-                                (HSD: ${selectedBatch ? selectedBatch.expiration_date : "N/A"})
-                            </small>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
@@ -569,8 +616,10 @@
                     <div class="card product-card mb-3" data-id="${productsDose.id}">
                         <img src="${productsDose.img}" class="card-img-top" alt="${productsDose.name}">
                         <div class="card-body text-center">
-                            <h6>${productsDose.name}(${productsDose.quantity})</h6>
-                            <p >${productsDose.price.toLocaleString()}₫ <small class="text-muted">${productsDose.category}</small></p>
+                            <h6>${productsDose.name}</h6>
+                            <small class="text-muted">${productsDose.category}</small>
+                            <p class="text-success">(Tồn: ${productsDose.quantity})</p>
+                            <h5 class="text-danger">${productsDose.price.toLocaleString()}₫</h5>
                         </div>
                     </div>
                 `;
@@ -607,20 +656,23 @@
 
                 cartItem.innerHTML = `
                     <div>
-                        <span>${item.name}</span>
+                        <h6>${item.name}</h6>
                         <input type="hidden" name="unit_id[${selectedBatch ? selectedBatch.id : ''}]" value="${item.unit_smallest}">
-                        <br>
-                        <small id="price-${item.id}">${item.price.toLocaleString()}₫</small>
+
+                        <div class="d-flex flex-column">
+                            <h5 class="m-0 p-0 text-danger" id="price-${item.id}">${item.price.toLocaleString()}₫</h5>
+                            <small class="mt-2 mb-2 text-success">(Tồn: ${selectedBatch ? selectedBatch.quantity : 0})</small>
+                            <small id="expiration-date-${item.id}">
+                                (HSD: ${selectedBatch ? selectedBatch.expiration_date : "N/A"})
+                            </small>
+                        </div>
+
                         <div class="d-flex align-items-center">
                              <select class="form-select form-select-sm mt-2 lot-select me-2" 
                                     data-item-id="${item.id}"
                                     onchange="updateQuantityOnLotChange(${item.id}, this)">
                                 ${batchOptions}
                             </select>
-                            <small class="me-2">(Tồn: ${selectedBatch ? selectedBatch.quantity : 0})</small>
-                            <small class="me-2" id="expiration-date-${item.id}">
-                                (HSD: ${selectedBatch ? selectedBatch.expiration_date : "N/A"})
-                            </small>
                         </div>
                     </div>
                     
@@ -778,7 +830,7 @@
         document.addEventListener('DOMContentLoaded', function () {
         // Hàm gọi API và render dữ liệu
         function fetchInvoices() {
-            fetch('http://127.0.0.1:8000/api/invoices/today', {
+            fetch('/api/invoices/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
