@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
 use App\Models\Disease;
+use App\Models\Inventory;
 use App\Models\Medicine;
 use App\Models\Shift;
 use App\Models\Unit;
@@ -91,8 +92,9 @@ class CutDoseOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CutDoseOrderRequest $request)
+    public function store(Request $request)
     {
+        // dd($request->all());
         DB::beginTransaction();
 
         try {
@@ -102,13 +104,13 @@ class CutDoseOrderController extends Controller
             // Nếu khách hàng chưa tồn tại, tạo mới
             if (!$customer) {
                 $customer = Customer::create([
-                    'name' => $request->input('customer_name'),
-                    'age' => $request->input('age'),
-                    'phone' => $request->input('phone'),
-                    'address' => $request->input('address'),
-                    'weight' => $request->input('weight'),
-                    'gender' => $request->input('gender'),
-                    'email' => $request->input('email') ?? null,
+                    'name' => $request->customer_name,
+                    'age' => $request->age,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'weight' => $request->weight,
+                    'gender' => $request->gender,
+                    'email' => $request->email ?? null,
                 ]);
             }
 
@@ -118,22 +120,24 @@ class CutDoseOrderController extends Controller
 
             // Lưu thông tin đơn đặt hàng
             $cutDoseOrder = CutDoseOrder::create([
-                'disease_id' => $request->input('disease_id'),  // Đảm bảo rằng trường này không phải là null
-                'weight' => $request->input('weight'),
-                'age' => $request->input('age'),
-                'gender' => $request->input('gender'),
+                'disease_id' => $request->disisease,  // Đảm bảo rằng trường này không phải là null
+                'weight' => $request->weight,
+                'age' => $request->age,
+                'gender' => $request->gender,
                 'customer_id' => $customerId,
-                'customer_name' => $request->input('customer_name'),
-                'phone' => $request->input('phone'),
-                'address' => $request->input('address'),
+                'customer_name' => $request->customer_name,
+                'phone' => $request->phone,
+                'address' => $request->address,
                 'shift_id' => $shiftId,
-                'total_price' => $request->input('total_price'),
+                'total_price' => $request->total_price,
+                'dosage' => $request->dosage,
                 'seller' => Auth::user()->name,
             ]);
+
             // Cập nhật doanh thu cho ca làm việc
             if ($shiftId) {
                 $shift = Shift::find($shiftId);
-                $shift->revenue_summary += $request->input('total_price');
+                $shift->revenue_summary += $request->total_price;
                 $shift->save();
                 broadcast(new RevenueUpdated($shiftId, $shift->revenue_summary))->toOthers();
                 // event(new TransactionCreated($cutDoseOrder));
@@ -141,13 +145,17 @@ class CutDoseOrderController extends Controller
 
 
             // Lưu thông tin chi tiết đơn đặt hàng
-            foreach ($request->input('medicines') as $medicine) {
+            foreach ($request->unit_id as $key => $value) {
                 CutDoseOrderDetails::create([
-                    'cut_dose_order_id' => $cutDoseOrder->id,
-                    'medicine_id' => $medicine['medicine_id'],
-                    'unit_id' => $medicine['unit_id'],
-                    'quantity' => $medicine['quantity'],
-                    'dosage' => $medicine['dosage'],
+                    'cut_dose_order_id' => $cutDoseOrder->id,   
+                    'batch_id' => $key,
+                    'unit_id' => $value,
+                    'quantity' => $request->quantity[$key],
+                ]);
+
+                $inventory = Inventory::where('batch_id', $key)->first();
+                $inventory->update([
+                    'quantity' => $inventory->quantity - $request->quantity[$key],
                 ]);
             }
 
@@ -155,7 +163,7 @@ class CutDoseOrderController extends Controller
             DB::commit();
 
             // Trả về view thành công
-            return redirect()->route('admin.cutDoseOrders.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.sell.index')->with('success', 'Tạo đơn thuốc thành công');
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
@@ -270,7 +278,7 @@ class CutDoseOrderController extends Controller
 
     public function getRestore()
     {
-        $data = CutDoseOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = CutDoseOrder::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.cutdoseorder.restore', compact('data'));
     }
     public function restore(Request $request)

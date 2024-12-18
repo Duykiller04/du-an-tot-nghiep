@@ -34,19 +34,15 @@ class MedicineExport implements FromCollection, WithHeadings, WithMapping, WithS
         return [
             'STT',
             'Tên danh mục',
-            'Kho lưu trữ',
             'Mã thuốc',
             'Tên thuốc',
-            'Giá nhập',
-            'Giá bán',
-            'Quy cách đóng gói',
-            'Số đăng ký',
-            'Xuất xứ',
+            'Hoạt chất',
+            'Hàm lượng',
+            'Liều dùng',
+            'Đường dùng (đường uống, đường tiêm)',
             'Loại',
-            'Hạn sử dụng',
             'Nhiệt độ',
             'Độ ẩm',
-            'Nhà cung cấp',
         ];
     }
 
@@ -56,19 +52,15 @@ class MedicineExport implements FromCollection, WithHeadings, WithMapping, WithS
         return [
             $medicine->id,
             $medicine->category->name,
-            $medicine->storage->name,
             $medicine->medicine_code,
             $medicine->name,
-            $medicine->price_import,
-            $medicine->price_sale,
-            $medicine->packaging_specification,
-            $medicine->registration_number,
-            $medicine->origin,
-            $medicine->type_product,
-            $medicine->expiration_date,
+            $medicine->active_ingredient,
+            $medicine->concentration,
+            $medicine->dosage,
+            $medicine->administration_route,
+            $medicine->type_product == 0 ? 'Thuốc' : 'dụng cu',
             $medicine->temperature,
             $medicine->moisture,
-            $medicine->suppliers->pluck('name')->implode(', '), // Nhà cung cấp
         ];
     }
 

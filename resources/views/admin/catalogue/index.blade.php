@@ -206,7 +206,6 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th></th> <!-- Cột để click mở rộng -->
                                                 <th>STT</th>
                                                 <th>Tên danh mục</th>
                                                 <th>Ngày tạo</th>
@@ -302,13 +301,7 @@
                         d.endDate = $('#end-date').val();
                     }
                 }, 
-                columns: [{
-                        className: 'details-control',
-                        orderable: false,
-                        data: null,
-                        defaultContent: '<i class="bx bx-sort-down"></i>',
-                        width: '20px'
-                    },
+                columns: [
                     {
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -327,9 +320,6 @@
                         orderable: false,
                         searchable: false
                     }
-                ],
-                order: [
-                    [1, 'desc']
                 ],
                 language: {
                     "sEmptyTable": "Không có dữ liệu trong bảng",
@@ -358,55 +348,7 @@
                     table.draw();
                 });
 
-            $('#example tbody').on('click', 'td.details-control', function() {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    var rowData = row.data();
-                    var categoryId = rowData.id;
-
-                    $.ajax({
-                        url: '{{ route('admin.catalogues.getChildren') }}',
-                        method: 'GET',
-                        data: {
-                            id: categoryId
-                        },
-                        success: function(children) {
-                            // Nếu children là chuỗi JSON, hãy phân tích nó
-                            if (typeof children === 'string') {
-                                children = JSON.parse(children);
-                            }
-
-                            if (children.length > 0) {
-                                var html =
-                                    '<table class="table"><tr><th>ID</th><th>Tên danh mục con</th><th>Thời gian tạo</th><th>Thời gian cập nhật</th><th>Thao tác</th></tr>';
-                                children.forEach(function(child) {
-                                    html += '<tr><td>' + child.id + '</td><td>' + child
-                                        .name + '</td><td>' + child.created_at +
-                                        '</td><td>' + child.updated_at + '</td>';
-                                    html += '<td><a href="' + child.edit_url +
-                                        '" class="btn btn-sm btn-warning">Sửa</a></td></tr>';
-                                });
-                                html += '</table>';
-                                row.child(html).show();
-                                tr.addClass('shown');
-                            } else {
-                                row.child('<div>Không có danh mục con</div>').show();
-                                tr.addClass('shown');
-                            }
-                        },
-                        error: function() {
-                            row.child('<div>Lỗi khi tải danh mục con.</div>').show();
-                            tr.addClass('shown');
-                        }
-                    });
-
-                }
-            });
+            
 
             $(document).on('click', '.btn-delete', function(e) {
                 e.preventDefault();

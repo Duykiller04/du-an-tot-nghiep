@@ -1,0 +1,96 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    background-color: white;
+    max-width: 100%;
+    min-height: 95vh;
+    max-height: 100%;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* backdrop-filter: blur(100px); Hiệu ứng làm mờ */
+    /* -webkit-backdrop-filter: blur(8px); Hỗ trợ trình duyệt Webkit */
+}
+
+.row {
+    max-height: 85vh;
+    /* Đặt chiều cao tối đa cho khu vực chứa sản phẩm */
+    overflow-y: auto;
+    /* Cho phép cuộn dọc khi có quá nhiều sản phẩm */
+    scrollbar-width: none;
+    /* Ẩn thanh cuộn trong Firefox */
+    -ms-overflow-style: none;
+    /* Ẩn thanh cuộn trong IE/Edge */
+}
+
+.row::-webkit-scrollbar {
+    display: none;
+    /* Ẩn thanh cuộn trong Chrome, Edge và Safari */
+}
+
+.product-card {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.cart-item {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.total {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.detail {
+    font-size: 1rem;
+    color: #495057;
+}
+
+.custom-tabs .nav-link {
+    background-color: #ffffff;
+    /* Màu nền trắng */
+    color: #000000;
+    /* Màu chữ đen */
+    border: 1px solid #ddd;
+    /* Đường viền */
+    transition: all 0.3s ease;
+    /* Hiệu ứng mượt */
+}
+
+/* Tabs khi hover */
+.custom-tabs .nav-link:hover {
+    background-color: #f0f0f0;
+    /* Màu nền khi hover */
+    color: #000;
+    /* Màu chữ đen */
+}
+
+/* Tabs khi active */
+.custom-tabs .nav-link.active {
+    background-color: #28a745;
+    /* Màu xanh lá cây */
+    color: #fff;
+    /* Màu chữ trắng */
+    border-color: #28a745;
+    /* Đường viền xanh lá */
+}
+
+/* Ẩn nút lên xuống trong input[type="number"] */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Ẩn nút lên xuống cho Firefox */
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}

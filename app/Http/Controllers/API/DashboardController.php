@@ -120,12 +120,12 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->orderByDesc('created_at')
             ->limit(value: 5)
-            ->get()->toArray();         
-            $presscriptions = Prescription::where('created_at', '>=', now()->subDays(30))
-                ->orderByDesc('created_at')
-                ->limit(value: 5)
-                ->get()->toArray();
-                
+            ->get()->toArray();
+        $presscriptions = Prescription::where('created_at', '>=', now()->subDays(30))
+            ->orderByDesc('created_at')
+            ->limit(value: 5)
+            ->get()->toArray();
+
         // Thêm trường 'prescription_name' cho đơn thuốc cắt liều
         foreach ($cutDoseOrders as &$cutDoseOrder) {
             $cutDoseOrder['prescription_name'] = 'Đơn thuốc cắt liều';
@@ -135,7 +135,7 @@ class DashboardController extends Controller
         foreach ($presscriptions as &$order) {
             $order['prescription_name'] = 'Đơn thuốc thông thường';
         }
-        $recentOrders = array_merge($cutDoseOrders,$presscriptions);
+        $recentOrders = array_merge($cutDoseOrders, $presscriptions);
         return response()->json($recentOrders);
     }
 
@@ -146,7 +146,8 @@ class DashboardController extends Controller
         // Tổng doanh thu từ bảng Prescription
         $totalPrescription = DB::table('prescriptions')
             ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
-            ->sum('total');
+            ->sum('total_price');
+        // dd($totalPrescription); 
 
         // Tổng doanh thu từ bảng CutDoseOrder
         $totalCutDoseOrder = DB::table('cut_dose_orders')
@@ -173,65 +174,66 @@ class DashboardController extends Controller
     }
 
     public function getFilter(Request $request)
-{
-    // Lấy giá trị startDate và endDate từ request
-    $startDate = $request->input('startDate');
-    $endDate = $request->input('endDate');
+    {
+        // Lấy giá trị startDate và endDate từ request
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
 
-    // Kiểm tra và parse ngày
-    try {
-        $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
-        $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
+        // Kiểm tra và parse ngày
+        try {
+            $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
+            $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
+        }
+
+        // Lọc dữ liệu khách hàng trong khoảng thời gian
+        $totalCustomers = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
+
+        // Tổng doanh thu từ bảng Prescription
+        $totalPrescription = DB::table('prescriptions')
+            ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+            ->sum('total_price');
+        // dd($totalPrescription); 
+
+        // Tổng doanh thu từ bảng CutDoseOrder
+        $totalCutDoseOrder = DB::table('cut_dose_orders')
+            ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+            ->sum('total_price');
+
+        // Tổng doanh thu
+        $totalRevenue = $totalPrescription + $totalCutDoseOrder;
+
+        // Tính tổng giá nhập (price_import) trong khoảng thời gian
+        $totalCostPrice = DB::table('batches')
+            ->whereBetween('created_at', [$startDate, $endDate]) // Lọc theo ngày nhập
+            ->sum('price_import');
+
+        // Tính lợi nhuận
+        $profit = $totalRevenue - $totalCostPrice;
+
+        // Tính tổng số đơn thuốc bán ra
+        $totalPrescriptionOrders = DB::table('prescriptions')
+            ->whereNull('deleted_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+
+        $totalCutDoseOrders = DB::table('cut_dose_orders')
+            ->whereNull('deleted_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+
+        $totalOrders = $totalPrescriptionOrders + $totalCutDoseOrders;
+
+        // Trả về JSON
+        return response()->json([
+            'totalCustomers' => $totalCustomers,
+            'totalRevenue' => $totalRevenue,
+            'totalCostPrice' => $totalCostPrice, // Tổng giá nhập
+            'profit' => $profit, // Lợi nhuận
+            'totalOrders' => $totalOrders
+        ], 200);
     }
-
-    // Lọc dữ liệu khách hàng trong khoảng thời gian
-    $totalCustomers = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
-
-    // Tính tổng doanh thu
-    $totalPrescription = DB::table('prescriptions')
-        ->whereNull('deleted_at')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('total');
-
-    $totalCutDoseOrder = DB::table('cut_dose_orders')
-        ->whereNull('deleted_at')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('total_price');
-
-    $totalRevenue = $totalPrescription + $totalCutDoseOrder;
-
-    // Tính tổng giá nhập (price_import) trong khoảng thời gian
-    $totalCostPrice = DB::table('medicines')
-        ->whereBetween('created_at', [$startDate, $endDate]) // Lọc theo ngày nhập
-        ->sum('price_import');
-
-    // Tính lợi nhuận
-    $profit = $totalRevenue - $totalCostPrice;
-
-    // Tính tổng số đơn thuốc bán ra
-    $totalPrescriptionOrders = DB::table('prescriptions')
-        ->whereNull('deleted_at')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->count();
-
-    $totalCutDoseOrders = DB::table('cut_dose_orders')
-        ->whereNull('deleted_at')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->count();
-
-    $totalOrders = $totalPrescriptionOrders + $totalCutDoseOrders;
-
-    // Trả về JSON
-    return response()->json([
-        'totalCustomers' => $totalCustomers,
-        'totalRevenue' => $totalRevenue,
-        'totalCostPrice' => $totalCostPrice, // Tổng giá nhập
-        'profit' => $profit, // Lợi nhuận
-        'totalOrders' => $totalOrders
-    ], 200);
-}
 
 
     public function totalOrders()
@@ -247,18 +249,20 @@ class DashboardController extends Controller
     }
     public function getProfit()
     {
-        $totalCostPrice = DB::table('medicines')->sum('price_import');
+        $totalCostPrice = DB::table('batches')->sum('price_import');
+
         // dd($totalCostPrice);
-        $totalPrescriptionPrice = DB::table('prescriptions')->sum('total');
+        $totalPrescriptionPrice = DB::table('prescriptions')->sum('total_price');
+
 
         $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')->sum('total_price');
-        
+
 
         $totalRevenue = $totalPrescriptionPrice + $totalcutDoseOrdersPrice;
 
         // Tính lợi nhuận
         $profit = $totalRevenue - $totalCostPrice;
-        
+
         return response()->json([
             'total_cost_price' => $totalCostPrice,
             'total_revenue' => $totalRevenue,
@@ -300,127 +304,115 @@ class DashboardController extends Controller
         $totalOrders = $totalCutDoseOrders + $totalPrecriptions;
         return response()->json([
             'totalRevenue' => $totalRevenue,
-            'totalOrders' =>$totalOrders,
-          ]);
+            'totalOrders' => $totalOrders,
+        ]);
     }
-
     public function getTopSuppliers(Request $request)
     {
-        // Lấy loại thống kê thời gian từ query (mặc định là 'today')
-        $type = $request->query('type', 'today');
-        $startDate = now()->startOfDay();
-        $endDate = now()->endOfDay();
-
-
-        // Xử lý thời gian dựa vào loại $type
-        switch ($type) {
-            case 'yesterday':
-                $startDate = now()->subDay()->startOfDay();
-                $endDate = now()->subDay()->endOfDay();
-                break;
-            case 'last_7_days':
-                $startDate = now()->subDays(7)->startOfDay();
-                $endDate = now()->endOfDay();
-                break;
-            case 'last_30_days':
-                $startDate = now()->subDays(30)->startOfDay();
-                $endDate = now()->endOfDay();
-                break;
-            case 'this_month':
-                $startDate = now()->startOfMonth()->startOfDay();
-                $endDate = now()->endOfMonth()->endOfDay();
-                break;
-            case 'last_month':
-                $startDate = now()->subMonth()->startOfMonth()->startOfDay();
-                $endDate = now()->subMonth()->endOfMonth()->endOfDay();
-                break;
-            case 'today':
-            default:
-                $startDate = now()->startOfDay();
-                $endDate = now()->endOfDay();
-                break;
-        }
-
-
-        // Lấy top 5 nhà cung cấp
         try {
-            $topSuppliers = DB::table('medicine_supplier')
-                ->join('suppliers', 'medicine_supplier.supplier_id', '=', 'suppliers.id')
-                ->join('medicines', 'medicine_supplier.medicine_id', '=', 'medicines.id')
-                ->leftJoin('cut_dose_order_details', 'medicines.id', '=', 'cut_dose_order_details.medicine_id')
-                ->leftJoin('cut_dose_orders', 'cut_dose_order_details.cut_dose_order_id', '=', 'cut_dose_orders.id')
-                ->leftJoin('prescription_details', 'medicines.id', '=', 'prescription_details.medicine_id')
-                ->leftJoin('prescriptions', 'prescription_details.prescription_id', '=', 'prescriptions.id')
+            // Lấy loại thống kê thời gian từ query (mặc định là 'today')
+            $type = $request->query('type', 'today');
+            $startDate = now()->startOfDay();
+            $endDate = now()->endOfDay();
+    
+            // Xử lý thời gian dựa vào loại $type
+            switch ($type) {
+                case 'yesterday':
+                    $startDate = now()->subDay()->startOfDay();
+                    $endDate = now()->subDay()->endOfDay();
+                    break;
+                case 'last_7_days':
+                    $startDate = now()->subDays(7)->startOfDay();
+                    $endDate = now()->endOfDay();
+                    break;
+                case 'last_30_days':
+                    $startDate = now()->subDays(30)->startOfDay();
+                    $endDate = now()->endOfDay();
+                    break;
+                case 'this_month':
+                    $startDate = now()->startOfMonth()->startOfDay();
+                    $endDate = now()->endOfMonth()->endOfDay();
+                    break;
+                case 'last_month':
+                    $startDate = now()->subMonth()->startOfMonth()->startOfDay();
+                    $endDate = now()->subMonth()->endOfMonth()->endOfDay();
+                    break;
+                case 'today':
+                default:
+                    $startDate = now()->startOfDay();
+                    $endDate = now()->endOfDay();
+                    break;
+            }
+    
+            // Lấy top 5 nhà cung cấp dựa trên số lượng đơn hàng từ các lô
+            $topSuppliers = DB::table('suppliers')
+                ->leftJoin('batches', 'suppliers.id', '=', 'batches.supplier_id')
+                ->leftJoin('cut_dose_order_details as c', 'batches.id', '=', 'c.batch_id')
+                ->leftJoin('prescription_details as p', 'batches.id', '=', 'p.batch_id')
                 ->select(
+                    'suppliers.id',
                     'suppliers.name as supplier_name',
                     'suppliers.created_at as join_date',
-                    DB::raw('count(distinct prescriptions.id) + count(distinct cut_dose_orders.id) as total_orders')
+                    DB::raw('MIN(batches.created_at) as first_batch_date'),
+                    DB::raw('COUNT(DISTINCT c.id) + COUNT(DISTINCT p.id) as total_orders')
                 )
-                ->whereNull('suppliers.deleted_at')
                 ->where(function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('prescriptions.created_at', [$startDate, $endDate])
-                        ->orWhereBetween('cut_dose_orders.created_at', [$startDate, $endDate]);
+                    $query->whereBetween('c.created_at', [$startDate, $endDate])
+                        ->orWhereBetween('p.created_at', [$startDate, $endDate]);
                 })
-                ->groupBy('suppliers.id')
-                ->orderBy('total_orders', 'desc')
+                ->whereNull('suppliers.deleted_at')
+                ->groupBy('suppliers.id', 'suppliers.name', 'suppliers.created_at')
+                ->orderByDesc('total_orders')
                 ->take(5)
                 ->get();
-
-
-            // Trả về JSON
+    
+            // Kiểm tra nếu không có dữ liệu
+            if ($topSuppliers->isEmpty()) {
+                if ($type === 'today' || $type === 'yesterday') {
+                    return response()->json(['error' => 'Không có dữ liệu cho ngày được chọn'], 200);
+                }
+                return response()->json(['error' => 'Không tìm thấy dữ liệu'], 200);
+            }
+    
+            // Trả về kết quả dưới dạng JSON
             return response()->json(['topSuppliers' => $topSuppliers], 200);
         } catch (\Exception $e) {
-            // Trả về lỗi nếu xảy ra vấn đề
+            // Xử lý lỗi
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
+    
     public function getTopMedicines(Request $request)
     {
-        // Lấy giá trị startDate và endDate từ request
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-
-
-        // Kiểm tra và parse ngày
         try {
-            if (!$startDate || !$endDate) {
-                $startDate = Carbon::now()->subYear()->startOfDay(); // 1 năm trước
-                $endDate = Carbon::now()->endOfDay(); // Ngày hiện tại
-            } else {
-                $startDate = Carbon::createFromFormat('d/m/Y', $startDate)->startOfDay();
-                $endDate = Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay();
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Ngày không hợp lệ.'], 400);
-        }
-
-
-        // Lấy top 5 thuốc bán chạy nhất từ các bảng liên quan
-        try {
-            $topMedicines = DB::table('medicines')
-                ->leftJoin('cut_dose_order_details', 'medicines.id', '=', 'cut_dose_order_details.medicine_id')
-                ->leftJoin('cut_dose_orders', 'cut_dose_order_details.cut_dose_order_id', '=', 'cut_dose_orders.id')
-                ->leftJoin('prescription_details', 'medicines.id', '=', 'prescription_details.medicine_id')
-                ->leftJoin('prescriptions', 'prescription_details.prescription_id', '=', 'prescriptions.id')
+            // Lấy top 5 thuốc dựa trên tổng số đơn hàng
+            $topMedicines = DB::table('medicines as m')
+                ->join('batches as b', 'm.id', '=', 'b.medicine_id') // Liên kết thuốc và lô thuốc
+                ->leftJoin('cut_dose_order_details as c', 'b.id', '=', 'c.batch_id') // Đơn hàng bán theo liều
+                ->leftJoin('prescription_details as p', 'b.id', '=', 'p.batch_id') // Đơn hàng bán theo đơn
                 ->select(
-                    'medicines.name as medicine_name',
-                    'medicines.created_at as import_date', // Sử dụng created_at làm ngày nhập thuốc
-                    DB::raw('count(distinct prescriptions.id) + count(distinct cut_dose_orders.id) as total_orders') // Tổng số đơn thuốc
+                    'm.name as medicine_name', // Tên thuốc
+                    DB::raw('MIN(b.created_at) as import_date'), // Ngày nhập thuốc sớm nhất
+                    DB::raw('MIN(m.created_at) as join_date'), // Ngày tham gia của thuốc
+                    DB::raw('COUNT(DISTINCT c.id) + COUNT(DISTINCT p.id) as total_orders') // Tổng số đơn hàng
                 )
-                ->where(function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('prescriptions.created_at', [$startDate, $endDate])
-                        ->orWhereBetween('cut_dose_orders.created_at', [$startDate, $endDate]);
-                })
-                ->groupBy('medicines.id') // Nhóm theo ID thuốc
-                ->orderBy('total_orders', 'desc')
-                ->take(5)
+                ->whereNotNull('b.id') // Chỉ lấy thuốc có lô
+                ->groupBy('m.id', 'm.name') // Nhóm theo thuốc
+                ->orderByDesc('total_orders') // Sắp xếp giảm dần theo tổng đơn hàng
+                ->limit(5) // Lấy top 5 thuốc
                 ->get();
 
 
-            // Trả về JSON
+            // Kiểm tra nếu không có dữ liệu
+            if ($topMedicines->isEmpty()) {
+                return response()->json(['error' => 'Không tìm thấy dữ liệu'], 404);
+            }
+
+
+            // Trả về kết quả dưới dạng JSON
             return response()->json(['topMedicines' => $topMedicines], 200);
         } catch (\Exception $e) {
+            // Xử lý lỗi
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }

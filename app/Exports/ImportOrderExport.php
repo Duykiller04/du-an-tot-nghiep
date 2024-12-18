@@ -33,23 +33,17 @@ class ImportOrderExport implements FromCollection, WithHeadings, WithMapping, Wi
         return [
             'STT',
             'Người nhập kho',
-            'Tên kho thuốc',
-            'Nhà cung cấp',
             'Tổng cộng',
-            'Số tiền phải trả',
-            'Còn nợ',
-            'Ngày thêm',
+            'Ngày nhập kho',
             'Ghi chú',
-            'Trạng thái',
-            'Id đơn nhập kho',
             'Đơn vị',
+            'ID chi tiết',
             'Id thuốc',
+            'Tên thuốc',
             'Ngày nhập',
             'Số lượng',
-            'Gía nhập',
+            'Giá nhập',
             'Tổng tiền',
-            'Ghi chú',
-            'Tên thuốc',
             'Hạn sử dụng',
         ];
     }
@@ -63,24 +57,18 @@ class ImportOrderExport implements FromCollection, WithHeadings, WithMapping, Wi
             $data[] = [
                 $index++,                                     // STT
                 $importorder->user->name,
-                $importorder->storage->name,
-                $importorder->supplier->name,
                 $importorder->total,
-                $importorder->price_paid,
-                $importorder->still_in_debt,
                 $importorder->date_added,
                 $importorder->note,
-                $importorder->status,
                 $detail->import_order_id,
                 $detail->unit->name,
                 $detail->medicine_id,
+                $detail->medication_name,
                 $detail->date_added,
                 $detail->quantity,
                 $detail->import_price,
                 $detail->total,
-                $detail->note,
-                $detail->medication_name,
-                $detail->expiration_date,                             // Liều lượng
+                $detail->expiration_date,                             
             ];
         }
 

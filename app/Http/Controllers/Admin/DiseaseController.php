@@ -44,7 +44,8 @@ class DiseaseController extends Controller
                 ->addColumn('image', function ($row) {
                     if ($row->feature_img) {
                         $url = Storage::url($row->feature_img);
-                        return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc" ><img src="' . asset($url) . '" width="200" height="150" alt="" /></a>';
+                        return '<img src="' . $url . '" width="200" height="150" alt="" />';
+                        //return '<a data-fancybox data-src="' . asset($url) . '" data-caption="Ảnh thuốc" ><img src="' . asset($url) . '" width="200" height="150" alt="" /></a>';
                     } else {
                         $defaultImage = asset('theme/admin/assets/images/no-img-avatar.png');
                         return '<img src="' . $defaultImage . '" width="200" height="150" alt="" />';
@@ -213,7 +214,7 @@ class DiseaseController extends Controller
     }
     public function getRestore()
     {
-        $data = Disease::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = Disease::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.diseases.restore', compact('data'));
     }
     public function restore(Request $request)

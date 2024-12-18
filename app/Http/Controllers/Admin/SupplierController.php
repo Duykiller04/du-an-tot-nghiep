@@ -126,7 +126,7 @@ class SupplierController extends Controller
     }
     public function getRestore()
     {
-        $data = Supplier::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = Supplier::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.suppliers.restore', compact('data'));
     }
     public function restore(Request $request)

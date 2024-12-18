@@ -12,7 +12,7 @@
     <ul>
         @foreach($medicines as $medicine)
             <li>
-                <strong>{{ $medicine->name }}</strong> (Hạn sử dụng: {{  \Carbon\Carbon::parse($medicine->expiration_date)->format('d-m-Y') }})
+               Thuốc <strong>{{ $medicine['medicine_name'] }}</strong> lô nhập ngày <strong>{{ $medicine['batch_name'] }}</strong> (Hạn sử dụng: {{  $medicine['expiration_date'] }})
             </li>
         @endforeach
     </ul>

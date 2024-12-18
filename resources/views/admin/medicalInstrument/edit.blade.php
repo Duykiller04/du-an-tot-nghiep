@@ -29,8 +29,8 @@
             <div class="alert alert-danger">Đã có lỗi nhập liệu. Vui lòng kiểm tra lại!</div>
         @endif
 
-        <form id="create-disease-form" method="POST"
-            action="{{ route('admin.medicalInstruments.update', $medicalInstrument->id) }}" enctype="multipart/form-data">
+        <form id="create-disease-form" method="POST" action="{{ route('admin.medicalInstruments.update', $medicine->id) }}"
+            enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">
@@ -47,41 +47,40 @@
                                         class="text-danger">(*)</span></label>
                                 <input type="text"
                                     class="form-control @error('medicine.medicine_code') is-invalid @enderror"
-                                    id="name" name="medicine[medicine_code]"
-                                    value="{{ $medicalInstrument->medicine_code }}">
+                                    id="name" name="medicine[medicine_code]" value="{{ $medicine->medicine_code }}">
                                 @error('medicine.medicine_code')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label class="form-label" for="name">Số đăng ký <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
                                     class="form-control @error('medicine.registration_number') is-invalid @enderror"
                                     id="name" name="medicine[registration_number]"
-                                    value="{{ $medicalInstrument->registration_number }}">
+                                    value="{{ $medicine->registration_number }}">
                                 @error('medicine.registration_number')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                             <div class="mb-3">
                                 <label class="form-label" for="name">Tên dụng cụ <span
                                         class="text-danger">(*)</span></label>
                                 <input type="text" class="form-control @error('medicine.name') is-invalid @enderror"
-                                    id="name" name="medicine[name]" value="{{ $medicalInstrument->name }}">
+                                    id="name" name="medicine[name]" value="{{ $medicine->name }}">
                                 @error('medicine.name')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label class="form-label" for="name">Giá nhập <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
                                     class="form-control @error('medicine.price_import') is-invalid @enderror" id="name"
-                                    name="medicine[price_import]" value="{{ $medicalInstrument->price_import }}">
+                                    name="medicine[price_import]" value="{{ $medicine->price_import }}">
                                 @error('medicine.price_import')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -92,11 +91,11 @@
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
                                     class="form-control @error('medicine.price_sale') is-invalid @enderror" id="name"
-                                    name="medicine[price_sale]" value="{{ $medicalInstrument->price_sale }}">
+                                    name="medicine[price_sale]" value="{{ $medicine->price_sale }}">
                                 @error('medicine.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -106,9 +105,9 @@
                         </div>
                         <div class="card-body">
 
-                            <div class="d-flex justify-content-end">
+                            {{-- <div class="d-flex justify-content-end">
                                 <button id="addProductNew" type="button" class="btn btn-primary">Thêm đơn vị</button>
-                            </div>
+                            </div> --}}
 
                             <div class="unit-conversion-list">
                                 <div class="mb-3">
@@ -116,27 +115,27 @@
                                         @php
                                             $oldQuantities = old(
                                                 'so_luong',
-                                                $medicalInstrument->unitConversions->pluck('proportion')->toArray(),
+                                                $medicine->unitConversions->pluck('proportion')->toArray(),
                                             );
                                             $oldUnits = old(
                                                 'don_vi',
-                                                $medicalInstrument->unitConversions->pluck('unit_id')->toArray(),
+                                                $medicine->unitConversions->pluck('unit_id')->toArray(),
                                             );
                                         @endphp
 
                                         @foreach ($oldQuantities as $index => $quantity)
                                             <div class="row form-item unit-conversion-row"
                                                 data-index="{{ $index }}">
-                                                <div class="col-5 mt-3">
+                                                <div class="col-6 mt-3">
                                                     <label class="form-label" for="so_luong">Số lượng <span
                                                             class="text-danger">(*)</span></label>
                                                     <input type="number" class="form-control" name="so_luong[]"
-                                                        value="{{ $quantity }}">
+                                                        value="{{ $quantity }}" disabled>
                                                 </div>
-                                                <div class="col-5 mt-3">
+                                                <div class="col-6 mt-3">
                                                     <label for="don_vi">Đơn vị <span
                                                             class="text-danger">(*)</span></label>
-                                                    <select name="don_vi[]" class="form-control">
+                                                    <select name="don_vi[]" class="form-control" disabled>
                                                         <option value="">Chọn đơn vị</option>
                                                         @foreach ($donvis as $donvi)
                                                             <option value="{{ $donvi['id'] }}"
@@ -147,10 +146,10 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-2 mt-3">
+                                                {{-- <div class="col-2 mt-3">
                                                     <button class="btn btn-danger btn-delete" type="button"
                                                         style="margin-top: 25px" onclick="deleteUnit(this)">Xóa</button>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         @endforeach
                                     </div>
@@ -163,13 +162,13 @@
                                 <input type="text"
                                     class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
                                     id="packaging_specification" name="medicine[packaging_specification]"
-                                    value="{{ $medicalInstrument->packaging_specification }}">
+                                    value="{{ $packaging_specification }}" disabled>
                                 @error('medicine.packaging_specification')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <script>
+                            {{-- <script>
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
@@ -358,7 +357,7 @@
 
                                     updatePackagingSpecification();
                                 });
-                            </script>
+                            </script> --}}
 
                         </div>
                     </div>
@@ -367,7 +366,7 @@
                 <!-- Cột bên phải -->
                 <div class="col-lg-4">
 
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
@@ -376,7 +375,7 @@
                                 class="js-example-basic-multiple @error('supplier_id') is-invalid @enderror"
                                 multiple="multiple">
                                 @foreach ($suppliers as $item)
-                                    <option value="{{ $item->id }}" @if (in_array($item->id, $medicalInstrument->suppliers->pluck('id')->toArray())) selected @endif>
+                                    <option value="{{ $item->id }}" @if (in_array($item->id, $medicine->suppliers->pluck('id')->toArray())) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -385,7 +384,7 @@
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="card">
@@ -398,7 +397,7 @@
                                 <option value="">-- Chọn danh mục --</option>
                                 @foreach ($categories as $item)
                                     <option value="{{ $item->id }}"
-                                        @if (old('medicine.category_id', $medicalInstrument->category_id) == $item->id) selected @endif>
+                                        @if (old('medicine.category_id', $medicine->category_id) == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -409,7 +408,7 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Kho lưu trữ <span class="text-danger">(*)</span></h5>
                         </div>
@@ -419,7 +418,7 @@
                                 <option value="">-- Chọn kho lưu trữ --</option>
                                 @foreach ($storages as $item)
                                     <option value="{{ $item->id }}"
-                                        @if (old('storage_id', $medicalInstrument->storage_id) == $item->id) selected @endif>
+                                        @if (old('storage_id', $medicine->storage_id) == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -428,19 +427,19 @@
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Card cho Ảnh dụng cụ -->
                     <div class="card mt-3">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Ảnh dụng cụ</h5>
                         </div>
-                        <div class="card-body d-flex justify-content-center">
+                        <div class="card-body d-flex justify-content-center mb-3">
                             <div class="avatar-upload text-center">
                                 <div class="position-relative">
                                     <div class="avatar-preview">
                                         <div id="imagePreview" class="bg-cover bg-center"
-                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ $medicalInstrument->image ? asset('storage/' . $medicalInstrument->image) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ $medicine->image ? asset('storage/' . $medicine->image) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
                                         </div>
                                         <div class="change-btn mt-2">
                                             <input type='file' class="form-control d-none" id="imageUpload"
@@ -457,18 +456,18 @@
                         </div>
                     </div>
 
-                    <div class="card mt-3">
+                    {{-- <div class="card mt-3">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Xuất xứ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
                             <input type="text" class="form-control @error('medicine.origin') is-invalid @enderror"
-                                id="origin" name="medicine[origin]" value="{{ $medicalInstrument->origin }}">
+                                id="origin" name="medicine[origin]" value="{{ $medicine->origin }}">
                             @error('medicine.origin')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="card mt-3">
                         <div class="card-header">
@@ -478,7 +477,7 @@
                             <label class="form-label" for="temperature">Nhiệt độ (Độ C)</label>
                             <input type="number"
                                 class="form-control @error('medicine.temperature') is-invalid @enderror" id="temperature"
-                                name="medicine[temperature]" value="{{ $medicalInstrument->temperature }}">
+                                name="medicine[temperature]" value="{{ $medicine->temperature }}">
                             @error('medicine.temperature')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
@@ -486,14 +485,14 @@
                         <div class="card-body">
                             <label class="form-label" for="moisture">Độ ẩm (%)</label>
                             <input type="number" class="form-control @error('medicine.moisture') is-invalid @enderror"
-                                id="moisture" name="medicine[moisture]" value="{{ $medicalInstrument->moisture }}">
+                                id="moisture" name="medicine[moisture]" value="{{ $medicine->moisture }}">
                             @error('medicine.moisture')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="card mt-3">
+                    {{-- <div class="card mt-3">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Ngày hết hạn <span class="text-danger">(*)</span></h5>
                         </div>
@@ -501,13 +500,13 @@
                             <input type="date"
                                 class="form-control @error('medicine.expiration_date') is-invalid @enderror"
                                 id="expiration_date" name="medicine[expiration_date]"
-                                value="{{ $medicalInstrument->expiration_date->format('Y-m-d') }}"
+                                value="{{ $medicine->expiration_date->format('Y-m-d') }}"
                                 min="{{ now()->format('Y-m-d') }}">
                             @error('medicine.expiration_date')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
 

@@ -53,7 +53,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label class="form-label" for="name">Số đăng ký <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
@@ -63,7 +63,7 @@
                                 @error('medicine.registration_number')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                             <div class="mb-3">
                                 <label class="form-label" for="name">Tên thuốc <span
@@ -75,7 +75,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label class="form-label" for="name">Giá nhập <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
@@ -95,7 +95,7 @@
                                 @error('medicine.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -105,9 +105,9 @@
                         </div>
                         <div class="card-body">
 
-                            <div class="d-flex justify-content-end">
+                            {{-- <div class="d-flex justify-content-end">
                                 <button id="addProductNew" type="button" class="btn btn-primary">Thêm đơn vị</button>
-                            </div>
+                            </div> --}}
 
                             <div class="unit-conversion-list">
                                 <div class="mb-3">
@@ -126,16 +126,16 @@
                                         @foreach ($oldQuantities as $index => $quantity)
                                             <div class="row form-item unit-conversion-row"
                                                 data-index="{{ $index }}">
-                                                <div class="col-5 mt-3">
+                                                <div class="col-6 mt-3">
                                                     <label class="form-label" for="so_luong">Số lượng <span
                                                             class="text-danger">(*)</span></label>
                                                     <input type="number" class="form-control" name="so_luong[]"
-                                                        value="{{ $quantity }}">
+                                                        value="{{ $quantity }}" disabled>
                                                 </div>
-                                                <div class="col-5 mt-3">
+                                                <div class="col-6 mt-3">
                                                     <label for="don_vi">Đơn vị <span
                                                             class="text-danger">(*)</span></label>
-                                                    <select name="don_vi[]" class="form-control">
+                                                    <select name="don_vi[]" class="form-control" disabled>
                                                         <option value="">Chọn đơn vị</option>
                                                         @foreach ($donvis as $donvi)
                                                             <option value="{{ $donvi['id'] }}"
@@ -146,10 +146,10 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-2 mt-3">
+                                                {{-- <div class="col-2 mt-3">
                                                     <button class="btn btn-danger btn-delete" type="button"
                                                         style="margin-top: 25px" onclick="deleteUnit(this)">Xóa</button>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         @endforeach
                                     </div>
@@ -162,13 +162,13 @@
                                 <input type="text"
                                     class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
                                     id="packaging_specification" name="medicine[packaging_specification]"
-                                    value="{{ $medicine->packaging_specification }}">
+                                    value="{{ $packaging_specification }}" disabled>
                                 @error('medicine.packaging_specification')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <script>
+                            {{-- <script>
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
@@ -357,7 +357,7 @@
 
                                     updatePackagingSpecification();
                                 });
-                            </script>
+                            </script> --}}
 
                         </div>
                     </div>
@@ -407,7 +407,7 @@
                 <!-- Cột bên phải -->
                 <div class="col-lg-4">
 
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
@@ -425,7 +425,7 @@
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="card">
@@ -449,7 +449,7 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Kho lưu trữ <span class="text-danger">(*)</span></h5>
                         </div>
@@ -468,7 +468,7 @@
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Card cho Ảnh thuốc -->
                     <div class="card mt-3">
@@ -497,7 +497,7 @@
                         </div>
                     </div>
 
-                    <div class="card mt-3">
+                    {{-- <div class="card mt-3">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Xuất xứ <span class="text-danger">(*)</span></h5>
                         </div>
@@ -508,7 +508,7 @@
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="card mt-3">
                         <div class="card-header">
@@ -533,7 +533,7 @@
                         </div>
                     </div>
 
-                    <div class="card mt-3">
+                    {{-- <div class="card mt-3">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Ngày hết hạn <span class="text-danger">(*)</span></h5>
                         </div>
@@ -547,7 +547,7 @@
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
 

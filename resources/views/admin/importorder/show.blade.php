@@ -36,16 +36,8 @@
                 <table class="table table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th class="ps-0" scope="row">Tên kho:</th>
-                            <td class="text-muted">{{ $importOrder->storage->name }}</td>
-                        </tr>
-                        <tr>
-                            <th class="ps-0" scope="row">Người kiểm kho:</th>
+                            <th class="ps-0" scope="row">Người nhập kho:</th>
                             <td class="text-muted">{{ $importOrder->user->name}}</td>
-                        </tr>
-                        <tr>
-                            <th class="ps-0" scope="row">Nhà cung cấp:</th>
-                            <td class="text-muted">{{ $importOrder->supplier->name }}</td>
                         </tr>
 
                         <tr>
@@ -54,26 +46,11 @@
                         </tr>
                         <tr>
                             <th class="ps-0" scope="row">Tổng tiền:</th>
-                            <td class="text-muted">{{ number_format($importOrder->total, 2) }}</td>
-                        </tr>
-
-
-                        <tr>
-                            <th class="ps-0" scope="row">Số tiền trả :</th>
-                            <td class="text-muted">{{ number_format($importOrder->price_paid, 2)}}</td>
-                        </tr>
-
-                        <tr>
-                            <th class="ps-0" scope="row">Còn nợ :</th>
-                            <td class="text-muted">{{number_format($importOrder->still_in_debt, 2)  }}</td>
+                            <td class="text-muted">{{ number_format($importOrder->total, 2) }} VNĐ</td>
                         </tr>
                         <tr>
                             <th class="ps-0" scope="row">Ghi chú :</th>
                             <td class="text-muted">{{$importOrder->note  }}</td>
-                        </tr>
-                        <tr>
-                            <th class="ps-0" scope="row">Trạng thái :</th>
-                            <td class="text-muted">{{ $importOrder->status  }}</td>
                         </tr>
                 </tbody>
             </table>

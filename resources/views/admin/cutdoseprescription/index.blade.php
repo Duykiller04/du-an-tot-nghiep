@@ -40,11 +40,7 @@
                                 <th>STT</th>
                                 <th>Tên đơn thuốc</th>
                                 <th>Bệnh</th>
-                                <th>Tên bệnh viện</th>
                                 <th>Tên bác sĩ</th>
-                                <th>Tuổi</th>
-                                <th>Số điện thoại</th>
-                                <th>Tổng tiền</th>
                                 <th>Ngày thêm</th>
                                 <th>Hành động</th>
                             </tr>
@@ -59,11 +55,7 @@
                                     <td>{{ $stt++ }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->disease->disease_name }}</td>
-                                    <td>{{ $item->name_hospital }}</td>
                                     <td>{{ $item->name_doctor }}</td>
-                                    <td>{{ $item->age }}</td>
-                                    <td>{{ $item->phone_doctor }}</td>
-                                    <td>{{ number_format($item->total) }} VNĐ</td>
                                     <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
@@ -72,7 +64,7 @@
                                             <a href="{{ route('admin.cutDosePrescriptions.edit', $item) }}"
                                                 class="btn btn-info mb-3">Sửa</a>
                                             <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}"
-                                                method="post"  id="delete-form-{{ $item->id }}">
+                                                method="post" id="delete-form-{{ $item->id }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button onclick="confirmDelete({{ $item->id }})" type="button"
@@ -144,27 +136,27 @@
                 }
             },
         });
-        function confirmDelete(id) {
-    Swal.fire({
-        title: 'Bạn có chắc chắn muốn xóa không??',
-        text: "Hành động này không thể hoàn tác!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa',
-        cancelButtonText: 'Hủy'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const form = document.getElementById(`delete-form-${id}`);
-            if (form) {
-                form.submit();
-            } else {
-                console.error(`Không tìm thấy form với ID: delete-form-${id}`);
-            }
-        }
-    });
-}
 
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "Bạn có chắc muốn xóa không?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Xóa!",
+                cancelButtonText: "Hủy",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById(`delete-form-${id}`);
+                    if (form) {
+                        form.submit();
+                    } else {
+                        console.error(`Không tìm thấy form với ID: delete-form-${id}`);
+                    }
+                }
+            });
+        }
     </script>
 @endsection

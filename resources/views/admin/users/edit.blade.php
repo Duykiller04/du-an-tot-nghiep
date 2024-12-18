@@ -79,23 +79,35 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Ảnh</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <input type="file" class="form-control" id="image" name="image">
-                            <div class="mt-3">
-                                <img src="{{ \Storage::url($user->image) }}" alt="" width="100px">
+                    <div class="card-body d-flex justify-content-center">
+                        <div class="avatar-upload text-center">
+                            <div class="position-relative">
+                                <div class="avatar-preview">
+                                    <!-- Hiển thị ảnh hiện tại hoặc ảnh mặc định -->
+                                    <div id="imagePreview" class="bg-cover bg-center"
+                                        style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; 
+                               background-image: url({{ $user->image ? asset('storage/' . $user->image) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                    </div>
+                                </div>
+                                <div class="change-btn mt-2">
+                                    <!-- Input file ẩn -->
+                                    <input type="file" class="form-control d-none" id="imageUpload" name="image"
+                                        accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+                                    <!-- Nút chọn ảnh -->
+                                    <label for="imageUpload" class="btn btn-primary light btn">Chọn ảnh</label>
+                                </div>
+                                @error('image')
+                                    <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
-
-                            @error('image')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="col-lg-8">
                 <div class="card">
@@ -190,5 +202,15 @@
             .catch(error => {
                 console.error(error);
             });
+
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('imagePreview');
+                preview.style.backgroundImage = `url(${reader.result})`;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
     </script>
 @endsection

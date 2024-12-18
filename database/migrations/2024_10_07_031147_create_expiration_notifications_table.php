@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('expiration_notifications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('medicine_id'); // ID thuốc được thông báo
-            $table->dateTime('notified_at'); // Thời gian gửi thông báo
-            $table->boolean('notification_sent')->default(false); // Trạng thái thông báo (đã gửi hay chưa)
+            $table->unsignedBigInteger('medicine_id'); 
+            $table->dateTime('notified_at'); 
+            $table->boolean('notification_sent')->default(false); 
             $table->timestamps();
-        
-            // Đặt khóa ngoại liên kết với bảng medicines
             $table->foreign('medicine_id')->references('id')->on('medicines')->onDelete('cascade');
         });
         

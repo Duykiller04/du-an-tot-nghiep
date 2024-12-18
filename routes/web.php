@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CutDoseOrderController;
 use App\Http\Controllers\Admin\CutDosePrescriptionController;
 use App\Http\Controllers\Admin\PrescriptionsController;
+use App\Http\Controllers\Admin\CounterSaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\UserController;
@@ -77,7 +78,7 @@ Route::prefix('admin')
                     Route::delete('/delete/{id}', 'destroy')->name('destroy');
                 });
 
-            Route::get('list-attendace-user', [AttendaceController::class, 'listAttendaceUser'])->name('attendace.list.user');
+            Route::get('list-attendace/user', [AttendaceController::class, 'listAttendaceUser'])->name('attendace.list.user');
 
             Route::controller(ExpirationNotificationController::class)
                 ->prefix('notifications')->as('notifications.')
@@ -120,6 +121,8 @@ Route::prefix('admin')
                 Route::delete('/delete/{id}', 'destroy')->name('destroy');
                 Route::get('/download-template', 'downloadTemplate')->name('downloadTemplate');
             });
+
+        Route::resource('sell', CounterSaleController::class);
 
         Route::resource('diseases', DiseaseController::class);
 

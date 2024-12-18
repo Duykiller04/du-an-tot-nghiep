@@ -66,9 +66,9 @@
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="tables[]" value="medicine"
-                                        id="medicine2">
-                                    <label class="form-check-label" for="medicine2">Xuất Dụng cụ</label>
+                                    <input class="form-check-input" type="checkbox" name="tables[]" value="batch"
+                                        id="batch">
+                                    <label class="form-check-label" for="batch">Xuất lô thuốc </label>
                                 </div>
                             </div>
 

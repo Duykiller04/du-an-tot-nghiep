@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\API\BatchMedicineController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\API\CutDoseOrderController;
+use App\Http\Controllers\Api\GetAllProductController;
+use App\Http\Controllers\API\GetMedicineDetail;
 use App\Http\Controllers\API\UnitMedicineController;
 use App\Http\Controllers\API\PrescriptionsController;
 use App\Http\Controllers\API\Unitcontroller;
@@ -23,7 +26,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('get-units/{medicineId}', [UnitMedicineController::class, 'getUnits']);
+Route::get('get-medicine-detail/{medicineId}', [GetMedicineDetail::class, 'getMedicineDetail']);
+
+Route::get('get-largest-unit/{medicineId}', [UnitMedicineController::class, 'getLargestUnit']);
+
+Route::get('get-all-product', [GetAllProductController::class, 'getAllProduct']);
+Route::get('/invoices/today', [GetAllProductController::class, 'getInvoicesOfTheDay']);
 
 Route::get('cut-dose-order/{medicineId}', [CutDoseOrderController::class, 'getUnits']);
 // Route::get('get-price/{medicineId}', [UnitMedicineController::class, 'getPrice']);
@@ -54,6 +64,8 @@ Route::get('/dashboard/profit', [DashboardController::class, 'getProfit'])->name
 Route::get('/dashboardtopsuppliers', [DashboardController::class, 'getTopSuppliers'])->name('dashboard.dashboardtopsuppliers');
 Route::get('/dashboardtopmedicines', [DashboardController::class, 'getTopMedicines'])->name('dashboard.dashboardtopmedicines');
 Route::get('/dashboard/store-statistics', [DashboardController::class, 'getStatistics'])->name('dashboard.store.statistics');
+
+
 
 
 

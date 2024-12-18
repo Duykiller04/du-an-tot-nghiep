@@ -57,10 +57,10 @@
                                 <label class="form-label" for="name">Số đăng ký <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number"
-                                    class="form-control @error('medicine.registration_number') is-invalid @enderror"
-                                    id="name" name="medicine[registration_number]"
-                                    value="{{ old('medicine.registration_number') }}">
-                                @error('medicine.registration_number')
+                                    class="form-control @error('batch.registration_number') is-invalid @enderror"
+                                    id="name" name="batch[registration_number]"
+                                    value="{{ old('batch.registration_number') }}">
+                                @error('batch.registration_number')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -78,10 +78,9 @@
                             <div class="mb-3">
                                 <label class="form-label" for="name">Giá nhập <span
                                         class="text-danger">(*)</span></label>
-                                <input type="number"
-                                    class="form-control @error('medicine.price_import') is-invalid @enderror" id="name"
-                                    name="medicine[price_import]" value="{{ old('medicine.price_import') }}">
-                                @error('medicine.price_import')
+                                <input type="number" class="form-control @error('batch.price_import') is-invalid @enderror"
+                                    id="name" name="batch[price_import]" value="{{ old('batch.price_import') }}">
+                                @error('batch.price_import')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -89,10 +88,9 @@
                             <div class="mb-3">
                                 <label class="form-label" for="name">Giá bán <span
                                         class="text-danger">(*)</span></label>
-                                <input type="number"
-                                    class="form-control @error('medicine.price_sale') is-invalid @enderror" id="name"
-                                    name="medicine[price_sale]" value="{{ old('medicine.price_sale') }}">
-                                @error('medicine.price_sale')
+                                <input type="number" class="form-control @error('batch.price_sale') is-invalid @enderror"
+                                    id="name" name="batch[price_sale]" value="{{ old('batch.price_sale') }}">
+                                @error('batch.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -140,35 +138,34 @@
                                     <label class="form-label" for="packaging_specification">Quy cách đóng gói <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text"
-                                        class="form-control @error('medicine.packaging_specification') is-invalid @enderror"
-                                        id="packaging_specification" name="medicine[packaging_specification]"
-                                        value="{{ old('medicine.packaging_specification') }}" readonly>
-                                    @error('medicine.packaging_specification')
+                                        class="form-control @error('batch.packaging_specification') is-invalid @enderror"
+                                        id="packaging_specification" name="batch[packaging_specification]"
+                                        value="{{ old('batch.packaging_specification') }}" readonly>
+                                    @error('batch.packaging_specification')
                                         <span class="d-block text-danger mt-2">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
 
                             <script>
-                                document.addEventListener('DOMContentLoaded', function () {
+                                document.addEventListener('DOMContentLoaded', function() {
                                     const btnAdd = document.querySelector('#addProductNew');
                                     const productNew = document.querySelector('.productNew');
+                                    const packagingInput = document.querySelector('#packaging_specification');
 
                                     const donvis = @json($donvis);
                                     const oldQuantities = @json(old('so_luong', []));
                                     const oldUnits = @json(old('don_vi', []));
-                                    const errors = @json($errors->toArray()); // Lấy danh sách lỗi từ Laravel
+                                    const errors = @json($errors->toArray());
 
                                     const unitsByParent = donvis.reduce((acc, donvi) => {
-                                        if (!acc[donvi.parent_id]) {
-                                            acc[donvi.parent_id] = [];
-                                        }
+                                        if (!acc[donvi.parent_id]) acc[donvi.parent_id] = [];
                                         acc[donvi.parent_id].push(donvi);
                                         return acc;
                                     }, {});
 
                                     function renderChildUnits(parentId, selectElement) {
-                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>'; // Reset các option
+                                        selectElement.innerHTML = '<option value="">Chọn đơn vị</option>';
                                         if (unitsByParent[parentId]) {
                                             unitsByParent[parentId].forEach(donvi => {
                                                 const option = document.createElement('option');
@@ -179,42 +176,58 @@
                                         }
                                     }
 
-                                    function showError(element, message) {
-                                        const errorElement = document.createElement('p');
-                                        errorElement.classList.add('text-danger'); // Thêm class để hiển thị lỗi
-                                        errorElement.textContent = message;
-                                        element.parentElement.appendChild(errorElement); // Gắn lỗi ngay dưới input
-                                    }
-
-                                    function validateFields() {
+                                    function updatePackagingSpecification() {
                                         const formItems = productNew.querySelectorAll('.form-item');
-                                        let isValid = true;
+                                        let quantities = [];
+                                        let units = [];
 
-                                        formItems.forEach((item, index) => {
+                                        formItems.forEach((item) => {
                                             const quantityInput = item.querySelector('input[name="so_luong[]"]');
                                             const unitSelect = item.querySelector('select[name="don_vi[]"]');
 
-                                            // Xóa lỗi cũ
-                                            const oldErrors = item.querySelectorAll('.text-danger');
-                                            oldErrors.forEach(error => error.remove());
+                                            const quantity = quantityInput ? quantityInput.value.trim() : '';
+                                            const unit = unitSelect && unitSelect.value 
+                                            ? unitSelect.options[unitSelect.selectedIndex]?.textContent.trim() 
+                                            : null;
 
-                                            // Kiểm tra số lượng
-                                            if (!quantityInput.value || parseFloat(quantityInput.value) <= 0) {
-                                                showError(quantityInput, `Số lượng ở dòng ${index + 1} phải lớn hơn 0.`);
-                                                isValid = false;
-                                            }
-
-                                            // Kiểm tra đơn vị
-                                            if (!unitSelect.value) {
-                                                showError(unitSelect, `Vui lòng chọn đơn vị ở dòng ${index + 1}.`);
-                                                isValid = false;
+                                            if (quantity && unit) {
+                                                quantities.push(quantity);
+                                                units.push(unit);
                                             }
                                         });
 
-                                        return isValid;
+                                        let packaging = [];
+                                        let flag = false;
+                                        for (let i = 0; i < quantities.length; i++) {
+                                            if (i === 0) {
+                                                // Luôn hiển thị giá trị gốc là "1 thùng"
+                                                packaging.push(`1 ${units[i]}`);
+                                            } else {
+                                                if(flag == false){
+                                                    packaging.push(`1 ${units[i - 1]} có ${quantities[i]} ${units[i]}`);
+                                                    flag = true;
+                                                    continue;
+                                                }
+                                                packaging.push(`- 1 ${units[i - 1]} có ${quantities[i]} ${units[i]}`);
+                                            }
+                                        }
+
+                                        // Xóa phần "1 thùng" ở các cấp sâu hơn
+                                        if (packaging.length > 1) {
+                                            packaging.shift(); // Xóa "1 thùng" khỏi kết quả
+                                        }
+
+                                        packagingInput.value = packaging.join(' ');
                                     }
 
-                                    btnAdd.addEventListener('click', function () {
+
+                                    productNew.addEventListener('input', function(event) {
+                                        if (event.target.name === 'so_luong[]' || event.target.name === 'don_vi[]') {
+                                            updatePackagingSpecification();
+                                        }
+                                    });
+
+                                    btnAdd.addEventListener('click', function() {
                                         const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                         const lastSelect = allSelects[allSelects.length - 1];
                                         const lastSelectedUnit = lastSelect ? lastSelect.value : null;
@@ -223,24 +236,25 @@
                                             const childUnits = unitsByParent[lastSelectedUnit] || [];
                                             if (childUnits.length > 0) {
                                                 const newFieldHTML = `
-                                                    <div class="row mb-3 form-item mt-3">
-                                                        <div class="col-5">
-                                                            <label for="">Số lượng <span class="text-danger">(*)</span></label>
-                                                            <input type="number" name="so_luong[]" class="form-control">
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <label for="">Đơn vị <span class="text-danger">(*)</span></label>
-                                                            <select name="don_vi[]" class="form-control">
-                                                                <option value="">Chọn đơn vị</option>
-                                                                ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-2">
-                                                            <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
-                                                        </div>
+                                                <div class="row mb-3 form-item mt-3">
+                                                    <div class="col-5">
+                                                        <label for="">Số lượng <span class="text-danger">(*)</span></label>
+                                                        <input type="number" name="so_luong[]" class="form-control" min="1">
                                                     </div>
-                                                `;
+                                                    <div class="col-5">
+                                                        <label for="">Đơn vị <span class="text-danger">(*)</span></label>
+                                                        <select name="don_vi[]" class="form-control">
+                                                            <option value="">Chọn đơn vị</option>
+                                                            ${childUnits.map(donvi => `<option value="${donvi.id}">${donvi.name}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <button class="btn btn-danger btn-delete" type="button" style="margin-top: 25px">Xóa</button>
+                                                    </div>
+                                                </div>
+                                            `;
                                                 productNew.insertAdjacentHTML('beforeend', newFieldHTML);
+                                                updatePackagingSpecification();
                                             } else {
                                                 alert('Hết đơn vị con, không thể thêm trường mới!');
                                             }
@@ -249,34 +263,24 @@
                                         }
                                     });
 
-                                    productNew.addEventListener('click', function (event) {
+                                    productNew.addEventListener('click', function(event) {
                                         if (event.target.classList.contains('btn-delete')) {
-                                            const formItem = event.target.closest('.form-item');
-                                            if (formItem) {
-                                                const allFormItems = Array.from(productNew.querySelectorAll('.form-item'));
-                                                const currentIndex = allFormItems.indexOf(formItem);
-
-                                                // Xóa tất cả các trường từ vị trí hiện tại
-                                                for (let i = allFormItems.length - 1; i >= currentIndex; i--) {
-                                                    allFormItems[i].remove();
-                                                }
-                                            }
+                                            event.target.closest('.form-item').remove();
+                                            updatePackagingSpecification();
                                         }
                                     });
 
-                                    productNew.addEventListener('change', function (event) {
+                                    productNew.addEventListener('change', function(event) {
                                         if (event.target.name === 'don_vi[]') {
                                             const selectedParentId = event.target.value;
                                             const allSelects = productNew.querySelectorAll('select[name="don_vi[]"]');
                                             const currentSelectIndex = Array.from(allSelects).indexOf(event.target);
 
-                                            // Reset các trường sau trường hiện tại
                                             for (let i = currentSelectIndex + 1; i < allSelects.length; i++) {
                                                 allSelects[i].innerHTML = '<option value="">Chọn đơn vị</option>';
                                                 allSelects[i].value = '';
                                             }
 
-                                            // Render các đơn vị con
                                             if (currentSelectIndex < allSelects.length - 1) {
                                                 const nextSelect = allSelects[currentSelectIndex + 1];
                                                 renderChildUnits(selectedParentId, nextSelect);
@@ -285,48 +289,18 @@
                                         }
                                     });
 
-                                    // Khôi phục giá trị và lỗi từ session
                                     oldQuantities.forEach((quantity, index) => {
-                                        if (index > 0) {
-                                            btnAdd.click();
-                                        }
+                                        if (index > 0) btnAdd.click();
                                         const inputs = productNew.querySelectorAll('input[name="so_luong[]"]');
                                         const selects = productNew.querySelectorAll('select[name="don_vi[]"]');
 
                                         if (inputs[index]) inputs[index].value = quantity;
                                         if (selects[index]) selects[index].value = oldUnits[index] || '';
 
-                                        if (errors[`so_luong.${index}`]) {
-                                            showError(inputs[index], errors[`so_luong.${index}`][0]);
-                                        }
-
-                                        if (errors[`don_vi.${index}`]) {
-                                            showError(selects[index], errors[`don_vi.${index}`][0]);
-                                        }
+                                        if (errors[`so_luong.${index}`]) showError(inputs[index], errors[`so_luong.${index}`][0]);
+                                        if (errors[`don_vi.${index}`]) showError(selects[index], errors[`don_vi.${index}`][0]);
                                     });
 
-                                    function updatePackagingSpecification() {
-                                        const formItems = productNew.querySelectorAll('.form-item');
-                                        const packagingInput = document.querySelector('#packaging_specification');
-
-                                        let packaging = []; // Mảng lưu các đơn vị cha và con
-
-                                        formItems.forEach(item => {
-                                            const unitSelect = item.querySelector('select[name="don_vi[]"]');
-                                            
-                                            if (unitSelect && unitSelect.value) {
-                                                const selectedUnit = unitSelect.options[unitSelect.selectedIndex];
-                                                const selectedUnitText = selectedUnit.textContent.trim(); // Loại bỏ khoảng trắng thừa
-
-                                                if (selectedUnitText) {
-                                                    packaging.push(selectedUnitText); // Lưu tên đơn vị đã chọn vào mảng
-                                                }
-                                            }
-                                        });
-
-                                        // Ghép các đơn vị với dấu "-" nếu có hơn 1 đơn vị, và loại bỏ khoảng trắng thừa
-                                        packagingInput.value = packaging.join('-').trim();
-                                    }
                                     updatePackagingSpecification();
                                 });
                             </script>
@@ -384,11 +358,10 @@
                             <h5 class="card-title mb-0">Nhà cung cấp <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <select id="supplier" name="supplier_id[]"
-                                class="js-example-basic-multiple @error('supplier_id') is-invalid @enderror"
-                                multiple="multiple">
+                            <select id="supplier" name="supplier_id"
+                                class="js-example-basic-single @error('supplier_id') is-invalid @enderror">
                                 @foreach ($suppliers as $item)
-                                    <option value="{{ $item->id }}" @if (in_array($item->id, old('supplier_id', []))) selected @endif>
+                                    <option value="{{ $item->id }}" @if (old('supplier_id') == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -451,7 +424,8 @@
                             <div class="avatar-upload text-center">
                                 <div class="position-relative">
                                     <div class="avatar-preview">
-                                        <div id="imagePreview" class="bg-cover bg-center" style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                        <div id="imagePreview" class="bg-cover bg-center"
+                                            style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; background-image: url({{ asset('theme/admin/assets/images/no-img-avatar.png') }});">
                                         </div>
                                     </div>
                                     <div class="change-btn mt-2">
@@ -473,9 +447,9 @@
                             <h5 class="card-title mb-0">Xuất xứ <span class="text-danger">(*)</span></h5>
                         </div>
                         <div class="card-body">
-                            <input type="text" class="form-control @error('medicine.origin') is-invalid @enderror"
-                                id="origin" name="medicine[origin]" value="{{ old('medicine.origin') }}">
-                            @error('medicine.origin')
+                            <input type="text" class="form-control @error('batch.origin') is-invalid @enderror"
+                                id="origin" name="batch[origin]" value="{{ old('batch.origin') }}">
+                            @error('batch.origin')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
@@ -510,10 +484,10 @@
                         </div>
                         <div class="card-body">
                             <input type="date"
-                                class="form-control @error('medicine.expiration_date') is-invalid @enderror"
-                                id="expiration_date" name="medicine[expiration_date]"
-                                value="{{ old('medicine.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
-                            @error('medicine.expiration_date')
+                                class="form-control @error('batch.expiration_date') is-invalid @enderror"
+                                id="expiration_date" name="batch[expiration_date]"
+                                value="{{ old('batch.expiration_date') }}" min="{{ now()->format('Y-m-d') }}">
+                            @error('batch.expiration_date')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>
