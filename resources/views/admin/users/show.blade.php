@@ -39,10 +39,14 @@
                             </tr>
                             <tr>
                                 <th class="ps-0" scope="row">Ảnh:</th>
-                                <td class="text-muted">
-                                    <img src="{{ asset('storage/' . $user->image) }}" alt="User Image" width="100">
+                                <td>
+                                    <div class="bg-cover bg-center"
+                                        style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; 
+                                               background-image: url({{ $user->image ? asset('storage/' . $user->image) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                                    </div>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th class="ps-0" scope="row">Sô điện thoại:</th>
                                 <td class="text-muted">{{ $user->phone }}</td>

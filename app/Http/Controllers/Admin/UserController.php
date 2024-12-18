@@ -26,8 +26,7 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = User::query() ->where('type', 'staff')
-            ->latest('id');
+            $query = User::query()->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -131,21 +130,15 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(User $user)
     {
-        $user = User::findOrFail($id);
-
-        if (Auth::user()->type === 'staff' && Auth::id() != $id) {
-            return back()->withErrors(['error' => 'Bạn không có quyền sửa tài khoản này.']);
-        }
-
         return view('admin.users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, int $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         try {
             $model = User::findOrFail($id);
@@ -179,78 +172,7 @@ class UserController extends Controller
 
                 // Kiểm tra mật khẩu mới và xác nhận mật khẩu
                 $request->validate([
-                    'new_password' => 'required|min:8',
-                    'confirm_password' => 'same:new_password',
-                ]);
-
-                // Cập nhật mật khẩu mới
-                $data['password'] = Hash::make($request->new_password);
-            }
-
-            // Cập nhật dữ liệu người dùng
-            $model->update($data);
-
-            // Xóa ảnh cũ nếu có ảnh mới và ảnh cũ tồn tại
-            if ($request->hasFile('image') && $currentImgThumb && Storage::disk('public')->exists($currentImgThumb)) {
-                Storage::disk('public')->delete($currentImgThumb);
-            }
-            Mail::to($currentEmail)->send(new SendMailToUser($model, $password));
-            return back()->with('success', 'Cập nhật thành công');
-        } catch (\Exception $exception) {
-            Log::error('Lỗi cập nhật tài khoản ' . $exception->getMessage());
-            return back()->with('error', 'Cập nhật thất bại: ' . $exception->getMessage());
-        }
-    }
-
-    public function profile(int $id)
-    {
-        $user = User::findOrFail($id);
-
-        if (Auth::user()->type === 'staff' && Auth::id() != $id) {
-            return back()->withErrors(['error' => 'Bạn không có quyền sửa tài khoản này.']);
-        }
-
-        return view('admin.users.profile', compact('user'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function updateProfile(UpdateUserRequest $request, string $id)
-    {
-        try {
-            $model = User::findOrFail($id);
-
-            if (Auth::user()->type === 'staff' && Auth::id() != $id) {
-                return back()->withErrors(['error' => 'Bạn không có quyền sửa tài khoản này.']);
-            }
-
-            // Lấy toàn bộ dữ liệu trừ 'image' và các trường mật khẩu
-            $data = $request->except(['image', 'old_password', 'new_password', 'confirm_password']);
-            $password = $request->new_password;
-            // Lấy ảnh hiện tại của người dùng
-            $currentImgThumb = $model->image;
-            $currentEmail = $model->email;
-
-            // Nếu người dùng tải lên ảnh mới
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $data['image'] = $image->store('users', 'public'); // Lưu ảnh mới
-            } else {
-                // Không thay đổi ảnh thì giữ ảnh cũ
-                $data['image'] = $currentImgThumb;
-            }
-
-            // Kiểm tra và cập nhật mật khẩu nếu có nhập mật khẩu cũ, mới, và xác nhận mật khẩu
-            if ($request->filled('old_password') || $request->filled('new_password') || $request->filled('confirm_password')) {
-                // Kiểm tra mật khẩu cũ
-                if (!Hash::check($request->old_password, $model->password)) {
-                    return back()->withErrors(['old_password' => 'Mật khẩu cũ không chính xác.']);
-                }
-
-                // Kiểm tra mật khẩu mới và xác nhận mật khẩu
-                $request->validate([
-                    'new_password' => 'required|min:8',
+                    'new_password' => 'required',
                     'confirm_password' => 'same:new_password',
                 ]);
 
