@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // Gọi hàm ban đầu để lấy danh sách thuốc
-    fetchTopMedicines(); // Gọi hàm fetchTopMedicines mà không cần tham số
+    fetchTopMedicines();
 
     // Hàm gọi API để lấy danh sách top thuốc
     function fetchTopMedicines() {
@@ -32,12 +32,15 @@ $(document).ready(function () {
         if (medicines && medicines.length > 0) {
             medicines.forEach((medicine, index) => {
                 const totalOrders = medicine.total_orders || 0;
+                const joinDate = medicine.join_date 
+                    ? new Date(medicine.join_date).toLocaleDateString("vi-VN") 
+                    : "N/A"; // Xử lý trường hợp join_date bị null
 
                 const row = `
                     <tr>
                         <td>${index + 1}</td> <!-- STT -->
                         <td>${medicine.medicine_name}</td>
-                        <td>${new Date(medicine.import_date).toLocaleDateString("vi-VN")}</td> <!-- Ngày nhập thuốc -->
+                        <td>${joinDate}</td> <!-- Ngày nhập thuốc -->
                         <td>${totalOrders}</td>
                     </tr>`;
                 tableBody.append(row);
