@@ -269,44 +269,46 @@ class DashboardController extends Controller
             'profit' => $profit,
         ]);
     }
-
     public function getStatistics(Request $request)
     {
-        $type = $request->query('type', 'day');
-        $startDate = null;
-        $endDate = Carbon::now();
-        // Xử lý thống kê theo khoảng thời gian cụ thể
-        switch ($type) {
-            case 'week':
-                $startDate = Carbon::now()->startOfWeek();
-                break;
-            case 'month':
-                $startDate = Carbon::now()->startOfMonth();
-                break;
-            case 'year':
-                $startDate = Carbon::now()->startOfYear();
-                break;
-            default:
-                $startDate = Carbon::now()->startOfDay();
-                break;
+        $startDate = Carbon::now()->startOfYear();
+        $endDate = Carbon::now()->endOfYear();
+    
+        $categories = [];
+        $revenues = [];
+        $profit = [];
+    
+        for ($i = 1; $i <= 12; $i++) {
+            $dateStart = $startDate->copy()->addMonths($i - 1);
+            $dateEnd = $dateStart->copy()->endOfMonth();
+            $categories[] = "Tháng $i";
+    
+            $monthlyRevenue = CutDoseOrder::whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price') 
+                            + Prescription::whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
+                            $totalCostPrice = DB::table('batches')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('price_import');
+
+                            $totalPrescriptionPrice = DB::table('prescriptions')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
+                    
+                    
+                            $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
+                    
+                    
+                            $totalRevenue = $totalPrescriptionPrice + $totalcutDoseOrdersPrice;
+                            
+                            // Tính lợi nhuận
+                            $monthlyRevenue = $totalRevenue - $totalCostPrice;
+            // Nếu không có dữ liệu, set mặc định là 0
+            $revenues[] = $totalRevenue ?? 0;
+            $profit[] = $monthlyRevenue ?? 0;
         }
-        // Tổng doanh thu
-        $totalRevenueCutDoseOrders = CutDoseOrder::whereBetween('created_at', [$startDate, $endDate])
-            ->sum('total_price');
-        $totalRevenuePrescriptions = Prescription::whereBetween('created_at', [$startDate, $endDate])
-            ->sum('total_price');
-        $totalRevenue = $totalRevenueCutDoseOrders + $totalRevenuePrescriptions;
-        // Tổng số đơn hàng
-        $totalCutDoseOrders = CutDoseOrder::whereBetween('created_at', [$startDate, $endDate])
-            ->count();
-        $totalPrecriptions = Prescription::whereBetween('created_at', [$startDate, $endDate])
-            ->count();
-        $totalOrders = $totalCutDoseOrders + $totalPrecriptions;
+    
         return response()->json([
-            'totalRevenue' => $totalRevenue,
-            'totalOrders' => $totalOrders,
+            'categories' => $categories,
+            'profit' => $profit,
+            'revenues' => $revenues,
         ]);
     }
+    
     public function getTopSuppliers(Request $request)
     {
         try {
