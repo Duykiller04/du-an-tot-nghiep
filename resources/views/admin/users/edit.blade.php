@@ -42,16 +42,6 @@
                             @enderror
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="type" class="form-label">Vai trò<span class="text-danger">*</span></label>
-                            <select name="type" id="type" class="form-select">
-                                <option value="admin" {{ $user->type == 'admin' ? 'selected' : '' }}>Quản trị viên
-                                </option>
-                                <option value="staff" {{ $user->type == 'staff' ? 'selected' : '' }}>Nhân viên
-                                </option>
-                            </select>
-                        </div>
-
                         <!-- Các ô nhập mật khẩu -->
                         <div class="form-group mb-3">
                             <label for="old_password">Mật khẩu cũ</label>
@@ -81,7 +71,7 @@
 
                 <div class="card mt-3">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Ảnh</h5>
+                        <h5 class="card-title mb-0">Ảnh người dùng</h5>
                     </div>
                     <div class="card-body d-flex justify-content-center">
                         <div class="avatar-upload text-center">
@@ -145,7 +135,7 @@
                         <div class="form-group mb-3">
                             <label for="birth">Ngày sinh</label>
                             <input type="date" class="form-control" id="birth" name="birth"
-                                value="{{ old('birth', $user->birth) }}">
+                                value="{{ old('birth', $user->birth) }}" max="{{ date('Y-m-d') }}">
                             @error('birth')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

@@ -18,7 +18,14 @@ class StorageController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Storage::query()->withCount('medicines')->latest('id'); // Thêm withCount để đếm số lượng thuốc
+            $query = Storage::query()
+                        ->select('storages.*')
+                        ->selectSub(function ($query) {
+                            $query->from('batches')
+                                ->selectRaw('COUNT(DISTINCT medicine_id)')
+                                ->whereColumn('batches.storage_id', 'storages.id');
+                        }, 'medicines_count')
+                        ->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -58,9 +65,14 @@ class StorageController extends Controller
                 ->make(true);
         }
 
-        $totalMedicines = Storage::with('batches')->get()->sum(function ($storage) {
-            return $storage->batches->sum('quantity');
-        });
+        $totalMedicines = Storage::query()
+                            ->select('storages.*')
+                            ->selectSub(function ($query) {
+                                $query->from('batches')
+                                    ->selectRaw('COUNT(DISTINCT medicine_id)')
+                                    ->whereColumn('batches.storage_id', 'storages.id');
+                            }, 'medicines_count')
+                            ->latest('id');
 
         // Nếu không phải yêu cầu AJAX, trả về view
         $data = Storage::query()->latest('id')->paginate(5);
