@@ -1,78 +1,86 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Thêm người dùng
+    Cập nhật tài khoản của bạn
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Thêm mới người dùng</h4>
+                <h4 class="mb-sm-0">Cập nhật tài khoản của bạn</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item">
-                            <a href="javascript: void(0);">Người dùng</a>
+                            <a href="javascript: void(0);">Danh sách</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Thêm mới
+                            Cập nhật tài khoản của bạn
                         </li>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
-    <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.updateProfile', $user->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="row">
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Thông tin người dùng</span></h5>
+                        <h5 class="card-title mb-0">Thông tin</span></h5>
                     </div>
                     <div class="card-body">
-
                         <div class="form-group mb-3">
-                            <label for="name">Tên người dùng <span class="text-danger">*</span></label>
+                            <label for="name">Tên<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" name="name"
-                                value="{{ old('name') }}">
+                                value="{{ old('name', $user->name) }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        
-                        <input type="hidden" class="form-control" name="type" value="staff" >
-
+                        <!-- Các ô nhập mật khẩu -->
                         <div class="form-group mb-3">
-                            <label for="password">Mật khẩu<span class="text-danger">*</span></label>
-                            <input type="password" class="form-control " id="password" name="password">
-                            @error('password')
+                            <label for="old_password">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="old_password" name="old_password">
+                            @error('old_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="password_confirmation" class="mt-4">Xác nhận mật khẩu<span
-                                    class="text-danger">*</span></label>
-                            <input class="form-control" type="password" name="password_confirmation" id=" password">
+                            <label for="new_password">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password">
+                            @error('new_password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="confirm_password">Nhập lại mật khẩu mới</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                            @error('confirm_password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Ảnh người dùng</h5>
+                        <h5 class="card-title mb-0">Ảnh</h5>
                     </div>
                     <div class="card-body d-flex justify-content-center">
                         <div class="avatar-upload text-center">
                             <div class="position-relative">
                                 <div class="avatar-preview">
-                                    <!-- Hiển thị ảnh mặc định hoặc ảnh đã được tải lên trước đó -->
+                                    <!-- Hiển thị ảnh hiện tại hoặc ảnh mặc định -->
                                     <div id="imagePreview" class="bg-cover bg-center"
                                         style="width: 150px; height:150px; background-size: contain; background-repeat: no-repeat; 
-                                               background-image: url({{ old('image') ? asset('storage/' . old('image')) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
+                               background-image: url({{ $user->image ? asset('storage/' . $user->image) : asset('theme/admin/assets/images/no-img-avatar.png') }});">
                                     </div>
                                 </div>
                                 <div class="change-btn mt-2">
@@ -91,7 +99,6 @@
                 </div>
 
             </div>
-
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">
@@ -99,18 +106,18 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label for="email">Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control " id="email" name="email"
-                                value="{{ old('email') }}">
+                            <label for="email">Email<span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="{{ old('email', $user->email) }}">
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="phone">Điện thoại <span class="text-danger">*</span></label>
+                            <label for="phone">Điện thoại<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="phone" name="phone"
-                                value="{{ old('phone') }}">
+                                value="{{ old('phone', $user->phone) }}">
                             @error('phone')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -118,8 +125,8 @@
 
                         <div class="form-group mb-3">
                             <label for="address">Địa chỉ</label>
-                            <input type="text" class="form-control   " id="address" name="address"
-                                value="{{ old('address') }}">
+                            <input type="text" class="form-control" id="address" name="address"
+                                value="{{ old('address', $user->address) }}">
                             @error('address')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -127,8 +134,8 @@
 
                         <div class="form-group mb-3">
                             <label for="birth">Ngày sinh</label>
-                            <input type="date" class="form-control " id="birth" name="birth"
-                                value="{{ old('birth') }}" max="{{ date('Y-m-d') }}">
+                            <input type="date" class="form-control" id="birth" name="birth"
+                                value="{{ old('birth', $user->birth) }}" max="{{ date('Y-m-d') }}">
                             @error('birth')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -136,28 +143,31 @@
 
                         <div class="form-group mb-3">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
+                            <textarea class="form-control" id="description" name="description">{{ old('description', $user->description) }}</textarea>
                         </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
-        <!--end col-->
-        </div>
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="text-end m-3">
-                        <a href="{{ route('admin.users.index') }}">
-                            <button type="button" class="btn btn-primary w-sm">Quay lại</button>
-                        </a>
-                        <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
+                        <button type="submit" class="btn btn-success w-sm">Cập nhật</button>
                     </div>
                 </div>
             </div>
-            <!--end col-->
         </div>
     </form>
+    @if (Auth::user()->type === 'staff' && Auth::id() != $user->id)
+        <script>
+            alert('Bạn không có quyền sửa tài khoản này.');
+            window.location.href = "{{ route('admin.users.index') }}";
+        </script>
+    @endif
 @endsection
 
 @section('style-libs')
@@ -181,19 +191,13 @@
             });
 
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
-                    $('#imagePreview').hide();
-                    $('#imagePreview').fadeIn(650);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('imagePreview');
+                preview.style.backgroundImage = `url(${reader.result})`;
+            };
+            reader.readAsDataURL(event.target.files[0]);
         }
-        $("#imageUpload").on('change', function() {
-            readURL(this);
-        });
     </script>
 @endsection

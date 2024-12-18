@@ -131,10 +131,12 @@
                     </a>
                     <div class="collapse menu-dropdown {{ Request::is('admin/users*') || Request::is('admin/customers*') || Request::is('admin/suppliers*') ? 'show' : '' }}" id="sidebarMultilevel4">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('admin.users.index') }}" class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}"
-                                    data-key="t-level-1.1">Người dùng</a>
-                            </li>
+                            @if (Auth::user()->isAdmin())
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.users.index') }}" class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}"
+                                        data-key="t-level-1.1">Người dùng</a>
+                                </li>
+                            @endif
                             <li class="nav-item">
                                 <a href="{{ route('admin.customers.index') }}" class="nav-link {{ Request::is('admin/customers*') ? 'active' : '' }}"
                                     data-key="t-level-1.1">Khách hàng</a>
