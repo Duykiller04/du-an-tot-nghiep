@@ -193,23 +193,6 @@
                                 </div><!-- end card body -->
                             </div><!-- end card -->
                         </div><!-- end col -->
-
-                        <div class="col-xl-4">
-                            <!-- card -->
-                            <div class="card card-height-100">
-                                <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp theo tổng số thuốc</h4>
-                                </div><!-- end card header -->
-
-                                <!-- card body -->
-                                <div class="card-body">
-                                    <canvas id="supplierChartCanvas" width="400" height="400"></canvas>
-                                </div>
-                                <!-- end card body -->
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col -->
                     </div>
 
                     <div class="row">
@@ -434,7 +417,6 @@
     <!-- Dashboard init -->
     {{-- <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    {{-- <script src="{{ asset('library/dashboard-supplier.js') }}"></script> --}}
     <script src="{{ asset('library/order.js') }}"></script>
     <script src="{{ asset('library/dashboard-topmedicines.js') }}"></script>
     <script src="{{ asset('library/dashboard-topsupplier.js') }}"></script>
