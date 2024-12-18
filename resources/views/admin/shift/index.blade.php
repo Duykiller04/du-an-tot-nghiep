@@ -137,7 +137,7 @@
                                                             {{ ucfirst($shift->status) }}
                                                         </span>
                                                     </td>
-                                                    <td>{{ number_format($shift->revenue_summary ?? 0) }} VND</td>
+                                                    <td>{{ number_format($shift->revenue_summary ?? 0) }} ₫</td>
                                                     <td>
                                                         <ul class="list-unstyled d-flex gap-2">
                                                             <li><a href="{{ route('admin.shifts.edit', $shift->id) }}"

@@ -37,7 +37,7 @@
                         <form action="{{ route('admin.shifts.updateStatus', ['shift' => $shift->id, 'status' => 'đang mở']) }}" method="POST" class="d-inline">
                             @csrf
                             @method('PUT')
-                            <button type="submit" class="btn btn-primary">Xác nhận mở ca</button>
+                            <button type="submit" class="btn btn-primary" id="btn-open-shift">Xác nhận mở ca</button>
                         </form>
                         <form action="{{ route('admin.shifts.updateStatus', ['shift' => $shift->id, 'status' => 'đã hủy']) }}" method="POST" class="d-inline">
                             @csrf
@@ -121,7 +121,7 @@
                         <h2 class="mb-4">Tổng doanh thu ca</h2>
                         <div class="d-flex justify-content-center align-items-center gap-4">
                             <div class="d-flex align-items-center">
-                                <span id="total-revenue" class="text-success" style="font-size: 24px; font-weight: bold;">{{ number_format($shift->revenue_summary) }} VND</span>
+                                <span id="total-revenue" class="text-success" style="font-size: 24px; font-weight: bold;">{{ number_format($shift->revenue_summary) }}₫</span>
                             </div>
                         </div>
                         
@@ -270,55 +270,25 @@
                 checkbox.checked = this.checked;
             });
         });
+        document.getElementById('btn-open-shift').addEventListener('click', function () {
+        event.preventDefault();
+        const currentDateTime = new Date();
+        const shiftStartTime = new Date("{{ $shift->start_time }}");
         
-    // Function to update the order list and total revenue
-    // function updateOrdersAndRevenue() {
-    //     $.ajax({
-    //         url: '{{ route('admin.shifts.getOrders', $shift->id) }}', // Route to get updated orders
-    //         method: 'GET',
-    //         success: function(response) {
-    //             // Update orders table
-    //             $('#normal-orders tbody').empty();
-    //             $('#special-orders tbody').empty();
+        // Kiểm tra nếu ngày khác nhau
+        if (currentDateTime.toDateString() !== shiftStartTime.toDateString()) {
+            const confirmMessage = `Thời gian hiện tại (${currentDateTime.toLocaleString()}) khác với thời gian bắt đầu ca (${shiftStartTime.toLocaleString()}). Bạn có chắc chắn muốn mở ca không?`;
+            
+            if (!confirm(confirmMessage)) {
+                return; // Người dùng chọn "Hủy bỏ"
+            }
+        }
 
-    //             // Normal Orders
-    //             response.orders.forEach(order => {
-    //                 $('#normal-orders tbody').append(`
-    //                     <tr>
-    //                         <td>${order.id}</td>
-    //                         <td>${new Date(order.created_at).toLocaleString()}</td>
-    //                         <td>${new Intl.NumberFormat().format(order.total)} VND</td>
-    //                         <td>${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</td>
-    //                     </tr>
-    //                 `);
-    //             });
+            // Nếu đồng ý hoặc thời gian trùng khớp, gửi biểu mẫu
+            document.getElementById('open-shift-form').submit();
+        });
 
-    //             // Special Orders
-    //             response.prescriptions.forEach(prescription => {
-    //                 $('#special-orders tbody').append(`
-    //                     <tr>
-    //                         <td>${prescription.id}</td>
-    //                         <td>${new Date(prescription.created_at).toLocaleString()}</td>
-    //                         <td>${new Intl.NumberFormat().format(prescription.total)} VND</td>
-    //                         <td>${prescription.status.charAt(0).toUpperCase() + prescription.status.slice(1)}</td>
-    //                     </tr>
-    //                 `);
-    //             });
-
-    //             // Update total revenue
-    //             $('#total-revenue').text(`${new Intl.NumberFormat().format(response.totalRevenue)} VND`);
-    //         },
-    //         error: function(error) {
-    //             console.log('Error fetching updated orders:', error);
-    //         }
-    //     });
-    // }
-
-    // // Initial call to update the data
-    // setInterval(updateOrdersAndRevenue, 5000); // Update every 5 seconds
-
-    // // Manually trigger on page load
-    // updateOrdersAndRevenue();
+    
 </script>
 @endsection
 

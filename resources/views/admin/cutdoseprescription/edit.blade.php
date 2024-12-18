@@ -110,7 +110,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-3">
+                                        {{-- <div class="col-3">
                                             <label for="quantity" class="form-label" id="unitLabel-0">Số lượng</label>
                                             <input type="number" name="medicines[{{ $index }}][quantity]"
                                                 class="form-control" value="{{ $item->quantity }}">
@@ -121,7 +121,7 @@
                                             <label for="dosage" class="form-label">Liều lượng</label>
                                             <input type="text" name="medicines[{{ $index }}][dosage]"
                                                 class="form-control" value="{{ $item->dosage }}">
-                                        </div>
+                                        </div> --}}
                                         @php
                                             $count = count($cutDosePrescription->cutDosePrescriptionDetails);
                                         @endphp

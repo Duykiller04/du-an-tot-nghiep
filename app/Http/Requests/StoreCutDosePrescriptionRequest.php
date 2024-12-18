@@ -28,10 +28,9 @@ class StoreCutDosePrescriptionRequest extends FormRequest
             'name_doctor' => 'required|string|max:255',
 
             'medicines' => 'array',
-            'medicines.*' => 'array|required_array_keys:medicine_id,quantity,dosage',
+            'medicines.*' => 'array|required_array_keys:medicine_id',
             'medicines.*.medicine_id' => 'required|exists:medicines,id',
-            'medicines.*.quantity' => 'required|integer|min:1',
-            'medicines.*.dosage' => 'required|string|max:255',
+            
         ];
     }
     public function messages()
@@ -53,10 +52,7 @@ class StoreCutDosePrescriptionRequest extends FormRequest
             'medicines.*.medicine_id.required' => 'Bạn phải chọn một loại thuốc.',
             'medicines.*.medicine_id.exists' => 'Thuốc không tồn tại trong cơ sở dữ liệu.',
 
-            'medicines.*.quantity.required' => 'Số lượng là bắt buộc.',
-            'medicines.*.quantity.integer' => 'Số lượng phải là số nguyên.',
-         
-            'medicines.*.dosage.required' => 'Liều lượng là bắt buộc.',
+            
         ];
     }
 }
