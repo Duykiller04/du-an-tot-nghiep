@@ -254,9 +254,21 @@
             </div>
             <!-- Tab Danh sách -->
             <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="tab-danh-sach">
-                <h4>Danh sách</h4>
-                <p>Danh sách các mặt hàng sẽ hiển thị tại đây.</p>
-                <!-- Nội dung tùy chỉnh của danh sách -->
+                <h4 class="mb-3">Danh sách đơn hàng hôm nay</h4>
+                <table class="table table-bordered table-hover" id="invoice-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Tên khách hàng</th>
+                            <th>Tổng tiền</th>
+                            <th>Thời gian tạo</th>
+                            <th>loại đơn thuốc</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu từ API sẽ được thêm ở đây -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -358,9 +370,11 @@
                         <small id="price-${item.id}">${item.price.toLocaleString()}₫</small>
                         <div class="d-flex align-items-center">
                             <select class="form-select form-select-sm mt-2 lot-select me-2" 
+                                    data-item-id="${item.id}"
                                     onchange="updateQuantityOnLotChange(${item.id}, this)">
                                 ${batchOptions}
                             </select>
+
                             <small class="me-2">(Tồn: ${selectedBatch ? selectedBatch.quantity : 0})</small>
                             <small class="me-2" id="expiration-date-${item.id}">
                                 (HSD: ${selectedBatch ? selectedBatch.expiration_date : "N/A"})
@@ -368,18 +382,21 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
-                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="decreaseQuantity(${item.id})">-</button>
+                        <button class="btn btn-sm btn-outline-secondary me-2" 
+                            onclick="decreaseQuantity(${item.id}, ${item.price})">-</button>
                         <input type="number" class="form-control form-control-sm text-center" 
                             value="${item.quantity}" 
                             min="1" 
                             name="quantity[${selectedBatch ? selectedBatch.id : ''}]"
-                            onchange="updateQuantity(${item.id}, this.value)" 
+                            onchange="updateQuantity(${item.id}, ${item.price}, this.value)" 
                             style="width: 60px;">
-                        <button class="btn btn-sm btn-outline-secondary ms-2" onclick="increaseQuantity(${item.id})">+</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" 
+                            onclick="increaseQuantity(${item.id}, ${item.price})">+</button>
                     </div>
+
                     <div>
                         <span>${(item.price * item.quantity).toLocaleString()}₫</span>
-                        <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart(${item.id})">X</button>
+                        <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart(${item.id}, ${item.price})">X</button>
                     </div>
                     <!-- Hidden Inputs to store batch details -->
                     <input type="hidden" name="batch_total_price[${selectedBatch ? selectedBatch.id : ''}]" value="${(item.price * item.quantity)}">
@@ -420,20 +437,19 @@
             }
         }
 
-        function updateQuantity(itemId, quantity) {
+        function updateQuantity(itemId, price, quantity) {
             if (quantity < 1) {
                 alert("Số lượng không thể nhỏ hơn 1.");
-                return;
+                quantity = 1;
             }
 
-            let cartItem = cart.find(item => item.id === itemId);
+            let cartItem = cart.find(item => item.id === itemId && item.price === price);
             if (cartItem) {
                 cartItem.quantity = parseInt(quantity);
-
-                // Cập nhật lại tổng giá trị và hiển thị
                 renderCart();
             }
         }
+
 
         function updateTotalAmount() {
             // Giả sử mỗi item trong giỏ hàng có các thuộc tính 'price' (giá) và 'quantity' (số lượng)
@@ -473,33 +489,48 @@
 
             renderCart();
         }
+        function getSelectedPrice(itemId) {
+            // Lấy giá trị (price) của batch hiện tại được chọn từ dropdown
+            let selectElement = document.querySelector(`.lot-select[data-item-id="${itemId}"]`);
+            if (selectElement) {
+                let selectedOption = selectElement.selectedOptions[0];
+                return parseFloat(selectedOption.getAttribute('data-price'));
+            }
+            return null;
+        }
 
 
-        function increaseQuantity(productId) {
-            let product = cart.find(item => item.id === productId);
-            if (product) {
-                product.quantity++;
+        function increaseQuantity(itemId, price) {
+            // Tìm item trong giỏ hàng dựa trên id sản phẩm và price của lô hàng
+            let cartItem = cart.find(item => item.id === itemId && item.price === price);
+            if (cartItem) {
+                cartItem.quantity++;
                 renderCart();
             }
         }
 
-        function decreaseQuantity(productId) {
-            let product = cart.find(item => item.id === productId);
-            if (product && product.quantity > 1) {
-                product.quantity--;
+
+        function decreaseQuantity(itemId, price) {
+            // Tìm item trong giỏ hàng dựa trên id sản phẩm và price của lô hàng
+            let cartItem = cart.find(item => item.id === itemId && item.price === price);
+            if (cartItem) {
+                if (cartItem.quantity > 1) {
+                    cartItem.quantity--;
+                } else {
+                    removeFromCart(itemId, price); // Xóa sản phẩm nếu số lượng giảm về 0
+                }
                 renderCart();
-            } else {
-                removeFromCart(productId);
             }
         }
 
-        function removeFromCart(productId) {
-            let index = cart.findIndex(item => item.id === productId);
+        function removeFromCart(itemId, price) {
+            let index = cart.findIndex(item => item.id === itemId && item.price === price);
             if (index !== -1) {
                 cart.splice(index, 1);
                 renderCart();
             }
         }
+
 
         let selectedCategory = "";
         document.getElementById("category-filter1").addEventListener("change", (e) => {
@@ -581,8 +612,9 @@
                         <br>
                         <small id="price-${item.id}">${item.price.toLocaleString()}₫</small>
                         <div class="d-flex align-items-center">
-                            <select class="form-select form-select-sm mt-2 lot-select me-2" 
-                                    onchange="updateQuantityDoseOnLotChange(${item.id}, this)">
+                             <select class="form-select form-select-sm mt-2 lot-select me-2" 
+                                    data-item-id="${item.id}"
+                                    onchange="updateQuantityOnLotChange(${item.id}, this)">
                                 ${batchOptions}
                             </select>
                             <small class="me-2">(Tồn: ${selectedBatch ? selectedBatch.quantity : 0})</small>
@@ -591,19 +623,24 @@
                             </small>
                         </div>
                     </div>
+                    
                     <div class="d-flex align-items-center">
-                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="decreaseDoseQuantity(${item.id})">-</button>
+                        <button class="btn btn-sm btn-outline-secondary me-2" 
+                            onclick="decreaseDoseQuantity(${item.id}, ${item.price})">-</button>
                         <input type="number" class="form-control form-control-sm text-center" 
                             value="${item.quantity}" 
                             min="1" 
                             name="quantity[${selectedBatch ? selectedBatch.id : ''}]"
-                            onchange="updateDoseQuantity(${item.id}, this.value)" 
+                            onchange="updateDoseQuantity(${item.id}, ${item.price}, this.value)" 
                             style="width: 60px;">
-                        <button class="btn btn-sm btn-outline-secondary ms-2" onclick="increaseDoseQuantity(${item.id})">+</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" 
+                            onclick="increaseDoseQuantity(${item.id}, ${item.price})">+</button>
                     </div>
+
+
                     <div>
                         <span>${(item.price * item.quantity).toLocaleString()}₫</span>
-                        <button class="btn btn-sm btn-danger ms-3" onclick="removeDoseFromCart(${item.id})">X</button>
+                        <button class="btn btn-sm btn-danger ms-3" onclick="removeDoseFromCart(${item.id}, ${item.price})">X</button>
                     </div>
                     <!-- Hidden Inputs to store batch details -->
                     <input type="hidden" name="batch_total_price[${selectedBatch ? selectedBatch.id : ''}]" value="${(item.price * item.quantity)}">
@@ -644,17 +681,16 @@
             }
         }
 
-        function updateDoseQuantity(itemId, quantity) {
+       
+        function updateDoseQuantity(itemId, price, quantity) {
             if (quantity < 1) {
                 alert("Số lượng không thể nhỏ hơn 1.");
-                return;
+                quantity = 1;
             }
 
-            let cartItem = doseCart.find(item => item.id === itemId);
+            let cartItem = doseCart.find(item => item.id === itemId && item.price === price);
             if (cartItem) {
                 cartItem.quantity = parseInt(quantity);
-
-                // Cập nhật lại tổng giá trị và hiển thị
                 renderDoseCart();
             }
         }
@@ -699,26 +735,28 @@
         }
 
 
-        function increaseDoseQuantity(productId) {
-            let product = doseCart.find(item => item.id === productId);
-            if (product) {
-                product.quantity++;
+        function increaseDoseQuantity(itemId, price) {
+            let cartItem = doseCart.find(item => item.id === itemId && item.price === price);
+            if (cartItem) {
+                cartItem.quantity++;
                 renderDoseCart();
             }
         }
 
-        function decreaseDoseQuantity(productId) {
-            let product = doseCart.find(item => item.id === productId);
-            if (product && product.quantity > 1) {
-                product.quantity--;
+        function decreaseDoseQuantity(itemId, price) {
+            let cartItem = doseCart.find(item => item.id === itemId && item.price === price);
+            if (cartItem) {
+                if (cartItem.quantity > 1) {
+                    cartItem.quantity--;
+                } else {
+                    removeDoseFromCart(itemId, price); // Xóa sản phẩm nếu số lượng giảm về 0
+                }
                 renderDoseCart();
-            } else {
-                removeFromCart(productId);
             }
         }
 
-        function removeDoseFromCart(productId) {
-            let index = doseCart.findIndex(item => item.id === productId);
+        function removeDoseFromCart(itemId, price) {
+            let index = doseCart.findIndex(item => item.id === itemId && item.price === price);
             if (index !== -1) {
                 doseCart.splice(index, 1);
                 renderDoseCart();
@@ -736,6 +774,72 @@
         });
 
         renderProducts2();
+        ///////
+        document.addEventListener('DOMContentLoaded', function () {
+        // Hàm gọi API và render dữ liệu
+        function fetchInvoices() {
+            fetch('http://127.0.0.1:8000/api/invoices/today', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Không thể lấy dữ liệu từ API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderInvoices(data);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi gọi API:', error);
+                });
+        }
+
+        // Hàm render dữ liệu vào bảng
+        function renderInvoices(invoices) {
+            const tableBody = document.querySelector('#invoice-table tbody');
+            tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+
+            if (invoices.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center">Không có đơn hàng nào trong hôm nay</td></tr>`;
+                return;
+            }
+
+            invoices.forEach((invoice, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${invoice.customer_name || 'N/A'}</td>
+                        <td>${invoice.total_price ? invoice.total_price.toLocaleString() + '₫' : '0₫'}</td>
+                        <td>${formatDate(invoice.created_at)}</td>
+                        <td>${invoice.type || ''}</td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        // Hàm format ngày giờ
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+
+            return `${hours}:${minutes}:${seconds} ${day}-${month}-${year}`;
+        }
+
+        // Gọi fetchInvoices khi chuyển sang tab "Danh sách"
+        const tabDanhSach = document.getElementById('tab-danh-sach');
+        tabDanhSach.addEventListener('click', fetchInvoices);
+    });
+
     </script>
 </body>
 

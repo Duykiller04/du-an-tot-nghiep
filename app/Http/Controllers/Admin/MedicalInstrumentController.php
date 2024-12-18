@@ -255,7 +255,7 @@ class MedicalInstrumentController extends Controller
     }
     public function getRestore()
     {
-        $data = Medicine::onlyTrashed()->where('type_product', 1)->orderBy('deleted_at', 'desc')->get();
+        $data = Medicine::onlyTrashed()->where('type_product', 1)->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.medicalInstrument.restore', compact('data'));
     }
     public function restore(Request $request)

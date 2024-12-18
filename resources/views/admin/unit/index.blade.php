@@ -158,7 +158,6 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th></th> <!-- Cột để click mở rộng -->
                                                 <th>STT</th>
                                                 <th>Tên đơn vị</th>
                                                 <th>Thời gian tạo</th>
@@ -255,13 +254,7 @@
                     }
                 }, 
                 columns: [
-                    {
-                        className: 'details-control',
-                        orderable: false,
-                        data: null,
-                        defaultContent: '<i class="bx bx-sort-down"></i>',
-                        width: '20px'
-                    },
+                    
                     {
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -280,9 +273,6 @@
                         orderable: false,
                         searchable: false
                     }
-                ],
-                order: [
-                    [1, 'desc']
                 ],
                 language: {
                     "sEmptyTable": "Không có dữ liệu trong bảng",
@@ -356,54 +346,6 @@
             $('#filter-btn').click(function() {
                     table.draw();
                 });
-            $('#example tbody').on('click', 'td.details-control', function() {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-                
-                
-                if (row.child.isShown()) {
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    var rowData = row.data();
-                    var unitId = rowData.id;
-
-                    $.ajax({
-                        url: '{{ route('admin.units.getChildren') }}',
-                        method: 'GET',
-                        data: {
-                            id: unitId
-                        },
-                        success: function(children) {   
-                            // Nếu children là chuỗi JSON, hãy phân tích nó
-                            if (typeof children === 'string') {
-                                children = JSON.parse(children);
-                            }
-
-                            if (children.length > 0) {
-                                var html =
-                                    '<table class="table"><tr><th>STT</th><th>Tên đơn vị con</th></tr>';
-                                children.forEach(function(child) {
-                                    html += '<tr><td>' + child.id + '</td><td>' + child
-                                        .name + '</td>';
-                                   
-                                });
-                                html += '</table>';
-                                row.child(html).show();
-                                tr.addClass('shown');
-                            } else {
-                                row.child('<div>Không có đơn vị con</div>').show();
-                                tr.addClass('shown');
-                            }
-                        },
-                        error: function() {
-                            row.child('<div>Lỗi khi tải đơn vị con.</div>').show();
-                            tr.addClass('shown');
-                        }
-                    });
-
-                }
-            });
             $(document).on('click', '.btn-delete', function(e) {
                 e.preventDefault();
 

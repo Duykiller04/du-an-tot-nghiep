@@ -265,7 +265,7 @@ class MedicineController extends Controller
     }
     public function getRestore()
     {
-        $data = Medicine::onlyTrashed()->where('type_product', 0)->orderBy('deleted_at', 'desc')->get();
+        $data = Medicine::onlyTrashed()->where('type_product', 0)->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.medicine.restore', compact('data'));
     }
     public function restore(Request $request)

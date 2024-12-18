@@ -81,9 +81,7 @@
                                 <th>STT</th>
                                 <th>Thuốc</th>
                                 <th>Đơn vị</th>
-                                <th>Lô</th>
                                 <th>Số lượng</th>
-                                <th>Giá hiện tại</th>
                                 <th>Liều dùng</th>
                             </tr>
                         </thead>
@@ -96,10 +94,8 @@
                                 <tr>
                                     <td>{{ $stt++ }}</td>
                                     <td>{{ $item->medicine->name }}</td>
-                                    <td>{{ $item->unit->name }}</td>
-                                    <td>{{ $item->batch->created_at->format("d/m/Y H:i:s") }}</td>
+                                    <td>{{ $item->unit->name }}</td>             
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ $item->current_price }}</td>
                                     <td>{{ $item->dosage }}</td>
                                 </tr>
                             @endforeach

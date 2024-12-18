@@ -217,7 +217,7 @@ class UserController extends Controller
     }
     public function getRestore()
     {
-        $data = User::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        $data = User::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
         return view('admin.users.restore', compact('data'));
     }
     public function restore(Request $request)

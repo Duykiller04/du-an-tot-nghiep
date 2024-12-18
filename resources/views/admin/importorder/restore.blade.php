@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card vh-100">
 
 
                 <div class="card-body">
@@ -34,15 +34,17 @@
                                             <thead class="table-light">
                                                 <form action="{{ route('admin.restore.importorder') }}" method="POST">
                                                     @csrf
+                                                    <div class="d-flex justify-content-end pb-3">
+                                                        <button type="submit" class="btn btn-primary">Khôi phục</button>
+                                                    </div>
                                                     <table id="example"
                                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Tên Kho</th>
+                                                                <th>Mã nhập kho</th>
                                                                 <th>Người kiểm tra</th>
-                                                                <th>Nhà cung cấp</th>
                                                                 <th>Ngày nhập</th>
                                                                 <th>Tổng tiền</th>
                                                                 <th>Ngày xóa</th>
@@ -56,20 +58,19 @@
                                                                             value="{{ $item->id }}">
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->storage->name }}</td>
                                                                     <td>{{ $item->user->name }}</td>
-                                                                    <td>{{ $item->supplier->name }}</td>
+                                                                    <td>{{ $item->date_added }}</td>
                                                                     <td>{{ $item->total }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
                                                     </table>
-                                                    <button type="submit" class="btn btn-primary">Khôi phục</button>
                                                 </form>
                                             </thead>
                                         </table>
                                         <!-- end table -->
+                                        {{ $data->links() }}
                                     </div>
                                 </div>
                                 <!--end accordion-->
