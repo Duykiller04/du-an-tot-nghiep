@@ -31,7 +31,7 @@ class StoreUserRequest extends FormRequest
             'description' => 'nullable|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
-            'type' => ['required', 'in:' . User::TYPE_ADMIN . ',' . User::TYPE_STAFF],
+            
         ];
     }
     public function messages()
@@ -64,7 +64,7 @@ class StoreUserRequest extends FormRequest
             'password.min' => ' Mật khẩu của trường này phải có ít nhất 8 ký tự.',
             'password.confirmed' => 'Mật khẩu không giống nhau vui lòng nhập lại.',
 
-            'type' => ' Type',
+           
         ];
     }
 }
