@@ -46,11 +46,7 @@
                                                                 <th><input type="checkbox" id="select-all"></th>
                                                                 <th>Mã đơn thuốc mẫu</th>
                                                                 <th>Bệnh</th>
-                                                                <th>Tên bệnh viện</th>
                                                                 <th>Tên bác sĩ</th>
-                                                                <th>Tuổi</th>
-                                                                <th>Số điện thoại</th>
-                                                                <th>Tổng tiền</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -63,11 +59,7 @@
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
                                                                     <td>{{ $item->disease->disease_name }}</td>
-                                                                    <td>{{ $item->name_hospital }}</td>
                                                                     <td>{{ $item->name_doctor }}</td>
-                                                                    <td>{{ date('m/d/Y', strtotime($item->age)) }}</td>
-                                                                    <td>{{ $item->phone_doctor }}</td>
-                                                                    <td>{{ $item->total }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
