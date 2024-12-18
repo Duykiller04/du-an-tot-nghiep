@@ -49,6 +49,7 @@ class CutDosePrescriptionController extends Controller
      */
     public function store(StoreCutDosePrescriptionRequest $request)
     {
+        //dd($request);
         try {
             DB::beginTransaction();
             $cutDosePrescription = CutDosePrescription::query()->create([
@@ -64,8 +65,8 @@ class CutDosePrescriptionController extends Controller
                     'medicine_id' => $medicine['medicine_id'],
                     'cut_dose_prescription_id' => $cutDosePrescription->id,
                     'unit_id' => $unitId,
-                    'quantity' => $medicine['quantity'],
-                    'dosage' => $medicine['dosage'],
+                    // 'quantity' => $medicine['quantity'],
+                    // 'dosage' => $medicine['dosage'],
                 ]);
             }
             DB::commit();
@@ -125,8 +126,8 @@ class CutDosePrescriptionController extends Controller
                         $detail->update([
                             'medicine_id' => $item['medicine_id'],
                             'unit_id' => $unitId,
-                            'quantity' => $item['quantity'],
-                            'dosage' => $item['dosage'],
+                            // 'quantity' => $item['quantity'],
+                            // 'dosage' => $item['dosage'],
                         ]);
                     }
                 } else {
@@ -135,8 +136,8 @@ class CutDosePrescriptionController extends Controller
                     $detail = $cutDosePrescription->cutDosePrescriptionDetails()->create([
                         'medicine_id' => $item['medicine_id'],
                         'unit_id' => $unitId,
-                        'quantity' => $item['quantity'],
-                        'dosage' => $item['dosage'],
+                        // 'quantity' => $item['quantity'],
+                        // 'dosage' => $item['dosage'],
                     ]);
                 }
             }

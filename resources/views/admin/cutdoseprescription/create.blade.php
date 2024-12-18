@@ -104,7 +104,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-3">
+                                    {{-- <div class="col-3">
                                         <label for="quantity" class="form-label" id="unitLabel-0">Số lượng</label>
                                         <input type="number" name="medicines[0][quantity]"
                                             value="{{ old('medicines.0.quantity') ?? 0 }}" class="form-control">
@@ -114,7 +114,7 @@
                                         <label for="dosage" class="form-label">Liều lượng</label>
                                         <input type="text" name="medicines[0][dosage]"
                                             value="{{ old('medicines.0.dosage') }}" class="form-control">
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
 

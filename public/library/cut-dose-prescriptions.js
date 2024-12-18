@@ -24,15 +24,7 @@ document.getElementById("add-medicine").addEventListener("click", function () {
             </select>
         </div>
 
-        <div class="col-3">
-            <label for="quantity" class="form-label" id="unitLabel-${index}">Số lượng</label>
-            <input type="number" name="medicines[${index}][quantity]" class="form-control" value="${oldMedicine.quantity || 0}">
-        </div>
-
-        <div class="col-4">
-            <label for="dosage" class="form-label">Liều lượng</label>
-            <input type="text" name="medicines[${index}][dosage]" class="form-control" value="${oldMedicine.dosage || ''}">
-        </div>
+       
 
         <div class="col-md-1 d-flex align-items-end">
             <button type="button" class="btn btn-danger remove-medicine">Xóa</button>
@@ -48,27 +40,27 @@ document.addEventListener("click", function (e) {
     }
 });
 //render đơn vị theo id thuốc
-$(document).on("change", 'select[name$="[medicine_id]"]', function () {
-    var medicineId = $(this).val();
-    var unitLabelId = $(this)
-    .closest(".medicine-row")
-    .find('label[for="quantity"]')
-    .attr("id");
+// $(document).on("change", 'select[name$="[medicine_id]"]', function () {
+//     var medicineId = $(this).val();
+//     var unitLabelId = $(this)
+//     .closest(".medicine-row")
+//     .find('label[for="quantity"]')
+//     .attr("id");
     
-        $.ajax({
-            url: `/api/get-medicine-detail/${medicineId}`,
-            method: "GET",
-            success: function (response) { 
-                if (response.unitName) {
-                    $(`#${unitLabelId}`).text(`Số lượng (${response.unitName})`);
-                } else {
-                    $(`#${unitLabelId}`).text("Số lượng");
-                }
-            },
-            error: function (xhr) {
-                console.error("Error:", xhr.responseText);
-            },
-        });
-});
+//         $.ajax({
+//             url: `/api/get-medicine-detail/${medicineId}`,
+//             method: "GET",
+//             success: function (response) { 
+//                 if (response.unitName) {
+//                     $(`#${unitLabelId}`).text(`Số lượng (${response.unitName})`);
+//                 } else {
+//                     $(`#${unitLabelId}`).text("Số lượng");
+//                 }
+//             },
+//             error: function (xhr) {
+//                 console.error("Error:", xhr.responseText);
+//             },
+//         });
+// });
 
 

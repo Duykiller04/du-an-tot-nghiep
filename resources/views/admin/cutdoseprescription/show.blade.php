@@ -38,10 +38,10 @@
                             disabled>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="name_hospital">Tên bệnh viện (<span
+                            <label class="form-label" for="name_hospital">Tên đơn thuốc (<span
                                     class="text-danger">*</span>)</label>
                             <input type="text" class="form-control"
-                                id="name_hospital" name="name_hospital" value="{{ $cutDosePrescription->name_hospital }}"
+                                id="name_hospital" name="name_hospital" value="{{ $cutDosePrescription->name }}"
                                 disabled>
                         </div>
                         <div class="mb-3">
@@ -52,17 +52,11 @@
                                 disabled>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="age">Tuổi (<span class="text-danger">*</span>)</label>
-                            <input type="number" class="form-control" id="age" name="age"
-                                value="{{ $cutDosePrescription->age }}" disabled>
+                            <label class="form-label" for="age">Mô tả đơn thuốc</label>
+                            
+                            <textarea name="" id="" cols="30" rows="10" class="form-control" disabled>{{ $cutDosePrescription->description}}</textarea>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="phone_doctor">Số điện thoại (<span
-                                    class="text-danger">*</span>)</label>
-                            <input type="number" class="form-control"
-                                id="phone_doctor" name="phone_doctor" value="{{ $cutDosePrescription->phone_doctor }}"
-                                disabled>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -80,9 +74,7 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Thuốc</th>
-                                <th>Đơn vị</th>
-                                <th>Số lượng</th>
-                                <th>Liều dùng</th>
+                        
                             </tr>
                         </thead>
 
@@ -94,9 +86,7 @@
                                 <tr>
                                     <td>{{ $stt++ }}</td>
                                     <td>{{ $item->medicine->name }}</td>
-                                    <td>{{ $item->unit->name }}</td>             
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>{{ $item->dosage }}</td>
+                                    
                                 </tr>
                             @endforeach
                         </tbody>

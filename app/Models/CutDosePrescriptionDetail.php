@@ -13,10 +13,7 @@ class CutDosePrescriptionDetail extends Model
         'medicine_id',
         'cut_dose_prescription_id',
         'unit_id',
-        'batch_id',
-        'quantity',
-        'current_price',
-        'dosage',
+        
     ];
 
     public function medicine()
