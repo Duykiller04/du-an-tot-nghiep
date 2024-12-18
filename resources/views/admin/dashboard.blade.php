@@ -181,83 +181,18 @@
                     </div> <!-- end row-->
 
                     <div class="row align-items-stretch">
-                        <div class="col-xl-8">
+                        <div class="col-12">
                             <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thông số thua nhập cửa hàng</h4>
-                                    <div>
-                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
-                                            data-type="day">
-                                            Day
-                                        </button>
-                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
-                                            data-type="week">
-                                            Week
-                                        </button>
-                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
-                                            data-type="month">
-                                            Month
-                                        </button>
-                                        <button type="button" class="btn btn-soft-primary btn-sm btn-timeFrame"
-                                            data-type="year">
-                                            Year
-                                        </button>
-                                    </div>
                                 </div><!-- end card header -->
-
-                                <div class="card-header p-0 border-0 bg-light-subtle">
-                                    <div class="row g-0 text-center">
-                                        <div class="col-6 col-sm-4">
-                                            <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1"><span class="counter-value"
-                                                id="totalStoreOrders">0</span></h5>
-                                                <p class="text-muted mb-0">Đơn thuốc</p>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-6 col-sm-4">
-                                            <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1"><span class="counter-value"
-                                                    id="totalRevenueOrders">0</span></h5>
-                                                <p class="text-muted mb-0">Thu nhập</p>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-6 col-sm-4">
-                                            <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1"><span class="counter-value" data-target="367">0</span>
-                                                </h5>
-                                                <p class="text-muted mb-0">Doanh thu</p>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                    </div>
-                                </div><!-- end card header -->
-
                                 <div class="card-body p-0 pb-2">
                                     <div class="w-100">
-                                        <canvas id="statisticsChart"></canvas>
+                                        <div id="statisticsChart"></div>
                                     </div>
                                 </div><!-- end card body -->
                             </div><!-- end card -->
                         </div><!-- end col -->
-
-                        <div class="col-xl-4">
-                            <!-- card -->
-                            <div class="card card-height-100">
-                                <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Thống kê nhà cung cấp theo tổng số thuốc</h4>
-                                </div><!-- end card header -->
-
-                                <!-- card body -->
-                                <div class="card-body">
-                                    <canvas id="supplierChartCanvas" width="400" height="400"></canvas>
-                                </div>
-                                <!-- end card body -->
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col -->
                     </div>
 
                     <div class="row">
@@ -482,7 +417,6 @@
     <!-- Dashboard init -->
     {{-- <script src="{{ asset('theme/admin/assets/js/pages/dashboard-ecommerce.init.js') }}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ asset('library/dashboard-supplier.js') }}"></script>
     <script src="{{ asset('library/order.js') }}"></script>
     <script src="{{ asset('library/dashboard-topmedicines.js') }}"></script>
     <script src="{{ asset('library/dashboard-topsupplier.js') }}"></script>
