@@ -26,7 +26,8 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = User::query()->latest('id');
+            $query = User::query() ->where('type', 'staff')
+            ->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
