@@ -13,7 +13,7 @@ class GetAllProductController extends Controller
 {
     public function getAllProduct()
     {
-        $medicines = Medicine::with(['category', 'batches.inventory'])->get();
+        $medicines = Medicine::with(['category', 'batches.inventory', 'unitConversions'])->get();
         // dd($medicines->toArray());
         // Biến đổi dữ liệu
         $transformedData = $medicines->map(function ($medicine) {
