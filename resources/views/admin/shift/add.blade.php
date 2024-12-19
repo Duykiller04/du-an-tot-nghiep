@@ -55,38 +55,32 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>                 
-                            <div id="details-container">
-                                @for ($i = 0; $i < max(count(old('details', [1])), session('detail_count', 1)); $i++)
-                                    <div class="row mb-3 detail-row">
-                                        <div class="col-lg-3">
-                                            <label class="form-label" for="user_id">Chọn nhân viên<span class="text-danger">*</span></label>
-                                            <select class="form-control @error('details.' . $i . '.user_id') is-invalid @enderror" name="details[{{ $i }}][user_id]">
-                                                <option value="">Chọn nhân viên<span class="text-danger">*</span></option>
-                                                @if ($user->isNotEmpty())
-                                                    @foreach ($user as $item)
-                                                        <option value="{{ $item->id }}" {{ old('details.' . $i . '.user_id') == $item->id ? 'selected' : '' }}>
-                                                            {{ $item->name }}
-                                                        </option>
-                                                    @endforeach
-                                                @else
-                                                    <option value="">Không có nhân viên nào</option>
-                                                @endif
-                                            </select>
-                                            @error('details.' . $i . '.user_id')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
+                            <div class="mb-3">
+                                <label class="form-label">Chọn nhân viên<span class="text-danger">*</span></label>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" id="select_all">
+                                    <label class="form-check-label" for="select_all">Chọn tất cả</label>
+                                </div>
+                                <div id="user-checkboxes">
+                                    @foreach ($user as $item)
+                                        <div class="form-check">
+                                            <input 
+                                                type="checkbox" 
+                                                class="form-check-input" 
+                                                id="user_{{ $item->id }}" 
+                                                name="details[]" 
+                                                value="{{ $item->id }}" 
+                                                {{ in_array($item->id, old('details', [])) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="user_{{ $item->id }}">{{ $item->name }}</label>
                                         </div>
-
-                                        <div class="col-lg-1 d-flex align-items-center">
-                                            <button type="button" class="btn btn-danger btn-remove-detail">Xóa</button>
-                                        </div>
-                                    </div>
-                                @endfor
+                                    @endforeach
+                                </div>
+                                @error('details')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
-
-                            <div>
-                                <button id="btn-add-detail" type="button" class="btn btn-primary">Thêm nhân viên +</button>
-                            </div>
+                            
+                            
 
                             <div class="text-end mb-4">
                                 <a href="{{ route('admin.shifts.index') }}" class="btn btn-warning w-sm">Quay lại</a>
@@ -107,50 +101,10 @@
 
 @section('js')
     <script>
-        var detailCount = {{ max(count(old('details', [1])), session('detail_count', 1)) }};
-        var users = @json($user); // Chuyển đổi collection $user thành JSON
-
-        document.getElementById('btn-add-detail').addEventListener('click', function() {
-            if (detailCount >= 5) {
-                alert('Chỉ được phép thêm tối đa 5 chi tiết.');
-                return;
-            }
-
-            var newDetail = createDetailElement(detailCount);
-            document.getElementById('details-container').appendChild(newDetail);
-            addRemoveButtonEvent(newDetail.querySelector('.btn-remove-detail'));
-            detailCount++;
-        });
-
-        function createDetailElement(index) {
-            var newDetail = document.createElement('div');
-            newDetail.className = 'row mb-3 detail-row';
-            newDetail.innerHTML = `
-                <div class="col-lg-3">
-                    <select class="form-control" name="details[${index}][user_id]">
-                        <option value="">Chọn nhân viên<span class="text-danger">*</span></option>
-                        ${users.length > 0 ? users.map(user => `<option value="${user.id}">${user.name}</option>`).join('') : '<option value="">Không có nhân viên nào</option>'}
-                    </select>
-                </div>
-                <div class="col-lg-1 d-flex align-items-end">
-                    <button type="button" class="btn btn-danger btn-remove-detail">Xóa</button>
-                </div>
-            `;
-            return newDetail;
-        }
-
-        function addRemoveButtonEvent(button) {
-            button.addEventListener('click', function() {
-                if (detailCount > 1) {
-                    this.closest('.detail-row').remove();
-                    detailCount--;
-                } else {
-                    alert('Ca làm phải có ít nhất một nhân viên.');
-                }
-            });
-        }
-
-        document.querySelectorAll('.btn-remove-detail').forEach(addRemoveButtonEvent);
+       document.getElementById('select_all').addEventListener('change', function () {
+        let checkboxes = document.querySelectorAll('#user-checkboxes input[type="checkbox"]');
+        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    });
     </script>
 @endsection
 @endsection
