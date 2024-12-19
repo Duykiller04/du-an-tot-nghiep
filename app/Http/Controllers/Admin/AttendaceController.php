@@ -181,7 +181,7 @@ class AttendaceController extends Controller
         $userId = $request->get('user_id');
         $month = $request->get('month', now()->format('m'));
         $year = $request->get('year', now()->format('Y'));
-        $arrUsers = User::all();
+        $arrUsers = User::where('type', 'staff')->get();
 
         $attendances = Attendace::with(['shift', 'user'])
             ->whereYear('created_at', $year)

@@ -60,7 +60,7 @@
                                                                 <tr>
                                                                    
                                                                     <td>{{ $index+1 }}</td>
-                                                                    <td>{{ $item->disease->disease_name }}</td>
+                                                                    <td>{{ $item->disease->disease_name ? $item->disease->disease_name : 'N/A' }}</td>
                                                                     <td>{{ $item->customer_name }}</td>
                                                                     <td>{{ $item->age }}</td>
                                                                     <td>{{ $item->phone }}</td>
