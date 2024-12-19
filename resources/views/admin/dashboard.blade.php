@@ -184,7 +184,7 @@
                         <div class="col-12">
                             <div class="card card-height-100">
                                 <div class="card-header border-0 align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Thông số thua nhập cửa hàng</h4>
+                                    <h4 class="card-title mb-0 flex-grow-1">Thông số thu nhập cửa hàng</h4>
                                 </div><!-- end card header -->
                                 <div class="card-body p-0 pb-2">
                                     <div class="w-100">
@@ -195,9 +195,9 @@
                         </div><!-- end col -->
                     </div>
 
-                    <div class="row">
+                    <div class="row align-items-stretch">
                         <div class="col-xl-6">
-                            <div class="card">
+                            <div class="card card-height-100">
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Top 5 Hãng thuốc bán chạy nhất</h4>
                                     <div class="flex-shrink-0">
