@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label for="name">Tên<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name"
+                            <input type="text" class="form-control" id="name" name="name"  placeholder="Nhập tên người dùng"
                                 value="{{ old('name', $user->name) }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
@@ -107,7 +107,7 @@
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label for="email">Email<span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email" name="email"
+                            <input type="email" class="form-control" id="email" name="email"  placeholder="Nhập email người dùng"
                                 value="{{ old('email', $user->email) }}">
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
@@ -116,7 +116,7 @@
 
                         <div class="form-group mb-3">
                             <label for="phone">Điện thoại<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="phone" name="phone"
+                            <input type="text" class="form-control" id="phone" name="phone"  placeholder="Nhập số điện thoại người dùng"
                                 value="{{ old('phone', $user->phone) }}">
                             @error('phone')
                                 <span class="text-danger">{{ $message }}</span>
@@ -125,7 +125,7 @@
 
                         <div class="form-group mb-3">
                             <label for="address">Địa chỉ</label>
-                            <input type="text" class="form-control" id="address" name="address"
+                            <input type="text" class="form-control" id="address" name="address"  placeholder="Nhập địa chỉ người dùng"
                                 value="{{ old('address', $user->address) }}">
                             @error('address')
                                 <span class="text-danger">{{ $message }}</span>
@@ -143,7 +143,7 @@
 
                         <div class="form-group mb-3">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control" id="description" name="description">{{ old('description', $user->description) }}</textarea>
+                            <textarea class="form-control" id="description" name="description"  placeholder="Nhập mô tả người dùng">{{ old('description', $user->description) }}</textarea>
                         </div>
 
 

@@ -26,8 +26,7 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = User::query() ->where('type', 'staff')
-            ->latest('id');
+            $query = User::query()->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -131,21 +130,15 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(User $user)
     {
-        $user = User::findOrFail($id);
-
-        if (Auth::user()->type === 'staff' && Auth::id() != $id) {
-            return back()->withErrors(['error' => 'Bạn không có quyền sửa tài khoản này.']);
-        }
-
         return view('admin.users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, int $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         try {
             $model = User::findOrFail($id);
@@ -179,7 +172,7 @@ class UserController extends Controller
 
                 // Kiểm tra mật khẩu mới và xác nhận mật khẩu
                 $request->validate([
-                    'new_password' => 'required|min:8',
+                    'new_password' => 'required',
                     'confirm_password' => 'same:new_password',
                 ]);
 
@@ -250,7 +243,7 @@ class UserController extends Controller
 
                 // Kiểm tra mật khẩu mới và xác nhận mật khẩu
                 $request->validate([
-                    'new_password' => 'required|min:8',
+                    'new_password' => 'required',
                     'confirm_password' => 'same:new_password',
                 ]);
 
@@ -272,7 +265,6 @@ class UserController extends Controller
             return back()->with('error', 'Cập nhật thất bại: ' . $exception->getMessage());
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
