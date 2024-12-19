@@ -140,7 +140,7 @@ Route::prefix('admin')
 
         Route::resource('cutDoseOrders', CutDoseOrderController::class);
 
-        Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class);
+        Route::resource('cutDosePrescriptions', CutDosePrescriptionController::class)->except(['edit', 'update']);
 
         Route::resource('storage', StorageController::class);
 
