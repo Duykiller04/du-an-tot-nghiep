@@ -219,7 +219,7 @@ class MedicineController extends Controller
      */
     public function edit(string $id)
     {
-        $medicine = Medicine::with(['category', 'unitConversions.unit'])->findOrFail($id);
+        $medicine = Medicine::with(['category', 'unitConversions.unit', 'batches.supplier','batches.storage', 'batches.inventory.unit'])->findOrFail($id);
         $packaging_specification = Batch::where('medicine_id', $id)->pluck('packaging_specification')->first();
         $categories = Category::all();
         $storages = Storage::all();
@@ -248,6 +248,17 @@ class MedicineController extends Controller
             // Cập nhật thông tin thuốc
             $medicineData = $request->medicine;
             $medicine->update($medicineData);
+
+            $batches = $request->batches;
+            foreach ($batches as $batchId => $data) {
+                $batch = Batch::find($batchId);
+                
+                if ($batch) {
+                    $batch->update([
+                        'price_in_smallest_unit' => $data['price_in_smallest_unit']
+                    ]);
+                }
+            }
 
             DB::commit();
 
