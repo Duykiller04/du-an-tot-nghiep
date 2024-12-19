@@ -45,10 +45,8 @@
                                                                 <th><input type="checkbox" id="select-all"></th>
                                                                 <th>Mã tài khoản</th>
                                                                 <th>Tên tài khoản</th>
-                                                                <th>Ngày sinh</th>
-                                                                <th>Địa chỉ</th>
-                                                                <th>Số điện thoại</th>
                                                                 <th>Email</th>
+                                                                <th>Ngày tạo</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -61,10 +59,8 @@
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
                                                                     <td>{{ $item->name }}</td>
-                                                                    <td>{{ $item->birth }}</td>
-                                                                    <td>{{ $item->address }}</td>
-                                                                    <td>{{ $item->phone }}</td>
                                                                     <td>{{ $item->email }}</td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach

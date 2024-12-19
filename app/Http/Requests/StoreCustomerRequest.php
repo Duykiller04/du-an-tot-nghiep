@@ -22,9 +22,9 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nameCreate' => ['required', 'string', 'max:255'],
-            'phoneCreate' => ['required', 'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/', 'numeric', 'unique:students,phone'],
-            'addressCreate' => ['required', 'string','max:255'], 
+            'nameCreate' => ['required', 'string', 'max:255','min:3','regex:/^[^\d]*$/'],
+            'phoneCreate' => ['required', 'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/', 'numeric', 'unique:customers,phone'],
+            'addressCreate' => ['required', 'string','max:255','min:5','regex:/.*([a-zA-Z].*){3,}/'], 
             'emailCreate' => ['required', 'email','max:255','unique:customers,email'],
             'ageCreate' => ['required', 'numeric', 'min:0', 'max:150'],
             'weightCreate' => ['required', 'numeric', 'min:0', 'max:200'],
@@ -37,6 +37,8 @@ class StoreCustomerRequest extends FormRequest
             'nameCreate.required' => 'Trường tên là bắt buộc.',
             'nameCreate.string' => 'Tên phải là một chuỗi ký tự.',
             'nameCreate.max' => 'Tên không được vượt quá 255 ký tự.',
+            'nameCreate.regex' => 'Tên không được nhập số.',
+            'nameCreate.min' => 'Tên phải lớn hơn hoặc bằng 3 ký tự.',
 
             'phoneCreate.required' => 'Trường số điện thoại là bắt buộc.',
             'phoneCreate.regex' => 'Số điện thoại không đúng định dạng.',
@@ -44,7 +46,9 @@ class StoreCustomerRequest extends FormRequest
 
             'addressCreate.required' => 'Trường địa chỉ là bắt buộc.',
             'addressCreate.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+            'addressCreate.min' => 'Địa chỉ phải lớn hơn hoặc bằng 5 ký tự.',
             'addressCreate.string' => 'Địa chỉ phải là một chuỗi ký tự.',
+            'addressCreate.regex' => 'Địa chỉ phải chứa ít nhất 3 chữ cái.',
 
             'emailCreate.required' => 'Trường email là bắt buộc.',
             'emailCreate.email' => 'Trường email không đúng đinh dạng.',

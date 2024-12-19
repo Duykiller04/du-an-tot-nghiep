@@ -45,14 +45,8 @@
                                                                 <th><input type="checkbox" id="select-all"></th>
                                                                 <th>Mã đơn thuốc thông thường</th>
                                                                 <th>Tên khách hàng</th>
-                                                                <th>Giới tính</th>
-                                                                <th>Tuổi</th>
-                                                                <th>Điện thoại</th>
-                                                                <th>Loại bán</th>
-                                                                <th>Địa chỉ</th>
-                                                                <th>Email</th>
-                                                                <th>Cân nặng</th>
                                                                 <th>Tổng đơn</th>
+                                                                <th>Ngày mua</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -65,14 +59,8 @@
                                                                     </td>
                                                                     <td>{{ $item->id }}</td>
                                                                     <td>{{ $item->customer_name }}</td>
-                                                                    <td>{{ $item->gender }}</td>
-                                                                    <td>{{ $item->age }}</td>
-                                                                    <td>{{ $item->phone }}</td>
-                                                                    <td>{{ $item->type_sell }}</td>
-                                                                    <td>{{ $item->address }}</td>
-                                                                    <td>{{ $item->email }}</td>
-                                                                    <td>{{ $item->weight }}</td>
                                                                     <td>{{ $item->total_price }}</td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach

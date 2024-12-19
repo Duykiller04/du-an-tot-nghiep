@@ -70,7 +70,6 @@ Danh sách đơn thuốc
                             <tr>
                                 <th>STT</th>
                                 <th>Tên khách hàng</th>
-                                <th>Giới tính</th>
                                 <th>Ngày mua</th>
                                 <th>Tổng đơn hàng</th>
                                 <th>Hành động</th>
@@ -130,7 +129,6 @@ Danh sách đơn thuốc
                 columns: [
                     { data: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'customer_name' },
-                    { data: 'gender' },
                     { data: 'created_at' },
                     { data: 'total_price' },
                     { data: 'action', orderable: false, searchable: false }

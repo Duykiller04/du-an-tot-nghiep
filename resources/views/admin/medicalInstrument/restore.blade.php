@@ -46,8 +46,6 @@
                                                                 <th>Mã dụng cụ</th>
                                                                 <th>Danh mục dụng cụ</th>
                                                                 <th>Tên dụng cụ</th>
-                                                                <th>Giá nhập</th>
-                                                                <th>Giá bán</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -58,11 +56,9 @@
                                                                         <input type="checkbox" name="ids[]"
                                                                             value="{{ $item->id }}">
                                                                     </td>
-                                                                    <td>{{ $item->category->name }}</td>
                                                                     <td>{{ $item->medicine_code }}</td>
+                                                                    <td>{{ $item->category->name }}</td>
                                                                     <td>{{ $item->name }}</td>
-                                                                    <td>{{ $item->price_import }}</td>
-                                                                    <td>{{ $item->price_sale }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @endforeach
