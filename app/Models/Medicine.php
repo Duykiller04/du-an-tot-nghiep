@@ -43,6 +43,19 @@ class Medicine extends Model
     {
         return $this->hasMany(UnitConversion::class);
     }
+    public function prescription_details(){
+        return $this->hasMany(PrescriptionDetail::class,'prescription_id');
+    }
+    public function import_order_details(){
+        return $this->hasMany(ImportOrderDetail::class,'import_order_id');
+    }
+
+    public function cut_dose_order_details(){
+        return $this->hasMany(CutDoseOrderDetails::class,'cut_dose_order_id');
+    }
+    public function cut_dose_prescription_details(){
+        return $this->hasMany(CutDosePrescriptionDetail::class,'cut_dose_prescription_id');
+    }
     protected $casts = [
         'expiration_date' => 'datetime',
     ];

@@ -57,7 +57,7 @@
                                                                             value="{{ $item->id }}">
                                                                     </td>
                                                                     <td>{{ $item->medicine_code }}</td>
-                                                                    <td>{{ $item->category->name }}</td>
+                                                                    <td>{{ $item->category->name ? $item->category->name : 'N/A' }}</td>
                                                                     <td>{{ $item->name }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y')}}</td>
                                                                 </tr>
