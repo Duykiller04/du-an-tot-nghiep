@@ -35,37 +35,48 @@
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label for="name">Tên<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name"  placeholder="Nhập tên người dùng"
-                                value="{{ old('name', $user->name) }}">
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="Nhập tên người dùng" value="{{ old('name', $user->name) }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
-                        <!-- Các ô nhập mật khẩu -->
                         <div class="form-group mb-3">
                             <label for="old_password">Mật khẩu cũ</label>
-                            <input type="password" class="form-control" id="old_password" name="old_password">
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="old_password" name="old_password">
+                                <i class="fas fa-eye" id="toggleOldPassword" 
+                                    style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
+                            </div>
                             @error('old_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
+                        
                         <div class="form-group mb-3">
                             <label for="new_password">Mật khẩu mới</label>
-                            <input type="password" class="form-control" id="new_password" name="new_password">
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="new_password" name="new_password">
+                                <i class="fas fa-eye" id="toggleNewPassword" 
+                                    style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
+                            </div>
                             @error('new_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
+                        
                         <div class="form-group mb-3">
                             <label for="confirm_password">Nhập lại mật khẩu mới</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                                <i class="fas fa-eye" id="toggleConfirmPassword" 
+                                    style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
+                            </div>
                             @error('confirm_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+                        
                     </div>
                 </div>
 
@@ -107,8 +118,8 @@
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label for="email">Email<span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email" name="email"  placeholder="Nhập email người dùng"
-                                value="{{ old('email', $user->email) }}">
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="Nhập email người dùng" value="{{ old('email', $user->email) }}">
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -116,8 +127,8 @@
 
                         <div class="form-group mb-3">
                             <label for="phone">Điện thoại<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="phone" name="phone"  placeholder="Nhập số điện thoại người dùng"
-                                value="{{ old('phone', $user->phone) }}">
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                placeholder="Nhập số điện thoại người dùng" value="{{ old('phone', $user->phone) }}">
                             @error('phone')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -125,8 +136,8 @@
 
                         <div class="form-group mb-3">
                             <label for="address">Địa chỉ</label>
-                            <input type="text" class="form-control" id="address" name="address"  placeholder="Nhập địa chỉ người dùng"
-                                value="{{ old('address', $user->address) }}">
+                            <input type="text" class="form-control" id="address" name="address"
+                                placeholder="Nhập địa chỉ người dùng" value="{{ old('address', $user->address) }}">
                             @error('address')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -143,7 +154,7 @@
 
                         <div class="form-group mb-3">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control" id="description" name="description"  placeholder="Nhập mô tả người dùng">{{ old('description', $user->description) }}</textarea>
+                            <textarea class="form-control" id="description" name="description" placeholder="Nhập mô tả người dùng">{{ old('description', $user->description) }}</textarea>
                         </div>
 
 
@@ -173,6 +184,8 @@
 @section('style-libs')
     <!-- Plugins css -->
     <link href="{{ asset('theme/admin/assets/libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 @endsection
 
 @section('script-libs')
@@ -199,5 +212,32 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         }
+    </script>
+     <script>
+        // Function to toggle password visibility
+    function togglePassword(inputId, toggleId) {
+        const passwordField = document.getElementById(inputId);
+        const toggleIcon = document.getElementById(toggleId);
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    }
+
+    // Attach event listeners
+    document.getElementById("toggleOldPassword").addEventListener("click", function() {
+        togglePassword("old_password", "toggleOldPassword");
+    });
+
+    document.getElementById("toggleNewPassword").addEventListener("click", function() {
+        togglePassword("new_password", "toggleNewPassword");
+    });
+
+    document.getElementById("toggleConfirmPassword").addEventListener("click", function() {
+        togglePassword("confirm_password", "toggleConfirmPassword");
+    });
     </script>
 @endsection
