@@ -104,7 +104,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         try {
-            $data = $request->except('image');
+            $data = $request->except('image','type');
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -112,7 +112,7 @@ class UserController extends Controller
             } else {
                 $data['image'] = null;
             }
-
+            $data['type'] = User::TYPE_STAFF;
             User::create($data);
 
             return redirect()->route('admin.users.index')->with('success', 'Thành công');
