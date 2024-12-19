@@ -70,42 +70,60 @@ class ShiftController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    //     'title' => 'required|string|max:255',
+    //     'start_time' => 'required|date|after_or_equal:today',
+    //     'end_time' => 'required|date|after:start_time',
+    //     'details.*.user_id' => 'required|exists:users,id',
+    //     'details.*.user_id' => 'required|array|min:1',
+    // ], [
+    //     'title.required' => 'Vui lòng nhập tiêu đề.',
+    //     'title.string' => 'Tiêu đề phải là một chuỗi.',
+    //     'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
+
+    //     'start_time.required' => 'Vui lòng nhập thời gian bắt đầu.',
+    //     'start_time.date' => 'Thời gian bắt đầu không hợp lệ.',
+    //     'start_time.after_or_equal' => 'Thời gian bắt đầu phải là ngày hôm nay hoặc sau đó.',
+
+    //     'end_time.required' => 'Vui lòng nhập thời gian kết thúc.',
+    //     'end_time.date' => 'Thời gian kết thúc không hợp lệ.',
+    //     'end_time.after' => 'Thời gian kết thúc phải sau thời gian bắt đầu.',
+
+    //     'details.*.user_id.required' => 'Vui lòng chọn người dùng.',
+    //     'details.*.user_id.exists' => 'Người dùng không tồn tại.',
+    // ]);
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'start_time' => 'required|date|after_or_equal:today',
             'end_time' => 'required|date|after:start_time',
-            'details.*.user_id' => 'required|exists:users,id',
+            'details' => 'required|array|min:1',
+            'details.*' => 'exists:users,id',
         ], [
-            'title.required' => 'Vui lòng nhập tiêu đề.',
-            'title.string' => 'Tiêu đề phải là một chuỗi.',
-            'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
+        'title.required' => 'Vui lòng nhập tiêu đề.',
+        'title.string' => 'Tiêu đề phải là một chuỗi.',
+        'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
 
-            'start_time.required' => 'Vui lòng nhập thời gian bắt đầu.',
-            'start_time.date' => 'Thời gian bắt đầu không hợp lệ.',
-            'start_time.after_or_equal' => 'Thời gian bắt đầu phải là ngày hôm nay hoặc sau đó.',
+        'start_time.required' => 'Vui lòng nhập thời gian bắt đầu.',
+        'start_time.date' => 'Thời gian bắt đầu không hợp lệ.',
+        'start_time.after_or_equal' => 'Thời gian bắt đầu phải là ngày hôm nay hoặc sau đó.',
 
-            'end_time.required' => 'Vui lòng nhập thời gian kết thúc.',
-            'end_time.date' => 'Thời gian kết thúc không hợp lệ.',
-            'end_time.after' => 'Thời gian kết thúc phải sau thời gian bắt đầu.',
-
-            'details.*.user_id.required' => 'Vui lòng chọn người dùng.',
-            'details.*.user_id.exists' => 'Người dùng không tồn tại.',
+        'end_time.required' => 'Vui lòng nhập thời gian kết thúc.',
+        'end_time.date' => 'Thời gian kết thúc không hợp lệ.',
+        'end_time.after' => 'Thời gian kết thúc phải sau thời gian bắt đầu.',
+            'details.required' => 'Vui lòng chọn ít nhất một nhân viên.',
+            'details.*.exists' => 'Nhân viên không tồn tại.',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $startTime = Carbon::parse($request->start_time);
         $endTime = Carbon::parse($request->end_time);
 
         $overlappingShifts = Shift::whereIn('status', ['kế hoạch', 'đang mở'])
-            ->whereDate('start_time', $startTime->toDateString()) // Chỉ kiểm tra trong cùng ngày
+            ->whereDate('start_time', $startTime->toDateString())
             ->where(function ($query) use ($startTime, $endTime) {
                 $query->whereBetween('start_time', [$startTime, $endTime])
                     ->orWhereBetween('end_time', [$startTime, $endTime])
@@ -114,9 +132,9 @@ class ShiftController extends Controller
                             ->where('end_time', '>=', $endTime);
                     });
             })
-            ->count();
+            ->exists();
 
-        if ($overlappingShifts > 0) {
+        if ($overlappingShifts) {
             return redirect()->back()
                 ->withErrors(['start_time' => 'Thời gian của ca làm bị trùng lặp với ca đã tồn tại.'])
                 ->withInput();
@@ -130,16 +148,17 @@ class ShiftController extends Controller
             'revenue_summary' => 0,
         ]);
 
-        foreach ($request->details as $detail) {
+        foreach ($request->details as $userId) {
             ShiftUser::create([
-                'user_id' => $detail['user_id'],
+                'user_id' => $userId,
                 'shift_id' => $shift->id,
             ]);
+
             Attendace::create([
-                'user_id' => $detail['user_id'],
+                'user_id' => $userId,
                 'shift_id' => $shift->id,
                 'time_in' => null,
-                'img_check_in' => null, 
+                'img_check_in' => null,
                 'img_check_out' => null,
                 'time_out' => null,
                 'time_out_2' => null,
