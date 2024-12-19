@@ -24,21 +24,24 @@ class CutDoseOrderRequest extends FormRequest
         return [
             'customer_name' => 'required|string|max:255',
             'age' => 'required|integer|min:0',
-            'phone' => 'required|string|max:15',
+            'phone' => ['required', 'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/', 'numeric'],
             'address' => 'required|string|max:255',
             'weight' => 'required|integer|min:0',
-            'gender' => 'required|in:0,1', // Giả sử 0 là nam, 1 là nữ
-            'medicines' => 'required|array',
-            'medicines.*.medicine_id' => 'required|integer|exists:medicines,id',
-            'medicines.*.unit_id' => 'required|integer|exists:units,id',
-            'medicines.*.quantity' => 'required|integer|min:1',
-            'medicines.*.dosage' => 'required|string|max:255',
-            'disease_id' => 'nullable|exists:diseases,id',
-            'sale_date' => 'required|date|after_or_equal:today',
-
-            'medicines.*.current_price' => 'required|numeric|min:0',
+            'gender' => 'required|in:0,1',
+            'unit_id' => 'required|array',
+            'unit_id.*' => 'required|integer|exists:units,id', // Each unit_id must be valid
+            'quantity' => 'required|array',
+            'quantity.*' => 'required|integer|min:1', // Each quantity must be an integer greater than 0
+            'batch_total_price' => 'required|array',
+            'batch_total_price.*' => 'required|numeric|min:0', // Each batch total price must be numeric and >= 0
+            'email' => 'nullable|email|max:255', // Email validation
+            'disease_id' => 'nullable|exists:diseases,id', // Disease validation
+            'dosage' => 'required|string|max:255',
+            'note' => 'nullable|string|max:255', // Note validation (nullable)
+            'total_price' => 'required|numeric|min:0', // Total price validation
         ];
     }
+
     public function messages(): array
     {
         return [
@@ -49,8 +52,8 @@ class CutDoseOrderRequest extends FormRequest
             'age.integer' => 'Tuổi phải là một số nguyên.',
             'age.min' => 'Tuổi phải lớn hơn hoặc bằng 0.',
             'phone.required' => 'Số điện thoại là bắt buộc.',
-            'phone.string' => 'Số điện thoại phải là một chuỗi.',
-            'phone.max' => 'Số điện thoại không được vượt quá 15 ký tự.',
+            'phone.regex' => 'Số điện thoại không đúng định dạng.',
+            'phone.numeric' => 'Số điện thoại phải là số.',
             'address.required' => 'Địa chỉ là bắt buộc.',
             'address.string' => 'Địa chỉ phải là một chuỗi.',
             'address.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
@@ -59,28 +62,28 @@ class CutDoseOrderRequest extends FormRequest
             'weight.min' => 'Cân nặng phải lớn hơn hoặc bằng 0.',
             'gender.required' => 'Giới tính là bắt buộc.',
             'gender.in' => 'Giới tính phải là 0 hoặc 1.',
-            'medicines.required' => 'Danh sách thuốc là bắt buộc.',
-            'medicines.array' => 'Danh sách thuốc phải là một mảng.',
-            'medicines.*.medicine_id.required' => 'Thuốc là bắt buộc.',
-            'medicines.*.medicine_id.integer' => 'Thuốc phải là một số nguyên.',
-            'medicines.*.medicine_id.exists' => 'Thuốc không tồn tại.',
-            'medicines.*.unit_id.required' => 'Đơn vị là bắt buộc.',
-            'medicines.*.unit_id.integer' => 'Đơn vị phải là một số nguyên.',
-            'medicines.*.unit_id.exists' => 'Đơn vị không tồn tại.',
-            'medicines.*.quantity.required' => 'Số lượng là bắt buộc.',
-            'medicines.*.quantity.integer' => 'Số lượng phải là một số nguyên.',
-            'medicines.*.quantity.min' => 'Số lượng phải lớn hơn hoặc bằng 1.',
-            'medicines.*.dosage.required' => 'Liều lượng là bắt buộc.',
-            'medicines.*.dosage.string' => 'Liều lượng phải là một chuỗi.',
-            'medicines.*.dosage.max' => 'Liều lượng không được vượt quá 255 ký tự.',
-            'disease_id.exists' => 'Bệnh đã chọn không hợp lệ.',
-            'sale_date.required' => 'Vui lòng chọn ngày bán.',
-            'sale_date.date' => 'Ngày bán phải là một ngày hợp lệ.',
-            'sale_date.after_or_equal' => 'Ngày bán phải là hôm nay hoặc sau này.',
-
-            'medicines.*.current_price.required' => 'Vui lòng nhập thành tiền.',
-            'medicines.*.current_price.numeric' => 'Thành tiền phải là một số.',
-            'medicines.*.current_price.min' => 'Thành tiền không được nhỏ hơn 0.',
+            'unit_id.required' => 'Đơn vị là bắt buộc.',
+            'unit_id.array' => 'Đơn vị phải là một mảng.',
+            'unit_id.*.required' => 'Đơn vị là bắt buộc.',
+            'unit_id.*.integer' => 'Đơn vị phải là một số nguyên.',
+            'unit_id.*.exists' => 'Đơn vị không tồn tại.',
+            'quantity.required' => 'Số lượng là bắt buộc.',
+            'quantity.array' => 'Số lượng phải là một mảng.',
+            'quantity.*.required' => 'Số lượng là bắt buộc.',
+            'quantity.*.integer' => 'Số lượng phải là một số nguyên.',
+            'quantity.*.min' => 'Số lượng phải lớn hơn hoặc bằng 1.',
+            'batch_total_price.required' => 'Giá trị tổng của lô thuốc là bắt buộc.',
+            'batch_total_price.array' => 'Giá trị tổng của lô thuốc phải là một mảng.',
+            'batch_total_price.*.required' => 'Giá trị tổng của lô thuốc là bắt buộc.',
+            'batch_total_price.*.numeric' => 'Giá trị tổng của lô thuốc phải là một số.',
+            'batch_total_price.*.min' => 'Giá trị tổng của lô thuốc không được nhỏ hơn 0.',
+            'dosage.required' => 'Liều lượng là bắt buộc.',
+            'dosage.string' => 'Liều lượng phải là một chuỗi.',
+            'dosage.max' => 'Liều lượng không được vượt quá 255 ký tự.',
+            'note.string' => 'Ghi chú phải là một chuỗi.',
+            'total_price.required' => 'Tổng giá trị đơn hàng là bắt buộc.',
+            'total_price.numeric' => 'Tổng giá trị phải là một số.',
+            'total_price.min' => 'Tổng giá trị không được nhỏ hơn 0.',
         ];
     }
 }

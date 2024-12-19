@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrescriptionRequest;
 use App\Http\Requests\UpdatePrescriptionRequest;
 use App\Models\CutDosePrescription;
 use App\Models\Disease;
@@ -90,7 +91,7 @@ class PrescriptionsController extends Controller
     /**
      * Store a newly created resource in Prescription.
      */
-    public function store(Request $request)
+    public function store(PrescriptionRequest $request)
     {
         // Bắt đầu giao dịch
         DB::beginTransaction();
@@ -102,11 +103,11 @@ class PrescriptionsController extends Controller
 
             $prescription = Prescription::create([
                 'total_price' => $request->total_price,
-                'customer_name' => $request->customer_name,
+                'customer_name' => $request->customer_name_tt,
                 'shift_id' => $shiftId,
                 'seller' => Auth::user()->name,
                 'note' => $request->note,
-                'dosage' => $request->dosage
+                'dosage' => $request->dosage_tt
             ]);
 
             foreach ($request->unit_id as $key => $value) {
