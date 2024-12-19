@@ -280,7 +280,7 @@
                         text: 'Sao chép',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 4; // Ẩn cột "Thao tác"
+                                return idx !== 3; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -289,7 +289,7 @@
                         text: 'Xuất CSV',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 4; // Ẩn cột "Thao tác"
+                                return idx !== 3; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -298,7 +298,7 @@
                         text: 'Xuất Excel',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 4; // Ẩn cột "Thao tác"
+                                return idx !== 3; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -307,7 +307,7 @@
                         text: 'Xuất PDF',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 4; // Ẩn cột "Thao tác"
+                                return idx !== 3; // Ẩn cột "Thao tác"
                             }
                         }
                     },
@@ -316,7 +316,7 @@
                         text: 'In',
                         exportOptions: {
                             columns: function(idx, data, node) {
-                                return idx !== 4; // Ẩn cột "Thao tác"
+                                return idx !== 3; // Ẩn cột "Thao tác"
                             }
                         }
                     }
