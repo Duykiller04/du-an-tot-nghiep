@@ -129,11 +129,11 @@
                                                 @continue
                                             @endif
 
-                                            <div class="col-8">
+                                            <div class="col-8 mb-3">
                                                 <label for="medicine_id" class="form-label">Thuốc</label>
                                                 <select id="name-{{ $index }}"
                                                     name="medicines[{{ $index }}][medicine_id]"
-                                                    class="form-select js-example-basic-single" style="width: 100%">
+                                                    class="form-select select2" style="width: 100%">
                                                     <option value="">Chọn thuốc</option>
                                                     @foreach ($medicines as $id => $name)
                                                         <option value="{{ $id }}"

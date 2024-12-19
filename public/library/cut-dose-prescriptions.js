@@ -37,15 +37,7 @@ document.addEventListener("click", function (e) {
         e.target.closest(".medicine-row").remove();
     }
 });
-document.addEventListener("DOMContentLoaded", function (){
-    const oldMedicine = oldData;
-    oldMedicine.forEach((medicine, index) => {
-        // const selects = .querySelectorAll('');
-        console.log(medicine, index);
-        
-    });
 
-})
 
 $(document).on("change", 'select[name$="[medicine_id]"]', function () {
     var $currentSelect = $(this);
