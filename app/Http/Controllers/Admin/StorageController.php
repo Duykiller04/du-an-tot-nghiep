@@ -43,8 +43,10 @@ class StorageController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
+                    $viewUrl = route('admin.storage.show', $row->id);
                     $deleteUrl = route('admin.storage.destroy', $row->id);
                     return '
+                    <a href="' . $viewUrl . '" class="btn btn-info view-btn">Xem</a>
                     <button class="btn btn-warning edit-btn" 
                             data-id="' . $row->id . '" 
                             data-name="' . $row->name . '" 
@@ -111,12 +113,26 @@ class StorageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        $storage = Storage::with('medicines')->findOrFail($id);
+        // Lấy thông tin kho theo ID
+        $storage = Storage::with('batches.medicine', 'batches.inventory.unit')->findOrFail($id);
 
-        return view('admin.storage.show', compact('storage'));
+        // Lấy danh sách thuốc liên quan đến các lô trong kho
+        $medicines = $storage->batches
+            ->map(function ($batch) {
+                $medicine = $batch->medicine;
+                if ($medicine) {
+                    $medicine->batch_info = $batch;
+                    $medicine->inventory_info = $batch->inventory;
+                }
+                return $medicine;
+            })
+            ->filter(); // Loại bỏ null trong trường hợp không có thuốc liên quan
+
+        return view('admin.storage.show', compact('storage', 'medicines'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
