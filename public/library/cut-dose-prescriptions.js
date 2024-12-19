@@ -8,16 +8,14 @@ document.getElementById("add-medicine").addEventListener("click", function () {
     const medicineContainer = document.getElementById("medicine-container");
     const index = medicineContainer.children.length;
     // Tạo các tùy chọn thuốc từ biến medicines
-    const oldMedicine = oldData[index] || {};
 
     let medicineOptions = '<option value="">Chọn thuốc</option>';
     for (const [id, name] of Object.entries(medicines)) {
-        const medicineSelected = oldMedicine.medicine_id == id ? "selected" : "";
-        medicineOptions += `<option value="${id}" ${medicineSelected}>${name}</option>`;
+        medicineOptions += `<option value="${id}">${name}</option>`;
     }
     const newRow = `
     <div class="row mb-3 medicine-row">
-        <div class="col-4">
+        <div class="col-8">
             <label for="medicine_id" class="form-label">Thuốc</label>
             <select name="medicines[${index}][medicine_id]" class="form-select select2">
                  ${medicineOptions}
@@ -26,7 +24,7 @@ document.getElementById("add-medicine").addEventListener("click", function () {
 
        
 
-        <div class="col-md-1 d-flex align-items-end">
+        <div class="col-2 d-flex align-items-end">
             <button type="button" class="btn btn-danger remove-medicine">Xóa</button>
         </div>
     </div>
@@ -39,6 +37,39 @@ document.addEventListener("click", function (e) {
         e.target.closest(".medicine-row").remove();
     }
 });
+document.addEventListener("DOMContentLoaded", function (){
+    const oldMedicine = oldData;
+    oldMedicine.forEach((medicine, index) => {
+        // const selects = .querySelectorAll('');
+        console.log(medicine, index);
+        
+    });
+
+})
+
+$(document).on("change", 'select[name$="[medicine_id]"]', function () {
+    var $currentSelect = $(this);
+    var medicineId = $currentSelect.val();
+    
+    // Duyệt qua tất cả các select khác và loại bỏ option trùng
+    $('select[name$="[medicine_id]"]').each(function () {
+        var $select = $(this);
+        
+        // Nếu select này không phải là cái đang thay đổi
+        if ($select[0] !== $currentSelect[0]) {
+            $select.find('option').each(function () {
+                var $option = $(this);
+                
+                // Nếu giá trị của option trùng với medicineId, loại bỏ nó
+                if ($option.val() === medicineId) {
+                    $option.remove();
+                }
+            });
+        }
+    });
+});
+
+
 //render đơn vị theo id thuốc
 // $(document).on("change", 'select[name$="[medicine_id]"]', function () {
 //     var medicineId = $(this).val();

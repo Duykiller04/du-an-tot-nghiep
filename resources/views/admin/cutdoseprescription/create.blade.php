@@ -91,8 +91,8 @@
                         <div class="card-body">
                             <!-- Thông tin chi tiết thuốc -->
                             <div id="medicine-container">
-                                <div class="row mb-3 medicine-row">
-                                    <div class="col-4">
+                                <div class="row mb-3 mt-3 medicine-row">
+                                    <div class="col-8">
                                         <label for="medicine_id" class="form-label">Thuốc</label>
                                         <select name="medicines[0][medicine_id]" class="form-select select2">
                                             <option value="">Chọn thuốc</option>
@@ -102,8 +102,10 @@
                                                     {{ $name }}</option>
                                             @endforeach
                                         </select>
+                                        @error('medicines.0.medicine_id')
+                                            <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
-
                                     {{-- <div class="col-3">
                                         <label for="quantity" class="form-label" id="unitLabel-0">Số lượng</label>
                                         <input type="number" name="medicines[0][quantity]"
@@ -115,6 +117,41 @@
                                         <input type="text" name="medicines[0][dosage]"
                                             value="{{ old('medicines.0.dosage') }}" class="form-control">
                                     </div> --}}
+                                </div>
+                                <div class="row mb-3 mt-3 medicine-row">
+                                    @php
+                                        $oldValue = old('medicines');
+
+                                    @endphp
+                                    @if (isset($oldValue))
+                                        @foreach ($oldValue as $index => $id)
+                                            @if ($index == 0)
+                                                @continue
+                                            @endif
+
+                                            <div class="col-8">
+                                                <label for="medicine_id" class="form-label">Thuốc</label>
+                                                <select id="name-{{ $index }}"
+                                                    name="medicines[{{ $index }}][medicine_id]"
+                                                    class="form-select js-example-basic-single" style="width: 100%">
+                                                    <option value="">Chọn thuốc</option>
+                                                    @foreach ($medicines as $id => $name)
+                                                        <option value="{{ $id }}"
+                                                            {{ old('medicines.' . $index . '.medicine_id') == $id ? 'selected' : '' }}>
+                                                            {{ $name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-2 d-flex align-items-end">
+                                                <button type="button" class="btn btn-danger remove-medicine">Xóa</button>
+                                            </div>
+                                            @error('medicines.' . $index . '.medicine_id')
+                                                <span class="d-block text-danger mt-2 mb-2">{{ $message }}</span>
+                                            @enderror
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
 
@@ -135,9 +172,9 @@
                     </div>
                 </div>
             </div>
-         </div>
+    </div>
 
-        </form>
+    </form>
     </div>
 @endsection
 

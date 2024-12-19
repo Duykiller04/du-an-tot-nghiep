@@ -61,8 +61,6 @@
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('admin.cutDosePrescriptions.show', $item) }}"
                                                 class="btn btn-warning mb-3">Xem</a>
-                                            <a href="{{ route('admin.cutDosePrescriptions.edit', $item) }}"
-                                                class="btn btn-info mb-3">Sửa</a>
                                             <form action="{{ route('admin.cutDosePrescriptions.destroy', $item) }}"
                                                 method="post" id="delete-form-{{ $item->id }}">
                                                 @csrf

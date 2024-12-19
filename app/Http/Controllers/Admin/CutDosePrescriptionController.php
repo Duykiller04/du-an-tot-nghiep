@@ -49,7 +49,6 @@ class CutDosePrescriptionController extends Controller
      */
     public function store(StoreCutDosePrescriptionRequest $request)
     {
-        //dd($request);
         try {
             DB::beginTransaction();
             $cutDosePrescription = CutDosePrescription::query()->create([
