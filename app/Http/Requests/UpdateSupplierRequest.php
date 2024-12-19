@@ -22,17 +22,29 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->segment(3);
+        $id = $this->input('supplier_id');
         return [
          'tax_code_edit' => [
             'required',
             'max:13',
-            Rule::unique('suppliers', 'tax_code')->ignore($id),
+            Rule::unique('suppliers', 'tax_code')->ignore($id)->whereNull('deleted_at')
         ],
             'name_edit' => 'required|max:100',
-            'email_edit' => 'required|string|max:255',
-            'phone_edit' => "required|max:11|unique:suppliers,phone,$id",
-            'address_edit' => "required|max:255|unique:suppliers,email,$id",
+            'phone_edit' => [
+                'required',
+                'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/',
+                'numeric',
+                Rule::unique('suppliers', 'phone')->ignore($id)->whereNull('deleted_at'),
+            ],
+            'address_edit' => "required|max:255",
+            'email_edit' => [
+                'required',
+                'email',
+                'regex:/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/',
+                'min:5',
+                'max:255',
+                Rule::unique('suppliers', 'email')->ignore($id)->whereNull('deleted_at'),
+            ],
         ];
     }
     public function messages()

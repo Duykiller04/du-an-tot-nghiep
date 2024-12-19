@@ -36,8 +36,7 @@
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="tax_code" class="form-label">Mã số thuế (<span
-                                        class="text-danger">*</span>)</label>
+                                <label for="tax_code" class="form-label">Mã số thuế</label>
                                 <input type="text" class="form-control" id="tax_code" name="tax_code"
                                     value="{{ old('tax_code') }}">
                                 @error('tax_code')
