@@ -73,8 +73,8 @@ class UnitController extends Controller
                     return isset($row['created_at']) ? \Carbon\Carbon::parse($row['created_at'])->format('d/m/Y') : '';
                 })
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.catalogues.edit', $row['id']);
-                    $deleteUrl = route('admin.catalogues.destroy', $row['id']);
+                    $editUrl = route('admin.units.edit', $row['id']);
+                    $deleteUrl = route('admin.units.destroy', $row['id']);
 
                     return '
                         <button class="btn btn-warning edit-btn" 
@@ -139,13 +139,19 @@ class UnitController extends Controller
     {
         $unit = Unit::findOrFail($id);
 
-        // Cập nhật các đơn vị con (nếu có) để không có cha
+        if ($unit->unitConversions()->exists()) {
+            return redirect()->route('admin.units.index')
+                ->with('error', 'Không thể xóa đơn vị vì đang có liên kết với bảng chuyển đổi đơn vị.');
+        }
+
         Unit::where('parent_id', $unit->id)->update(['parent_id' => null]);
 
+        // Xóa đơn vị
         $unit->delete();
 
         return redirect()->route('admin.units.index')->with('success', 'Đơn vị đã được xóa thành công');
     }
+
     public function getRestore()
     {
         $data = Unit::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);

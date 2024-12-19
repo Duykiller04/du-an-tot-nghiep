@@ -22,4 +22,5 @@ class UnitConversion extends Model
     {
         return $this->belongsTo(Medicine::class);
     }
+    
 }
