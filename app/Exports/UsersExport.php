@@ -39,7 +39,6 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, WithStyl
             'Ngày sinh',
             'Mô tả',
             'Email',
-            'Mật khẩu',
             'Loại',
         ];
     }
@@ -57,7 +56,6 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, WithStyl
             $user->birth,
             $user->description,
             $user->email,
-            $user->password,
             $user->type,
         ];
     }
