@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|regex:/^[A-Za-z](.*[\S].*){9,}$/',
+            'name' => 'required|string|max:255',
             
             'phone' => [
                 'required',
@@ -42,8 +42,8 @@ class StoreUserRequest extends FormRequest
                 Rule::unique('users', 'email')->whereNull('deleted_at'),
             ],
     
-            'address'      => 'nullable|string|min:5|max:255|regex:/\S+/',
-            'birth'        => 'nullable|date_format:Y-m-d',
+            'address'      => 'nullable|string|max:255',
+            'birth'        => 'nullable|date_format:Y-m-d|before_or_equal:' . now()->subYears(18)->format('Y-m-d'),
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'description'  => 'nullable|string',
             'password' => 'string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|confirmed',
@@ -56,20 +56,19 @@ class StoreUserRequest extends FormRequest
             'name.required' => 'Tên là bắt buộc.',
             'name.string' => 'Tên phải là một chuỗi ký tự.',
             'name.max' => 'Tên không được vượt quá 100 ký tự.',
-            'name.regex' => 'Tên phải bắt đầu bằng chữ cái, có ít nhất 10 ký tự và không chứa ký tự đặc biệt.',
-            'name.unique' => 'Tên đã tồn tại. Vui lòng chọn tên khác.',
+            
 
             'phone.required' => 'Số điện thoại là bắt buộc.',
             'phone.regex' => 'Số điện thoại không đúng định dạng. Vui lòng nhập số bắt đầu bằng 0 và có 10 chữ số. định dạng Sô điện thoại VN',
             'phone.numeric' => 'Số điện thoại phải là một chuỗi số hợp lệ.',
             'phone.unique' => 'Số điện thoại này đã được sử dụng.',
 
-            'address.min' => 'Địa chỉ phải có ít nhất 5 ký tự.',
+           
             'address.string' => 'địa chỉ phải là chuỗi ký tự hợp lệ.',
             'address.max' => 'địa chỉ không được vượt quá 255 ký tự.',
-            'address.regex' => 'Không được nhập khoảng trắng.',
-
+            
             'birth.date_format' => 'Ngày sinh này phải là một ngày tháng năm và ở định dạng "Y-m-d" (ví dụ: "2023-08-15")',
+            'birth.before_or_equal' => 'Phải đủ 18 tuổi',
 
             'image.image' => 'Ảnh này phải là một tệp hình ảnh (ảnh).',
             'image.mimes' => 'Chỉ chấp nhận định dạng: jpeg, png, jpg, gif, webp.',

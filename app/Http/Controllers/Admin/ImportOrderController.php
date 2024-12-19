@@ -57,14 +57,11 @@ class ImportOrderController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.importorder.show', $row->id);
-                    $deleteUrl = route('admin.importorder.destroy', $row->id);
+                    
 
                     return '
                 <a href="' . $viewUrl . '" class="btn btn-primary">Xem</a>
-                <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
-                    ' . csrf_field() . method_field('DELETE') . '
-                    <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
-                </form>
+               
                 ';
                 })
                 ->rawColumns(['action'])
@@ -153,7 +150,7 @@ class ImportOrderController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.importorder.index')->with('success', 'Đơn nhập kho đã được tạo thành công!');
+            return redirect()->route('admin.importorder.index')->with('success', 'Phiếu nhập kho đã được tạo thành công!');
         } catch (\Exception $e) {
             Log::error("Lỗi nhập kho: " . $e->getMessage());
             DB::rollback();

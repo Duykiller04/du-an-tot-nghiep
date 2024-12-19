@@ -97,7 +97,7 @@
                                 <select name="cutDosePrescription" id="cutDosePrescription" class="form-select select2 @error('cutDosePrescription') is-invalid @enderror">
                                     <option value="">Chọn mẫu đơn thuốc</option>
                                     @foreach ($cutDosePrescription as $prescription)
-                                        <option value="{{ $prescription['id'] }}" {{ old('cutDosePrescription', $prescription['id'] ?? '') == $prescription['id'] ? 'selected' : '' }}>
+                                        <option value="{{ $prescription['id'] }}" >
                                             {{ $prescription['name'] }}
                                         </option>
                                     @endforeach
@@ -112,14 +112,14 @@
                             <div class="mb-3">
                                 <label for="customer-name" class="form-label">Tên khách hàng <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('customer_name_tt') is-invalid @enderror" id="customer-name" name="customer_name_tt"
-                                    placeholder="Nhập tên khách hàng" value="{{ old('customer_name_tt') }}">
+                                    placeholder="Nhập tên khách hàng" value="{{ old('customer_name_tt') }}" required>
                                 @error('customer_name_tt')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="dosage" class="form-label">Liều lượng <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('dosage_tt') is-invalid @enderror" id="dosage" name="dosage_tt" rows="3" placeholder="Nhập ghi chú">{{ old('dosage_tt') }}</textarea>
+                                <textarea class="form-control @error('dosage_tt') is-invalid @enderror" id="dosage" name="dosage_tt" rows="3" placeholder="Nhập ghi chú" required>{{ old('dosage_tt') }}</textarea>
                                 @error('dosage_tt')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -308,8 +308,9 @@
                             <th>#</th>
                             <th>Tên khách hàng</th>
                             <th>Tổng tiền</th>
-                            <th>Thời gian tạo</th>
+                            <th>Người bán</th>
                             <th>Loại đơn thuốc</th>
+                            <th>Thời gian bán</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1004,8 +1005,9 @@
                         <td>${index + 1}</td>
                         <td>${invoice.customer_name || 'N/A'}</td>
                         <td>${invoice.total_price ? invoice.total_price.toLocaleString() + '₫' : '0₫'}</td>
-                        <td>${formatDate(invoice.created_at)}</td>
+                        <td>${invoice.seller || 'N/A'}</td>
                         <td>${invoice.type || ''}</td>
+                        <td>${formatDate(invoice.created_at)}</td>
                     </tr>
                 `;
                 tableBody.insertAdjacentHTML('beforeend', row);

@@ -208,19 +208,21 @@
                                 <table class="table table-hover table-bordered border-dark">
                                     <thead class="table-striped">
                                         <tr>
-                                            <th>Mã hóa đơn</th>
-                                            <th>Ngày tạo</th>
+                                            <th>stt</th>
+                                            <th>Người mua</th>
                                             <th>Tổng tiền</th>
-                                            <th>Trạng thái</th>
+                                            <th>Người bán</th>
+                                            <th>Thời gian bán</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($orders as $order)
+                                        @foreach ($orders as $index=>$order)
                                             <tr>
-                                                <td>{{ $order->id }}</td>
-                                                <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                                <td>{{ $index+1 }}</td>
+                                                <td>{{ $order->customer_name }}</td>
                                                 <td>{{ number_format($order->total_price) }} VND</td>
-                                                <td>{{ ucfirst($order->status) }}</td>
+                                                <td>{{ ucfirst($order->seller) }}</td>
+                                                <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -234,19 +236,21 @@
                                 <table class="table table-hover table-bordered">
                                     <thead class="table">
                                         <tr>
-                                            <th>Mã hóa đơn</th>
-                                            <th>Ngày tạo</th>
+                                            <th>stt</th>
+                                            <th>Người mua</th>
                                             <th>Tổng tiền</th>
-                                            <th>Trạng thái</th>
+                                            <th>Người bán</th>
+                                            <th>Thời gian bán</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($prescriptions as $prescription)
+                                        @foreach ($prescriptions as $index=>$prescription)
                                             <tr>
-                                                <td>{{ $prescription->id }}</td>
+                                                <td>{{ $index+1 }}</td>
+                                                <td>{{ $prescription->customer_name }}</td>
+                                                <td>{{ number_format($prescription->total_price) }} VND</td>
+                                                <td>{{ ucfirst($prescription->seller) }}</td>
                                                 <td>{{ $prescription->created_at->format('d/m/Y H:i') }}</td>
-                                                <td>{{ number_format($prescription->total) }} VND</td>
-                                                <td>{{ ucfirst($prescription->status) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -164,13 +164,13 @@ Danh sách đơn thuốc cắt liều
 
                 let form = $(this).closest('.delete-form');
                 Swal.fire({
-                    title: "Bạn có chắc muốn xóa không?",
+                    title: "Bạn có chắc muốn Hủy không?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#d33",
                     cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Xóa!",
-                    cancelButtonText: "Hủy",
+                    confirmButtonText: "Hủy",
+                    cancelButtonText: "Không",
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {

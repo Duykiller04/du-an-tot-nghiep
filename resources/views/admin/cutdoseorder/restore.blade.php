@@ -34,7 +34,7 @@
                                             <thead class="table-light">
                                                 <form action="{{ route('admin.restore.cutDoseOrders') }}" method="POST">
                                                     @csrf
-                                                    <div class="d-flex justify-content-end pb-3">
+                                                    <div class="d-none justify-content-end pb-3">
                                                         <button type="submit" class="btn btn-primary">Khôi phục</button>
                                                     </div>
                                                     <table id="example"
@@ -42,8 +42,8 @@
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Mã thuốc cắt liều</th>
+                                                               
+                                                                <th>STT</th>
                                                                 <th>Tên bệnh</th>
                                                                 <th>Tên khách hàng</th>
                                                                 <th>Tuổi</th>
@@ -56,13 +56,10 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($data as $item)
+                                                            @foreach ($data as $index=>$item)
                                                                 <tr>
-                                                                    <td>
-                                                                        <input type="checkbox" name="ids[]"
-                                                                            value="{{ $item->id }}">
-                                                                    </td>
-                                                                    <td>{{ $item->id }}</td>
+                                                                   
+                                                                    <td>{{ $index+1 }}</td>
                                                                     <td>{{ $item->disease->disease_name }}</td>
                                                                     <td>{{ $item->customer_name }}</td>
                                                                     <td>{{ $item->age }}</td>
