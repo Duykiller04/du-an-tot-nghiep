@@ -206,12 +206,23 @@ class DiseaseController extends Controller
     public function destroy(int $id)
     {
         $item = Disease::findOrFail($id);
+
+        // Kiểm tra nếu có đơn mẫu nào liên kết với loại bệnh này
+        $hasPrescriptions = $item->cutDosePrescriptions()->exists();
+
+        if ($hasPrescriptions) {
+            return redirect()->route('admin.diseases.index')
+                ->with('error', 'Không thể xóa bệnh vì có đơn mẫu liên kết với bệnh này.');
+        }
+        
         if ($item->feature_img && Storage::disk('public')->exists($item->feature_img)) {
             Storage::disk('public')->delete($item->feature_img);
         }
         $item->delete();
+
         return redirect()->route('admin.diseases.index')->with('success', 'Bệnh đã được xóa thành công.');
     }
+
     public function getRestore()
     {
         $data = Disease::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);

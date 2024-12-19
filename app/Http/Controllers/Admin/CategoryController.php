@@ -165,6 +165,14 @@ class CategoryController extends Controller
     {
         $catalogue = Category::findOrFail($id);
 
+        // Kiểm tra xem có thuốc thuộc danh mục này không
+        $hasMedicines = $catalogue->medicines()->exists();
+
+        if ($hasMedicines) {
+            return redirect()->route('admin.catalogues.index')
+                ->with('error', 'Không thể xóa danh mục vì có thuốc đang thuộc danh mục này.');
+        }
+        
         Category::where('parent_id', $catalogue->id)->update(['parent_id' => null]);
 
         $catalogue->delete();
