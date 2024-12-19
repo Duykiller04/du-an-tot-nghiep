@@ -30,13 +30,8 @@ class UpdateUserRequest extends FormRequest
             'address' => 'nullable|string',
             'birth' => 'nullable|date_format:Y-m-d',
             'image' => 'nullable|image|max:2048',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string', 
             'email' => 'required|email|unique:users,email,' . $this->route('user'),
-            'type' => [
-                'required',
-                Rule::in([User::TYPE_ADMIN, User::TYPE_STAFF]),
-            ],
-
         ];
     }
 
@@ -64,8 +59,6 @@ class UpdateUserRequest extends FormRequest
             'email.required' => ' Email này là bắt buộc phải được điền.',
             'email.email' => '  Email của trường này phải là một địa chỉ email hợp lệ..',
             'email.unique' => 'Email này phải là duy nhất trong bảng "users" (tức là không được trùng với email của người dùng khác',
-
-            'type' => ' Type',
         ];
     }
 }

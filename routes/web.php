@@ -94,9 +94,11 @@ Route::prefix('admin')
                     Route::delete('/delete','deleteMultiple')->name('deleteMultiple');
                 });
 
+                Route::resource('users', UserController::class);
             });
             
-        Route::resource('users', UserController::class);
+            Route::get('profile/{id}', [UserController::class, 'profile'])->name('profile');
+            Route::put('profile/{id}', [UserController::class, 'updateProfile'])->name('updateProfile');
             
         Route::controller(EnvironmentController::class)
             ->prefix('environments')->as('environments.')

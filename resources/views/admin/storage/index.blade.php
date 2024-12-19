@@ -161,7 +161,7 @@
                                         <th>Tên kho</th>
                                         <th>Địa chỉ</th>
                                         <th>Thời gian tạo</th>
-                                        <th>Tổng thuốc</th>
+                                        <th>Tổng thuốc, dụng cụ trong kho</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>

@@ -79,7 +79,123 @@
                             <h4 class="card-title mb-0 flex-grow-1">Chi tiết sản phẩm</h4>
                         </div>
                         <div id="order-details">
-                            
+                            @php
+                                $oldDetails = old('details');
+                            @endphp
+                            @if (isset($oldDetails))
+                            @foreach ($oldDetails as $key => $detail)
+                            <div class="mb-3 border p-3 rounded detail-row" data-detail-index="{{ $key }}" style="background-color: #7c76761f">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-success btn-sm" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseDetails{{ $key }}" aria-expanded="false" aria-controls="collapseDetails{{ $key }}">
+                                        <p class="mt-1 mb-0">Chi tiết sản phẩm</p>
+                                    </button>
+                                    <button type="button" class="btn btn-danger remove-detail" data-detail-index="{{ $key }}">Xóa sản phẩm</button>
+                                </div>
+                                <div class="collapse mt-2" id="collapseDetails{{ $key }}">
+                                    <div class="row mt-3 mb-3">
+                                        <div class="mb-3 col-3">
+                                            <label for="name-{{ $key }}" class="form-label">Sản phẩm<span class="text-danger">*</span></label>
+                                            <select id="name-{{ $key }}" name="details[{{ $key }}][medicine_id]" class="form-select js-example-basic-single" style="width: 100%">
+                                                <option value="">Chọn sản phẩm</option>
+                                                @foreach ($medicines as $medicine)
+                                                    <option value="{{ $medicine->id }}"
+                                                        {{ $detail['medicine_id'] == $medicine->id ? 'selected' : '' }}>
+                                                        {{ $medicine->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <input type="hidden" name="details[{{ $key }}][name_medicine]" id="name_medicine-{{ $key }}" value="{{ $detail['name_medicine'] ?? '' }}">
+                                        </div>
+        
+                                        <div class="mb-3 col-2">
+                                            <label for="supplier-{{ $key }}" class="form-label">Nhà cung cấp: <span
+                                                    class="text-danger">*</span></label>
+                                            <select id="supplier-{{ $key }}" name="details[{{ $key }}][supplier_id]" class="form-select js-example-basic-single">
+                                                <option value="">Chọn nhà cung cấp</option>
+                                                @foreach ($suppliers as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ $detail['supplier_id'] == $item->id ? 'selected' : '' }}>
+                                                        {{ $item->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('details['.$key.'][supplier_id]')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+        
+                                        <div class="mb-3 col-2">
+                                            <label for="storage_id-{{ $key }}" class="form-label">Kho thuốc: <span
+                                                    class="text-danger">*</span></label>
+                                            <select id="storage_id-{{ $key }}" name="details[{{ $key }}][storage_id]" class="form-select js-example-basic-single">
+                                                <option value="">Chọn kho thuốc</option>
+                                                @foreach ($storages as $storage)
+                                                    <option value="{{ $storage->id }}"
+                                                        {{ $detail['storage_id'] == $storage->id ? 'selected' : '' }}>
+                                                        {{ $storage->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('details['.$key.'][storage_id]')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+        
+                                        <div class="mb-3 col-2">
+                                            <label for="registration_number-{{ $key }}" class="form-label">Số đăng ký:<span class="text-danger">*</span></label>
+                                            <input type="text" id="registration_number-{{ $key }}" name="details[{{ $key }}][registration_number]" class="form-control" placeholder="Số đăng ký" value="{{ $detail['registration_number'] ?? '' }}">
+                                            <div class="text-danger" id="registration-number-error-{{ $key }}"></div>
+                                        </div>
+        
+                                        <div class="mb-3 col-2">
+                                            <label for="origin-{{ $key }}" class="form-label">Xuất xứ</label>
+                                            <input type="text" id="origin-{{ $key }}" name="details[{{ $key }}][origin]" class="form-control" placeholder="Xuất xứ" value="{{ $detail['origin'] ?? '' }}">
+                                            <div class="text-danger" id="origin-error-{{ $key }}"></div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="row mb-3">
+                                        <div class="mb-3 col-3">
+                                            <label class="form-label required" for="quantity-{{ $key }}">Số lượng</label>
+                                            <input type="number" class="form-control" id="quantity-{{ $key }}" name="details[{{ $key }}][quantity]" placeholder="0" value="{{ $detail['quantity'] ?? '' }}">
+                                            <input type="hidden" name="details[{{ $key }}][proportion]" id="proportion-{{ $key }}" value="{{ $detail['proportion'] ?? '' }}">
+                                            <input type="hidden" name="details[{{ $key }}][largest_proportion]" id="largest_proportion-{{ $key }}" value="{{ $detail['largest_proportion'] ?? '' }}">
+                                            <input type="hidden" name="details[{{ $key }}][packaging_specification]" id="packaging_specification-{{ $key }}" value="{{ $detail['packaging_specification'] ?? '' }}">
+                                            <input type="hidden" name="details[{{ $key }}][unit_id]" id="unit_id-{{ $key }}" value="{{ $detail['unit_id'] ?? '' }}">
+                                            <input type="hidden" name="details[{{ $key }}][smallest_unit_id]" id="smallest_unit_id-{{ $key }}" value="{{ $detail['smallest_unit_id'] ?? '' }}">
+                                            <div class="text-danger" id="quantity-error-{{ $key }}"></div>
+                                        </div>
+                                            
+                                        <div class="mb-3 col-2">
+                                            <label for="price_import-{{ $key }}" class="form-label">Giá nhập:<span class="text-danger">*</span></label>
+                                            <input type="number" id="price_import-{{ $key }}" name="details[{{ $key }}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal({{ $key }})" placeholder="Nhập giá nhập" value="{{ $detail['price_import'] ?? '' }}">
+                                            <div class="text-danger" id="import-price-error-{{ $key }}"></div>
+                                        </div>
+        
+                                        <div class="mb-3 col-2">
+                                            <label for="price_sale-{{ $key }}" class="form-label">Giá bán:<span class="text-danger">*</span></label>
+                                            <input type="number" id="price_sale-{{ $key }}" name="details[{{ $key }}][price_sale]" class="form-control price-sale" step="0.01" placeholder="Nhập giá bán" value="{{ $detail['price_sale'] ?? '' }}">
+                                            <div class="text-danger" id="price-sale-error-{{ $key }}"></div>
+                                        </div>
+                                        
+                                        <div class="mb-3 col-2">
+                                            <label for="expiration_date-{{ $key }}" class="form-label">Ngày hết hạn:<span class="text-danger">*</span></label>
+                                            <input type="date" id="expiration_date-{{ $key }}" name="details[{{ $key }}][expiration_date]" class="form-control" min="{{ date('Y-m-d') }}" value="{{ $detail['expiration_date'] ?? '' }}">
+                                            <div class="text-danger" id="expiration-date-error-{{ $key }}"></div>
+                                        </div>
+        
+                                        <div class="mb-3 col-2">
+                                            <label for="total-error-{{ $key }}" class="form-label">Thành tiền:<span class="text-danger">*</span></label>
+                                            <input type="number" name="details[{{ $key }}][total]" class="form-control total" placeholder="Thành tiền" readonly value="{{ $detail['total'] ?? '' }}">
+                                            <div class="text-danger" id="total-error-{{ $key }}"></div>
+                                        </div>
+        
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                            @endif
                         </div>
                         <!-- Nút để thêm chi tiết sản phẩm -->
                         <div>
@@ -201,13 +317,13 @@
 
                                 <div class="mb-3 col-2">
                                     <label for="registration_number-${detailCounter}" class="form-label">Số đăng ký:<span class="text-danger">*</span></label>
-                                    <input type="text" id="registration_number-${detailCounter}" name="details[${detailCounter}][registration_number]" class="form-control" placeholder="Số đăng ký">
+                                    <input type="text" id="registration_number-${detailCounter}" name="details[${detailCounter}][registration_number]" class="form-control" placeholder="Số đăng ký" value="{{ old('details[${detailCounter}][registration_number]') }}">
                                     <div class="text-danger" id="registration-number-error-${detailCounter}"></div>
                                 </div>
 
                                 <div class="mb-3 col-2">
                                     <label for="origin-${detailCounter}" class="form-label">Xuất xứ</label>
-                                    <input type="text" id="origin-${detailCounter}" name="details[${detailCounter}][origin]" class="form-control" placeholder="Xuất xứ">
+                                    <input type="text" id="origin-${detailCounter}" name="details[${detailCounter}][origin]" class="form-control" placeholder="Xuất xứ" value="{{ old('details[${detailCounter}][origin]') }}">
                                     <div class="text-danger" id="origin-error-${detailCounter}"></div>
                                 </div>
                             </div>
@@ -215,7 +331,7 @@
                             <div class="row mb-3">
                                 <div class="mb-3 col-3">
                                     <label class="form-label required" for="quantity-${detailCounter}">Số lượng</label>
-                                    <input type="number" class="form-control" id="quantity-${detailCounter}" name="details[${detailCounter}][quantity]" placeholder="0">
+                                    <input type="number" class="form-control" id="quantity-${detailCounter}" name="details[${detailCounter}][quantity]" placeholder="0" value="{{ old('details[${detailCounter}][quantity]') }}">
                                     <input type="hidden" name="details[${detailCounter}][proportion]" id="proportion-${detailCounter}">
                                     <input type="hidden" name="details[${detailCounter}][largest_proportion]" id="largest_proportion-${detailCounter}">
                                     <input type="hidden" name="details[${detailCounter}][packaging_specification]" id="packaging_specification-${detailCounter}">
@@ -226,25 +342,25 @@
                                     
                                 <div class="mb-3 col-2">
                                     <label for="price_import-${detailCounter}" class="form-label">Giá nhập:<span class="text-danger">*</span></label>
-                                    <input type="number" id="price_import-${detailCounter}" name="details[${detailCounter}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal(${detailCounter})" placeholder="Nhập giá nhập">
+                                    <input type="number" id="price_import-${detailCounter}" name="details[${detailCounter}][price_import]" class="form-control import-price" step="0.01" oninput="calculateDetailTotal(${detailCounter})" placeholder="Nhập giá nhập" value="{{ old('details[${detailCounter}][price_import]') }}">
                                     <div class="text-danger" id="import-price-error-${detailCounter}"></div>
                                 </div>
 
                                 <div class="mb-3 col-2">
                                     <label for="price_sale-${detailCounter}" class="form-label">Giá bán:<span class="text-danger">*</span></label>
-                                    <input type="number" id="price_sale-${detailCounter}" name="details[${detailCounter}][price_sale]" class="form-control price-sale" step="0.01" placeholder="Nhập giá bán">
+                                    <input type="number" id="price_sale-${detailCounter}" name="details[${detailCounter}][price_sale]" class="form-control price-sale" step="0.01" placeholder="Nhập giá bán" value="{{ old('details[${detailCounter}][price_sale]') }}">
                                     <div class="text-danger" id="price-sale-error-${detailCounter}"></div>
                                 </div>
                                 
                                 <div class="mb-3 col-2">
                                     <label for="expiration_date-${detailCounter}" class="form-label">Ngày hết hạn:<span class="text-danger">*</span></label>
-                                    <input type="date" id="expiration_date-${detailCounter}" name="details[${detailCounter}][expiration_date]" class="form-control" min="{{ date('Y-m-d') }}">
+                                    <input type="date" id="expiration_date-${detailCounter}" name="details[${detailCounter}][expiration_date]" class="form-control" min="{{ date('Y-m-d') }}" value="{{ old('details[${detailCounter}][expiration_date]') }}">
                                     <div class="text-danger" id="expiration-date-error-${detailCounter}"></div>
                                 </div>
 
                                 <div class="mb-3 col-2">
                                     <label for="total-error-${detailCounter}" class="form-label">Thành tiền:<span class="text-danger">*</span></label>
-                                    <input type="number" name="details[${detailCounter}][total]" class="form-control total" placeholder="Thành tiền" readonly>
+                                    <input type="number" name="details[${detailCounter}][total]" class="form-control total" placeholder="Thành tiền" readonly value="{{ old('details[${detailCounter}][total]') }}">
                                     <div class="text-danger" id="total-error-${detailCounter}"></div>
                                 </div>
 

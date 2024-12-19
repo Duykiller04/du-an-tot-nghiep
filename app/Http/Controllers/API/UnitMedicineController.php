@@ -68,7 +68,10 @@ class UnitMedicineController extends Controller
         }
 
         $largestProportion = 1;
-        foreach ($units as $unit) {
+        foreach ($units as $i => $unit) {
+            if ($i == 0) {
+                continue;
+            }
             $largestProportion *= $unit->proportion;
         }
 

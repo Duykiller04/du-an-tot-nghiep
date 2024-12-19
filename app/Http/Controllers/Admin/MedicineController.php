@@ -151,6 +151,10 @@ class MedicineController extends Controller
             $total_quantity = 1;
 
             foreach ($units as $i => $unit) {
+                if ($i == 0) {
+                    continue;
+                }
+
                 $total_quantity *= $quantities[$i];
             }
             

@@ -72,26 +72,40 @@ class DashboardController extends Controller
             return response()->json($supplierPercentages);
         }
     }
+
+    //Truy vấn batch where theo storage_id rồi group by theo medicine_id
+
+
     public function getStorage()
     {
         try {
             // Lấy danh sách kho và đếm số lượng thuốc theo từng kho
-            $storages = Storage::query()->withCount('medicines')->get();
+            $storages = Storage::query()
+                            ->select('storages.id', 'storages.name') // Chọn thông tin về kho
+                            ->selectSub(function ($query) {
+                                $query->from('batches')
+                                    ->join('medicines', 'medicines.id', '=', 'batches.medicine_id') // Join với bảng medicines
+                                    ->selectRaw('COUNT(DISTINCT batches.medicine_id)') // Đếm số lượng thuốc (distinct) trong từng kho
+                                    ->whereColumn('batches.storage_id', 'storages.id') // Liên kết kho với batches
+                                    ->whereNull('medicines.deleted_at'); // Lọc thuốc chưa bị xóa (soft deleted)
+                            }, 'medicines_count')
+                            ->latest('id') // Sắp xếp theo ID của kho
+                            ->get(); // Lấy kết quả
 
-            // Tính tổng số lượng thuốc từ tất cả các kho
-            $totalMedicinesCount = $storages->sum('medicines_count');
-
+            // Tính tổng số lượng thuốc trong tất cả các kho
+           $totalMedicinesCount = Medicine::count();
+    
             // Format lại dữ liệu trả về
             $formattedStorages = $storages->map(function ($storage) {
                 return [
-                    'storage_name' => $storage->name,
-                    'medicines_count' => $storage->medicines_count,
+                    'storage_name' => $storage->name, // Tên kho
+                    'medicines_count' => $storage->medicines_count, // Số lượng thuốc trong kho
                 ];
             });
-
+    
             return response()->json([
-                'total_medicines_count' => $totalMedicinesCount,
-                'storages' => $formattedStorages,
+                'total_medicines_count' => $totalMedicinesCount, // Tổng số thuốc trong tất cả các kho
+                'storages' => $formattedStorages, // Dữ liệu thống kê thuốc theo kho
             ]);
         } catch (\Exception $e) {
             // Ghi log chi tiết lỗi
@@ -100,12 +114,14 @@ class DashboardController extends Controller
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
-
+    
             return response()->json([
                 'error' => 'Lỗi khi lấy dữ liệu',
             ], 500);
         }
     }
+    
+
 
 
 
@@ -193,12 +209,14 @@ class DashboardController extends Controller
         // Tổng doanh thu từ bảng Prescription
         $totalPrescription = DB::table('prescriptions')
             ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total_price');
         // dd($totalPrescription); 
 
         // Tổng doanh thu từ bảng CutDoseOrder
         $totalCutDoseOrder = DB::table('cut_dose_orders')
             ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total_price');
 
         // Tổng doanh thu
@@ -229,8 +247,8 @@ class DashboardController extends Controller
         return response()->json([
             'totalCustomers' => $totalCustomers,
             'totalRevenue' => $totalRevenue,
-            'totalCostPrice' => $totalCostPrice, // Tổng giá nhập
-            'profit' => $profit, // Lợi nhuận
+            'totalCostPrice' => $totalCostPrice, 
+            'profit' => $profit, 
             'totalOrders' => $totalOrders
         ], 200);
     }
