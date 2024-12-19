@@ -99,8 +99,9 @@ class ImportOrderController extends Controller
      */
     // Phương thức lưu đơn nhập kho
 
-    public function store(Request $request)
+    public function store(ImportOrderRequest $request)
     {
+        // dd($request->all());
         $data = $request->all();
 
         try {
