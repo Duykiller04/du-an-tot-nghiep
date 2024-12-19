@@ -42,7 +42,6 @@ class CutDoseOrderExport implements FromCollection, WithHeadings, WithMapping, W
             'Id ca làm việc',
             'Tổng giá',
             'Liều lượng',
-            'Id đơn thuốc cắt liều',
             'Đơn vị',
             'Số lượng',
             'Lô thuốc'
@@ -74,7 +73,6 @@ class CutDoseOrderExport implements FromCollection, WithHeadings, WithMapping, W
                 $cutDoseOrder->shift_id,                   // ID ca làm việc
                 $cutDoseOrder->total_price,                // Tổng giá
                 $cutDoseOrder->dosage,                     // Liều lượng
-                $detail->cut_dose_order_id,                // ID đơn thuốc cắt liều
                 optional($detail->unit)->name,             // Đơn vị
                 $detail->quantity,                         // Số lượng
                 $detail->batch_id,                         // Lô thuốc

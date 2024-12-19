@@ -34,7 +34,6 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
             'Tênh bệnh mắc phải',
             'Tên bác sĩ',
             'Tên thuốc',
-            'Id đơn thuốc cắt liều',
             'Tên đơn vị',
         ];
     }
@@ -54,7 +53,6 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
                 $CutDosePrescription->disease->disease_name,
                 $CutDosePrescription->name_doctor,
                 $detail->medicine->name,
-                $detail->cut_dose_prescription_id,
                 $detail->unit->name,   
             ];
         }
