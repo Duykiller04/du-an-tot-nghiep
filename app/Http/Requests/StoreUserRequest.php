@@ -47,10 +47,6 @@ class StoreUserRequest extends FormRequest
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'description'  => 'nullable|string',
             'password' => 'string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|confirmed',
-            'type'         => [
-                'required',
-                Rule::in([User::TYPE_ADMIN, User::TYPE_STAFF]),
-            ],
         ];
     }   
     public function messages(): array
@@ -98,8 +94,6 @@ class StoreUserRequest extends FormRequest
             - Ít nhất một chữ số (0-9). 
             - Ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &, #).',
             'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
-
-            'type' => ' Type',
         ];
     }
 }

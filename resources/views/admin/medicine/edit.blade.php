@@ -551,6 +551,64 @@
 
                 </div>
 
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Chi tiết lô</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Số lô</th>
+                                        <th>Kho</th>
+                                        <th>Nhà cung cấp</th>
+                                        <th>Số đăng ký</th>
+                                        <th>Xuất xứ</th>
+                                        <th>Quy cách đóng gói</th>
+                                        <th>Giá nhập</th>
+                                        <th>Giá bán</th>
+                                        <th>Giá bán theo đơn vị nhỏ nhất <span class="text-danger">*</span></th>
+                                        <th>Số lượng</th>
+                                        <th>Ngày nhập lô</th>
+                                        <th>Ngày hết hạn</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($medicine->batches as $batch)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $batch->storage->name }}</td>
+                                            <td>{{ $batch->supplier->name }}</td>
+                                            <td>{{ $batch->registration_number }}</td>
+                                            <td>{{ $batch->origin }}</td>
+                                            <td>{{ $batch->packaging_specification }}</td>
+                                            <td>{{ number_format($batch->price_import, 0, ',', '.') }} VNĐ</td>
+                                            <td>{{ number_format($batch->price_sale, 0, ',', '.') }} VNĐ</td>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="number" value="{{ old("batches.{$batch->id}.price_in_smallest_unit", $batch->price_in_smallest_unit) }}" name="batches[{{ $batch->id }}][price_in_smallest_unit]" style="width: 100px" class="@error("batches.{$batch->id}.price_in_smallest_unit") is-invalid @enderror form-control" step="any">
+                                                        <p class="ms-2 mb-0">VNĐ</p>
+                                                    </div>
+                                                    <div class="">
+                                                        @error("batches.{$batch->id}.price_in_smallest_unit")
+                                                            <span class="d-block text-danger mt-2">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ $batch->inventory->quantity }} ({{ $batch->inventory->unit->name }})</td>
+                                            <td>{{ \Carbon\Carbon::parse($batch->created_at)->format('d-m-Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($batch->expiration_date)->format('d-m-Y') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-lg-12 custom-spacing ">
                     <div class="card">
                         <div class="text-end m-3">

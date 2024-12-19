@@ -40,14 +40,7 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
             'Tên khách hàng',
             'Ghi chú',
             'Liều lượng',
-            'Tuổi',
-            'Số điện thoại',
-            'Địa chỉ',
-            'Email',
-            'Cân nặng',
-            'Giới tính',
             'Trạng thái',
-            'Id ca làm việc',
             'Id thuốc chi tiết ',
             'ID đơn vị',
             'Số lượng',
@@ -71,14 +64,7 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
                 $Prescription->customer_name,              // Tên khách hàng
                 $Prescription->note,                       // Ghi chú
                 $Prescription->dosage,                     // Liều lượng
-                $Prescription->age,                        // Tuổi
-                $Prescription->phone,                      // Số điện thoại
-                $Prescription->address,                    // Địa chỉ
-                $Prescription->email,                      // Email
-                $Prescription->weight,                     // Cân nặng
-                $Prescription->gender == 0 ? 'Nam' : 'Nữ', // Giới tính
-                $Prescription->status,                     // Trạng thái
-                $Prescription->shift_id,                   // ID ca làm việc
+                $Prescription->status == 0 ? 'Hủy' : 'Bán',                     // Trạng thái                 // ID ca làm việc
                 $detail->prescription_id,                  // ID đơn thuốc trong chi tiết
                 optional($detail->unit)->name,             // Tên đơn vị (nếu có quan hệ unit)
                 $detail->quantity,                         // Số lượng

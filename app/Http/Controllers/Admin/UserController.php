@@ -104,7 +104,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         try {
-            $data = $request->except('image');
+            $data = $request->except('image','type');
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -112,7 +112,7 @@ class UserController extends Controller
             } else {
                 $data['image'] = null;
             }
-
+            $data['type'] = User::TYPE_STAFF;
             User::create($data);
 
             return redirect()->route('admin.users.index')->with('success', 'Thành công');
@@ -172,15 +172,8 @@ class UserController extends Controller
             if ($request->hasFile('image') && $currentImgThumb && Storage::disk('public')->exists($currentImgThumb)) {
                 Storage::disk('public')->delete($currentImgThumb);
             }
-
             // Gửi email thông báo, xử lý ngoại lệ riêng cho email
-            try {
-                Mail::to($currentEmail)->send(new SendMailToUser($model, $password));
-            } catch (\Exception $mailException) {
-                Log::error('Lỗi khi gửi email: ' . $mailException->getMessage());
-                // Không làm gián đoạn quá trình, chỉ ghi log và tiếp tục
-            }
-
+            Mail::to($currentEmail)->send(new SendMailToUser($model, $password));
             return back()->with('success', 'Cập nhật thành công');
         } catch (\Exception $exception) {
             Log::error('Lỗi cập nhật tài khoản: ' . $exception->getMessage());
@@ -204,6 +197,7 @@ class UserController extends Controller
      */
     public function updateProfile(UpdateProfileRequest $request, int $id)
     {
+        // dd($request->all());
         try {
             $model = User::findOrFail($id);
 

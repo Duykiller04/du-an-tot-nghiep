@@ -32,17 +32,10 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
             'Tên đơn thuốc',
             'Miêu tả Bệnh',
             'Tênh bệnh mắc phải',
-            'Tên bệnh viên',
             'Tên bác sĩ',
-            'Tuổi',
-            'Số điện thoại bác sĩ',
-            'Tổng cộng',
             'Tên thuốc',
             'Id đơn thuốc cắt liều',
             'Tên đơn vị',
-            'Số lượng',
-            'Gía hiện tại',
-            'Liều lượng',
         ];
     }
     // Ánh xạ dữ liệu của từng hàng
@@ -59,17 +52,10 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
                 $CutDosePrescription->name,
                 $CutDosePrescription->description,
                 $CutDosePrescription->disease->disease_name,
-                $CutDosePrescription->name_hospital,
                 $CutDosePrescription->name_doctor,
-                $CutDosePrescription->age,
-                $CutDosePrescription->phone_doctor,
-                $CutDosePrescription->total,
                 $detail->medicine->name,
                 $detail->cut_dose_prescription_id,
-                $detail->unit->name,
-                $detail->quantity,
-                $detail->current_price,
-                $detail->dosage,                       // Liều lượng
+                $detail->unit->name,   
             ];
         }
 

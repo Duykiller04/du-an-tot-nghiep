@@ -139,6 +139,20 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
+                                    <div class="row mb-3 d-none">
+                                        <div class="col-6">
+                                            <label for="start-date">Ngày bắt đầu:</label>
+                                            <input type="date" id="start-date" class="form-control" />
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="end-date">Ngày kết thúc:</label>
+                                            <div class="d-flex">
+                                                <input type="date" id="end-date" class="form-control me-2" />
+                                                <button id="filter-btn" class="btn btn-primary">Lọc</button>
+        
+                                            </div>
+                                        </div>
+                                    </div>
                                     <table id="example"
                                         class="table table-bordered dt-responsive nowrap table-striped align-middle"
                                         style="width:100%">
@@ -232,6 +246,13 @@
             var table = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
+                ajax:{
+                    url: '{{ route('admin.units.index') }}',
+                    data: function(d) {
+                        d.startDate = $('#start-date').val();
+                        d.endDate = $('#end-date').val();
+                    }
+                }, 
                 columns: [
                     
                     {

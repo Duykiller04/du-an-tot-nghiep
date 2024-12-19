@@ -47,10 +47,6 @@ class UpdateUserRequest extends FormRequest
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'description'  => 'nullable|string',
             'new_password' => 'nullable|string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|',
-            'type'         => [
-                'required',
-                Rule::in([User::TYPE_ADMIN, User::TYPE_STAFF]),
-            ],
         ];
     }
 
@@ -95,8 +91,6 @@ class UpdateUserRequest extends FormRequest
             - Ít nhất một chữ cái viết thường (a-z). 
             - Ít nhất một chữ số (0-9). 
             - Ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &, #).',
-
-            'type' => ' Type',
         ];
     }
 }

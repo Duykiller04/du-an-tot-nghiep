@@ -32,6 +32,7 @@ class UpdateProductRequest extends FormRequest
             'medicine.temperature' => 'nullable|numeric|between:-50,50',
             'medicine.moisture' => 'nullable|numeric|between:0,100',
             'medicine.category_id' => 'required|integer|exists:categories,id',
+            'batches.*.price_in_smallest_unit' => ['required', 'numeric', 'min:0', 'regex:/^\d+(\.\d{1,2})?$/'],
         ];
     }
 
@@ -70,6 +71,11 @@ class UpdateProductRequest extends FormRequest
 
             'medicine.moisture.numeric' => 'Độ ẩm phải là một số.',
             'medicine.moisture.between' => 'Độ ẩm phải trong khoảng từ 0 đến 100%.',
+
+            'batches.*.price_in_smallest_unit.required' => 'Giá là bắt buộc.',
+            'batches.*.price_in_smallest_unit.numeric' => 'Giá phải là số.',
+            'batches.*.price_in_smallest_unit.min' => 'Giá không được nhỏ hơn 0.',
+            'batches.*.price_in_smallest_unit.regex' => 'Giá chỉ được chứa tối đa 2 chữ số sau dấu thập phân.',
         ];
     }
 }
