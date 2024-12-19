@@ -349,8 +349,13 @@
 
             medicineIds.forEach(medicineId => {
                 let product = products.find(product => product.id === medicineId);
-
+                
                 if (!product) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: `Không tìm thấy thuốc do thuốc đã hết số lượng hoặc hết hạn trong kho.`,
+                    });
                     console.warn(`Không tìm thấy thông tin thuốc với ID: ${medicineId}`);
                     return;
                 }
@@ -553,10 +558,18 @@
                 let stock = cartItem.batches.find(batch => batch.price_in_smallest_unit === price)?.quantity || 0;
 
                 if (quantity < 1) {
-                    alert("Số lượng không thể nhỏ hơn 1.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng không thể nhỏ hơn 1.'
+                    });
                     cartItem.quantity = 1;
                 } else if (quantity > stock) {
-                    alert("Số lượng không được vượt quá tồn kho!");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng không được vượt quá tồn kho!'
+                    });
                     cartItem.quantity = stock;
                 } else {
                     cartItem.quantity = parseInt(quantity);
@@ -587,7 +600,11 @@
 
             if (remainingBatches.length === 0) {
                 // Nếu không còn lô nào, thông báo cho người dùng
-                alert("Hết lô hàng! Không thể thêm sản phẩm này vào giỏ.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hết lô hàng!',
+                    text: 'Không thể thêm sản phẩm này vào giỏ.',
+                });
                 return;
             }
 
@@ -624,7 +641,11 @@
                 if (cartItem.quantity < stock) {
                     cartItem.quantity++;
                 } else {
-                    alert("Số lượng không được vượt quá tồn kho!");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng không được vượt quá tồn kho!',
+                    });
                 }
                 renderCart();
             }
@@ -830,10 +851,18 @@
                 let stock = cartItem.batches.find(batch => batch.price_in_smallest_unit === price)?.quantity || 0;
 
                 if (quantity < 1) {
-                    alert("Số lượng không thể nhỏ hơn 1.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng không thể nhỏ hơn 1.',
+                    });
                     cartItem.quantity = 1;
                 } else if (quantity > stock) {
-                    alert("Số lượng không được vượt quá tồn kho!");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng không được vượt quá tồn kho!',
+                    });
                     cartItem.quantity = stock;
                 } else {
                     cartItem.quantity = parseInt(quantity);
@@ -863,7 +892,11 @@
 
             if (remainingBatches.length === 0) {
                 // Nếu không còn lô nào, thông báo cho người dùng
-                alert("Hết lô hàng! Không thể thêm sản phẩm này vào giỏ.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hết lô hàng!',
+                    text: 'Không thể thêm sản phẩm này vào giỏ.',
+                });
                 return;
             }
 
@@ -890,7 +923,11 @@
                 if (cartItem.quantity < stock) {
                     cartItem.quantity++;
                 } else {
-                    alert("Số lượng không được vượt quá tồn kho!");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng không được vượt quá tồn kho!',
+                    });
                 }
                 renderDoseCart();
             }

@@ -13,8 +13,24 @@ class GetAllProductController extends Controller
 {
     public function getAllProduct()
     {
-        $medicines = Medicine::with(['category', 'batches.inventory', 'unitConversions'])->get();
-        // dd($medicines->toArray());
+        $medicines = Medicine::with([
+            'category',
+            'batches' => function ($query) {
+                $query->whereHas('inventory', function ($q) {
+                    $q->where('quantity', '>', 0);
+                })
+                ->whereDate('expiration_date', '>=', Carbon::now());
+            },
+            'batches.inventory',
+            'unitConversions',
+        ])
+        ->whereHas('batches', function ($query) {
+            $query->whereHas('inventory', function ($q) {
+                $q->where('quantity', '>', 0);
+            })
+            ->whereDate('expiration_date', '>=', Carbon::now());
+        })
+        ->get();
         // Biến đổi dữ liệu
         $transformedData = $medicines->map(function ($medicine) {
             return [

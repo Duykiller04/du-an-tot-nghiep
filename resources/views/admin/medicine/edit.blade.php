@@ -568,7 +568,7 @@
                                         <th>Quy cách đóng gói</th>
                                         <th>Giá nhập</th>
                                         <th>Giá bán</th>
-                                        <th>Giá bán theo đơn vị nhỏ nhất</th>
+                                        <th>Giá bán theo đơn vị nhỏ nhất <span class="text-danger">*</span></th>
                                         <th>Số lượng</th>
                                         <th>Ngày nhập lô</th>
                                         <th>Ngày hết hạn</th>
