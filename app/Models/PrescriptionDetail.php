@@ -17,11 +17,14 @@ class PrescriptionDetail extends Model
         'current_price',
     ];
 
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
+    }
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
     }
-
     public function unit()
     {
         return $this->belongsTo(Unit::class);

@@ -180,8 +180,7 @@ class CutDoseOrderController extends Controller
      */
     public function show(string $id)
     {
-        $cutDoseOrder = CutDoseOrder::with(['cutDoseOrderDetails.medicine', 'cutDoseOrderDetails.unit'])->findOrFail($id);
-
+        $cutDoseOrder = CutDoseOrder::with(['cutDoseOrderDetails.batch', 'cutDoseOrderDetails.unit'])->findOrFail($id);
         return view(self::PATH_VIEW . __FUNCTION__, compact('cutDoseOrder'));
     }
 
