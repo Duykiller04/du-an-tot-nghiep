@@ -194,7 +194,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                        11; // Ví dụ: Nếu cột `action` là cột số 8
+                                        6; // Ví dụ: Nếu cột `action` là cột số 8
                                 }
                             }
                         },
@@ -205,7 +205,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                        11; // Ví dụ: Nếu cột `action` là cột số 12
+                                        6; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
@@ -216,7 +216,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                        11; // Ví dụ: Nếu cột `action` là cột số 12
+                                        6; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         },
@@ -227,7 +227,7 @@
                                 columns: function(idx, data, node) {
                                     // Loại bỏ cột `action` khi xuất
                                     return idx !==
-                                        11; // Ví dụ: Nếu cột `action` là cột số 12
+                                        6; // Ví dụ: Nếu cột `action` là cột số 12
                                 }
                             }
                         }
