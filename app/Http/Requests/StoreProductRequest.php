@@ -22,7 +22,7 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'medicine.medicine_code' => 'required|string|max:20',
+            'medicine.medicine_code' => 'required|string|max:20|unique:medicines,medicine_code',
             'medicine.name' => 'required|string',
             'batch.price_import' => 'required|numeric|between:0,999999999999',
             'batch.price_sale' => 'required|numeric|between:0,999999999999',
@@ -56,6 +56,7 @@ class StoreProductRequest extends FormRequest
             'medicine.medicine_code.required' => 'Mã thuốc là bắt buộc.',
             'medicine.medicine_code.string' => 'Mã thuốc phải là một chuỗi ký tự.',
             'medicine.medicine_code.max' => 'Mã thuốc không được vượt quá 20 ký tự.',
+            'medicine.medicine_code.unique' => 'Mã thuốc đã tồn tại.',
 
             'medicine.name.required' => 'Tên thuốc là bắt buộc.',
             'medicine.name.string' => 'Tên thuốc phải là một chuỗi ký tự.',

@@ -7,6 +7,7 @@ use App\Events\TransactionCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CutDoseOrderRequest;
 use App\Http\Requests\UpdateCutDoseOrderRequest;
+use App\Models\Batch;
 use App\Models\Customer;
 use App\Models\CutDoseOrder;
 use App\Models\CutDoseOrderDetails;
@@ -56,10 +57,10 @@ class CutDoseOrderController extends Controller
                     $deleteUrl = route('admin.cutDoseOrders.destroy', $row->id);
                     return '
                         <a href="' . route('admin.cutDoseOrders.show', $row->id) . '" class="btn btn-info">Xem</a>
-                        <a href="' . route('admin.cutDoseOrders.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
+                        
                         <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                             ' . csrf_field() . method_field('DELETE') . '
-                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Hủy</button>
                         </form>
                     ';
                 })
@@ -254,25 +255,52 @@ class CutDoseOrderController extends Controller
     public function destroy(string $id)
     {
         DB::beginTransaction();
-
+    
         try {
-            // Tìm đơn đặt hàng dựa trên ID
+            // Tìm đơn cắt liều dựa trên ID
             $cutDoseOrder = CutDoseOrder::findOrFail($id);
-
-            // Xóa mềm đơn đặt hàng
+    
+            // Lấy danh sách chi tiết đơn cắt liều
+            $details = $cutDoseOrder->cutDoseOrderDetails;
+    
+            // Duyệt qua từng chi tiết đơn cắt liều
+            foreach ($details as $detail) {
+                // Tìm lô thuốc liên quan đến chi tiết
+                $batch = Batch::find($detail->batch_id);
+    
+                if ($batch) {
+                    // Tìm tồn kho liên quan đến lô thuốc
+                    $inventory = Inventory::where('batch_id', $detail->batch_id)
+                        ->where('unit_id', $detail->unit_id)  // Đảm bảo đúng đơn vị
+                        ->first();
+    
+                    if ($inventory) {
+                        // Cộng lại số lượng đã cắt từ đơn cắt liều
+                        $inventory->quantity += $detail->quantity;
+                        $inventory->save(); // Lưu lại thông tin tồn kho
+                    }
+                }
+            }
+            $shift = $cutDoseOrder->shift; 
+            if ($shift) {
+                $shift->revenue_summary -= $cutDoseOrder->total_price;
+                $shift->save();
+            }
+            // Xóa mềm đơn cắt liều
             $cutDoseOrder->delete();
-
+    
             // Commit transaction
             DB::commit();
-
-            // Trả về view thành công
-            return redirect()->route('admin.cutDoseOrders.index')->with('success', 'Xóa thành công');
+    
+            // Trả về với thông báo thành công
+            return redirect()->route('admin.cutDoseOrders.index')->with('success', 'hủy thành công và đã trả lại số lượng tồn kho.');
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
             return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
+    
 
     public function getRestore()
     {

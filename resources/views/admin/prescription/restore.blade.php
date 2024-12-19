@@ -18,7 +18,7 @@
                             <div class="profile-timeline">
                                 <div class="accordion accordion-flush" id="storagesExample">
                                     <!-- start page title -->
-                                    <h4>Đơn thuốc thường đã xóa</h4>
+                                    <h4>Đơn thuốc thường đã hủy</h4>
                                     <!-- end page title -->
                                     <div class="table-responsive">
                                         <table class="table align-middle mb-0">
@@ -34,7 +34,7 @@
                                             <thead class="table-light">
                                                 <form action="{{ route('admin.restore.prescriptions') }}" method="POST">
                                                     @csrf
-                                                    <div class="d-flex justify-content-end pb-3">
+                                                    <div class="d-none justify-content-end pb-3">
                                                         <button type="submit" class="btn btn-primary">Khôi phục</button>
                                                     </div>
                                                     <table id="example"
@@ -42,8 +42,8 @@
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th><input type="checkbox" id="select-all"></th>
-                                                                <th>Mã đơn thuốc thông thường</th>
+                                                               
+                                                                <th>STT</th>
                                                                 <th>Tên khách hàng</th>
                                                                 <th>Tổng đơn</th>
                                                                 <th>Ngày mua</th>
@@ -51,13 +51,10 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($data as $item)
+                                                            @foreach ($data as $index=>$item)
                                                                 <tr>
-                                                                    <td>
-                                                                        <input type="checkbox" name="ids[]"
-                                                                            value="{{ $item->id }}">
-                                                                    </td>
-                                                                    <td>{{ $item->id }}</td>
+                                                                   
+                                                                    <td>{{ $index+1 }}</td>
                                                                     <td>{{ $item->customer_name }}</td>
                                                                     <td>{{ $item->total_price }}</td>
                                                                     <td>{{ $item->created_at->format('d-m-Y') }}</td>

@@ -6,6 +6,7 @@ use App\Events\RevenueUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrescriptionRequest;
 use App\Http\Requests\UpdatePrescriptionRequest;
+use App\Models\Batch;
 use App\Models\CutDosePrescription;
 use App\Models\Disease;
 use App\Models\Inventory;
@@ -55,11 +56,11 @@ class PrescriptionsController extends Controller
                     $deleteUrl = route('admin.prescriptions.destroy', $row->id);
                     return '
                         <a href="' . route('admin.prescriptions.show', $row->id) . '" class="btn btn-info">Xem</a>
-                        <a href="' . route('admin.prescriptions.edit', $row->id) . '" class="btn btn-warning">Sửa</a>
+                       
                         
                         <form action="' . $deleteUrl . '" method="post" style="display:inline;" class="delete-form">
                             ' . csrf_field() . method_field('DELETE') . '
-                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Xóa</button>
+                            <button type="button" class="btn btn-danger btn-delete" data-id="' . $row->id . '">Hủy</button>
                         </form>
                     ';
                 })
@@ -204,9 +205,35 @@ class PrescriptionsController extends Controller
      */
     public function destroy(Prescription $prescription)
     {
+        $details = $prescription->prescriptionDetails;
+    
+        foreach ($details as $detail) {
+            $batch = Batch::find($detail->batch_id);
+            
+            if ($batch) {
+                $inventory = Inventory::where('batch_id', $detail->batch_id)
+                    ->where('unit_id', $detail->unit_id)  
+                    ->first();
+    
+                if ($inventory) {
+                    $inventory->quantity += $detail->quantity;
+                    $inventory->save(); 
+                }
+            }
+        }
+     
+        $shift = $prescription->shift; 
+        if ($shift) {
+            $shift->revenue_summary -= $prescription->total_price;
+            $shift->save();
+        }
         $prescription->delete();
-        return back()->with('success', 'Xóa thuốc thành công.');
+    
+        // Trả về với thông báo thành công
+        return back()->with('success', 'hủy đơn thuốc thành công và đã trả lại số lượng cho tồn kho.');
     }
+    
+
 
     public function getRestore()
     {

@@ -173,7 +173,7 @@ class DashboardController extends Controller
         // Tổng doanh thu
         $totalRevenue = $totalPrescription + $totalCutDoseOrder;
 
-        // Định dạng tổng doanh thu và các giá trị theo kiểu "36,894 VND"
+        
         $formattedTotalPrescription = number_format($totalPrescription, 0, ',', ',') . ' VND';
         $formattedTotalCutDoseOrder = number_format($totalCutDoseOrder, 0, ',', ',') . ' VND';
         $formattedTotalRevenue = number_format($totalRevenue, 0, ',', ',') . ' VND';
@@ -267,13 +267,17 @@ class DashboardController extends Controller
     }
     public function getProfit()
     {
-        $totalCostPrice = DB::table('batches')->sum('price_import');
+        $totalCostPrice = DB::table('import_orders')->whereNull('deleted_at')->sum('total');
 
         // dd($totalCostPrice);
-        $totalPrescriptionPrice = DB::table('prescriptions')->sum('total_price');
+        $totalPrescriptionPrice = DB::table('prescriptions')
+        ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+        ->sum('total_price');
 
 
-        $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')->sum('total_price');
+        $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')
+        ->whereNull('deleted_at') // Nếu sử dụng SoftDeletes
+        ->sum('total_price');
 
 
         $totalRevenue = $totalPrescriptionPrice + $totalcutDoseOrdersPrice;
@@ -301,14 +305,14 @@ class DashboardController extends Controller
             $dateEnd = $dateStart->copy()->endOfMonth();
             $categories[] = "Tháng $i";
     
-            $monthlyRevenue = CutDoseOrder::whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price') 
-                            + Prescription::whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
-                            $totalCostPrice = DB::table('batches')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('price_import');
+            $monthlyRevenue = CutDoseOrder::whereBetween('created_at', [$dateStart, $dateEnd])->whereNull('deleted_at')->sum('total_price') 
+                            + Prescription::whereBetween('created_at', [$dateStart, $dateEnd])->whereNull('deleted_at')->sum('total_price');
+                            $totalCostPrice = DB::table('import_orders')->whereNull('deleted_at')->sum('total');
 
-                            $totalPrescriptionPrice = DB::table('prescriptions')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
+                            $totalPrescriptionPrice = DB::table('prescriptions')->whereNull('deleted_at')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
                     
                     
-                            $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
+                            $totalcutDoseOrdersPrice = DB::table('cut_dose_orders')->whereNull('deleted_at')->whereBetween('created_at', [$dateStart, $dateEnd])->sum('total_price');
                     
                     
                             $totalRevenue = $totalPrescriptionPrice + $totalcutDoseOrdersPrice;
