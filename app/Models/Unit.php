@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Unit extends Model
 {
     use HasFactory, SoftDeletes;
+    
     protected $fillable = [
         'name',
         'parent_id',
@@ -22,5 +23,9 @@ class Unit extends Model
     }
     public function children(){
         return $this->hasMany(Unit::class, 'parent_id');
+    }
+    public function unitConversions()
+    {
+        return $this->hasMany(UnitConversion::class, 'unit_id');
     }
 }

@@ -239,6 +239,17 @@ class MedicalInstrumentController extends Controller
             $medicineData = $request->medicine;
             $medicine->update($medicineData);
 
+            $batches = $request->batches;
+            foreach ($batches as $batchId => $data) {
+                $batch = Batch::find($batchId);
+                
+                if ($batch) {
+                    $batch->update([
+                        'price_in_smallest_unit' => $data['price_in_smallest_unit']
+                    ]);
+                }
+            }
+
             DB::commit();
 
             return redirect()->route('admin.medicalInstruments.index')->with('success', 'Cập nhật thành công');

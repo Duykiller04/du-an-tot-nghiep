@@ -91,6 +91,7 @@
                         <thead>
                             <tr>
                                 <th>Số lô</th>
+                                <th>Kho</th>
                                 <th>Nhà cung cấp</th>
                                 <th>Số đăng ký</th>
                                 <th>Xuất xứ</th>
@@ -101,7 +102,6 @@
                                 <th>Số lượng</th>
                                 <th>Nhiệt độ</th>
                                 <th>Độ ẩm</th>
-                                <th>Kho</th>
                                 <th>Ngày nhập lô</th>
                                 <th>Ngày hết hạn</th>
                             </tr>
@@ -110,6 +110,7 @@
                             @foreach ($medicine->batches as $batch)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $batch->storage->name }}</td>
                                     <td>{{ $batch->supplier->name }}</td>
                                     <td>{{ $batch->registration_number }}</td>
                                     <td>{{ $batch->origin }}</td>
@@ -120,7 +121,6 @@
                                     <td>{{ $batch->inventory->quantity }} ({{ $batch->inventory->unit->name }})</td>
                                     <td>{{ $medicine->temperature }}</td>
                                     <td>{{ $medicine->moisture }}</td>
-                                    <td>{{ $batch->storage->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($batch->created_at)->format('d-m-Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($batch->expiration_date)->format('d-m-Y') }}</td>
                                 </tr>
