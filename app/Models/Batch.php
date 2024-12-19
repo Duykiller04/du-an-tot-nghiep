@@ -50,4 +50,8 @@ class Batch extends Model
     {
         return $this->hasMany(ExpirationNotification::class);
     }
+    public function prescriptionDetails()
+    {
+        return $this->hasMany(PrescriptionDetail::class);
+    }
 }

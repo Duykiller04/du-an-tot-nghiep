@@ -29,7 +29,7 @@ class StoreCutDosePrescriptionRequest extends FormRequest
 
             'medicines' => 'array',
             'medicines.*' => 'array|required_array_keys:medicine_id',
-            'medicines.*.medicine_id' => 'required|exists:medicines,id|unique:medicines,id,except,id',
+            // 'medicines.*.medicine_id' => 'required|exists:medicines,id|unique:medicines,id,except,id',
             
         ];
     }
