@@ -23,21 +23,30 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('user'); // Hoặc thay đổi 'user' thành tên route parameter mà bạn đã định nghĩa
-
+        $id = $this->route('user');
         return [
-            'name' =>     'required|string|max:255|regex:/^[A-Za-z](.*[\S].*){9,}$/|unique:users,name,' . $id,
-            'phone' =>    'required|string|regex:/^0[0-9]{9}$/|unique:users,phone,' . $id,
-            'address' => 'nullable|string|min:5|max:255|regex:/\S+/',
-            'birth' =>    'nullable|date_format:Y-m-d',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'description' => 'nullable|string',
-            'email' => 'required|email|regex:/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/|min:5|max:255|unique:users,email,' . $this->route('user'),
-            'new_password' => 'nullable|string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|',
-            'type' => [
+            'name' => 'required|string|max:255|regex:/^[A-Za-z](.*[\S].*){9,}$/',
+            'phone' => [
                 'required',
-                Rule::in([User::TYPE_ADMIN, User::TYPE_STAFF]),
+                'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/',
+                'numeric',
+                Rule::unique('users', 'phone')->whereNull('deleted_at')->ignore($id),   
             ],
+           'email' => [
+            'required',
+            'email',
+            'regex:/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/',
+            'min:5',
+            'max:255',
+            Rule::unique('users', 'email')->whereNull('deleted_at')->ignore($id, 'id'),
+            ],
+
+
+            'address'      => 'nullable|string|min:5|max:255|regex:/\S+/',
+            'birth'        => 'nullable|date_format:Y-m-d',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'description'  => 'nullable|string',
+            'new_password' => 'nullable|string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|',
         ];
     }
 
@@ -50,10 +59,10 @@ class UpdateUserRequest extends FormRequest
             'name.regex' => 'Tên phải bắt đầu bằng chữ cái và có tối thiểu 10 ký tự.',
             'name.unique' => 'Tên đã tồn tại, vui lòng chọn tên khác.',
 
-            'phone.required' => 'Số điện thoại này là bắt buộc phải được điền',
-            'phone.string' => 'Số điện thoại này phải là một chuỗi ký tự',
-            'phone.regex' => 'Số điện thoại phải có 10 chữ số và bắt đầu bằng số 0.',
-            'phone.unique' => 'Số điện thoại đã tồn tại vui lòng nhập số khác',
+            'phone.required' => 'Số điện thoại là bắt buộc.',
+            'phone.regex' => 'Số điện thoại không đúng định dạng. Vui lòng nhập số bắt đầu bằng 0 và có 10 chữ số. định dạng Sô điện thoại VN',
+            'phone.numeric' => 'Số điện thoại phải là một chuỗi số hợp lệ.',
+            'phone.unique' => 'Số điện thoại này đã được sử dụng.',
 
             'address.min' => 'Địa chỉ phải có ít nhất 5 ký tự.',
             'address.string' => 'địa chỉ phải là chuỗi ký tự hợp lệ.',
@@ -82,8 +91,6 @@ class UpdateUserRequest extends FormRequest
             - Ít nhất một chữ cái viết thường (a-z). 
             - Ít nhất một chữ số (0-9). 
             - Ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &, #).',
-
-            'type' => ' Type',
         ];
     }
 }

@@ -32,43 +32,30 @@ class CutDosePrescriptionExport implements FromCollection, WithHeadings, WithMap
             'Tên đơn thuốc',
             'Miêu tả Bệnh',
             'Tênh bệnh mắc phải',
-            'Tên bệnh viên',
             'Tên bác sĩ',
-            'Tuổi',
-            'Số điện thoại bác sĩ',
-            'Tổng cộng',
             'Tên thuốc',
             'Id đơn thuốc cắt liều',
             'Tên đơn vị',
-            'Số lượng',
-            'Gía hiện tại',
-            'Liều lượng',
         ];
     }
     // Ánh xạ dữ liệu của từng hàng
     public function map($CutDosePrescription): array
     {
         $data = [];
-        $index = 1;
+        // Dùng biến $loopIndex để theo dõi vị trí của phần tử
+        $loopIndex = 1;
 
         // Lặp qua từng chi tiết đơn thuốc (prescriptionDetails)
         foreach ($CutDosePrescription->cutDosePrescriptionDetails as $detail) {
             $data[] = [
-                $index++,   
-                $CutDosePrescription->name,        
-                $CutDosePrescription->description,                             
+                $loopIndex++,   // STT dựa trên vòng lặp
+                $CutDosePrescription->name,
+                $CutDosePrescription->description,
                 $CutDosePrescription->disease->disease_name,
-                $CutDosePrescription->name_hospital,
                 $CutDosePrescription->name_doctor,
-                $CutDosePrescription->age,
-                $CutDosePrescription->phone_doctor,
-                $CutDosePrescription->total,
-                $detail->medicine->name,  
+                $detail->medicine->name,
                 $detail->cut_dose_prescription_id,
                 $detail->unit->name,   
-                $detail->quantity,
-                $detail->current_price,
-                $detail->dosage,                       // Liều lượng
             ];
         }
 

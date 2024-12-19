@@ -30,6 +30,7 @@ class CustomerExport implements FromCollection, WithHeadings, WithMapping, WithS
     public function headings(): array
     {
         return [
+            'STT', // Thêm STT vào tiêu đề
             'Tên khách hàng',
             'Số điện thoại',
             'Địa chỉ',
@@ -42,7 +43,10 @@ class CustomerExport implements FromCollection, WithHeadings, WithMapping, WithS
     // Ánh xạ dữ liệu của từng hàng
     public function map($customer): array
     {
+        static $counter = 1; // Khởi tạo bộ đếm STT
+
         return [
+            $counter++, // STT tự động tăng
             $customer->name,
             $customer->phone,
             $customer->address,
@@ -51,6 +55,7 @@ class CustomerExport implements FromCollection, WithHeadings, WithMapping, WithS
             $customer->weight,
         ];
     }
+
 
     // Định dạng các cột trong bảng
     public function styles($sheet)

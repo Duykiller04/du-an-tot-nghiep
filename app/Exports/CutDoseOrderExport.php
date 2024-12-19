@@ -52,38 +52,38 @@ class CutDoseOrderExport implements FromCollection, WithHeadings, WithMapping, W
     public function map($cutDoseOrder): array
     {
         $data = [];
-        $index = 1;  // Khởi tạo biến $index để đếm STT
 
         // Kiểm tra xem có bất kỳ chi tiết đơn thuốc nào không
         if ($cutDoseOrder->cutDoseOrderDetails->isEmpty()) {
             return $data;  // Nếu không có chi tiết đơn thuốc, trả về mảng rỗng
         }
 
-        // Duyệt qua từng chi tiết của đơn thuốc
-        foreach ($cutDoseOrder->cutDoseOrderDetails as $detail) {
+        // Duyệt qua từng chi tiết của đơn thuốc với chỉ số vòng lặp
+        foreach ($cutDoseOrder->cutDoseOrderDetails as $key => $detail) {
             $data[] = [
-                $index++,                                     // STT: Tăng dần trong mỗi vòng lặp
-                $cutDoseOrder->seller,                        // Seller lên đầu tiên
-                $cutDoseOrder->disease->disease_name,          // Tên bệnh mắc phải
-                $cutDoseOrder->customer_id,                    // ID khách hàng
-                $cutDoseOrder->customer_name,                  // Tên khách hàng
-                $cutDoseOrder->weight,                         // Cân nặng
-                $cutDoseOrder->age,                            // Tuổi
-                $cutDoseOrder->gender == 0 ? 'Nam' : 'Nữ',     // Giới tính (Nam nếu 0, Nữ nếu 1)
-                $cutDoseOrder->phone,                          // Số điện thoại
-                $cutDoseOrder->address,                        // Địa chỉ
-                $cutDoseOrder->shift_id,                       // Id ca làm việc
-                $cutDoseOrder->total_price,                    // Tổng giá
-                $cutDoseOrder->dosage,                         // Liều lượng
-                $detail->cut_dose_order_id,                    // Id đơn thuốc cắt liều
-                $detail->unit->name,                           // Đơn vị
-                $detail->quantity,                             // Số lượng
-                $detail->batch_id,                             // Lô thuốc
+                $key + 1,                                   // STT: Dựa vào chỉ số vòng lặp (bắt đầu từ 1)
+                $cutDoseOrder->seller,                     // Seller lên đầu tiên
+                $cutDoseOrder->disease->disease_name,      // Tên bệnh mắc phải
+                $cutDoseOrder->customer_id,                // ID khách hàng
+                $cutDoseOrder->customer_name,              // Tên khách hàng
+                $cutDoseOrder->weight,                     // Cân nặng
+                $cutDoseOrder->age,                        // Tuổi
+                $cutDoseOrder->gender == 0 ? 'Nam' : 'Nữ', // Giới tính (Nam nếu 0, Nữ nếu 1)
+                $cutDoseOrder->phone,                      // Số điện thoại
+                $cutDoseOrder->address,                    // Địa chỉ
+                $cutDoseOrder->shift_id,                   // ID ca làm việc
+                $cutDoseOrder->total_price,                // Tổng giá
+                $cutDoseOrder->dosage,                     // Liều lượng
+                $detail->cut_dose_order_id,                // ID đơn thuốc cắt liều
+                optional($detail->unit)->name,             // Đơn vị
+                $detail->quantity,                         // Số lượng
+                $detail->batch_id,                         // Lô thuốc
             ];
         }
 
         return $data;
     }
+
     // Định dạng các cột trong bảng
     public function styles($sheet)
     {

@@ -40,55 +40,42 @@ class PrescriptionExport implements FromCollection, WithHeadings, WithMapping, W
             'Tên khách hàng',
             'Ghi chú',
             'Liều lượng',
-            'Tuổi',
-            'Số điện thoại',
-            'Địa chỉ',
-            'Email',
-            'Cân nặng',
-            'Giới tính',
             'Trạng thái',
-            'Id ca làm việc',
             'Id thuốc chi tiết ',
             'ID đơn vị',
             'Số lượng',
             'Giá hiện tại',
             'Lô thuốc',
-           
+
         ];
     }
 
     public function map($Prescription): array
     {
         $data = [];
-        $index = 1;
+        $loopIndex = 1; // STT sẽ được tính trong vòng lặp
 
         // Lặp qua từng chi tiết đơn thuốc (prescriptionDetails)
         foreach ($Prescription->prescriptionDetails as $detail) {
             $data[] = [
-                $index++,                               // STT
-                $Prescription->seller,                 // người bán
-                $Prescription->total_price,            // Tổng tiền
-                $Prescription->customer_name,          // Tên khách hàng
-                $Prescription->note,                   //Ghi chú
-                $Prescription->dosage,                 // Liều lượng
-                $Prescription->age,                    // Tuổi
-                $Prescription->phone,                  // Số điện thoại
-                $Prescription->address,                // Địa chỉ
-                $Prescription->email,                  // Email
-                $Prescription->weight,                 // Cân nặng
-                $Prescription->gender == 0 ? 'Nam' : 'Nữ',   // Giới tính (sửa ở đây)
-                $Prescription->status,                 // Trạng thái
-                $Prescription->shift_id,               // ID ca làm việc
-                $detail->prescription_id,              // ID đơn thuốc trong chi tiết
-                optional($detail->unit)->name,         // Tên đơn vị (nếu có quan hệ unit)
-                $detail->quantity,                     // Số lượng
-                $detail->current_price,                // Giá hiện tại
-                $detail->batch_id,                // Giá hiện tại
+                $loopIndex++,                               // STT (Tăng dần từ 1)
+                $Prescription->seller,                     // Người bán
+                $Prescription->total_price,                // Tổng tiền
+                $Prescription->customer_name,              // Tên khách hàng
+                $Prescription->note,                       // Ghi chú
+                $Prescription->dosage,                     // Liều lượng
+                $Prescription->status == 0 ? 'Hủy' : 'Bán',                     // Trạng thái                 // ID ca làm việc
+                $detail->prescription_id,                  // ID đơn thuốc trong chi tiết
+                optional($detail->unit)->name,             // Tên đơn vị (nếu có quan hệ unit)
+                $detail->quantity,                         // Số lượng
+                $detail->current_price,                    // Giá hiện tại
+                $detail->batch_id,                         // Batch ID
             ];
         }
 
         return $data;
     }
+
 
 
     // Định dạng các cột trong bảng

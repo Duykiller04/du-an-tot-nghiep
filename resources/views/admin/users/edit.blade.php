@@ -42,31 +42,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="type" class="form-label">Vai trò<span class="text-danger">*</span></label>
-                            <select name="type" id="type" class="form-select">
-                                <option value="admin" {{ $user->type == 'admin' ? 'selected' : '' }}>Quản trị viên
-                                </option>
-                                <option value="staff" {{ $user->type == 'staff' ? 'selected' : '' }}>Nhân viên
-                                </option>
-                            </select>
-                        </div>
-
                         <!-- Các ô nhập mật khẩu -->
-                        <div class="form-group mb-3">
-                            <label for="old_password">Mật khẩu cũ</label>
-                            <div class="position-relative">
-                                <!-- Trường nhập mật khẩu cũ -->
-                                <input type="password" class="form-control" id="old_password" name="old_password">
-                                <!-- Biểu tượng mắt để hiển thị/ẩn mật khẩu cũ -->
-                                <i class="fas fa-eye" id="toggleOldPassword"
-                                    style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
-                            </div>
-                            @error('old_password')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-
                         <div class="form-group mb-3">
                             <label for="new_password">Mật khẩu mới</label>
                             <div class="position-relative">
@@ -164,7 +140,7 @@
                         <div class="form-group mb-3">
                             <label for="birth">Ngày sinh</label>
                             <input type="date" class="form-control" id="birth" name="birth"
-                                value="{{ old('birth', $user->birth) }}">
+                                value="{{ old('birth', $user->birth) }}" max="{{ date('Y-m-d') }}">
                             @error('birth')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -236,22 +212,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const toggleOldPassword = document.querySelector('#toggleOldPassword');
-            const oldPassword = document.querySelector('#old_password');
-
             const toggleNewPassword = document.querySelector('#toggleNewPassword');
             const newPassword = document.querySelector('#new_password');
 
             const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
             const confirmPassword = document.querySelector('#confirm_password');
-
-            // Khi nhấp vào biểu tượng mắt, chuyển đổi giữa type="password" và type="text"
-            toggleOldPassword.addEventListener('click', function() {
-                const type = oldPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-                oldPassword.setAttribute('type', type);
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
-            });
 
             toggleNewPassword.addEventListener('click', function() {
                 const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';

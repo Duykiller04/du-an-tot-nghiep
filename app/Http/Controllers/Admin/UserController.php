@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\SendMailToUser;
 use App\Models\User;
@@ -103,7 +104,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         try {
-            $data = $request->except('image');
+            $data = $request->except('image','type');
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -111,7 +112,7 @@ class UserController extends Controller
             } else {
                 $data['image'] = null;
             }
-
+            $data['type'] = User::TYPE_STAFF;
             User::create($data);
 
             return redirect()->route('admin.users.index')->with('success', 'Thành công');
@@ -138,7 +139,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, string $id)
+
+    public function update(UpdateUserRequest $request, int $id)
     {
         try {
             $model = User::findOrFail($id);
@@ -147,12 +149,12 @@ class UserController extends Controller
                 return back()->withErrors(['error' => 'Bạn không có quyền sửa tài khoản này.']);
             }
 
-            // Lấy toàn bộ dữ liệu trừ 'image' và các trường mật khẩu
-            $data = $request->except(['image', 'old_password', 'new_password', 'confirm_password']);
-            $password = $request->new_password;
+            // Lấy toàn bộ dữ liệu trừ 'image'
+            $data = $request->except(['image']);
             // Lấy ảnh hiện tại của người dùng
             $currentImgThumb = $model->image;
             $currentEmail = $model->email;
+            $password = $request->new_password;
 
             // Nếu người dùng tải lên ảnh mới
             if ($request->hasFile('image')) {
@@ -163,23 +165,6 @@ class UserController extends Controller
                 $data['image'] = $currentImgThumb;
             }
 
-            // Kiểm tra và cập nhật mật khẩu nếu có nhập mật khẩu cũ, mới, và xác nhận mật khẩu
-            if ($request->filled('old_password') || $request->filled('new_password') || $request->filled('confirm_password')) {
-                // Kiểm tra mật khẩu cũ
-                if (!Hash::check($request->old_password, $model->password)) {
-                    return back()->withErrors(['old_password' => 'Mật khẩu cũ không chính xác.']);
-                }
-
-                // Kiểm tra mật khẩu mới và xác nhận mật khẩu
-                $request->validate([
-                    'new_password' => 'required',
-                    'confirm_password' => 'same:new_password',
-                ]);
-
-                // Cập nhật mật khẩu mới
-                $data['password'] = Hash::make($request->new_password);
-            }
-
             // Cập nhật dữ liệu người dùng
             $model->update($data);
 
@@ -187,10 +172,11 @@ class UserController extends Controller
             if ($request->hasFile('image') && $currentImgThumb && Storage::disk('public')->exists($currentImgThumb)) {
                 Storage::disk('public')->delete($currentImgThumb);
             }
+            // Gửi email thông báo, xử lý ngoại lệ riêng cho email
             Mail::to($currentEmail)->send(new SendMailToUser($model, $password));
             return back()->with('success', 'Cập nhật thành công');
         } catch (\Exception $exception) {
-            Log::error('Lỗi cập nhật tài khoản ' . $exception->getMessage());
+            Log::error('Lỗi cập nhật tài khoản: ' . $exception->getMessage());
             return back()->with('error', 'Cập nhật thất bại: ' . $exception->getMessage());
         }
     }
@@ -209,8 +195,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateProfile(UpdateUserRequest $request, string $id)
+    public function updateProfile(UpdateProfileRequest $request, int $id)
     {
+        // dd($request->all());
         try {
             $model = User::findOrFail($id);
 

@@ -44,15 +44,19 @@ class DiseasesExport implements FromCollection, WithHeadings, WithMapping, WithS
     // Ánh xạ dữ liệu của từng hàng
     public function map($DiseasesExport): array
     {
+        static $counter = 1; // Khởi tạo bộ đếm
+
         return [
-            $DiseasesExport->id,
+            $counter++, // Tăng số thứ tự mỗi lần gọi
             $DiseasesExport->disease_name,
-            $DiseasesExport->symptom,
-            $DiseasesExport->treatment_direction,
+            strip_tags($DiseasesExport->symptom),
+            strip_tags($DiseasesExport->treatment_direction),
             $DiseasesExport->danger_level,
             $DiseasesExport->verify_date,
         ];
     }
+
+
 
     // Định dạng các cột trong bảng
     public function styles($sheet)

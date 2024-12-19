@@ -43,16 +43,6 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <div>
-                                <label for="password" class="form-label">Vai trò <span class="text-danger">*</span></label>
-                                <select name="type" id="" class="form-select">
-                                    <option value="admin" selected>Quản trị viên</option>
-                                    <option value="staff">Nhân viên</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
                             <label for="password">Mật khẩu<span class="text-danger">*</span></label>
                             <div class="position-relative">
                                 <!-- Trường nhập mật khẩu -->
@@ -146,7 +136,7 @@
                         <div class="form-group mb-3">
                             <label for="birth">Ngày sinh</label>
                             <input type="date" class="form-control" id="birth" name="birth" 
-                                value="{{ old('birth') }}">
+                                value="{{ old('birth') }}" max="{{ date('Y-m-d') }}">
                             @error('birth')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
