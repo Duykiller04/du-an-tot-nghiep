@@ -53,12 +53,17 @@
                 <span>{{ $cutDoseOrder->weight }}</span>
             </div>
             <div class="mb-3">
-                <label><strong>Thời gian tạo:</strong></label>
-                <span>{{ $cutDoseOrder->created_at }}</span>
+                <label><strong>Tổng tiền:</strong></label>
+                <span>{{ number_format($cutDoseOrder->total_price) }} VNĐ</span>
             </div>
             <div class="mb-3">
-                <label><strong>Thời gian cập nhật:</strong></label>
-                <span>{{ $cutDoseOrder->updated_at }}</span>
+                <label><strong>Liều lượng:</strong></label>
+                <span>{{ $cutDoseOrder->dosage }}</span>
+            </div>
+
+            <div class="mb-3">
+                <label><strong>Thời gian bán:</strong></label>
+                <span>{{ $cutDoseOrder->created_at }}</span>
             </div>
         </div>
     </div>
@@ -75,20 +80,17 @@
                         <th>Tên thuốc</th>
                         <th>Đơn vị</th>
                         <th>Số lượng</th>
-                        <th>Giá bán</th>
-                        <th>Liều lượng</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if($cutDoseOrder->cutDoseOrderDetails && $cutDoseOrder->cutDoseOrderDetails->count())
+
+                    @if ($cutDoseOrder->cutDoseOrderDetails && $cutDoseOrder->cutDoseOrderDetails->count())
                         @foreach ($cutDoseOrder->cutDoseOrderDetails as $detail)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $detail->medicine->name }}</td>
+                                <td>{{ $detail->batch->medicine->name }}</td>
                                 <td>{{ $detail->unit->name }}</td>
                                 <td>{{ $detail->quantity }}</td>
-                                <td>{{ number_format($detail->current_price) }} VNĐ</td>
-                                <td>{{ $detail->dosage }}</td>
                             </tr>
                         @endforeach
                     @else

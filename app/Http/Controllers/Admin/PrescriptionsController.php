@@ -115,7 +115,7 @@ class PrescriptionsController extends Controller
                     'quantity' => $request->quantity[$key],
                     'current_price' => $request->batch_total_price[$key],
                 ]);
-                
+
                 $inventory = Inventory::where('batch_id', $key)->first();
                 $inventory->update([
                     'quantity' => $inventory->quantity - $request->quantity[$key],
@@ -134,7 +134,6 @@ class PrescriptionsController extends Controller
 
             // Redirect với thông báo thành công
             return redirect()->route('admin.sell.index')->with('success', 'Tạo đơn thuốc thành công');
-
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
             DB::rollBack();
@@ -148,7 +147,8 @@ class PrescriptionsController extends Controller
      */
     public function show(string $id)
     {
-        $prescription = Prescription::with(['prescriptionDetails.medicine', 'prescriptionDetails.unit'])->findOrFail($id);
+
+        $prescription = Prescription::with(['prescriptionDetails.batch', 'prescriptionDetails.unit'])->findOrFail($id);
 
         return view(self::PATH_VIEW . __FUNCTION__, compact('prescription'));
     }
@@ -228,5 +228,4 @@ class PrescriptionsController extends Controller
             return back()->with('error', 'Khôi phục bản ghi thất bại.');
         }
     }
-
 }

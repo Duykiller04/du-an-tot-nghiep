@@ -19,13 +19,13 @@ class StorageController extends Controller
     {
         if (request()->ajax()) {
             $query = Storage::query()
-                        ->select('storages.*')
-                        ->selectSub(function ($query) {
-                            $query->from('batches')
-                                ->selectRaw('COUNT(DISTINCT medicine_id)')
-                                ->whereColumn('batches.storage_id', 'storages.id');
-                        }, 'medicines_count')
-                        ->latest('id');
+                ->select('storages.*')
+                ->selectSub(function ($query) {
+                    $query->from('batches')
+                        ->selectRaw('COUNT(DISTINCT medicine_id)')
+                        ->whereColumn('batches.storage_id', 'storages.id');
+                }, 'medicines_count')
+                ->latest('id');
 
             // Lọc theo ngày tháng nếu có
             if (request()->has('startDate') && request()->has('endDate')) {
@@ -66,13 +66,13 @@ class StorageController extends Controller
         }
 
         $totalMedicines = Storage::query()
-                            ->select('storages.*')
-                            ->selectSub(function ($query) {
-                                $query->from('batches')
-                                    ->selectRaw('COUNT(DISTINCT medicine_id)')
-                                    ->whereColumn('batches.storage_id', 'storages.id');
-                            }, 'medicines_count')
-                            ->latest('id');
+            ->select('storages.*')
+            ->selectSub(function ($query) {
+                $query->from('batches')
+                    ->selectRaw('COUNT(DISTINCT medicine_id)')
+                    ->whereColumn('batches.storage_id', 'storages.id');
+            }, 'medicines_count')
+            ->latest('id');
 
         // Nếu không phải yêu cầu AJAX, trả về view
         $data = Storage::query()->latest('id')->paginate(5);
@@ -152,12 +152,22 @@ class StorageController extends Controller
      */
     public function destroy(string $id)
     {
+        // Tìm model Storage theo ID
         $model = Storage::query()->findOrFail($id);
 
+        $hasMedicines = $model->batches()->whereHas('medicine')->exists();
+
+        if ($hasMedicines) {
+            return back()->with('error', 'Không thể xóa vì trong kho vẫn còn thuốc.');
+        }
+
+        // Nếu không có thuốc tiến hành xóa
         $model->delete();
 
-        return back()->with('success', 'Xóa Thành công');
+        return back()->with('success', 'Xóa thành công');
     }
+
+
 
     public function getRestore()
     {

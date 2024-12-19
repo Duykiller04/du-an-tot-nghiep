@@ -16,6 +16,10 @@ class CutDoseOrderDetails extends Model
         'status'
     ];
 
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
+    }
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
@@ -30,5 +34,4 @@ class CutDoseOrderDetails extends Model
     {
         return $this->belongsTo(Unit::class);
     }
-
 }

@@ -27,44 +27,34 @@
         </div>
         <div class="card-body">
             <div class="mb-3">
+                <label><strong>Người bán:</strong></label>
+                <span>{{ $prescription->seller }}</span>
+            </div> 
+
+            <div class="mb-3">
                 <label><strong>Tên khách hàng:</strong></label>
                 <span>{{ $prescription->customer_name }}</span>
             </div>
-            <div class="mb-3">
-                <label><strong>Giới tính:</strong></label>
-                <span>{{ $prescription->gender == 0 ? 'Nam' : 'Nữ' }}</span>
-            </div>
-            <div class="mb-3">
-                <label><strong>Tuổi:</strong></label>
-                <span>{{ $prescription->age }}</span>
-            </div>
-            <div class="mb-3">
-                <label><strong>Điện thoại:</strong></label>
-                <span>{{ $prescription->phone }}</span>
-            </div>
-            <div class="mb-3">
-                <label><strong>Địa chỉ:</strong></label>
-                <span>{{ $prescription->address }}</span>
-            </div>
-            <div class="mb-3">
-                <label><strong>Email:</strong></label>
-                <span>{{ $prescription->email }}</span>
-            </div>
-            <div class="mb-3">
-                <label><strong>Cân nặng:</strong></label>
-                <span>{{ $prescription->weight }}</span>
-            </div>
+
             <div class="mb-3">
                 <label><strong>Tổng:</strong></label>
                 <span>{{ number_format($prescription->total_price, 2) }}</span>
             </div>
+
             <div class="mb-3">
-                <label><strong>Thời gian tạo:</strong></label>
-                <span>{{ $prescription->created_at }}</span>
+                <label><strong>Liều lượng:</strong></label>
+                <span>{{  $prescription->dosage}}</span>
             </div>
+
+
             <div class="mb-3">
-                <label><strong>Thời gian cập nhật:</strong></label>
-                <span>{{ $prescription->updated_at }}</span>
+                <label><strong>Ghi chú:</strong></label>
+                <span>{{ $prescription->note }}</span>
+            </div>
+
+            <div class="mb-3">
+                <label><strong>Thời gian bán:</strong></label>
+                <span>{{ $prescription->created_at }}</span>
             </div>
         </div>
     </div>
@@ -82,7 +72,6 @@
                         <th>Đơn vị</th>
                         <th>Số lượng</th>
                         <th>Giá bán</th>
-                        <th>Liều lượng</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,11 +79,10 @@
                         @foreach ($prescription->prescriptionDetails as $detail)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $detail->medicine->name }}</td>
+                                <td>{{ $detail->batch->medicine->name  }}</td>
                                 <td>{{ $detail->unit->name }}</td>
                                 <td>{{ $detail->quantity }}</td>
                                 <td>{{ number_format($detail->current_price) }} VNĐ</td>
-                                <td>{{ $detail->dosage }}</td>
                             </tr>
                         @endforeach
                     @else
