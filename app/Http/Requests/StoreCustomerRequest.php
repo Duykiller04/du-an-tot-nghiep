@@ -23,7 +23,7 @@ class StoreCustomerRequest extends FormRequest
     {
         return [
             'nameCreate' => ['required', 'string', 'max:255'],
-            'phoneCreate' => ['required', 'numeric', 'regex:/^(\+84|0[3|5|7|8|9])+([0-9]{8})$/'],
+            'phoneCreate' => ['required', 'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/', 'numeric', 'unique:students,phone'],
             'addressCreate' => ['required', 'string','max:255'], 
             'emailCreate' => ['required', 'email','max:255','unique:customers,email'],
             'ageCreate' => ['required', 'numeric', 'min:0', 'max:150'],
@@ -40,6 +40,7 @@ class StoreCustomerRequest extends FormRequest
 
             'phoneCreate.required' => 'Trường số điện thoại là bắt buộc.',
             'phoneCreate.regex' => 'Số điện thoại không đúng định dạng.',
+            'phoneCreate.unique' => 'Số điện thoại đã tồn tại.',
 
             'addressCreate.required' => 'Trường địa chỉ là bắt buộc.',
             'addressCreate.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
