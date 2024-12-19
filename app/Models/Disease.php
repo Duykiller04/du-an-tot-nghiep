@@ -17,5 +17,9 @@ class Disease extends Model
         'danger_level',
         'verify_date',
     ];
-  
+    public function cutDosePrescriptions()
+    {
+        return $this->hasMany(CutDosePrescription::class, 'disease_id');
+    }
+
 }

@@ -121,9 +121,16 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
+        // Kiểm tra nếu nhà cung cấp có liên kết với các lô hàng
+        if ($supplier->batches()->exists()) {
+            return back()->with('error', 'Không thể xóa nhà cung cấp vì còn liên kết với các lô hàng.');
+        }
+    
         $supplier->delete();
-        return back()->with('success', 'Thành công');
+    
+        return back()->with('success', 'Nhà cung cấp đã được xóa thành công.');
     }
+    
     public function getRestore()
     {
         $data = Supplier::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(5);
