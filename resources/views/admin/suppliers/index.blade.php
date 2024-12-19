@@ -36,8 +36,7 @@
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="tax_code" class="form-label">Mã số thuế (<span
-                                        class="text-danger">*</span>)</label>
+                                <label for="tax_code" class="form-label">Mã số thuế</label>
                                 <input type="text" class="form-control" id="tax_code" name="tax_code"
                                     value="{{ old('tax_code') }}">
                                 @error('tax_code')
@@ -64,7 +63,7 @@
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Số điện thoại (<span
                                         class="text-danger">*</span>)</label>
-                                <input type="text" class="form-control" id="phone" name="phone"
+                                <input type="number" class="form-control" id="phone" name="phone"
                                     value="{{ old('phone') }}">
                                 @error('phone')
                                     <span class="text-danger">{{ $message }}</span>
@@ -130,7 +129,7 @@
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Số điện thoại (<span
                                         class="text-danger">*</span>)</label>
-                                <input type="text" class="form-control" id="phone_edit" name="phone_edit" value="{{ old('phone_edit') }}">
+                                <input type="number" class="form-control" id="phone_edit" name="phone_edit" value="{{ old('phone_edit') }}">
                                 @error('phone_edit')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

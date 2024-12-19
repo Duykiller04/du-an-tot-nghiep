@@ -61,7 +61,7 @@
                                     <th>Email</th>
                                     <th>Vai trò</th>
                                     <th>Ngày tạo</th>
-                                    <th>Action</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>

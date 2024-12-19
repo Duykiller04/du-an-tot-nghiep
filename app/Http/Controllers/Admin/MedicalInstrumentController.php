@@ -143,13 +143,17 @@ class MedicalInstrumentController extends Controller
             $quantities = $request->so_luong;
 
             $total_quantity = 1;
-
-            foreach ($units as $i => $unit) {
-                if ($i == 0) {
-                    continue;
+            
+            if(count($units) === 1) {
+                $total_quantity = $quantities[0];
+            }else {
+                foreach ($units as $i => $unit) {
+                    if ($i == 0) {
+                        continue;
+                    }
+    
+                    $total_quantity *= $quantities[$i];
                 }
-
-                $total_quantity *= $quantities[$i];
             }
             
             $price_in_smallest_unit = $request->batch['price_sale'] / $total_quantity;

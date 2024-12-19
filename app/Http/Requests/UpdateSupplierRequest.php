@@ -22,17 +22,29 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->segment(3);
+        $id = $this->input('supplier_id');
         return [
          'tax_code_edit' => [
             'required',
             'max:13',
-            Rule::unique('suppliers', 'tax_code')->ignore($id),
+            Rule::unique('suppliers', 'tax_code')->ignore($id)->whereNull('deleted_at')
         ],
             'name_edit' => 'required|max:100',
-            'email_edit' => 'required|string|max:255',
-            'phone_edit' => "required|max:11|unique:suppliers,phone,$id",
-            'address_edit' => "required|max:255|unique:suppliers,email,$id",
+            'phone_edit' => [
+                'required',
+                'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/',
+                'numeric',
+                Rule::unique('suppliers', 'phone')->ignore($id)->whereNull('deleted_at'),
+            ],
+            'address_edit' => "required|max:255",
+            'email_edit' => [
+                'required',
+                'email',
+                'regex:/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/',
+                'min:5',
+                'max:255',
+                Rule::unique('suppliers', 'email')->ignore($id)->whereNull('deleted_at'),
+            ],
         ];
     }
     public function messages()
@@ -41,18 +53,25 @@ class UpdateSupplierRequest extends FormRequest
             'tax_code_edit.required' => 'Bắt buộc nhập',
             'tax_code_edit.max' => 'Quá số lượng ký tự',
             'tax_code_edit.unique' => 'Mã số thuế đã được sử dụng',
+
             'name_edit.required' => 'Bắt buộc nhập',
             'name_edit.max' => 'Quá số lượng ký tự',
+
             'address_edit.required' => 'Bắt buộc nhập',
             'address_edit.string' => 'Bắt buộc phải là chuỗi',
             'address_edit.max' => 'Quá số lượng ký tự',
             'phone_edit.required' => 'Bắt buộc nhập',
-            'phone_edit.unique' => 'Số điện thoại đã tồn tại',
+           
+            'phone_edit.regex' => 'Số điện thoại không đúng định dạng. Vui lòng nhập số bắt đầu bằng 0 và có 10 chữ số. định dạng Sô điện thoại VN',
+            'phone_edit.numeric' => 'Số điện thoại phải là một chuỗi số hợp lệ.',
+            'phone_edit.unique' => 'Số điện thoại này đã được sử dụng.',
             'phone_edit.max' => 'Quá số lượng ký tự',
-            'email_edit' => 'Bắt buộc nhập',
-            'email_edit.max' => 'Quá số lượng ký tự',
-            'email_edit.unique' => 'Email đã tồn tại',
 
+            'email_edit' => 'Bắt buộc nhập',
+            'email_edit.email' => 'Email không đúng định dạng.',
+            'email_edit.max' => 'Quá số lượng ký tự',
+            'email_edit.regex' => 'Email phải bắt đầu bằng chữ cái, không chứa ký tự viết hoa và tuân theo định dạng hợp lệ (ví dụ: example@gmail.com).',
+            'email_edit.unique' => 'Email đã tồn tại. Vui lòng sử dụng một email khác.',
         ];
     }
 }
