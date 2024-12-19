@@ -44,9 +44,6 @@ class PrescriptionsController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('gender', function ($row) {
-                    return $row->gender == 0 ? 'Nam' : 'Nữ'; // Chuyển đổi giới tính
-                })
                 ->addColumn('total_price', function ($row) {
                     return number_format($row->total_price) . ' VND';  // Format price
                 })

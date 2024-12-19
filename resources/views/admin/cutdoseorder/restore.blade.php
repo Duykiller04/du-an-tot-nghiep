@@ -46,7 +46,6 @@
                                                                 <th>Mã thuốc cắt liều</th>
                                                                 <th>Tên bệnh</th>
                                                                 <th>Tên khách hàng</th>
-                                                                <th>Giới tính</th>
                                                                 <th>Tuổi</th>
                                                                 <th>Điện thoại</th>
                                                                 <th>Địa chỉ</th>
@@ -66,11 +65,11 @@
                                                                     <td>{{ $item->id }}</td>
                                                                     <td>{{ $item->disease->disease_name }}</td>
                                                                     <td>{{ $item->customer_name }}</td>
-                                                                    <td>{{ $item->gender }}</td>
                                                                     <td>{{ $item->age }}</td>
                                                                     <td>{{ $item->phone }}</td>
                                                                     <td>{{ $item->address }}</td>
                                                                     <td>{{ $item->weight }}</td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                                                     <td>{{ $item->total_price }}</td>
                                                                     <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
                                                                 </tr>

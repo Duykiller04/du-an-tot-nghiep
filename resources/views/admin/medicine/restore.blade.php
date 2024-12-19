@@ -45,10 +45,7 @@
                                                                 <th><input type="checkbox" id="select-all"></th>
                                                                 <th>Mã Thuốc</th>
                                                                 <th>Danh mục thuốc</th>
-                                                                <th>Mã thuốc</th>
                                                                 <th>Tên thuốc</th>
-                                                                <th>Giá nhập</th>
-                                                                <th>Giá bán</th>
                                                                 <th>Ngày xóa</th>
                                                             </tr>
                                                         </thead>
@@ -59,12 +56,10 @@
                                                                         <input type="checkbox" name="ids[]"
                                                                             value="{{ $item->id }}">
                                                                     </td>
-                                                                    <td>{{ $item->category->name }}</td>
                                                                     <td>{{ $item->medicine_code }}</td>
+                                                                    <td>{{ $item->category->name }}</td>
                                                                     <td>{{ $item->name }}</td>
-                                                                    <td>{{ $item->price_import }}</td>
-                                                                    <td>{{ $item->price_sale }}</td>
-                                                                    <td>{{ $item->deleted_at->format('d-m-Y') }}</td>
+                                                                    <td>{{ $item->deleted_at->format('d-m-Y')}}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
