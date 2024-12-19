@@ -47,7 +47,7 @@
                                 <input type="text"
                                     class="form-control @error('medicine.medicine_code') is-invalid @enderror"
                                     id="name" name="medicine[medicine_code]"
-                                    value="{{ old('medicine.medicine_code') }}">
+                                    value="{{ old('medicine.medicine_code') }}" placeholder="Nhập mã thuốc">
                                 @error('medicine.medicine_code')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -59,7 +59,7 @@
                                 <input type="number"
                                     class="form-control @error('batch.registration_number') is-invalid @enderror"
                                     id="name" name="batch[registration_number]"
-                                    value="{{ old('batch.registration_number') }}">
+                                    value="{{ old('batch.registration_number') }}" placeholder="Nhập số đăng ký">
                                 @error('batch.registration_number')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -69,27 +69,27 @@
                                 <label class="form-label" for="name">Tên thuốc <span
                                         class="text-danger">(*)</span></label>
                                 <input type="text" class="form-control @error('medicine.name') is-invalid @enderror"
-                                    id="name" name="medicine[name]" value="{{ old('medicine.name') }}">
+                                    id="name" name="medicine[name]" value="{{ old('medicine.name') }}" placeholder="Nhập tên thuốc">
                                 @error('medicine.name')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Giá nhập <span
+                                <label class="form-label" for="name">Giá nhập theo đơn vị lớn nhất <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number" class="form-control @error('batch.price_import') is-invalid @enderror"
-                                    id="name" name="batch[price_import]" value="{{ old('batch.price_import') }}">
+                                    id="name" name="batch[price_import]" value="{{ old('batch.price_import') }}" placeholder="Nhập giá nhập">
                                 @error('batch.price_import')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="name">Giá bán <span
+                                <label class="form-label" for="name">Giá bán theo đơn vị lớn nhất <span
                                         class="text-danger">(*)</span></label>
                                 <input type="number" class="form-control @error('batch.price_sale') is-invalid @enderror"
-                                    id="name" name="batch[price_sale]" value="{{ old('batch.price_sale') }}">
+                                    id="name" name="batch[price_sale]" value="{{ old('batch.price_sale') }}" placeholder="Nhập giá bán">
                                 @error('batch.price_sale')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -317,7 +317,7 @@
                                 <input type="text"
                                     class="form-control @error('medicine.administration_route') is-invalid @enderror"
                                     id="administration_route" name="medicine[administration_route]"
-                                    value="{{ old('medicine.administration_route') }}">
+                                    value="{{ old('medicine.administration_route') }}" placeholder="Nhập đường dùng">
                                 @error('medicine.administration_route')
                                     <span class="d-block text-danger mt-2">{{ $message }}</span>
                                 @enderror
@@ -463,7 +463,7 @@
                             <label class="form-label" for="temperature">Nhiệt độ (Độ C)</label>
                             <input type="number"
                                 class="form-control @error('medicine.temperature') is-invalid @enderror" id="temperature"
-                                name="medicine[temperature]" value="{{ old('medicine.temperature') }}">
+                                name="medicine[temperature]" value="{{ old('medicine.temperature') }}" placeholder="Nhập nhiệt độ">
                             @error('medicine.temperature')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
@@ -471,7 +471,7 @@
                         <div class="card-body">
                             <label class="form-label" for="moisture">Độ ẩm (%)</label>
                             <input type="number" class="form-control @error('medicine.moisture') is-invalid @enderror"
-                                id="moisture" name="medicine[moisture]" value="{{ old('medicine.moisture') }}">
+                                id="moisture" name="medicine[moisture]" value="{{ old('medicine.moisture') }}" placeholder="Nhập độ ẩm">
                             @error('medicine.moisture')
                                 <span class="d-block text-danger mt-2">{{ $message }}</span>
                             @enderror
