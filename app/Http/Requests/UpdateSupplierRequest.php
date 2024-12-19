@@ -53,18 +53,25 @@ class UpdateSupplierRequest extends FormRequest
             'tax_code_edit.required' => 'Bắt buộc nhập',
             'tax_code_edit.max' => 'Quá số lượng ký tự',
             'tax_code_edit.unique' => 'Mã số thuế đã được sử dụng',
+
             'name_edit.required' => 'Bắt buộc nhập',
             'name_edit.max' => 'Quá số lượng ký tự',
+
             'address_edit.required' => 'Bắt buộc nhập',
             'address_edit.string' => 'Bắt buộc phải là chuỗi',
             'address_edit.max' => 'Quá số lượng ký tự',
             'phone_edit.required' => 'Bắt buộc nhập',
-            'phone_edit.unique' => 'Số điện thoại đã tồn tại',
+           
+            'phone_edit.regex' => 'Số điện thoại không đúng định dạng. Vui lòng nhập số bắt đầu bằng 0 và có 10 chữ số. định dạng Sô điện thoại VN',
+            'phone_edit.numeric' => 'Số điện thoại phải là một chuỗi số hợp lệ.',
+            'phone_edit.unique' => 'Số điện thoại này đã được sử dụng.',
             'phone_edit.max' => 'Quá số lượng ký tự',
-            'email_edit' => 'Bắt buộc nhập',
-            'email_edit.max' => 'Quá số lượng ký tự',
-            'email_edit.unique' => 'Email đã tồn tại',
 
+            'email_edit' => 'Bắt buộc nhập',
+            'email_edit.email' => 'Email không đúng định dạng.',
+            'email_edit.max' => 'Quá số lượng ký tự',
+            'email_edit.regex' => 'Email phải bắt đầu bằng chữ cái, không chứa ký tự viết hoa và tuân theo định dạng hợp lệ (ví dụ: example@gmail.com).',
+            'email_edit.unique' => 'Email đã tồn tại. Vui lòng sử dụng một email khác.',
         ];
     }
 }
