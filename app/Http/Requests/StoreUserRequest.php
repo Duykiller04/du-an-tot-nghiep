@@ -24,18 +24,36 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100', 'regex:/^[A-Za-z](.*[\S].*){9,}$/', Rule::unique('users', 'name')->whereNull('deleted_at')->ignore($this->route('user'))],
-            'phone' => ['required', 'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/', 'numeric', Rule::unique('users', 'phone')->whereNull('deleted_at')->ignore($this->route('user'))],
-            'address' => 'nullable|string|min:5|max:255|regex:/\S+/',
-            'birth' => 'nullable|date_format:Y-m-d',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'description' => 'nullable|string',
-            'email' => ['required', 'email', 'min:5', 'max:255', 'regex:/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/', Rule::unique('users', 'email')->whereNull('deleted_at')->ignore($this->route('user'))],
-            'password' => 'required|string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|confirmed',
-            'type' => ['required', 'in:' . User::TYPE_ADMIN . ',' . User::TYPE_STAFF],
+            'name' => 'required|string|max:255|regex:/^[A-Za-z](.*[\S].*){9,}$/',
+            
+            'phone' => [
+                'required',
+                'regex:/^(0(2\d{8,9}|3\d{8}|5\d{8}|7\d{8}|8\d{8}|9\d{8}))$/',
+                'numeric',
+                Rule::unique('users', 'phone')->whereNull('deleted_at'),
+            ],
+    
+            'email' => [
+                'required',
+                'email',
+                'regex:/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/',
+                'min:5',
+                'max:255',
+                Rule::unique('users', 'email')->whereNull('deleted_at'),
+            ],
+    
+            'address'      => 'nullable|string|min:5|max:255|regex:/\S+/',
+            'birth'        => 'nullable|date_format:Y-m-d',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'description'  => 'nullable|string',
+            'password' => 'string|min:8|regex:/[A-Z]/|regex:/[a-z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/|confirmed',
+            'type'         => [
+                'required',
+                Rule::in([User::TYPE_ADMIN, User::TYPE_STAFF]),
+            ],
         ];
-    }
-    public function messages()
+    }   
+    public function messages(): array
     {
         return [
 
