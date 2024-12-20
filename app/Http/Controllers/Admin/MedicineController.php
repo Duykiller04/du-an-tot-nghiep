@@ -279,25 +279,16 @@ class MedicineController extends Controller
      */
     public function destroy(Medicine $medicine)
     {
-        if ($medicine->type_product == 0) {
-            if (
-                $medicine->cut_dose_order_details()->exists() ||
-                $medicine->prescription_details()->exists() ||
-                $medicine->import_order_details()->exists() ||
-                $medicine->cut_dose_prescription_details()->exists()
-            ) {
-                return back()->with('error', 'Không thể xóa thuốc vì có dữ liệu liên quan.');
-            }
-        } elseif ($medicine->type_product == 1) {
-            if (
-                $medicine->cut_dose_order_details()->exists() ||
-                $medicine->prescription_details()->exists() ||
-                $medicine->import_order_details()->exists() ||
-                $medicine->cut_dose_prescription_details()->exists()
-            ) {
-                return back()->with('error', 'Không thể xóa dụng cụ vì có dữ liệu liên quan.');
-            }
+
+        if (
+            $medicine->cut_dose_order_details()->exists() ||
+            $medicine->prescription_details()->exists() ||
+            $medicine->import_order_details()->exists() ||
+            $medicine->cut_dose_prescription_details()->exists()
+        ) {
+            return back()->with('error', 'Không thể xóa thuốc vì có dữ liệu liên quan.');
         }
+        
     
         $medicine->delete();
     
