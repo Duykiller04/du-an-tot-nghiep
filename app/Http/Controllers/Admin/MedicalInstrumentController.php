@@ -269,6 +269,15 @@ class MedicalInstrumentController extends Controller
      */
     public function destroy(Medicine $medicalInstrument)
     {
+        if (
+            $medicalInstrument->cut_dose_order_details()->exists() ||
+            $medicalInstrument->prescription_details()->exists() ||
+            $medicalInstrument->import_order_details()->exists() ||
+            $medicalInstrument->cut_dose_prescription_details()->exists()
+        ) {
+            return back()->with('error', 'Không thể xóa dụng cụ vì có dữ liệu liên quan.');
+        }
+
         $medicalInstrument->delete();
         return back()->with('success', 'Xóa dụng cụ thành công');
     }
